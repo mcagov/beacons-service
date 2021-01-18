@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  postgres:
+    image: library/postgres:12
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: beacons-service
+      POSTGRES_DB: beacons
+
+
