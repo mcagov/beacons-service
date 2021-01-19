@@ -22,9 +22,7 @@ We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f
 
 The choices that Prettier makes can be found [here](https://prettier.io/docs/en/rationale.html).
 
-- Building the Service
 - Requirements
-- Running
 - Tests
 - Deployment
 - License
