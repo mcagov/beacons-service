@@ -4,8 +4,19 @@ services:
   postgres:
     image: library/postgres:12
     ports:
-    - 5432:5432
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: beacons-service
       POSTGRES_DB: beacons
+
+  beacons:
+    build:
+      context: ./
+      args:
+        JAR_FILE: "build/libs/*.jar"
+    container_name: app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
