@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   postgres:
     image: library/postgres:12
@@ -8,5 +9,3 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: beacons-service
       POSTGRES_DB: beacons
-
-
