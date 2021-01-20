@@ -2,7 +2,7 @@
 
 This is an API to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
 
-### Testing
+## Testing
 
 Integration tests use the naming convention `<name>IntegrationTest`.
 
@@ -10,7 +10,7 @@ Unit tests use the naming convention `<name>Test`.
 
 Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service](src/test/java/uk/gov/mca/beacons/service).
 
-#### Running tests
+### Running tests
 
 - `./gradlew test` runs unit tests
 - `./gradlew integrationTest` runs integration tests
