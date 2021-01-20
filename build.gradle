@@ -21,6 +21,9 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	filter {
+		excludeTestsMatching '*IntegrationTest'
+	}
 }
 
 task integrationTest(type: Test) {
