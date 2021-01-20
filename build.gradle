@@ -22,3 +22,16 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+task integrationTest(type: Test) {
+	description = 'Runs integration tests.'
+	group = 'verification'
+	useJUnitPlatform()
+	filter {
+		includeTestsMatching '*IntegrationTest'
+	}
+
+	shouldRunAfter test
+}
+
+check.dependsOn 'integrationTest'
