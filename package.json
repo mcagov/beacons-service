@@ -1,4 +1,5 @@
 {
+  "description": "Beacons Registration Service Prettier Formatting Dependencies",
   "scripts": {
     "format": "prettier --write './**/*.{java,md,json,yml}'"
   },

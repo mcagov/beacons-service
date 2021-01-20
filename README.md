@@ -26,14 +26,16 @@ Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service]
 
 ## Building 
 
-To build the service locally from the CLI, run:
-`./gradlew build`
+The service can be built either locally in your IDE of choice or from the command line by running:
+`./gradlew clean build`
 
 ## Running
 
-To run the service locally from the CLI: `./gradlew clean bootRun`
+The service can be run either locally in your IDE of choice or from the command line by running: `./gradlew clean bootRun`
 
-You can also use `docker-compose up` to bring up both the service and the postgres database with docker.
+The PostgreSQL backend can be stood up by running: `docker-compose up postgres`
+
+You can also use `docker-compose up` to bring up both the service and the PostgreSQL backend in docker.
 
 ## Style Guide
 
