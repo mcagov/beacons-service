@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -13,8 +13,6 @@ services:
   beacons:
     build:
       context: ./
-      args:
-        JAR_FILE: "build/libs/*.jar"
     container_name: app
     ports:
       - 8080:8080

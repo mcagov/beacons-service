@@ -1,6 +1,14 @@
-# Beacons Registration Sprint Boot API
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+# Beacons Registration Spring Boot API
 
 This is an API to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
+
+## Development
+
+Clone this repo
+
+Install node packages (needed for code formatting): `npm install`
 
 ## Testing
 
@@ -16,11 +24,16 @@ Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service]
 - `./gradlew integrationTest` runs integration tests
 - `./gradlew check` runs both unit and integration tests
 
-## Style Guide
+## Building 
 
-We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f74ebfdf68ccb843f8186c943bfdeca) to format our code and we have [Husky](https://typicode.github.io/husky/#/) to run the formatting as a pre-commit hook.
+To build the service locally from the CLI, run:
+`./gradlew build`
 
-The choices that Prettier makes can be found [here](https://prettier.io/docs/en/rationale.html).
+## Running
+
+To run the service locally from the CLI: `./gradlew clean bootRun`
+
+You can also use `docker-compose up` to bring up both the service and the postgres database with docker.
 
 ## Style Guide
 
