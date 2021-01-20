@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: beacons-service
       POSTGRES_DB: beacons
 
-  beacons:
+  beacons-service:
     build:
       context: ./
     container_name: app
