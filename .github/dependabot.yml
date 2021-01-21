@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  # Maintain Gradle dependencies
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  # Maintain Docker dependency
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
