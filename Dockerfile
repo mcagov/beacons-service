@@ -1,13 +1,11 @@
-FROM  adoptopenjdk/openjdk11:alpine AS build
-WORKDIR /app
+# Build the service
+FROM gradle:jdk11-hotspot AS build
+WORKDIR /opt/app
 COPY . ./
-RUN ./gradlew clean build
+RUN ./gradlew clean assemble
 
-FROM adoptopenjdk/openjdk11:alpine AS unit-test
-WORKDIR /app
-COPY --from=build /app/src .
-RUN ./gradlew clean check
-
-FROM adoptopenjdk/openjdk11:alpine AS beacons-service
-COPY --from=build /app/build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Run the service
+FROM adoptopenjdk:11-jre-hotspot AS beacons-service
+WORKDIR /opt/app
+COPY --from=build /opt/app/build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
