@@ -18,7 +18,7 @@ jobs:
       - name: Unit tests
         run: ./gradlew clean test
 
-  integraiton_test:
+  integration_test:
     name: Integration test
     runs-on: ubuntu-latest
 
@@ -41,3 +41,25 @@ jobs:
         run: ./gradlew clean integrationTest
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
+
+  docker_lint:
+    name: Docker lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker lint
+        uses: brpaz/hadolint-action@v1.2.1
+
+  codeql_check:
+    name: CodeQL check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
