@@ -7,7 +7,7 @@ This is a Spring Boot Application to allow users to register 406Hz Distress Beac
 
 ## Dependencies
 
-The following dependencies are required to build and test the service.
+The following dependencies are required to build and test the application.
 
 | Dependency | Version |
 |---|---|
@@ -55,7 +55,7 @@ You can also use `docker-compose up` to bring up both the service and the Postgr
 
 ## Style Guide
 
-We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f74ebfdf68ccb843f8186c943bfdeca) to format our code and we have [Husky](https://typicode.github.io/husky/#/) to run the formatting as a pre-commit hook.
+We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f74ebfdf68ccb843f8186c943bfdeca) to format our code and use [Husky](https://typicode.github.io/husky/#/) to run the formatting as a pre-commit hook.
 
 The choices that Prettier makes can be found [here](https://prettier.io/docs/en/rationale.html).
 
