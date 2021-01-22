@@ -9,11 +9,11 @@ This is a Spring Boot Application to allow users to register 406Hz Distress Beac
 
 The following dependencies are required to build and test the application.
 
-| Dependency | Version |
-|---|---|
-|[Java](https://adoptopenjdk.net/)| 11|
-|[Docker](https://www.docker.com/products/docker-desktop)|Latest|
-|[nodejs](https://nodejs.org/en/)|12.x \|\| 14.x|
+| Dependency                                               | Version        |
+| -------------------------------------------------------- | -------------- |
+| [Java](https://adoptopenjdk.net/)                        | 11             |
+| [Docker](https://www.docker.com/products/docker-desktop) | Latest         |
+| [nodejs](https://nodejs.org/en/)                         | 12.x \|\| 14.x |
 
 ## Development
 
@@ -63,6 +63,6 @@ The choices that Prettier makes can be found [here](https://prettier.io/docs/en/
 
 A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy to our development environment on merges into the `main` branch.
 
-Please see the [MCA Beacons Integration](https://github.com/madetech/mca-beacons-integration) project which manages the infrastructure-as-code and deployments for the application. 
+Please see the [MCA Beacons Integration](https://github.com/madetech/mca-beacons-integration) project which manages the infrastructure-as-code and deployments for the application.
 
 - License

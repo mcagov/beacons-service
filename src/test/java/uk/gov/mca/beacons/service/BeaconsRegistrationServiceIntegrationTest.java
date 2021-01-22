@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BeaconsRegistrationServiceIntegrationTest {
+
   @Test
   void contextLoads() {}
 }
