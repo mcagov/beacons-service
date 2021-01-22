@@ -11,8 +11,6 @@ services:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
-      SPRING_DATASOURCE_USERNAME: beacons-service
-      SPRING_DATASOURCE_PASSWORD: password
 
   postgres:
     image: library/postgres:12
