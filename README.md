@@ -1,10 +1,19 @@
-<<<<<<< HEAD
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![CI/CD Pipeline](https://github.com/madetech/mca-beacons-service/workflows/CI/CD%20Pipeline/badge.svg)
 
-# Beacons Registration Sprint Boot API
+# Beacons Registration Sprint Boot Application
 
-This is an API to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
+This is a Spring Boot Application to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
+
+## Dependencies
+
+The following dependencies are required to build and test the service.
+
+| Dependency | Version |
+|---|---|
+|[Java](https://adoptopenjdk.net/)| 11|
+|[Docker](https://www.docker.com/products/docker-desktop)|Latest|
+|[nodejs](https://nodejs.org/en/)|12.x \|\| 14.x|
 
 ## Development
 
@@ -50,7 +59,10 @@ We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f
 
 The choices that Prettier makes can be found [here](https://prettier.io/docs/en/rationale.html).
 
-- Requirements
-- Tests
-- Deployment
+## Deployment
+
+A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy to our development environment on merges into the `main` branch.
+
+Please see the [MCA Beacons Integration](https://github.com/madetech/mca-beacons-integration) project which manages the infrastructure-as-code and deployments for the application. 
+
 - License
