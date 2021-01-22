@@ -1,6 +1,19 @@
 {
+  "description": "Beacons Registration Service Prettier Formatting Dependencies",
+  "scripts": {
+    "format": "prettier --write './**/*.{java,md,json,yml}'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
-    "husky": "^5.0.6",
-    "prettier-plugin-java": "^1.0.1"
+    "husky": "^4.3.8",
+    "prettier-plugin-java": "1.0.1",
+    "pretty-quick": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=12.20.x"
   }
 }
