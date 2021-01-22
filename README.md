@@ -24,10 +24,15 @@ Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service]
 - `./gradlew integrationTest` runs integration tests
 - `./gradlew check` runs both unit and integration tests
 
-## Building 
+## Building
 
-The service can be built either locally in your IDE of choice or from the command line by running:
-`./gradlew clean build`
+The service can be built locally in your IDE of choice.
+
+You can also build from the command line:
+
+- And run the tests: `./gradlew clean build`
+  - This will require standing up the PostgreSQL backend for the Integration tests.
+- Without running the tests: `./gradlew clean assemble`
 
 ## Running
 

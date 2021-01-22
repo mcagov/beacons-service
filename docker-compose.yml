@@ -1,15 +1,6 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: library/postgres:12
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: beacons-service
-      POSTGRES_DB: beacons
-
   beacons-service:
     build:
       context: ./
@@ -18,3 +9,16 @@ services:
       - 8080:8080
     depends_on:
       - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
+      SPRING_DATASOURCE_USERNAME: beacons-service
+      SPRING_DATASOURCE_PASSWORD: password
+
+  postgres:
+    image: library/postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: beacons-service
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: beacons
