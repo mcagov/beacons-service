@@ -1,6 +1,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+![CI/CD Pipeline](https://github.com/madetech/mca-beacons-service/workflows/CI/CD%20Pipeline/badge.svg)
 
-# Beacons Registration Spring Boot API
+# Beacons Registration Sprint Boot API
 
 This is an API to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
 
