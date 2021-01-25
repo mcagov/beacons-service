@@ -17,7 +17,7 @@ class BeaconsRegistrationServiceIntegrationTest {
   void contextLoads() {}
 
   @Test
-  void actuatorEndpointShouldReturnOK() {
+  void actuatorEndpointShouldReturnUp() {
     webTestClient
       .get()
       .uri(ACTUATOR_HEALTH_ENDPOINT)
