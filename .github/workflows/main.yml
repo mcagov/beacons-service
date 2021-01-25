@@ -36,8 +36,6 @@ jobs:
           java-version: 11
       - name: Integration tests
         run: ./gradlew clean integrationTest
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
 
   prettier_check:
     name: Prettier check
