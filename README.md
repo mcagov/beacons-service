@@ -1,9 +1,12 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![CI/CD Pipeline](https://github.com/madetech/mca-beacons-service/workflows/CI/CD%20Pipeline/badge.svg)
 
-# Beacons Registration Sprint Boot Application
+# Beacons Registration API
 
-This is a Spring Boot Application to allow users to register 406Hz Distress Beacons with the Maritime and Coastguard Agency (MCA).
+This is a Spring Boot API to enable:
+
+- [406Mhz beacon](https://www.gov.uk/maritime-safety-weather-and-navigation/register-406-mhz-beacons) owners to register their details with the Maritime & Coastguard Agency
+- Search and rescue [Mission Control Centres](<https://en.wikipedia.org/wiki/Mission_control_centre_(Cospas-Sarsat)>) to retrieve information about beacons during distress signal activations
 
 ## Dependencies
 
