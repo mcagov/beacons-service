@@ -68,4 +68,6 @@ A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy
 
 Please see the [MCA Beacons Integration](https://github.com/madetech/mca-beacons-integration) project which manages the infrastructure-as-code and deployments for the application.
 
-- License
+## Licence
+
+TBC
