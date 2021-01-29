@@ -24,7 +24,7 @@ jobs:
         image: postgres:12
         env:
           POSTGRES_PASSWORD: password
-          POSTGRES_USER: beacons-service
+          POSTGRES_USER: beacons_service
           POSTGRES_DB: beacons
         ports:
           - 5432:5432
