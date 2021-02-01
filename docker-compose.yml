@@ -17,6 +17,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: beacons-service
+      POSTGRES_USER: beacons_service
       POSTGRES_PASSWORD: password
       POSTGRES_DB: beacons
