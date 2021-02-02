@@ -5,6 +5,8 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/beacons}
     username: ${SPRING_DATASOURCE_USER:beacons_service}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
+  flyway:
+    baseline-on-migrate: true
 server:
   servlet:
     context-path: /api
