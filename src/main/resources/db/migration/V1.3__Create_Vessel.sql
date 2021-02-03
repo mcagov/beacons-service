@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS vessel (
     mmsi VARCHAR,
     name VARCHAR,
     callsign VARCHAR,
-    radioComms VARCHAR,
+    radio_comms VARCHAR,
     capacity INTEGER,
-    vesselType VARCHAR
+    vessel_type VARCHAR
 )

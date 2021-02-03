@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS person (
     id uuid PRIMARY KEY,
-    personType VARCHAR,
+    person_type VARCHAR,
     name VARCHAR,
     telephone VARCHAR,
-    emailAddress VARCHAR,
-    addressLine1 VARCHAR,
-    addressLine2 VARCHAR,
-    addressLine3 VARCHAR,
-    addressLine4 VARCHAR,
-    addressLine5 VARCHAR,
-    addressLine6 VARCHAR,
-    addressLine7 VARCHAR
+    email_address VARCHAR,
+    address_line_1 VARCHAR,
+    address_line_2 VARCHAR,
+    address_line_3 VARCHAR,
+    address_line_4 VARCHAR,
+    address_line_5 VARCHAR,
+    address_line_6 VARCHAR,
+    address_line_7 VARCHAR
 )

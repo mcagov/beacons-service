@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS beaconUses (
+CREATE TABLE IF NOT EXISTS beacon_uses (
     id uuid PRIMARY KEY,
-    beaconId uuid REFERENCES beacons (id),
-    useType VARCHAR,
-    mainUse boolean,
-    beaconPersonId uuid REFERENCES beacon_person (id),
-    vesselId uuid REFERENCES vessel (id)
+    beacon_id uuid REFERENCES beacons (id),
+    use_type VARCHAR,
+    main_use boolean,
+    beacon_person_id uuid REFERENCES beacon_person (id),
+    vessel_id uuid REFERENCES vessel (id)
 )
