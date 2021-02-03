@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS beacons (
-    id uuid,
+    id uuid PRIMARY KEY,
     beaconType VARCHAR,
     hexId VARCHAR,
 -- Would it be better to have hexId as Hex type for more efficient queries?
@@ -8,6 +8,5 @@ CREATE TABLE IF NOT EXISTS beacons (
     model VARCHAR,
     serialNumber VARCHAR,
     batteryExpiry TIMESTAMP,
-    lastServiced TIMESTAMP,
-    PRIMARY KEY (id)
+    lastServiced TIMESTAMP
 )

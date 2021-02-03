@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS person (
-    id uuid,
+    id uuid PRIMARY KEY,
     personType VARCHAR,
     name VARCHAR,
     telephone VARCHAR,
@@ -10,6 +10,5 @@ CREATE TABLE IF NOT EXISTS person (
     addressLine4 VARCHAR,
     addressLine5 VARCHAR,
     addressLine6 VARCHAR,
-    addressLine7 VARCHAR,
-    PRIMARY KEY (id)
+    addressLine7 VARCHAR
 )
