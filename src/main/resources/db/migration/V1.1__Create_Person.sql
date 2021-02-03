@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS person (
-    id SERIAL,
+    id uuid,
     personType VARCHAR,
     name VARCHAR,
     telephone VARCHAR,

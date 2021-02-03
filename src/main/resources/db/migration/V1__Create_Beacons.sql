@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS beacons (
-    id SERIAL,
+    id uuid,
     beaconType VARCHAR,
     hexId VARCHAR,
 -- Would it be better to have hexId as Hex type for more efficient queries?
