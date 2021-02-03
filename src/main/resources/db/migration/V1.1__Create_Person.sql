@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS person (
     address_line_5 VARCHAR,
     address_line_6 VARCHAR,
     address_line_7 VARCHAR
-)
+);

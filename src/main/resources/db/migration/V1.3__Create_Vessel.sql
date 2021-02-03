@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS vessel (
     radio_comms VARCHAR,
     capacity INTEGER,
     vessel_type VARCHAR
-)
+);
