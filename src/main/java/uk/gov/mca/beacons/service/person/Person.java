@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.service.person;
 
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,12 +19,26 @@ public class Person {
   private String name;
   private String telephone;
   private String emailAddress;
+
+  @Column(name = "address_line_1")
   private String addressLine1;
+
+  @Column(name = "address_line_2")
   private String addressLine2;
+
+  @Column(name = "address_line_3")
   private String addressLine3;
+
+  @Column(name = "address_line_4")
   private String addressLine4;
+
+  @Column(name = "address_line_5")
   private String addressLine5;
+
+  @Column(name = "address_line_6")
   private String addressLine6;
+
+  @Column(name = "address_line_7")
   private String addressLine7;
 
   public UUID getId() {
