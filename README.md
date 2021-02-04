@@ -62,6 +62,8 @@ We use [Prettier-Java](https://github.com/jhipster/prettier-java/tree/c1f867092f
 
 The choices that Prettier makes can be found [here](https://prettier.io/docs/en/rationale.html).
 
+Wildcard imports, `import java.util.*;` should not be used within the application. See [GDS Programming Languages](https://gds-way.cloudapps.digital/manuals/programming-languages/java.html#imports) guidance on this and how to configure IntelliJ to ensure it does not use wildcard imports.
+
 ## Deployment
 
 A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy to our development environment on merges into the `main` branch.
