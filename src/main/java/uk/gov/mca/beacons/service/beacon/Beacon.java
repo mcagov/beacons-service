@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.service.beacon;
 
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,11 +12,13 @@ public class Beacon {
 
   @Id
   @GeneratedValue
-  @Column
-  UUID id;
+  private UUID id;
 
-  @Override
-  public String toString() {
-    return id.toString();
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public UUID getId() {
+    return id;
   }
 }
