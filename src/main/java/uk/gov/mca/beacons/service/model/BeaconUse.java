@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.beacon_use;
+package uk.gov.mca.beacons.service.model;
 
 import com.sun.istack.NotNull;
 import java.util.UUID;

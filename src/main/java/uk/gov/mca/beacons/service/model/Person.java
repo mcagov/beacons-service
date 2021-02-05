@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.person;
+package uk.gov.mca.beacons.service.model;
 
 import java.util.UUID;
 import javax.persistence.Column;

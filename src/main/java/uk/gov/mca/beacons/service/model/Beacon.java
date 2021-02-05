@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.beacon;
+package uk.gov.mca.beacons.service.model;
 
 import java.time.LocalDate;
 import java.util.UUID;

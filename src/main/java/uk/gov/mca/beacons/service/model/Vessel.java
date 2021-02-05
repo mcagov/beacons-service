@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.vessel;
+package uk.gov.mca.beacons.service.model;
 
 import java.util.UUID;
 import javax.persistence.Entity;
