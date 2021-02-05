@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.service.model;
 
-import com.sun.istack.NotNull;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
