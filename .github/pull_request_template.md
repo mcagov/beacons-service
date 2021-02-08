@@ -10,9 +10,7 @@
 
 <!-- How could someone else check this work? Which parts do you want more feedback on? -->
 
-## Link to Jira card
-
-<!-- https://hackney.atlassian.net/123-example-card -->
+## Link to Trello card
 
 ## Things to check
 
