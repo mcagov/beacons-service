@@ -1,13 +1,19 @@
 package uk.gov.mca.beacons.service.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "beacons")
 public class Beacon {
 
@@ -22,6 +28,13 @@ public class Beacon {
   private String serialNumber;
   private LocalDate batteryExpiry;
   private LocalDate lastServiced;
+  private String chkCode;
+
+  @CreatedDate
+  private LocalDateTime createdDate;
+
+  @LastModifiedDate
+  private LocalDateTime lastModifiedDate;
 
   public void setId(UUID id) {
     this.id = id;
@@ -85,5 +98,13 @@ public class Beacon {
 
   public void setLastServiced(LocalDate lastServiced) {
     this.lastServiced = lastServiced;
+  }
+
+  public String getChkCode() {
+    return chkCode;
+  }
+
+  public void setChkCode(String chkCode) {
+    this.chkCode = chkCode;
   }
 }
