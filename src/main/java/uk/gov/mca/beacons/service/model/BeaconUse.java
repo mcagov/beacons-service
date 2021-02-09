@@ -25,7 +25,7 @@ public class BeaconUse {
   private boolean mainUse;
   private UUID beaconPersonId;
   private UUID vesselId;
-  private String location;
+  private String beaconPosition;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -81,11 +81,11 @@ public class BeaconUse {
     this.vesselId = vesselId;
   }
 
-  public String getLocation() {
-    return location;
+  public String getBeaconPosition() {
+    return beaconPosition;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setBeaconPosition(String location) {
+    this.beaconPosition = location;
   }
 }

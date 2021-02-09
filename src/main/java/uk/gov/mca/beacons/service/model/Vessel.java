@@ -18,12 +18,18 @@ public class Vessel {
   @GeneratedValue
   private UUID id;
 
-  private String mmsi;
+  private String description;
+  private Integer vesselMmsi;
+  private Integer portableMsi;
   private String name;
   private String callsign;
   private String radioComms;
-  private Integer capacity;
+  private Integer maxCapacity;
   private String vesselType;
+  private String uksrId;
+  private String safetraxId;
+  private String homeport;
+  private String areaOfUse;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -39,12 +45,28 @@ public class Vessel {
     this.id = id;
   }
 
-  public String getMmsi() {
-    return mmsi;
+  public String getDescription() {
+    return description;
   }
 
-  public void setMmsi(String mmsi) {
-    this.mmsi = mmsi;
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Integer getVesselMmsi() {
+    return vesselMmsi;
+  }
+
+  public void setVesselMmsi(Integer vesselMmsi) {
+    this.vesselMmsi = vesselMmsi;
+  }
+
+  public Integer getPortableMsi() {
+    return portableMsi;
+  }
+
+  public void setPortableMsi(Integer portableMsi) {
+    this.portableMsi = portableMsi;
   }
 
   public String getName() {
@@ -71,12 +93,12 @@ public class Vessel {
     this.radioComms = radioComms;
   }
 
-  public Integer getCapacity() {
-    return capacity;
+  public Integer getMaxCapacity() {
+    return maxCapacity;
   }
 
-  public void setCapacity(Integer capacity) {
-    this.capacity = capacity;
+  public void setMaxCapacity(Integer maxCapacity) {
+    this.maxCapacity = maxCapacity;
   }
 
   public String getVesselType() {
@@ -85,5 +107,53 @@ public class Vessel {
 
   public void setVesselType(String vesselType) {
     this.vesselType = vesselType;
+  }
+
+  public String getUksrId() {
+    return uksrId;
+  }
+
+  public void setUksrId(String uksrId) {
+    this.uksrId = uksrId;
+  }
+
+  public String getSafetraxId() {
+    return safetraxId;
+  }
+
+  public void setSafetraxId(String safetraxId) {
+    this.safetraxId = safetraxId;
+  }
+
+  public String getHomeport() {
+    return homeport;
+  }
+
+  public void setHomeport(String homeport) {
+    this.homeport = homeport;
+  }
+
+  public String getAreaOfUse() {
+    return areaOfUse;
+  }
+
+  public void setAreaOfUse(String areaOfUse) {
+    this.areaOfUse = areaOfUse;
+  }
+
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  public LocalDateTime getLastModifiedDate() {
+    return lastModifiedDate;
+  }
+
+  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
   }
 }

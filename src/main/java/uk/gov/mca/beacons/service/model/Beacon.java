@@ -28,7 +28,10 @@ public class Beacon {
   private String serialNumber;
   private LocalDate batteryExpiry;
   private LocalDate lastServiced;
-  private String chkCode;
+  private String checksum;
+  private String beaconStatus;
+  private String coding;
+  private String protocolCode;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -36,12 +39,12 @@ public class Beacon {
   @LastModifiedDate
   private LocalDateTime lastModifiedDate;
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
   public UUID getId() {
     return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   public String getBeaconType() {
@@ -100,12 +103,36 @@ public class Beacon {
     this.lastServiced = lastServiced;
   }
 
-  public String getChkCode() {
-    return chkCode;
+  public String getChecksum() {
+    return checksum;
   }
 
-  public void setChkCode(String chkCode) {
-    this.chkCode = chkCode;
+  public void setChecksum(String checksum) {
+    this.checksum = checksum;
+  }
+
+  public String getBeaconStatus() {
+    return beaconStatus;
+  }
+
+  public void setBeaconStatus(String beaconStatus) {
+    this.beaconStatus = beaconStatus;
+  }
+
+  public String getCoding() {
+    return coding;
+  }
+
+  public void setCoding(String coding) {
+    this.coding = coding;
+  }
+
+  public String getProtocolCode() {
+    return protocolCode;
+  }
+
+  public void setProtocolCode(String protocolCode) {
+    this.protocolCode = protocolCode;
   }
 
   public LocalDateTime getCreatedDate() {
