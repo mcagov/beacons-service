@@ -1,13 +1,19 @@
 package uk.gov.mca.beacons.service.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table
 public class Person {
 
@@ -19,6 +25,12 @@ public class Person {
   private String name;
   private String telephone;
   private String emailAddress;
+
+  @CreatedDate
+  private LocalDateTime createdDate;
+
+  @LastModifiedDate
+  private LocalDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;
@@ -32,14 +44,9 @@ public class Person {
   @Column(name = "address_line_4")
   private String addressLine4;
 
-  @Column(name = "address_line_5")
-  private String addressLine5;
-
-  @Column(name = "address_line_6")
-  private String addressLine6;
-
-  @Column(name = "address_line_7")
-  private String addressLine7;
+  private String postcode;
+  private String country;
+  private String careOf;
 
   public UUID getId() {
     return id;
@@ -81,6 +88,22 @@ public class Person {
     this.emailAddress = emailAddress;
   }
 
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  public LocalDateTime getLastModifiedDate() {
+    return lastModifiedDate;
+  }
+
+  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
+
   public String getAddressLine1() {
     return addressLine1;
   }
@@ -113,27 +136,27 @@ public class Person {
     this.addressLine4 = addressLine4;
   }
 
-  public String getAddressLine5() {
-    return addressLine5;
+  public String getPostcode() {
+    return postcode;
   }
 
-  public void setAddressLine5(String addressLine5) {
-    this.addressLine5 = addressLine5;
+  public void setPostcode(String postcode) {
+    this.postcode = postcode;
   }
 
-  public String getAddressLine6() {
-    return addressLine6;
+  public String getCountry() {
+    return country;
   }
 
-  public void setAddressLine6(String addressLine6) {
-    this.addressLine6 = addressLine6;
+  public void setCountry(String country) {
+    this.country = country;
   }
 
-  public String getAddressLine7() {
-    return addressLine7;
+  public String getCareOf() {
+    return careOf;
   }
 
-  public void setAddressLine7(String addressLine7) {
-    this.addressLine7 = addressLine7;
+  public void setCareOf(String careOf) {
+    this.careOf = careOf;
   }
 }

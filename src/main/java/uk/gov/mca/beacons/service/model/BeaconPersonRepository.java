@@ -2,8 +2,8 @@ package uk.gov.mca.beacons.service.model;
 
 import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
+@RepositoryRestResource(exported = false)
 public interface BeaconPersonRepository
   extends CrudRepository<BeaconPerson, UUID> {}
