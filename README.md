@@ -1,5 +1,5 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-![CI/CD Pipeline](https://github.com/madetech/mca-beacons-service/workflows/CI/CD%20Pipeline/badge.svg)
+![CI/CD Pipeline](https://github.com/mcagov/beacons-service/workflows/CI/CD%20Pipeline/badge.svg)
 
 # Beacons Registration API
 
@@ -68,7 +68,7 @@ Wildcard imports, `import java.util.*;` should not be used within the applicatio
 
 A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy to our development environment on merges into the `main` branch.
 
-Please see the [MCA Beacons Integration](https://github.com/madetech/mca-beacons-integration) project which manages the infrastructure-as-code and deployments for the application.
+Please see the [Beacons Integration](https://github.com/mcagov/beacons-integration) project which manages the infrastructure-as-code and deployments for the application.
 
 ## Licence
 
