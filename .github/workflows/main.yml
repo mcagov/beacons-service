@@ -124,9 +124,9 @@ jobs:
           curl -X POST  -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.MCA_GITHUB_TOKEN }}" \
             https://api.github.com/repos/mcagov/beacons-integration/actions/workflows/main.yml/dispatches -d '{"ref":"main"}'
 
-  deploy_uat:
+  deploy_staging:
     if: github.ref == 'refs/heads/main'
-    name: Deploy Development Environment
+    name: Deploy Staging Environment
     runs-on: ubuntu-latest
     needs: deploy_dev
     environment: staging
