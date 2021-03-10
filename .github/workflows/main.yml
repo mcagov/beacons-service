@@ -114,9 +114,6 @@ jobs:
         docker_build,
         codeql_check,
       ]
-    environment:
-      name: development
-      url: http://beacons-1789774086.eu-west-2.elb.amazonaws.com
 
     steps:
       - name: Trigger Integration Pipeline
