@@ -13,7 +13,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
 
   postgres:
-    image: library/postgres:12
+    image: library/postgres:13
     ports:
       - 5432:5432
     environment:
