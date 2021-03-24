@@ -1,0 +1,52 @@
+{
+  "owner": {
+    "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+    "email": "nelson@royalnavy.mod.uk",
+    "addressLine1": "1 The Hard",
+    "addressLine2": "",
+    "addressTownOrCity": "Portsmouth",
+    "postcode": "PO1 3DT",
+    "emergencyContacts": [
+      {
+        "name": "Lady Hamilton",
+        "telephoneNumber": "02392 856621"
+      },
+      {
+        "name": "Frances Herbert Woolward",
+        "telephoneNumber": "02392 856281"
+      }
+    ]
+  },
+  "beacons": [
+    {
+      "hexId": "1D0EA08C52FFBFF",
+      "manufacturer": "Ocean Signal",
+      "model": "EPIRB1",
+      "uses": [
+        {
+          "environment": "MARITIME",
+          "purpose": "COMMERCIAL",
+          "activity": "SAILING",
+          "vessel": {
+            "name": "HMS Victory",
+            "maxCapacity": 180,
+            "areaOfOperation": "Cape of Trafalgar"
+          }
+        }
+      ]
+    },
+    {
+      "hexId": "ADCD0228C500401",
+      "manufacturer": "McMurdo",
+      "model": "S20 Lifejacket AIS Beacon",
+      "uses": [
+        {
+          "environment": "MARITIME",
+          "purpose": "COMMERCIAL",
+          "activity": "SAILING",
+          "moreInformation": "Carried on my person at sea, including in HMS Victory but also when visiting other ships in my fleet"
+        }
+      ]
+    }
+  ]
+}
