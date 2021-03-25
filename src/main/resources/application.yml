@@ -9,4 +9,4 @@ spring:
     baseline-on-migrate: true
 server:
   servlet:
-    context-path: /api
+    context-path: /spring-api
