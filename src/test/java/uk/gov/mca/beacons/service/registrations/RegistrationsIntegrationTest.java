@@ -28,10 +28,7 @@ class RegistrationsIntegrationTest {
       "src/test/resources/validRegistration.json"
     );
 
-    WebTestClient
-      .bindToServer()
-      .baseUrl("http://localhost:8080")
-      .build()
+    webTestClient
       .post()
       .uri(REGISTRATION_ENDPOINT)
       .contentType(MediaType.APPLICATION_JSON)
