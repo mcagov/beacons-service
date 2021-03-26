@@ -10,8 +10,8 @@ import uk.gov.mca.beacons.service.model.Beacon;
 @RequestMapping("/beacons")
 public class BeaconController {
 
-    @GetMapping(value = "/{hexId}")
-    public Beacon findByHexId(@PathVariable("hexId") String hexId) {
-        return new Beacon();
-    }
+  @GetMapping(value = "/{hexId}")
+  public Beacon findByHexId(@PathVariable("hexId") String hexId) {
+    return new Beacon();
+  }
 }

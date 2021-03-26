@@ -21,10 +21,17 @@ public class RegistrationsController {
     this.registrationsService = registrationsService;
   }
 
-  @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+  @PostMapping(
+    value = "/register",
+    consumes = "application/json",
+    produces = "application/json"
+  )
   public ResponseEntity<Registration> register(
     @RequestBody Registration registration
   ) {
-    return new ResponseEntity<Registration>(registrationsService.register(registration), HttpStatus.CREATED);
+    return new ResponseEntity<Registration>(
+      registrationsService.register(registration),
+      HttpStatus.CREATED
+    );
   }
 }
