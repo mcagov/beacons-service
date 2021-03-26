@@ -14,7 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient
 class RegistrationsIntegrationTest {
 
-  private static final String REGISTRATION_ENDPOINT = "/register";
+  private static final String REGISTRATION_ENDPOINT = "/registrations/register";
 
   @Autowired
   private WebTestClient webTestClient;
