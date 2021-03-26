@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.registrations;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,9 @@ import uk.gov.mca.beacons.service.model.Registration;
 
 @RestController
 @RequestMapping("/registrations")
+@Tag(name = "Registrations Controller")
 public class RegistrationsController {
 
-  @Autowired
   private final RegistrationsService registrationsService;
 
   @Autowired
