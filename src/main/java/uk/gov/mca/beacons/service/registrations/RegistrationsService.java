@@ -9,8 +9,13 @@ import uk.gov.mca.beacons.service.model.Registration;
 @Service
 public class RegistrationsService {
 
-  public ResponseEntity<Registration> register(Registration registration) {
-    // TODO: Persist to database, send confirmation email
+  public Registration register(Registration registration) {
+    // TODO: Persist beacon, owner etc. to database, send confirmation email
+
+    // Create new BeaconPerson to represent owner, persist
+    // For each beacon posted, create new Beacon and persist
+    // -----> For each use associated with Beacon, create new BeaconUse and persist
+    // For each beacon posted, create new Beacon and persist
 
     URI uri = ServletUriComponentsBuilder
       .fromCurrentRequest()
@@ -18,6 +23,6 @@ public class RegistrationsService {
       .buildAndExpand(registration.getId())
       .toUri();
 
-    return ResponseEntity.created(uri).body(registration);
+    return registration;
   }
 }
