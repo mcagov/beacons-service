@@ -10,7 +10,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient
 class BeaconsRegistrationServiceIntegrationTest {
 
-  private static final String ACTUATOR_HEALTH_ENDPOINT = "/actuator/health";
+  private static final String ACTUATOR_ENDPOINT = "/actuator";
+  private static final String ACTUATOR_HEALTH_ENDPOINT =
+    ACTUATOR_ENDPOINT + "/health";
+  private static final String ACTUATOR_INFO_ENDPOINT =
+    ACTUATOR_ENDPOINT + "/info";
 
   @Autowired
   private WebTestClient webTestClient;
@@ -20,13 +24,20 @@ class BeaconsRegistrationServiceIntegrationTest {
 
   @Test
   void actuatorEndpointShouldReturnUp() {
-    webTestClient
+    makeGet(ACTUATOR_HEALTH_ENDPOINT).expectBody().json("{\"status\": \"UP\"}");
+  }
+
+  @Test
+  void actuatorGitInfoEndpoint() {
+    makeGet(ACTUATOR_INFO_ENDPOINT).expectBody().jsonPath("$.gitt").exists();
+  }
+
+  private WebTestClient.ResponseSpec makeGet(String url) {
+    return webTestClient
       .get()
-      .uri(ACTUATOR_HEALTH_ENDPOINT)
+      .uri(url)
       .exchange()
       .expectStatus()
-      .is2xxSuccessful()
-      .expectBody()
-      .json("{\"status\": \"UP\"}");
+      .is2xxSuccessful();
   }
 }

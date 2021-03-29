@@ -14,10 +14,6 @@ repositories {
 	mavenCentral()
 }
 
-springBoot {
-	buildInfo()
-}
-
 testlogger {
 	theme 'mocha'
 }
