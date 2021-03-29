@@ -10,3 +10,8 @@ spring:
 server:
   servlet:
     context-path: /spring-api
+
+beacons:
+  openapi:
+    github:
+      url: https://github.com/mcagov/beacons-service

@@ -5,3 +5,8 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/beacons}
     username: ${SPRING_DATASOURCE_USER:beacons_service}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
+
+beacons:
+  openapi:
+    github:
+      url: https://github.com/mcagov/beacons-service
