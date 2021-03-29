@@ -24,15 +24,20 @@ class BeaconsRegistrationServiceIntegrationTest {
 
   @Test
   void actuatorEndpointShouldReturnUp() {
-    makeGet(ACTUATOR_HEALTH_ENDPOINT).expectBody().json("{\"status\": \"UP\"}");
+    makeGetRequest(ACTUATOR_HEALTH_ENDPOINT)
+      .expectBody()
+      .json("{\"status\": \"UP\"}");
   }
 
   @Test
   void actuatorGitInfoEndpointShouldReturnGitInfo() {
-    makeGet(ACTUATOR_INFO_ENDPOINT).expectBody().jsonPath("$.git").exists();
+    makeGetRequest(ACTUATOR_INFO_ENDPOINT)
+      .expectBody()
+      .jsonPath("$.git")
+      .exists();
   }
 
-  private WebTestClient.ResponseSpec makeGet(String url) {
+  private WebTestClient.ResponseSpec makeGetRequest(String url) {
     return webTestClient
       .get()
       .uri(url)
