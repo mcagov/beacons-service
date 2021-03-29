@@ -28,8 +28,8 @@ class BeaconsRegistrationServiceIntegrationTest {
   }
 
   @Test
-  void actuatorGitInfoEndpoint() {
-    makeGet(ACTUATOR_INFO_ENDPOINT).expectBody().jsonPath("$.gitt").exists();
+  void actuatorGitInfoEndpointShouldReturnGitInfo() {
+    makeGet(ACTUATOR_INFO_ENDPOINT).expectBody().jsonPath("$.git").exists();
   }
 
   private WebTestClient.ResponseSpec makeGet(String url) {
