@@ -30,9 +30,20 @@ ALTER TABLE beacon
 ALTER TABLE beacon_uses
     RENAME TO beacon_use;
 
+ALTER TABLE beacon_use
+    RENAME COLUMN use_type TO environment;
+
+ALTER TABLE beacon_use
+    ALTER COLUMN environment SET NOT NULL,
+    ADD COLUMN purpose text,
+    DROP COLUMN last_modified_date;
+
 -- Update beacon person table
 ALTER TABLE beacon_person
-    ADD COLUMN person_type text NOT NULL;
+    ADD COLUMN other_environment_use text,
+    ADD COLUMN activity text NOT NULL,
+    ADD COLUMN person_type text NOT NULL,
+    DROP COLUMN vessel_id;
 
 -- Update person table
 ALTER TABLE person
@@ -43,3 +54,10 @@ ALTER TABLE person
 
 ALTER TABLE person
     DROP COLUMN person_type;
+
+-- Drop table vessel and capture all fields on the beacon_use table until we allow users to create/manage vessels/aircrafts
+DROP TABLE vessel;
+
+-- Drop telephone table
+DROP TABLE telephone;
+
