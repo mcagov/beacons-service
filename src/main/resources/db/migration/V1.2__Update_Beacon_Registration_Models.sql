@@ -35,13 +35,24 @@ ALTER TABLE beacon_use
 
 ALTER TABLE beacon_use
     ALTER COLUMN environment SET NOT NULL,
+    ADD COLUMN other_environment_use text,
+    ADD COLUMN activity text NOT NULL,
+    ADD COLUMN other_activity text,
+    ADD COLUMN call_sign text,
     ADD COLUMN purpose text,
-    DROP COLUMN last_modified_date;
+    ADD COLUMN description text,
+    ADD COLUMN vessel_mmsi text,
+    ADD COLUMN vessel_comms text,
+    ADD COLUMN max_capacity text,
+    ADD COLUMN vessel_type text,
+    ADD COLUMN ssr_number text,
+    ADD COLUMN homeport text,
+    ADD COLUMN area_of_operation text,
+    DROP COLUMN last_modified_date,
+    DROP COLUMN vessel_id;
 
 -- Update beacon person table
 ALTER TABLE beacon_person
-    ADD COLUMN other_environment_use text,
-    ADD COLUMN activity text NOT NULL,
     ADD COLUMN person_type text NOT NULL,
     DROP COLUMN vessel_id;
 
