@@ -19,6 +19,7 @@ ALTER TABLE beacon
     ALTER COLUMN model SET NOT NULL,
     ALTER COLUMN hex_id SET NOT NULL,
     ALTER COLUMN manufacturer_serial_number SET NOT NULL,
+    ADD COLUMN chk_code text,
     ALTER COLUMN beacon_status SET DEFAULT 'DRAFT',
     DROP COLUMN checksum,
     DROP COLUMN coding,
@@ -29,5 +30,16 @@ ALTER TABLE beacon
 ALTER TABLE beacon_uses
     RENAME TO beacon_use;
 
+-- Update beacon person table
 ALTER TABLE beacon_person
     ADD COLUMN person_type text NOT NULL;
+
+-- Update person table
+ALTER TABLE person
+    RENAME COLUMN email_address TO email;
+
+ALTER TABLE person
+    DROP COLUMN care_of;
+
+ALTER TABLE person
+    DROP COLUMN person_type;

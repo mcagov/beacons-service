@@ -31,6 +31,8 @@ public class Beacon {
 
   private String manufacturerSerialNumber;
 
+  private String chkCode;
+
   private LocalDate batteryExpiryDate;
 
   private LocalDate lastServicedDate;
@@ -85,8 +87,16 @@ public class Beacon {
     return manufacturerSerialNumber;
   }
 
-  public void setManufacturerSerialNumber(String serialNumber) {
-    this.manufacturerSerialNumber = serialNumber;
+  public void setManufacturerSerialNumber(String manufacturerSerialNumber) {
+    this.manufacturerSerialNumber = manufacturerSerialNumber;
+  }
+
+  public String getChkCode() {
+    return chkCode;
+  }
+
+  public void setChkCode(String chkCode) {
+    this.chkCode = chkCode;
   }
 
   public LocalDate getBatteryExpiryDate() {

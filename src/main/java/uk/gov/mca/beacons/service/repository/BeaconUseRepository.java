@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.repository;
 
 import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;

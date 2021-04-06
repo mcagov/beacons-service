@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,6 +23,7 @@ public class BeaconPerson {
 
   private UUID personId;
 
+  @Enumerated(EnumType.STRING)
   private PersonType personType;
 
   @CreatedDate
