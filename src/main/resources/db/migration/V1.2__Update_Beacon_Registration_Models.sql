@@ -1,3 +1,4 @@
+-- Update beacon tables to reflect correct models
 ALTER TABLE beacons
     RENAME TO beacon;
 
@@ -23,3 +24,7 @@ ALTER TABLE beacon
     DROP COLUMN coding,
     DROP COLUMN last_modified_date,
     DROP COLUMN protocol_code;
+
+-- Update beacon use table
+ALTER TABLE beacon_uses
+    RENAME TO beacon_use;

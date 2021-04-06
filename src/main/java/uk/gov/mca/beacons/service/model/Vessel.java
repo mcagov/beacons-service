@@ -19,23 +19,31 @@ public class Vessel {
   private UUID id;
 
   private String description;
+
   private Integer vesselMmsi;
+
   private Integer portableMsi;
+
   private String name;
+
   private String callsign;
+
   private String radioComms;
+
   private Integer maxCapacity;
+
   private String vesselType;
+
   private String uksrId;
+
   private String safetraxId;
+
   private String homeport;
+
   private String areaOfUse;
 
   @CreatedDate
   private LocalDateTime createdDate;
-
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
 
   public UUID getId() {
     return id;
@@ -147,13 +155,5 @@ public class Vessel {
 
   public void setCreatedDate(LocalDateTime createdDate) {
     this.createdDate = createdDate;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
   }
 }

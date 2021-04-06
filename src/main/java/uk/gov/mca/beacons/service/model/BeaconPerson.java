@@ -19,13 +19,13 @@ public class BeaconPerson {
   private UUID id;
 
   private UUID beaconId;
+
   private UUID personId;
+
+  private PersonType personType;
 
   @CreatedDate
   private LocalDateTime createdDate;
-
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
 
   public UUID getId() {
     return id;
@@ -49,5 +49,21 @@ public class BeaconPerson {
 
   public void setPersonId(UUID personId) {
     this.personId = personId;
+  }
+
+  public PersonType getPersonType() {
+    return personType;
+  }
+
+  public void setPersonType(PersonType personType) {
+    this.personType = personType;
+  }
+
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
   }
 }

@@ -7,14 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table
 public class Person {
 
   @Id
@@ -22,15 +19,15 @@ public class Person {
   private UUID id;
 
   private String personType;
+
   private String name;
+
   private String telephone;
-  private String emailAddress;
+
+  private String email;
 
   @CreatedDate
-  private LocalDateTime createdDate;
-
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
+  private LocalDateTime createdAt;
 
   @Column(name = "address_line_1")
   private String addressLine1;
@@ -45,7 +42,7 @@ public class Person {
   private String addressLine4;
 
   private String postcode;
-  private String country;
+  private String county;
   private String careOf;
 
   public UUID getId() {
@@ -80,28 +77,20 @@ public class Person {
     this.telephone = telephone;
   }
 
-  public String getEmailAddress() {
-    return emailAddress;
+  public String getEmail() {
+    return email;
   }
 
-  public void setEmailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
+  public void setEmail(String emailAddress) {
+    this.email = emailAddress;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setCreatedAt(LocalDateTime createdDate) {
+    this.createdAt = createdDate;
   }
 
   public String getAddressLine1() {
@@ -144,12 +133,12 @@ public class Person {
     this.postcode = postcode;
   }
 
-  public String getCountry() {
-    return country;
+  public String getCounty() {
+    return county;
   }
 
-  public void setCountry(String country) {
-    this.country = country;
+  public void setCounty(String country) {
+    this.county = country;
   }
 
   public String getCareOf() {

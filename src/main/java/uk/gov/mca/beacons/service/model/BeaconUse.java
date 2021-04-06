@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "beacon_uses")
 public class BeaconUse {
 
   @Id
@@ -21,10 +20,15 @@ public class BeaconUse {
   private UUID id;
 
   private UUID beaconId;
+
   private String useType;
+
   private boolean mainUse;
+
   private UUID beaconPersonId;
+
   private UUID vesselId;
+
   private String beaconPosition;
 
   @CreatedDate
