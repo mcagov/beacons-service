@@ -11,12 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "beacons")
+@Table(name = "beacon")
 public class Beacon {
 
   @Id
@@ -32,25 +31,16 @@ public class Beacon {
 
   private String model;
 
-  private String serialNumber;
+  private String manufacturerSerialNumber;
 
   private LocalDate batteryExpiryDate;
 
   private LocalDate lastServicedDate;
 
-  private String checksum;
-
   private String beaconStatus;
 
-  private String coding;
-
-  private String protocolCode;
-
   @CreatedDate
-  private LocalDateTime createdDate;
-
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
+  private LocalDateTime createdAt;
 
   public UUID getId() {
     return id;
@@ -92,12 +82,12 @@ public class Beacon {
     this.model = model;
   }
 
-  public String getSerialNumber() {
-    return serialNumber;
+  public String getManufacturerSerialNumber() {
+    return manufacturerSerialNumber;
   }
 
-  public void setSerialNumber(String serialNumber) {
-    this.serialNumber = serialNumber;
+  public void setManufacturerSerialNumber(String serialNumber) {
+    this.manufacturerSerialNumber = serialNumber;
   }
 
   public LocalDate getBatteryExpiryDate() {
@@ -116,14 +106,6 @@ public class Beacon {
     this.lastServicedDate = lastServicedDate;
   }
 
-  public String getChecksum() {
-    return checksum;
-  }
-
-  public void setChecksum(String checksum) {
-    this.checksum = checksum;
-  }
-
   public String getBeaconStatus() {
     return beaconStatus;
   }
@@ -132,35 +114,11 @@ public class Beacon {
     this.beaconStatus = beaconStatus;
   }
 
-  public String getCoding() {
-    return coding;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCoding(String coding) {
-    this.coding = coding;
-  }
-
-  public String getProtocolCode() {
-    return protocolCode;
-  }
-
-  public void setProtocolCode(String protocolCode) {
-    this.protocolCode = protocolCode;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setCreatedAt(LocalDateTime createdDate) {
+    this.createdAt = createdDate;
   }
 }
