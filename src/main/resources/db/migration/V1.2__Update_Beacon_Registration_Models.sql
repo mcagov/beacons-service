@@ -23,4 +23,3 @@ ALTER TABLE beacon
     DROP COLUMN coding,
     DROP COLUMN last_modified_date,
     DROP COLUMN protocol_code;
-
