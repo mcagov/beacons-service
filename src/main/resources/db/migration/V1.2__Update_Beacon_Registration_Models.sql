@@ -11,12 +11,15 @@ ALTER TABLE beacon
 ALTER TABLE beacon
     RENAME COLUMN serial_number TO manufacturer_serial_number;
 
+CREATE INDEX beacon_hex_id_index ON beacon(hex_id);
+
 ALTER TABLE beacon
     ALTER COLUMN beacon_type SET NOT NULL,
     ALTER COLUMN manufacturer SET NOT NULL,
     ALTER COLUMN model SET NOT NULL,
     ALTER COLUMN hex_id SET NOT NULL,
     ALTER COLUMN manufacturer_serial_number SET NOT NULL,
+    ALTER COLUMN beacon_status SET DEFAULT 'DRAFT',
     DROP COLUMN checksum,
     DROP COLUMN coding,
     DROP COLUMN last_modified_date,

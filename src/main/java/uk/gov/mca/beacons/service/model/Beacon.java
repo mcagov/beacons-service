@@ -35,7 +35,8 @@ public class Beacon {
 
   private LocalDate lastServicedDate;
 
-  private String beaconStatus;
+  @Enumerated(EnumType.STRING)
+  private BeaconStatus beaconStatus;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -104,11 +105,11 @@ public class Beacon {
     this.lastServicedDate = lastServicedDate;
   }
 
-  public String getBeaconStatus() {
+  public BeaconStatus getBeaconStatus() {
     return beaconStatus;
   }
 
-  public void setBeaconStatus(String beaconStatus) {
+  public void setBeaconStatus(BeaconStatus beaconStatus) {
     this.beaconStatus = beaconStatus;
   }
 
