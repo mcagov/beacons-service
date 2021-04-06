@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,16 +23,27 @@ public class Beacon {
   @GeneratedValue
   private UUID id;
 
-  private String beaconType;
+  @Enumerated(EnumType.STRING)
+  private BeaconType beaconType;
+
   private String hexId;
+
   private String manufacturer;
+
   private String model;
+
   private String serialNumber;
-  private LocalDate batteryExpiry;
-  private LocalDate lastServiced;
+
+  private LocalDate batteryExpiryDate;
+
+  private LocalDate lastServicedDate;
+
   private String checksum;
+
   private String beaconStatus;
+
   private String coding;
+
   private String protocolCode;
 
   @CreatedDate
@@ -47,11 +60,11 @@ public class Beacon {
     this.id = id;
   }
 
-  public String getBeaconType() {
+  public BeaconType getBeaconType() {
     return beaconType;
   }
 
-  public void setBeaconType(String beaconType) {
+  public void setBeaconType(BeaconType beaconType) {
     this.beaconType = beaconType;
   }
 
@@ -87,20 +100,20 @@ public class Beacon {
     this.serialNumber = serialNumber;
   }
 
-  public LocalDate getBatteryExpiry() {
-    return batteryExpiry;
+  public LocalDate getBatteryExpiryDate() {
+    return batteryExpiryDate;
   }
 
-  public void setBatteryExpiry(LocalDate batteryExpiry) {
-    this.batteryExpiry = batteryExpiry;
+  public void setBatteryExpiryDate(LocalDate batteryExpiryDate) {
+    this.batteryExpiryDate = batteryExpiryDate;
   }
 
-  public LocalDate getLastServiced() {
-    return lastServiced;
+  public LocalDate getLastServicedDate() {
+    return lastServicedDate;
   }
 
-  public void setLastServiced(LocalDate lastServiced) {
-    this.lastServiced = lastServiced;
+  public void setLastServicedDate(LocalDate lastServicedDate) {
+    this.lastServicedDate = lastServicedDate;
   }
 
   public String getChecksum() {
