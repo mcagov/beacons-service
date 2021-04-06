@@ -38,7 +38,7 @@ public class Beacon {
   private String beaconStatus;
 
   @CreatedDate
-  private LocalDateTime createdAt;
+  private LocalDateTime createdDate;
 
   public UUID getId() {
     return id;
@@ -112,11 +112,11 @@ public class Beacon {
     this.beaconStatus = beaconStatus;
   }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
   }
 
-  public void setCreatedAt(LocalDateTime createdDate) {
-    this.createdAt = createdDate;
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
   }
 }

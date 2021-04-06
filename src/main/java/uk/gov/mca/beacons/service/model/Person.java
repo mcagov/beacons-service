@@ -18,8 +18,6 @@ public class Person {
   @GeneratedValue
   private UUID id;
 
-  private String personType;
-
   private String name;
 
   private String telephone;
@@ -27,7 +25,7 @@ public class Person {
   private String email;
 
   @CreatedDate
-  private LocalDateTime createdAt;
+  private LocalDateTime createdDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;
@@ -43,7 +41,6 @@ public class Person {
 
   private String postcode;
   private String county;
-  private String careOf;
 
   public UUID getId() {
     return id;
@@ -51,14 +48,6 @@ public class Person {
 
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  public String getPersonType() {
-    return personType;
-  }
-
-  public void setPersonType(String personType) {
-    this.personType = personType;
   }
 
   public String getName() {
@@ -85,12 +74,12 @@ public class Person {
     this.email = emailAddress;
   }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
   }
 
-  public void setCreatedAt(LocalDateTime createdDate) {
-    this.createdAt = createdDate;
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
   }
 
   public String getAddressLine1() {
@@ -139,13 +128,5 @@ public class Person {
 
   public void setCounty(String country) {
     this.county = country;
-  }
-
-  public String getCareOf() {
-    return careOf;
-  }
-
-  public void setCareOf(String careOf) {
-    this.careOf = careOf;
   }
 }
