@@ -1,7 +1,8 @@
 package uk.gov.mca.beacons.service.model;
 
 import java.util.UUID;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Registration {
