@@ -62,19 +62,11 @@ public class BeaconUse {
   @Column(name = "mobile_telephone_2")
   private String mobileTelephoneInput2;
 
-  private String description;
-
-  private String vesselMmsi;
-
-  private String radioComms;
-
   private Integer maxCapacity;
 
   private String vesselName;
 
   private String portLetterNumber;
-
-  private String ssrNumber;
 
   private String homeport;
 
@@ -82,9 +74,15 @@ public class BeaconUse {
 
   private String beaconLocation;
 
-  private boolean mainUse;
+  private String imoNumber;
 
-  private String beaconPosition;
+  private String ssrNumber;
+
+  private String officialNumber;
+
+  private String rigPlatformLocation;
+
+  private boolean mainUse;
 
   private String aircraftManufacturer;
 
@@ -99,6 +97,20 @@ public class BeaconUse {
   private String cnOrMsnNumber;
 
   private Boolean dongle;
+
+  private String beaconPosition;
+
+  private String workingRemotelyLocation;
+
+  private String workingRemotelyPeopleCount;
+
+  private String windfarmLocation;
+
+  private String windfarmPeopleCount;
+
+  private String otherActivityLocation;
+
+  private String getOtherActivityPeopleCount;
 
   @NotNull
   private String moreDetails;
@@ -250,30 +262,6 @@ public class BeaconUse {
     this.mobileTelephoneInput2 = mobileTelephoneInput2;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getVesselMmsi() {
-    return vesselMmsi;
-  }
-
-  public void setVesselMmsi(String vesselMmsi) {
-    this.vesselMmsi = vesselMmsi;
-  }
-
-  public String getRadioComms() {
-    return radioComms;
-  }
-
-  public void setRadioComms(String radioComms) {
-    this.radioComms = radioComms;
-  }
-
   public Integer getMaxCapacity() {
     return maxCapacity;
   }
@@ -296,14 +284,6 @@ public class BeaconUse {
 
   public void setPortLetterNumber(String portLetterNumber) {
     this.portLetterNumber = portLetterNumber;
-  }
-
-  public String getSsrNumber() {
-    return ssrNumber;
-  }
-
-  public void setSsrNumber(String ssrNumber) {
-    this.ssrNumber = ssrNumber;
   }
 
   public String getHomeport() {
@@ -330,20 +310,44 @@ public class BeaconUse {
     this.beaconLocation = beaconLocation;
   }
 
+  public String getImoNumber() {
+    return imoNumber;
+  }
+
+  public void setImoNumber(String imoNumber) {
+    this.imoNumber = imoNumber;
+  }
+
+  public String getSsrNumber() {
+    return ssrNumber;
+  }
+
+  public void setSsrNumber(String ssrNumber) {
+    this.ssrNumber = ssrNumber;
+  }
+
+  public String getOfficialNumber() {
+    return officialNumber;
+  }
+
+  public void setOfficialNumber(String officialNumber) {
+    this.officialNumber = officialNumber;
+  }
+
+  public String getRigPlatformLocation() {
+    return rigPlatformLocation;
+  }
+
+  public void setRigPlatformLocation(String rigPlatformLocation) {
+    this.rigPlatformLocation = rigPlatformLocation;
+  }
+
   public boolean isMainUse() {
     return mainUse;
   }
 
   public void setMainUse(boolean mainUse) {
     this.mainUse = mainUse;
-  }
-
-  public String getBeaconPosition() {
-    return beaconPosition;
-  }
-
-  public void setBeaconPosition(String beaconPosition) {
-    this.beaconPosition = beaconPosition;
   }
 
   public String getAircraftManufacturer() {
@@ -400,6 +404,64 @@ public class BeaconUse {
 
   public void setDongle(Boolean dongle) {
     this.dongle = dongle;
+  }
+
+  public String getBeaconPosition() {
+    return beaconPosition;
+  }
+
+  public void setBeaconPosition(String beaconPosition) {
+    this.beaconPosition = beaconPosition;
+  }
+
+  public String getWorkingRemotelyLocation() {
+    return workingRemotelyLocation;
+  }
+
+  public void setWorkingRemotelyLocation(String workingRemotelyLocation) {
+    this.workingRemotelyLocation = workingRemotelyLocation;
+  }
+
+  public String getWorkingRemotelyPeopleCount() {
+    return workingRemotelyPeopleCount;
+  }
+
+  public void setWorkingRemotelyPeopleCount(String workingRemotelyPeopleCount) {
+    this.workingRemotelyPeopleCount = workingRemotelyPeopleCount;
+  }
+
+  public String getWindfarmLocation() {
+    return windfarmLocation;
+  }
+
+  public void setWindfarmLocation(String windfarmLocation) {
+    this.windfarmLocation = windfarmLocation;
+  }
+
+  public String getWindfarmPeopleCount() {
+    return windfarmPeopleCount;
+  }
+
+  public void setWindfarmPeopleCount(String windfarmPeopleCount) {
+    this.windfarmPeopleCount = windfarmPeopleCount;
+  }
+
+  public String getOtherActivityLocation() {
+    return otherActivityLocation;
+  }
+
+  public void setOtherActivityLocation(String otherActivityLocation) {
+    this.otherActivityLocation = otherActivityLocation;
+  }
+
+  public String getGetOtherActivityPeopleCount() {
+    return getOtherActivityPeopleCount;
+  }
+
+  public void setGetOtherActivityPeopleCount(
+    String getOtherActivityPeopleCount
+  ) {
+    this.getOtherActivityPeopleCount = getOtherActivityPeopleCount;
   }
 
   public String getMoreDetails() {
