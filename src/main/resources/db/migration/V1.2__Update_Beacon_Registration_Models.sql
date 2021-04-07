@@ -59,23 +59,27 @@ ALTER TABLE beacon_use
     DROP COLUMN beacon_person_id,
     DROP COLUMN vessel_id;
 
--- Update beacon person table
-ALTER TABLE beacon_person
-    ADD COLUMN person_type text NOT NULL;
+-- Drop beacon_person table in favour of using person table
+DROP TABLE beacon_person;
 
 -- Update person table
 ALTER TABLE person
+    RENAME TO beacon_person;
+
+ALTER TABLE beacon_person
     RENAME COLUMN email_address TO email;
 
-ALTER TABLE person
+ALTER TABLE beacon_person
+    ADD COLUMN telephone text,
+    ADD COLUMN beacon_id uuid REFERENCES beacon(id) NOT NULL,
+    ALTER COLUMN email SET NOT NULL,
+    ALTER COLUMN person_type SET NOT NULL,
+    DROP COLUMN last_modified_date,
     DROP COLUMN care_of;
-
-ALTER TABLE person
-    DROP COLUMN person_type;
 
 -- Drop table vessel and capture all fields on the beacon_use table until we allow users to create/manage vessels/aircrafts
 DROP TABLE vessel;
 
--- Drop telephone table
+-- Drop unused telephone table
 DROP TABLE telephone;
 
