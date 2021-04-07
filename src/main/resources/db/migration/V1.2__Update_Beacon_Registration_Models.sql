@@ -97,4 +97,3 @@ DROP TABLE vessel;
 
 -- Drop unused telephone table
 DROP TABLE telephone;
-

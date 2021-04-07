@@ -53,14 +53,17 @@ public class Beacon {
 
   @Transient
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @Valid
   private List<BeaconUse> uses;
 
   @Transient
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @Valid
   private BeaconPerson owner;
 
   @Transient
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @Valid
   private List<BeaconPerson> emergencyContacts;
 
   public UUID getId() {

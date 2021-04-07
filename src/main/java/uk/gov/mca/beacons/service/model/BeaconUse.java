@@ -286,8 +286,16 @@ public class BeaconUse {
     return vesselName;
   }
 
-  public void setVesselName(String vesselType) {
-    this.vesselName = vesselType;
+  public void setVesselName(String vesselName) {
+    this.vesselName = vesselName;
+  }
+
+  public String getPortLetterNumber() {
+    return portLetterNumber;
+  }
+
+  public void setPortLetterNumber(String portLetterNumber) {
+    this.portLetterNumber = portLetterNumber;
   }
 
   public String getSsrNumber() {
@@ -312,6 +320,14 @@ public class BeaconUse {
 
   public void setAreaOfOperation(String areaOfOperation) {
     this.areaOfOperation = areaOfOperation;
+  }
+
+  public String getBeaconLocation() {
+    return beaconLocation;
+  }
+
+  public void setBeaconLocation(String beaconLocation) {
+    this.beaconLocation = beaconLocation;
   }
 
   public boolean isMainUse() {
@@ -384,6 +400,14 @@ public class BeaconUse {
 
   public void setDongle(Boolean dongle) {
     this.dongle = dongle;
+  }
+
+  public String getMoreDetails() {
+    return moreDetails;
+  }
+
+  public void setMoreDetails(String moreDetails) {
+    this.moreDetails = moreDetails;
   }
 
   public LocalDateTime getCreatedDate() {
