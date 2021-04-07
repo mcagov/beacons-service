@@ -20,6 +20,7 @@ class BeaconUnitTest {
     final Beacon beacon = objectMapper.readValue(json, Beacon.class);
 
     assertThat(beacon.getUses().size(), is(1));
+    assertThat(beacon.getBeaconType(), is(BeaconType.PLB));
   }
 
   @Test
