@@ -12,10 +12,6 @@ import javax.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * 1. create a new person object per beacon
- * 2. lookup is there already a user with (insert criteria, i.e: same email)?
- */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class BeaconPerson {

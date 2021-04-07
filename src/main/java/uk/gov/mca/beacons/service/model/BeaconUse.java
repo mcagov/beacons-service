@@ -2,12 +2,14 @@ package uk.gov.mca.beacons.service.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,6 +24,7 @@ public class BeaconUse {
   private UUID beaconId;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Environment environment;
 
   private String otherEnvironment;
@@ -30,6 +33,7 @@ public class BeaconUse {
   private Purpose purpose;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Activity activity;
 
   private String otherActivity;
@@ -40,9 +44,23 @@ public class BeaconUse {
 
   private Boolean fixedVhfRadio;
 
-  private String fixedMmsiNumber;
+  private String fixedVhfRadioInput;
 
   private Boolean portableVhfRadio;
+
+  private String portableVhfRadioInput;
+
+  private Boolean satelliteTelephone;
+
+  private String satelliteTelephoneInput;
+
+  private Boolean mobileTelephone;
+
+  @Column(name = "mobile_telephone_1")
+  private String mobileTelephoneInput1;
+
+  @Column(name = "mobile_telephone_2")
+  private String mobileTelephoneInput2;
 
   private String description;
 
@@ -52,13 +70,17 @@ public class BeaconUse {
 
   private Integer maxCapacity;
 
-  private String vesselType;
+  private String vesselName;
+
+  private String portLetterNumber;
 
   private String ssrNumber;
 
   private String homeport;
 
   private String areaOfOperation;
+
+  private String beaconLocation;
 
   private boolean mainUse;
 
@@ -77,6 +99,9 @@ public class BeaconUse {
   private String cnOrMsnNumber;
 
   private Boolean dongle;
+
+  @NotNull
+  private String moreDetails;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -109,8 +134,8 @@ public class BeaconUse {
     return otherEnvironment;
   }
 
-  public void setOtherEnvironment(String otherEnvironmentUse) {
-    this.otherEnvironment = otherEnvironmentUse;
+  public void setOtherEnvironment(String otherEnvironment) {
+    this.otherEnvironment = otherEnvironment;
   }
 
   public Purpose getPurpose() {
@@ -145,6 +170,86 @@ public class BeaconUse {
     this.callSign = callSign;
   }
 
+  public Boolean getVhfRadio() {
+    return vhfRadio;
+  }
+
+  public void setVhfRadio(Boolean vhfRadio) {
+    this.vhfRadio = vhfRadio;
+  }
+
+  public Boolean getFixedVhfRadio() {
+    return fixedVhfRadio;
+  }
+
+  public void setFixedVhfRadio(Boolean fixedVhfRadio) {
+    this.fixedVhfRadio = fixedVhfRadio;
+  }
+
+  public String getFixedVhfRadioInput() {
+    return fixedVhfRadioInput;
+  }
+
+  public void setFixedVhfRadioInput(String fixedVhfRadioInput) {
+    this.fixedVhfRadioInput = fixedVhfRadioInput;
+  }
+
+  public Boolean getPortableVhfRadio() {
+    return portableVhfRadio;
+  }
+
+  public void setPortableVhfRadio(Boolean portableVhfRadio) {
+    this.portableVhfRadio = portableVhfRadio;
+  }
+
+  public String getPortableVhfRadioInput() {
+    return portableVhfRadioInput;
+  }
+
+  public void setPortableVhfRadioInput(String portableVhfRadioInput) {
+    this.portableVhfRadioInput = portableVhfRadioInput;
+  }
+
+  public Boolean getSatelliteTelephone() {
+    return satelliteTelephone;
+  }
+
+  public void setSatelliteTelephone(Boolean satelliteTelephone) {
+    this.satelliteTelephone = satelliteTelephone;
+  }
+
+  public String getSatelliteTelephoneInput() {
+    return satelliteTelephoneInput;
+  }
+
+  public void setSatelliteTelephoneInput(String satelliteTelephoneInput) {
+    this.satelliteTelephoneInput = satelliteTelephoneInput;
+  }
+
+  public Boolean getMobileTelephone() {
+    return mobileTelephone;
+  }
+
+  public void setMobileTelephone(Boolean mobileTelephone) {
+    this.mobileTelephone = mobileTelephone;
+  }
+
+  public String getMobileTelephoneInput1() {
+    return mobileTelephoneInput1;
+  }
+
+  public void setMobileTelephoneInput1(String mobileTelephoneInput1) {
+    this.mobileTelephoneInput1 = mobileTelephoneInput1;
+  }
+
+  public String getMobileTelephoneInput2() {
+    return mobileTelephoneInput2;
+  }
+
+  public void setMobileTelephoneInput2(String mobileTelephoneInput2) {
+    this.mobileTelephoneInput2 = mobileTelephoneInput2;
+  }
+
   public String getDescription() {
     return description;
   }
@@ -177,12 +282,12 @@ public class BeaconUse {
     this.maxCapacity = maxCapacity;
   }
 
-  public String getVesselType() {
-    return vesselType;
+  public String getVesselName() {
+    return vesselName;
   }
 
-  public void setVesselType(String vesselType) {
-    this.vesselType = vesselType;
+  public void setVesselName(String vesselType) {
+    this.vesselName = vesselType;
   }
 
   public String getSsrNumber() {

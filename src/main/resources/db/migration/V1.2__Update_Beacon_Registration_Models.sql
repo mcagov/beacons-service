@@ -40,14 +40,20 @@ ALTER TABLE beacon_use
     ADD COLUMN other_activity text,
     ADD COLUMN call_sign text,
     ADD COLUMN vhf_radio boolean,
-    ADD COLUMN vhf_radio_radio boolean,
-    ADD COLUMN vhf_radio_radio_input text,
+    ADD COLUMN fixed_vhf_radio boolean,
+    ADD COLUMN fixed_vhf_radio_input text,
+    ADD COLUMN portable_vhf_radio boolean,
+    ADD COLUMN portable_vhf_radio_input text,
+    ADD COLUMN satellite_telephone boolean,
+    ADD COLUMN satellite_telephone_input text,
+    ADD COLUMN mobile_telephone boolean,
+    ADD COLUMN mobile_telephone_input_1 text,
+    ADD COLUMN mobile_telephone_input_2 text,
     ADD COLUMN purpose text,
     ADD COLUMN description text,
-    ADD COLUMN vessel_mmsi text,
     ADD COLUMN radio_comms text,
     ADD COLUMN max_capacity text,
-    ADD COLUMN vessel_type text,
+    ADD COLUMN vessel_name text,
     ADD COLUMN ssr_number text,
     ADD COLUMN homeport text,
     ADD COLUMN area_of_operation text,
@@ -58,9 +64,12 @@ ALTER TABLE beacon_use
     ADD COLUMN hex_address text,
     ADD COLUMN cn_or_msn_number text,
     ADD COLUMN dongle boolean,
+    ADD COLUMN more_details text NOT NULL,
     DROP COLUMN last_modified_date,
     DROP COLUMN beacon_person_id,
     DROP COLUMN vessel_id;
+
+CREATE INDEX beacon_use_activity ON beacon_use(activity);
 
 -- Drop beacon_person table in favour of using person table
 DROP TABLE beacon_person;

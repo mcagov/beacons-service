@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -26,12 +26,16 @@ public class Beacon {
   @Enumerated(EnumType.STRING)
   private BeaconType beaconType;
 
+  @NotNull
   private String hexId;
 
+  @NotNull
   private String manufacturer;
 
+  @NotNull
   private String model;
 
+  @NotNull
   private String manufacturerSerialNumber;
 
   private String chkCode;
@@ -49,6 +53,14 @@ public class Beacon {
   @Transient
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private List<BeaconUse> uses;
+
+  @Transient
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private BeaconPerson owner;
+
+  @Transient
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private List<BeaconPerson> emergencyContacts;
 
   public UUID getId() {
     return id;
@@ -144,5 +156,21 @@ public class Beacon {
 
   public void setUses(List<BeaconUse> uses) {
     this.uses = uses;
+  }
+
+  public BeaconPerson getOwner() {
+    return owner;
+  }
+
+  public void setOwner(BeaconPerson owner) {
+    this.owner = owner;
+  }
+
+  public List<BeaconPerson> getEmergencyContacts() {
+    return emergencyContacts;
+  }
+
+  public void setEmergencyContacts(List<BeaconPerson> emergencyContacts) {
+    this.emergencyContacts = emergencyContacts;
   }
 }
