@@ -20,7 +20,7 @@ ALTER TABLE beacon
     ALTER COLUMN hex_id SET NOT NULL,
     ALTER COLUMN manufacturer_serial_number SET NOT NULL,
     ADD COLUMN chk_code text,
-    ALTER COLUMN beacon_status SET DEFAULT 'DRAFT',
+    ALTER COLUMN beacon_status SET DEFAULT 'NEW',
     DROP COLUMN checksum,
     DROP COLUMN coding,
     DROP COLUMN last_modified_date,
