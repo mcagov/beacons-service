@@ -70,7 +70,6 @@ ALTER TABLE beacon_use
     ADD COLUMN working_remotely_people_count text,
     ADD COLUMN windfarm_location text,
     ADD COLUMN windfarm_people_count text,
-    ADD COLUMN windfarm_people_count text,
     ADD COLUMN other_activity_location text,
     ADD COLUMN other_activity_people_count text,
     ADD COLUMN more_details text NOT NULL,
