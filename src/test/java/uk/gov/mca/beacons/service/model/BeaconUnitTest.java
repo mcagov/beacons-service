@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
@@ -19,8 +21,9 @@ class BeaconUnitTest {
       "{\"beaconType\":\"PLB\",\"uses\": [{\"environment\":\"MARITIME\"}]}";
     final Beacon beacon = objectMapper.readValue(json, Beacon.class);
 
-    assertThat(beacon.getUses().size(), is(1));
-    assertThat(beacon.getBeaconType(), is(BeaconType.PLB));
+    final BeaconUse beaconUse = beacon.getUses().get(0);
+    assertNotNull(beaconUse);
+    assertThat(beaconUse.getEnvironment(), is(Environment.MARITIME));
   }
 
   @Test
