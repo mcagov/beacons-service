@@ -42,19 +42,26 @@ ALTER TABLE beacon_use
     ADD COLUMN purpose text,
     ADD COLUMN description text,
     ADD COLUMN vessel_mmsi text,
-    ADD COLUMN vessel_comms text,
+    ADD COLUMN radio_comms text,
     ADD COLUMN max_capacity text,
     ADD COLUMN vessel_type text,
     ADD COLUMN ssr_number text,
     ADD COLUMN homeport text,
     ADD COLUMN area_of_operation text,
+    ADD COLUMN aircraft_manufacturer text,
+    ADD COLUMN principal_airport text,
+    ADD COLUMN secondary_airport text,
+    ADD COLUMN registration_mark text,
+    ADD COLUMN hex_address text,
+    ADD COLUMN cn_or_msn_number text,
+    ADD COLUMN dongle boolean,
     DROP COLUMN last_modified_date,
+    DROP COLUMN beacon_person_id,
     DROP COLUMN vessel_id;
 
 -- Update beacon person table
 ALTER TABLE beacon_person
-    ADD COLUMN person_type text NOT NULL,
-    DROP COLUMN vessel_id;
+    ADD COLUMN person_type text NOT NULL;
 
 -- Update person table
 ALTER TABLE person

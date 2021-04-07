@@ -54,9 +54,21 @@ public class BeaconUse {
 
   private boolean mainUse;
 
-  private UUID beaconPersonId;
-
   private String beaconPosition;
+
+  private String aircraftManufacturer;
+
+  private String principalAirport;
+
+  private String secondaryAirport;
+
+  private String registrationMark;
+
+  private String hexAddress;
+
+  private String cnOrMsnNumber;
+
+  private Boolean dongle;
 
   @CreatedDate
   private LocalDateTime createdDate;
@@ -197,20 +209,68 @@ public class BeaconUse {
     this.mainUse = mainUse;
   }
 
-  public UUID getBeaconPersonId() {
-    return beaconPersonId;
-  }
-
-  public void setBeaconPersonId(UUID beaconPersonId) {
-    this.beaconPersonId = beaconPersonId;
-  }
-
   public String getBeaconPosition() {
     return beaconPosition;
   }
 
   public void setBeaconPosition(String beaconPosition) {
     this.beaconPosition = beaconPosition;
+  }
+
+  public String getAircraftManufacturer() {
+    return aircraftManufacturer;
+  }
+
+  public void setAircraftManufacturer(String aircraftManufacturer) {
+    this.aircraftManufacturer = aircraftManufacturer;
+  }
+
+  public String getPrincipalAirport() {
+    return principalAirport;
+  }
+
+  public void setPrincipalAirport(String principalAirport) {
+    this.principalAirport = principalAirport;
+  }
+
+  public String getSecondaryAirport() {
+    return secondaryAirport;
+  }
+
+  public void setSecondaryAirport(String secondaryAirport) {
+    this.secondaryAirport = secondaryAirport;
+  }
+
+  public String getRegistrationMark() {
+    return registrationMark;
+  }
+
+  public void setRegistrationMark(String registrationMark) {
+    this.registrationMark = registrationMark;
+  }
+
+  public String getHexAddress() {
+    return hexAddress;
+  }
+
+  public void setHexAddress(String hexAddress) {
+    this.hexAddress = hexAddress;
+  }
+
+  public String getCnOrMsnNumber() {
+    return cnOrMsnNumber;
+  }
+
+  public void setCnOrMsnNumber(String cnOrMsnNumber) {
+    this.cnOrMsnNumber = cnOrMsnNumber;
+  }
+
+  public Boolean getDongle() {
+    return dongle;
+  }
+
+  public void setDongle(Boolean dongle) {
+    this.dongle = dongle;
   }
 
   public LocalDateTime getCreatedDate() {
