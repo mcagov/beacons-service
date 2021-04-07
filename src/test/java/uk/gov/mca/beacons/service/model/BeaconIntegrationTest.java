@@ -4,21 +4,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-class BeaconUnitTest {
+/**
+ * Integration test to autowire in the Spring Boot configured Jackson Object Mapper.
+ */
+@SpringBootTest
+class BeaconIntegrationTest {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Test
   void shouldDeserializeTheBeaconUses() throws Exception {
     final String json =
-      "{\"beaconType\":\"PLB\",\"uses\": [{\"environment\":\"MARITIME\"}]}";
+      "{\"beaconType\":\"PLB\",\"batteryExpiryDate\": \"2020-03-07\",\"lastServicedDate\": \"2020-03-07\",\"createdDate\":\"2020-03-07T10:15:30\",\"uses\": [{\"environment\":\"MARITIME\"}]}";
     final Beacon beacon = objectMapper.readValue(json, Beacon.class);
 
     final BeaconUse beaconUse = beacon.getUses().get(0);
