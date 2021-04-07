@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.service.documentation.RegisterBeaconDocumentation;
 import uk.gov.mca.beacons.service.model.Registration;
 
 @RestController
@@ -17,7 +18,7 @@ public class RegistrationsController {
   private final RegistrationsService registrationsService;
 
   @Autowired
-  RegistrationsController(RegistrationsService registrationsService) {
+  public RegistrationsController(RegistrationsService registrationsService) {
     this.registrationsService = registrationsService;
   }
 
@@ -26,6 +27,7 @@ public class RegistrationsController {
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE
   )
+  @RegisterBeaconDocumentation
   public Registration register(@RequestBody Registration registration) {
     return registrationsService.register(registration);
   }
