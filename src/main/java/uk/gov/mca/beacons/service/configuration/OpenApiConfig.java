@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-  private static final String GITHUB_LICENSE_SUFFIX = "/blob/main/LICENSE";
+  private static final String GITHUB_LICENSE_SUFFIX = "/blob/main/LICENCE";
 
   @Bean
   public OpenAPI beaconsOpenApiConfig(
