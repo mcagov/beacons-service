@@ -1,7 +1,14 @@
 package uk.gov.mca.beacons.service.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -9,6 +16,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -42,6 +50,10 @@ public class Beacon {
 
   @CreatedDate
   private LocalDateTime createdDate;
+
+  @Transient
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private List<BeaconUse> uses;
 
   public UUID getId() {
     return id;
@@ -129,5 +141,13 @@ public class Beacon {
 
   public void setCreatedDate(LocalDateTime createdDate) {
     this.createdDate = createdDate;
+  }
+
+  public List<BeaconUse> getUses() {
+    return uses;
+  }
+
+  public void setUses(List<BeaconUse> uses) {
+    this.uses = uses;
   }
 }
