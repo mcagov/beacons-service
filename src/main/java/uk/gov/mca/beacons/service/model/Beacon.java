@@ -36,9 +36,9 @@ public class Beacon {
 
   private String chkCode;
 
-  private LocalDate batteryExpiryDate;
+  private LocalDateTime batteryExpiryDate;
 
-  private LocalDate lastServicedDate;
+  private LocalDateTime lastServicedDate;
 
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
@@ -106,19 +106,19 @@ public class Beacon {
     this.chkCode = chkCode;
   }
 
-  public LocalDate getBatteryExpiryDate() {
+  public LocalDateTime getBatteryExpiryDate() {
     return batteryExpiryDate;
   }
 
-  public void setBatteryExpiryDate(LocalDate batteryExpiryDate) {
+  public void setBatteryExpiryDate(LocalDateTime batteryExpiryDate) {
     this.batteryExpiryDate = batteryExpiryDate;
   }
 
-  public LocalDate getLastServicedDate() {
+  public LocalDateTime getLastServicedDate() {
     return lastServicedDate;
   }
 
-  public void setLastServicedDate(LocalDate lastServicedDate) {
+  public void setLastServicedDate(LocalDateTime lastServicedDate) {
     this.lastServicedDate = lastServicedDate;
   }
 

@@ -24,7 +24,7 @@ public class BeaconUse {
   @Enumerated(EnumType.STRING)
   private Environment environment;
 
-  private String otherEnvironmentUse;
+  private String otherEnvironment;
 
   @Enumerated(EnumType.STRING)
   private Purpose purpose;
@@ -35,6 +35,14 @@ public class BeaconUse {
   private String otherActivity;
 
   private String callSign;
+
+  private Boolean vhfRadio;
+
+  private Boolean fixedVhfRadio;
+
+  private String fixedMmsiNumber;
+
+  private Boolean portableVhfRadio;
 
   private String description;
 
@@ -97,12 +105,12 @@ public class BeaconUse {
     this.environment = environment;
   }
 
-  public String getOtherEnvironmentUse() {
-    return otherEnvironmentUse;
+  public String getOtherEnvironment() {
+    return otherEnvironment;
   }
 
-  public void setOtherEnvironmentUse(String otherEnvironmentUse) {
-    this.otherEnvironmentUse = otherEnvironmentUse;
+  public void setOtherEnvironment(String otherEnvironmentUse) {
+    this.otherEnvironment = otherEnvironmentUse;
   }
 
   public Purpose getPurpose() {
