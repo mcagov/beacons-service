@@ -28,7 +28,7 @@ Install node packages (needed for code formatting): `npm install`
 
 Integration tests use the naming convention `<name>IntegrationTest`.
 
-Unit tests use the naming convention `<name>Test`.
+Unit tests use the naming convention `<name>UnitTest`.
 
 Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service](src/test/java/uk/gov/mca/beacons/service).
 
