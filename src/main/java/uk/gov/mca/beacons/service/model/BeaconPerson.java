@@ -26,7 +26,7 @@ public class BeaconPerson {
 
   private UUID beaconId;
 
-  private String name;
+  private String fullName;
 
   private String telephone;
 
@@ -70,12 +70,12 @@ public class BeaconPerson {
     this.beaconId = beaconId;
   }
 
-  public String getName() {
-    return name;
+  public String getFullName() {
+    return fullName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFullName(String name) {
+    this.fullName = name;
   }
 
   public String getTelephone() {

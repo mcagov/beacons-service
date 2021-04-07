@@ -1,27 +1,27 @@
 {
-  "owner": {
-    "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
-    "email": "nelson@royalnavy.mod.uk",
-    "addressLine1": "1 The Hard",
-    "addressLine2": "",
-    "addressTownOrCity": "Portsmouth",
-    "postcode": "PO1 3DT",
-    "emergencyContacts": [
-      {
-        "name": "Lady Hamilton",
-        "telephoneNumber": "02392 856621"
-      },
-      {
-        "name": "Frances Herbert Woolward",
-        "telephoneNumber": "02392 856281"
-      }
-    ]
-  },
   "beacons": [
     {
       "hexId": "1D0EA08C52FFBFF",
       "manufacturer": "Ocean Signal",
       "model": "EPIRB1",
+      "owner": {
+        "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+        "email": "nelson@royalnavy.mod.uk",
+        "addressLine1": "1 The Hard",
+        "addressLine2": "",
+        "addressTownOrCity": "Portsmouth",
+        "postcode": "PO1 3DT"
+      },
+      "emergencyContacts": [
+        {
+          "name": "Lady Hamilton",
+          "telephoneNumber": "02392 856621"
+        },
+        {
+          "name": "Frances Herbert Woolward",
+          "telephoneNumber": "02392 856281"
+        }
+      ],
       "uses": [
         {
           "environment": "MARITIME",
@@ -39,6 +39,24 @@
       "hexId": "ADCD0228C500401",
       "manufacturer": "McMurdo",
       "model": "S20 Lifejacket AIS Beacon",
+      "owner": {
+        "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+        "email": "nelson@royalnavy.mod.uk",
+        "addressLine1": "1 The Hard",
+        "addressLine2": "",
+        "addressTownOrCity": "Portsmouth",
+        "postcode": "PO1 3DT"
+      },
+      "emergencyContacts": [
+        {
+          "name": "Lady Hamilton",
+          "telephoneNumber": "02392 856621"
+        },
+        {
+          "name": "Frances Herbert Woolward",
+          "telephoneNumber": "02392 856281"
+        }
+      ],
       "uses": [
         {
           "environment": "MARITIME",

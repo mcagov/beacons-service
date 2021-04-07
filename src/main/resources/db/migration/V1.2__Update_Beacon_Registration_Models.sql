@@ -70,6 +70,9 @@ ALTER TABLE beacon_person
     RENAME COLUMN email_address TO email;
 
 ALTER TABLE beacon_person
+    RENAME COLUMN name TO full_name;
+
+ALTER TABLE beacon_person
     ADD COLUMN telephone text,
     ADD COLUMN beacon_id uuid REFERENCES beacon(id) NOT NULL,
     ALTER COLUMN email SET NOT NULL,
