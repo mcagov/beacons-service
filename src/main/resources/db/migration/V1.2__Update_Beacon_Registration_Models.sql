@@ -95,10 +95,13 @@ ALTER TABLE beacon_person
 ALTER TABLE beacon_person
     ADD COLUMN telephone text,
     ADD COLUMN beacon_id uuid REFERENCES beacon(id) NOT NULL,
-    ALTER COLUMN email SET NOT NULL,
     ALTER COLUMN person_type SET NOT NULL,
     DROP COLUMN last_modified_date,
     DROP COLUMN care_of;
+
+ALTER TABLE beacon_person
+    ADD CONSTRAINT beacon_owner_email_not_null_constraint
+        CHECK ( NOT (email IS NULL AND person_type = 'OWNER'::text) );
 
 -- Drop table vessel and capture all fields on the beacon_use table until we allow users to create/manage vessels/aircrafts
 DROP TABLE vessel;
