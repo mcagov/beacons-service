@@ -1,9 +1,11 @@
 package uk.gov.mca.beacons.service.model;
 
 import java.util.List;
+import javax.validation.Valid;
 
 public class Registration {
 
+  @Valid
   private List<Beacon> beacons;
 
   public List<Beacon> getBeacons() {

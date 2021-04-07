@@ -41,6 +41,10 @@
       "hexId": "ADCD0228C500401",
       "manufacturer": "McMurdo",
       "model": "S20 Lifejacket AIS Beacon",
+      "manufacturerSerialNumber": "1407312904",
+      "chkCode": "9480B",
+      "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
+      "lastServicedDate": "2020-02-01T00:00:00.000Z",
       "uses": [
         {
           "environment": "MARITIME",
