@@ -24,7 +24,7 @@ class RegistrationsIntegrationTest {
 
   @Test
   void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
-    String validRegistrationRequestBody = importFromFile(
+    final String validRegistrationRequestBody = importFromFile(
       "src/test/resources/validRegistration.json"
     );
 
