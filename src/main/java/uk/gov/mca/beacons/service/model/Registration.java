@@ -1,15 +1,18 @@
 package uk.gov.mca.beacons.service.model;
 
-import java.util.UUID;
-import javax.persistence.*;
+import java.util.List;
+import javax.validation.Valid;
 
-@Entity
 public class Registration {
 
-  @Id
-  private UUID id;
+  @Valid
+  private List<Beacon> beacons;
 
-  public UUID getId() {
-    return UUID.randomUUID();
+  public List<Beacon> getBeacons() {
+    return beacons;
+  }
+
+  public void setBeacons(List<Beacon> beacons) {
+    this.beacons = beacons;
   }
 }

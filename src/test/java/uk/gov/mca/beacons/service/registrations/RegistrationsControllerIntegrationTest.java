@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class RegistrationsIntegrationTest {
+class RegistrationsControllerIntegrationTest {
 
   private static final String REGISTRATION_ENDPOINT = "/registrations/register";
 
@@ -20,11 +20,8 @@ class RegistrationsIntegrationTest {
   private WebTestClient webTestClient;
 
   @Test
-  void contextLoads() {}
-
-  @Test
   void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
-    String validRegistrationRequestBody = importFromFile(
+    final String validRegistrationRequestBody = importFromFile(
       "src/test/resources/validRegistration.json"
     );
 
@@ -37,10 +34,7 @@ class RegistrationsIntegrationTest {
       .expectStatus()
       .isCreated()
       .expectHeader()
-      .valueEquals("Content-Type", "application/json")
-      .expectBody()
-      .jsonPath("id")
-      .isNotEmpty();
+      .valueEquals("Content-Type", "application/json");
   }
 
   private String importFromFile(String path) throws IOException {

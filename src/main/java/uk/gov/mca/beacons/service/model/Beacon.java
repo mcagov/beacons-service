@@ -1,43 +1,67 @@
 package uk.gov.mca.beacons.service.model;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "beacons")
 public class Beacon {
 
   @Id
   @GeneratedValue
   private UUID id;
 
-  private String beaconType;
+  @Enumerated(EnumType.STRING)
+  private BeaconType beaconType;
+
+  @NotNull
   private String hexId;
+
+  @NotNull
   private String manufacturer;
+
+  @NotNull
   private String model;
-  private String serialNumber;
-  private LocalDate batteryExpiry;
-  private LocalDate lastServiced;
-  private String checksum;
-  private String beaconStatus;
-  private String coding;
-  private String protocolCode;
+
+  @NotNull
+  private String manufacturerSerialNumber;
+
+  private String chkCode;
+
+  private LocalDateTime batteryExpiryDate;
+
+  private LocalDateTime lastServicedDate;
+
+  @Enumerated(EnumType.STRING)
+  private BeaconStatus beaconStatus;
 
   @CreatedDate
   private LocalDateTime createdDate;
 
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
+  @Transient
+  @Valid
+  private List<BeaconUse> uses;
+
+  @Transient
+  @Valid
+  private BeaconPerson owner;
+
+  @Transient
+  @Valid
+  private List<BeaconPerson> emergencyContacts;
 
   public UUID getId() {
     return id;
@@ -47,11 +71,11 @@ public class Beacon {
     this.id = id;
   }
 
-  public String getBeaconType() {
+  public BeaconType getBeaconType() {
     return beaconType;
   }
 
-  public void setBeaconType(String beaconType) {
+  public void setBeaconType(BeaconType beaconType) {
     this.beaconType = beaconType;
   }
 
@@ -79,60 +103,44 @@ public class Beacon {
     this.model = model;
   }
 
-  public String getSerialNumber() {
-    return serialNumber;
+  public String getManufacturerSerialNumber() {
+    return manufacturerSerialNumber;
   }
 
-  public void setSerialNumber(String serialNumber) {
-    this.serialNumber = serialNumber;
+  public void setManufacturerSerialNumber(String manufacturerSerialNumber) {
+    this.manufacturerSerialNumber = manufacturerSerialNumber;
   }
 
-  public LocalDate getBatteryExpiry() {
-    return batteryExpiry;
+  public String getChkCode() {
+    return chkCode;
   }
 
-  public void setBatteryExpiry(LocalDate batteryExpiry) {
-    this.batteryExpiry = batteryExpiry;
+  public void setChkCode(String chkCode) {
+    this.chkCode = chkCode;
   }
 
-  public LocalDate getLastServiced() {
-    return lastServiced;
+  public LocalDateTime getBatteryExpiryDate() {
+    return batteryExpiryDate;
   }
 
-  public void setLastServiced(LocalDate lastServiced) {
-    this.lastServiced = lastServiced;
+  public void setBatteryExpiryDate(LocalDateTime batteryExpiryDate) {
+    this.batteryExpiryDate = batteryExpiryDate;
   }
 
-  public String getChecksum() {
-    return checksum;
+  public LocalDateTime getLastServicedDate() {
+    return lastServicedDate;
   }
 
-  public void setChecksum(String checksum) {
-    this.checksum = checksum;
+  public void setLastServicedDate(LocalDateTime lastServicedDate) {
+    this.lastServicedDate = lastServicedDate;
   }
 
-  public String getBeaconStatus() {
+  public BeaconStatus getBeaconStatus() {
     return beaconStatus;
   }
 
-  public void setBeaconStatus(String beaconStatus) {
+  public void setBeaconStatus(BeaconStatus beaconStatus) {
     this.beaconStatus = beaconStatus;
-  }
-
-  public String getCoding() {
-    return coding;
-  }
-
-  public void setCoding(String coding) {
-    this.coding = coding;
-  }
-
-  public String getProtocolCode() {
-    return protocolCode;
-  }
-
-  public void setProtocolCode(String protocolCode) {
-    this.protocolCode = protocolCode;
   }
 
   public LocalDateTime getCreatedDate() {
@@ -143,11 +151,27 @@ public class Beacon {
     this.createdDate = createdDate;
   }
 
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
+  public List<BeaconUse> getUses() {
+    return uses;
   }
 
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setUses(List<BeaconUse> uses) {
+    this.uses = uses;
+  }
+
+  public BeaconPerson getOwner() {
+    return owner;
+  }
+
+  public void setOwner(BeaconPerson owner) {
+    this.owner = owner;
+  }
+
+  public List<BeaconPerson> getEmergencyContacts() {
+    return emergencyContacts;
+  }
+
+  public void setEmergencyContacts(List<BeaconPerson> emergencyContacts) {
+    this.emergencyContacts = emergencyContacts;
   }
 }
