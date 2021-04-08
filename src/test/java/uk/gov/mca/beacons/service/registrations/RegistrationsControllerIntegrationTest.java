@@ -29,13 +29,13 @@ class RegistrationsControllerIntegrationTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = RegistrationJson.class,
+    value = RegistrationUseCase.class,
     names = { "SINGLE_BEACON", "MULTIPLE_BEACONS" }
   )
   void givenNewValidRegistration_whenPosted_thenStatus201(
-    RegistrationJson registrationJson
+    RegistrationUseCase registrationJson
   ) throws IOException {
-    final Map<RegistrationJson, Object> validRegistrationRequestBody = getRegistrationJson();
+    final Map<RegistrationUseCase, Object> validRegistrationRequestBody = getRegistrationsJson();
 
     makePostRequest(validRegistrationRequestBody.get(registrationJson))
       .expectStatus()
@@ -46,17 +46,17 @@ class RegistrationsControllerIntegrationTest {
 
   @ParameterizedTest
   @EnumSource(
-    value = RegistrationJson.class,
+    value = RegistrationUseCase.class,
     names = { "NO_BEACON_TYPE", "NO_USES", "NO_EMERGENCY_CONTACTS" }
   )
-  void givenNewInvalidRegistration_whenPosted_thenStatus400(
-    RegistrationJson registrationJson
+  void givenInvalidRegistration_whenPosted_thenStatus400(
+    RegistrationUseCase registrationJson
   ) throws IOException {
-    final Map<RegistrationJson, Object> validRegistrationRequestBody = getRegistrationJson();
+    final Map<RegistrationUseCase, Object> registrationsJson = getRegistrationsJson();
 
-    makePostRequest(validRegistrationRequestBody.get(registrationJson))
+    makePostRequest(registrationsJson.get(registrationJson))
       .expectStatus()
-      .is4xxClientError()
+      .isBadRequest()
       .expectHeader()
       .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
   }
@@ -70,16 +70,16 @@ class RegistrationsControllerIntegrationTest {
       .exchange();
   }
 
-  private Map<RegistrationJson, Object> getRegistrationJson()
+  private Map<RegistrationUseCase, Object> getRegistrationsJson()
     throws IOException {
     final String json = new String(
       Files.readAllBytes(Paths.get(REGISTRATION_JSON_RESOURCE))
     );
-    final TypeReference<EnumMap<RegistrationJson, Object>> typeReference = new TypeReference<>() {};
+    final TypeReference<EnumMap<RegistrationUseCase, Object>> typeReference = new TypeReference<>() {};
     return OBJECT_MAPPER.readValue(json, typeReference);
   }
 
-  enum RegistrationJson {
+  enum RegistrationUseCase {
     SINGLE_BEACON,
     MULTIPLE_BEACONS,
     NO_BEACON_TYPE,
