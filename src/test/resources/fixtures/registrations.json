@@ -42,7 +42,7 @@
       }
     ]
   },
-  "MULTIPLE_BEACON": {
+  "MULTIPLE_BEACONS": {
     "beacons": [
       {
         "hexId": "1D0EA08C52FFBFF",

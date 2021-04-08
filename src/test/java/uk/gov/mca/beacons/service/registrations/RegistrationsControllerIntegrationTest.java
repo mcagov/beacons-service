@@ -21,7 +21,7 @@ class RegistrationsControllerIntegrationTest {
 
   private static final String REGISTRATION_ENDPOINT = "/registrations/register";
   private static final String REGISTRATION_JSON_RESOURCE =
-    "src/test/resources/registrations.json";
+    "src/test/resources/fixtures/registrations.json";
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Autowired
@@ -30,7 +30,7 @@ class RegistrationsControllerIntegrationTest {
   @ParameterizedTest
   @EnumSource(
     value = RegistrationJson.class,
-    names = { "SINGLE_BEACON", "MULTIPLE_BEACON" }
+    names = { "SINGLE_BEACON", "MULTIPLE_BEACONS" }
   )
   void givenNewValidRegistration_whenPosted_thenStatus201(
     RegistrationJson registrationJson
@@ -81,7 +81,7 @@ class RegistrationsControllerIntegrationTest {
 
   enum RegistrationJson {
     SINGLE_BEACON,
-    MULTIPLE_BEACON,
+    MULTIPLE_BEACONS,
     NO_BEACON_TYPE,
     NO_USES,
     NO_EMERGENCY_CONTACTS,
