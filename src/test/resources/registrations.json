@@ -134,7 +134,7 @@
       }
     ]
   },
-  "INVALID_REGISTRATION": {
+  "NO_BEACON_TYPE": {
     "beacons": [
       {
         "hexId": "1D0EA08C52FFBFF",
@@ -173,6 +173,68 @@
             "telephoneNumber": "02392 856281"
           }
         ]
+      }
+    ]
+  },
+  "NO_USES": {
+    "beacons": [
+      {
+        "hexId": "1D0EA08C52FFBFF",
+        "manufacturer": "Ocean Signal",
+        "model": "EPIRB1",
+        "manufacturerSerialNumber": "1407312904",
+        "chkCode": "9480B",
+        "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
+        "lastServicedDate": "2020-02-01T00:00:00.000Z",
+        "uses": [],
+        "owner": {
+          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "email": "nelson@royalnavy.mod.uk",
+          "addressLine1": "1 The Hard",
+          "addressLine2": "",
+          "addressTownOrCity": "Portsmouth",
+          "postcode": "PO1 3DT"
+        },
+        "emergencyContacts": [
+          {
+            "name": "Lady Hamilton",
+            "telephoneNumber": "02392 856621"
+          },
+          {
+            "name": "Frances Herbert Woolward",
+            "telephoneNumber": "02392 856281"
+          }
+        ]
+      }
+    ]
+  },
+  "NO_EMERGENCY_CONTACTS": {
+    "beacons": [
+      {
+        "hexId": "1D0EA08C52FFBFF",
+        "manufacturer": "Ocean Signal",
+        "model": "EPIRB1",
+        "manufacturerSerialNumber": "1407312904",
+        "uses": [
+          {
+            "environment": "MARITIME",
+            "purpose": "COMMERCIAL",
+            "activity": "SAILING",
+            "vesselName": "HMS Victory",
+            "maxCapacity": 180,
+            "areaOfOperation": "Cape of Trafalgar",
+            "moreDetails": "More details of this vessel"
+          }
+        ],
+        "owner": {
+          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "email": "nelson@royalnavy.mod.uk",
+          "addressLine1": "1 The Hard",
+          "addressLine2": "",
+          "addressTownOrCity": "Portsmouth",
+          "postcode": "PO1 3DT"
+        },
+        "emergencyContacts": []
       }
     ]
   }

@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -53,6 +55,7 @@ public class Beacon {
   private LocalDateTime createdDate;
 
   @Transient
+  @NotEmpty
   @Valid
   private List<BeaconUse> uses;
 
@@ -61,6 +64,7 @@ public class Beacon {
   private BeaconPerson owner;
 
   @Transient
+  @NotEmpty
   @Valid
   private List<BeaconPerson> emergencyContacts;
 

@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,14 +56,17 @@ class RegistrationsControllerIntegrationTest {
       .valueEquals("Content-Type", "application/json");
   }
 
-  @Test
-  void givenNewInvalidRegistration_whenPosted_thenStatus400()
-    throws IOException {
+  @ParameterizedTest
+  @EnumSource(
+    value = RegistrationJson.class,
+    names = { "NO_BEACON_TYPE", "NO_USES", "NO_EMERGENCY_CONTACTS" }
+  )
+  void givenNewInvalidRegistration_whenPosted_thenStatus400(
+    RegistrationJson registrationJson
+  ) throws IOException {
     final Map<RegistrationJson, Object> validRegistrationRequestBody = getRegistrationJson();
 
-    makePostRequest(
-      validRegistrationRequestBody.get(RegistrationJson.INVALID_REGISTRATION)
-    )
+    makePostRequest(validRegistrationRequestBody.get(registrationJson))
       .expectStatus()
       .is4xxClientError()
       .expectHeader()
@@ -89,6 +94,8 @@ class RegistrationsControllerIntegrationTest {
   enum RegistrationJson {
     SINGLE_BEACON,
     MULTIPLE_BEACON,
-    INVALID_REGISTRATION,
+    NO_BEACON_TYPE,
+    NO_USES,
+    NO_EMERGENCY_CONTACTS,
   }
 }
