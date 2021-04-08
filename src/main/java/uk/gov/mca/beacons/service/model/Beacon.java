@@ -25,6 +25,7 @@ public class Beacon {
   private UUID id;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private BeaconType beaconType;
 
   @NotNull

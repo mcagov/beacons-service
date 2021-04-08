@@ -56,10 +56,10 @@ public class BeaconUse {
 
   private Boolean mobileTelephone;
 
-  @Column(name = "mobile_telephone_1")
+  @Column(name = "mobile_telephone_input_1")
   private String mobileTelephoneInput1;
 
-  @Column(name = "mobile_telephone_2")
+  @Column(name = "mobile_telephone_input_2")
   private String mobileTelephoneInput2;
 
   private Integer maxCapacity;
@@ -110,7 +110,7 @@ public class BeaconUse {
 
   private String otherActivityLocation;
 
-  private String getOtherActivityPeopleCount;
+  private String otherActivityPeopleCount;
 
   @NotNull
   private String moreDetails;
@@ -454,14 +454,12 @@ public class BeaconUse {
     this.otherActivityLocation = otherActivityLocation;
   }
 
-  public String getGetOtherActivityPeopleCount() {
-    return getOtherActivityPeopleCount;
+  public String getOtherActivityPeopleCount() {
+    return otherActivityPeopleCount;
   }
 
-  public void setGetOtherActivityPeopleCount(
-    String getOtherActivityPeopleCount
-  ) {
-    this.getOtherActivityPeopleCount = getOtherActivityPeopleCount;
+  public void setOtherActivityPeopleCount(String otherActivityPeopleCount) {
+    this.otherActivityPeopleCount = otherActivityPeopleCount;
   }
 
   public String getMoreDetails() {
