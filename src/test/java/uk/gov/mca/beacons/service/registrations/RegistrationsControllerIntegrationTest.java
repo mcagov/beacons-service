@@ -41,7 +41,7 @@ class RegistrationsControllerIntegrationTest {
       .expectStatus()
       .isCreated()
       .expectHeader()
-      .valueEquals("Content-Type", "application/json");
+      .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
   }
 
   @ParameterizedTest
@@ -58,7 +58,7 @@ class RegistrationsControllerIntegrationTest {
       .expectStatus()
       .is4xxClientError()
       .expectHeader()
-      .valueEquals("Content-Type", "application/json");
+      .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
   }
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
