@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
+import uk.gov.mca.beacons.service.model.BeaconStatus;
 import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.model.PersonType;
 import uk.gov.mca.beacons.service.model.Registration;
 import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
 import uk.gov.mca.beacons.service.repository.BeaconRepository;
@@ -59,21 +62,48 @@ class RegistrationsServiceUnitTest {
 
     registration = new Registration();
     registration.setBeacons(Collections.singletonList(beacon));
+
+    given(beaconRepository.save(beacon)).willReturn(beacon);
   }
 
   @Test
   void shouldReturnTheSameRegistrationObjectProvided() {
-    given(beaconRepository.save(beacon)).willReturn(beacon);
-
     final Registration expected = registrationsService.register(registration);
 
     assertThat(registration, is(expected));
   }
 
   @Test
-  void shouldRegisterASingleBeacon() {
-    given(beaconRepository.save(beacon)).willReturn(beacon);
+  void shouldSetTheBeaconStatusToNew() {
+    registrationsService.register(registration);
+    assertThat(beacon.getBeaconStatus(), is(BeaconStatus.NEW));
+  }
 
+  @Test
+  void shouldSetTheBeaconIdOnTheUse() {
+    registrationsService.register(registration);
+    assertThat(beaconUse.getBeaconId(), is(beaconId));
+  }
+
+  @Test
+  void shouldSetTheBeaconIdAndPersonTypeOnTheOwner() {
+    registrationsService.register(registration);
+    assertThat(owner.getBeaconId(), is(beaconId));
+    assertThat(owner.getPersonType(), is(PersonType.OWNER));
+  }
+
+  @Test
+  void shouldSetTheBeaconIdAndPersonTypeOnTheEmergencyContact() {
+    registrationsService.register(registration);
+    assertThat(emergencyContact.getBeaconId(), is(beaconId));
+    assertThat(
+      emergencyContact.getPersonType(),
+      is(PersonType.EMERGENCY_CONTACT)
+    );
+  }
+
+  @Test
+  void shouldRegisterASingleBeacon() {
     registrationsService.register(registration);
 
     then(beaconRepository).should(times(1)).save(beacon);
@@ -81,5 +111,22 @@ class RegistrationsServiceUnitTest {
     then(beaconPersonRepository).should(times(2)).save(isA(BeaconPerson.class));
     then(beaconPersonRepository).should(times(1)).save(emergencyContact);
     then(beaconPersonRepository).should(times(1)).save(owner);
+  }
+
+  @Test
+  void shouldRegisterAMultipleBeaconsUsesAndEmergencyContacts() {
+    beacon.setUses(Arrays.asList(beaconUse, beaconUse));
+    beacon.setEmergencyContacts(
+      Arrays.asList(emergencyContact, emergencyContact)
+    );
+    registration.setBeacons(Arrays.asList(beacon, beacon));
+
+    given(beaconRepository.save(beacon)).willReturn(beacon);
+
+    registrationsService.register(registration);
+
+    then(beaconRepository).should(times(2)).save(beacon);
+    then(beaconUseRepository).should(times(4)).save(beaconUse);
+    then(beaconPersonRepository).should(times(6)).save(isA(BeaconPerson.class));
   }
 }
