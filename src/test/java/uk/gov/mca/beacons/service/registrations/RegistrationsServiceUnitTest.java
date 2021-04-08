@@ -69,7 +69,6 @@ class RegistrationsServiceUnitTest {
   @Test
   void shouldReturnTheSameRegistrationObjectProvided() {
     final Registration expected = registrationsService.register(registration);
-
     assertThat(registration, is(expected));
   }
 
@@ -115,18 +114,19 @@ class RegistrationsServiceUnitTest {
 
   @Test
   void shouldRegisterAMultipleBeaconsUsesAndEmergencyContacts() {
-    beacon.setUses(Arrays.asList(beaconUse, beaconUse));
-    beacon.setEmergencyContacts(
-      Arrays.asList(emergencyContact, emergencyContact)
-    );
-    registration.setBeacons(Arrays.asList(beacon, beacon));
-
-    given(beaconRepository.save(beacon)).willReturn(beacon);
-
+    setupMultipleBeacons();
     registrationsService.register(registration);
 
     then(beaconRepository).should(times(2)).save(beacon);
     then(beaconUseRepository).should(times(4)).save(beaconUse);
     then(beaconPersonRepository).should(times(6)).save(isA(BeaconPerson.class));
+  }
+
+  private void setupMultipleBeacons() {
+    beacon.setUses(Arrays.asList(beaconUse, beaconUse));
+    beacon.setEmergencyContacts(
+      Arrays.asList(emergencyContact, emergencyContact)
+    );
+    registration.setBeacons(Arrays.asList(beacon, beacon));
   }
 }
