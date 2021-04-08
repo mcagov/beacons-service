@@ -35,9 +35,9 @@ class RegistrationsControllerIntegrationTest {
   void givenNewValidRegistration_whenPosted_thenStatus201(
     RegistrationUseCase registrationJson
   ) throws IOException {
-    final Map<RegistrationUseCase, Object> validRegistrationRequestBody = getRegistrationsJson();
+    final Map<RegistrationUseCase, Object> registrationsJson = getRegistrationsJson();
 
-    makePostRequest(validRegistrationRequestBody.get(registrationJson))
+    makePostRequest(registrationsJson.get(registrationJson))
       .expectStatus()
       .isCreated()
       .expectHeader()
