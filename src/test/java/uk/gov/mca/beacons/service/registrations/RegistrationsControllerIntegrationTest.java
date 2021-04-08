@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,28 +27,17 @@ class RegistrationsControllerIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
-  @Test
-  void givenNewValidRegistrationWithOneBeacon_whenPosted_thenStatus201()
-    throws IOException {
+  @ParameterizedTest
+  @EnumSource(
+    value = RegistrationJson.class,
+    names = { "SINGLE_BEACON", "MULTIPLE_BEACON" }
+  )
+  void givenNewValidRegistration_whenPosted_thenStatus201(
+    RegistrationJson registrationJson
+  ) throws IOException {
     final Map<RegistrationJson, Object> validRegistrationRequestBody = getRegistrationJson();
 
-    makePostRequest(
-      validRegistrationRequestBody.get(RegistrationJson.SINGLE_BEACON)
-    )
-      .expectStatus()
-      .isCreated()
-      .expectHeader()
-      .valueEquals("Content-Type", "application/json");
-  }
-
-  @Test
-  void givenNewValidRegistrationWithMultipleBeaconsAndMultipleUses_whenPosted_thenStatus201()
-    throws IOException {
-    final Map<RegistrationJson, Object> validRegistrationRequestBody = getRegistrationJson();
-
-    makePostRequest(
-      validRegistrationRequestBody.get(RegistrationJson.MULTIPLE_BEACON)
-    )
+    makePostRequest(validRegistrationRequestBody.get(registrationJson))
       .expectStatus()
       .isCreated()
       .expectHeader()
