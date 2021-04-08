@@ -6,3 +6,6 @@ ALTER TABLE beacon_use
 
 ALTER TABLE beacon_person
     RENAME COLUMN country TO county;
+
+ALTER TABLE beacon_person
+    ADD COLUMN town_or_city text;

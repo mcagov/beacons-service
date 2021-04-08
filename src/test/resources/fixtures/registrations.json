@@ -22,21 +22,25 @@
           }
         ],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": [
           {
-            "name": "Lady Hamilton",
-            "telephoneNumber": "02392 856621"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           },
           {
-            "name": "Frances Herbert Woolward",
-            "telephoneNumber": "02392 856281"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           }
         ]
       }
@@ -70,21 +74,25 @@
           }
         ],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": [
           {
-            "name": "Lady Hamilton",
-            "telephoneNumber": "02392 856621"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           },
           {
-            "name": "Frances Herbert Woolward",
-            "telephoneNumber": "02392 856281"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           }
         ]
       },
@@ -114,21 +122,25 @@
           }
         ],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": [
           {
-            "name": "Lady Hamilton",
-            "telephoneNumber": "02392 856621"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           },
           {
-            "name": "Frances Herbert Woolward",
-            "telephoneNumber": "02392 856281"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           }
         ]
       }
@@ -156,21 +168,25 @@
           }
         ],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": [
           {
-            "name": "Lady Hamilton",
-            "telephoneNumber": "02392 856621"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           },
           {
-            "name": "Frances Herbert Woolward",
-            "telephoneNumber": "02392 856281"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           }
         ]
       }
@@ -188,21 +204,25 @@
         "lastServicedDate": "2020-02-01T00:00:00.000Z",
         "uses": [],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": [
           {
-            "name": "Lady Hamilton",
-            "telephoneNumber": "02392 856621"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           },
           {
-            "name": "Frances Herbert Woolward",
-            "telephoneNumber": "02392 856281"
+            "fullName": "Lady Hamilton",
+            "telephoneNumber": "02392 856621",
+            "alternativeTelephoneNumber": "02392 856622"
           }
         ]
       }
@@ -227,11 +247,13 @@
           }
         ],
         "owner": {
-          "name": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
+          "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
           "email": "nelson@royalnavy.mod.uk",
+          "telephoneNumber": "02392 856624",
           "addressLine1": "1 The Hard",
           "addressLine2": "",
-          "addressTownOrCity": "Portsmouth",
+          "townOrCity": "Portsmouth",
+          "county": "Hampshire",
           "postcode": "PO1 3DT"
         },
         "emergencyContacts": []
