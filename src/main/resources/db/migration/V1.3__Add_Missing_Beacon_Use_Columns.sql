@@ -3,16 +3,6 @@
 ALTER TABLE beacon_use
     ADD COLUMN port_letter_number text;
 
-ALTER TABLE beacon_person
-    RENAME COLUMN country TO county;
-
-ALTER TABLE beacon_person
-    RENAME COLUMN telephone TO telephone_number;
-
-ALTER TABLE beacon_person
-    ADD COLUMN alternative_telephone_number text,
-    ADD COLUMN town_or_city text;
-
 ALTER TABLE beacon_use
     RENAME COLUMN mobile_telephone_input_1 TO mobile_telephone_1;
 
@@ -31,5 +21,16 @@ ALTER TABLE beacon_use
 ALTER TABLE beacon_use
     RENAME COLUMN other_environment_use TO other_environment;
 
+ALTER TABLE beacon_person
+    RENAME COLUMN country TO county;
+
+ALTER TABLE beacon_person
+    RENAME COLUMN telephone TO telephone_number;
+
+ALTER TABLE beacon_person
+    ADD COLUMN alternative_telephone_number text,
+    ADD COLUMN town_or_city text;
+
+-- Add reference to beacon table
 ALTER TABLE beacon
     ADD COLUMN reference text;
