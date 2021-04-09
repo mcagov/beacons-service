@@ -40,7 +40,7 @@ public class Beacon {
   @NotNull
   private String manufacturerSerialNumber;
 
-  private String reference;
+  private String referenceNumber;
 
   private String chkCode;
 
@@ -116,12 +116,12 @@ public class Beacon {
     this.manufacturerSerialNumber = manufacturerSerialNumber;
   }
 
-  public String getReference() {
-    return reference;
+  public String getReferenceNumber() {
+    return referenceNumber;
   }
 
-  public void setReference(String reference) {
-    this.reference = reference;
+  public void setReferenceNumber(String reference) {
+    this.referenceNumber = reference;
   }
 
   public String getChkCode() {

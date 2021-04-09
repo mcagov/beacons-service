@@ -8,7 +8,7 @@
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
-        "reference": "ABCDE4",
+        "referenceNumber": "ABCDE4",
         "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
         "lastServicedDate": "2020-02-01T00:00:00.000Z",
         "uses": [

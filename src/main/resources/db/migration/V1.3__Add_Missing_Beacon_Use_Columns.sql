@@ -33,4 +33,4 @@ ALTER TABLE beacon_person
 
 -- Add reference to beacon table
 ALTER TABLE beacon
-    ADD COLUMN reference text;
+    ADD COLUMN reference_number text;
