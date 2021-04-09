@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.service.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +25,7 @@ public class Beacon {
   private UUID id;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private BeaconType beaconType;
 
   @NotNull
@@ -39,6 +40,8 @@ public class Beacon {
   @NotNull
   private String manufacturerSerialNumber;
 
+  private String referenceNumber;
+
   private String chkCode;
 
   private LocalDateTime batteryExpiryDate;
@@ -52,6 +55,7 @@ public class Beacon {
   private LocalDateTime createdDate;
 
   @Transient
+  @NotEmpty
   @Valid
   private List<BeaconUse> uses;
 
@@ -60,6 +64,7 @@ public class Beacon {
   private BeaconPerson owner;
 
   @Transient
+  @NotEmpty
   @Valid
   private List<BeaconPerson> emergencyContacts;
 
@@ -109,6 +114,14 @@ public class Beacon {
 
   public void setManufacturerSerialNumber(String manufacturerSerialNumber) {
     this.manufacturerSerialNumber = manufacturerSerialNumber;
+  }
+
+  public String getReferenceNumber() {
+    return referenceNumber;
+  }
+
+  public void setReferenceNumber(String reference) {
+    this.referenceNumber = reference;
   }
 
   public String getChkCode() {

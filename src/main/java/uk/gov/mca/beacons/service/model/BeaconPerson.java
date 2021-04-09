@@ -25,7 +25,9 @@ public class BeaconPerson {
 
   private String fullName;
 
-  private String telephone;
+  private String telephoneNumber;
+
+  private String alternativeTelephoneNumber;
 
   @Email
   private String email;
@@ -47,6 +49,8 @@ public class BeaconPerson {
 
   @Column(name = "address_line_4")
   private String addressLine4;
+
+  private String townOrCity;
 
   private String postcode;
 
@@ -72,16 +76,24 @@ public class BeaconPerson {
     return fullName;
   }
 
-  public void setFullName(String name) {
-    this.fullName = name;
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
-  public String getTelephone() {
-    return telephone;
+  public String getTelephoneNumber() {
+    return telephoneNumber;
   }
 
-  public void setTelephone(String telephone) {
-    this.telephone = telephone;
+  public void setTelephoneNumber(String telephone) {
+    this.telephoneNumber = telephone;
+  }
+
+  public String getAlternativeTelephoneNumber() {
+    return alternativeTelephoneNumber;
+  }
+
+  public void setAlternativeTelephoneNumber(String alternativeTelephoneNumber) {
+    this.alternativeTelephoneNumber = alternativeTelephoneNumber;
   }
 
   public String getEmail() {
@@ -138,6 +150,14 @@ public class BeaconPerson {
 
   public void setAddressLine4(String addressLine4) {
     this.addressLine4 = addressLine4;
+  }
+
+  public String getTownOrCity() {
+    return townOrCity;
+  }
+
+  public void setTownOrCity(String townOrCity) {
+    this.townOrCity = townOrCity;
   }
 
   public String getPostcode() {
