@@ -1,4 +1,4 @@
--- Adds missing beacon use columns
+-- Adds missing beacon use and person columns
 
 ALTER TABLE beacon_use
     ADD COLUMN port_letter_number text,
@@ -6,6 +6,9 @@ ALTER TABLE beacon_use
 
 ALTER TABLE beacon_person
     RENAME COLUMN country TO county;
+
+ALTER TABLE beacon_person
+    RENAME COLUMN telephone TO telephone_number;
 
 ALTER TABLE beacon_person
     ADD COLUMN alternative_telephone_number text,

@@ -25,7 +25,7 @@ public class BeaconPerson {
 
   private String fullName;
 
-  private String telephone;
+  private String telephoneNumber;
 
   private String alternativeTelephoneNumber;
 
@@ -80,12 +80,12 @@ public class BeaconPerson {
     this.fullName = fullName;
   }
 
-  public String getTelephone() {
-    return telephone;
+  public String getTelephoneNumber() {
+    return telephoneNumber;
   }
 
-  public void setTelephone(String telephone) {
-    this.telephone = telephone;
+  public void setTelephoneNumber(String telephone) {
+    this.telephoneNumber = telephone;
   }
 
   public String getAlternativeTelephoneNumber() {
