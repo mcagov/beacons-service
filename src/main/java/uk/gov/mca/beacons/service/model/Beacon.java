@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.service.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,6 +39,8 @@ public class Beacon {
 
   @NotNull
   private String manufacturerSerialNumber;
+
+  private String reference;
 
   private String chkCode;
 
@@ -114,6 +114,14 @@ public class Beacon {
 
   public void setManufacturerSerialNumber(String manufacturerSerialNumber) {
     this.manufacturerSerialNumber = manufacturerSerialNumber;
+  }
+
+  public String getReference() {
+    return reference;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
   public String getChkCode() {

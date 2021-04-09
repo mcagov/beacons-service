@@ -44,23 +44,23 @@ public class BeaconUse {
 
   private Boolean fixedVhfRadio;
 
-  private String fixedVhfRadioInput;
+  private String fixedVhfRadioValue;
 
   private Boolean portableVhfRadio;
 
-  private String portableVhfRadioInput;
+  private String portableVhfRadioValue;
 
   private Boolean satelliteTelephone;
 
-  private String satelliteTelephoneInput;
+  private String satelliteTelephoneValue;
 
   private Boolean mobileTelephone;
 
-  @Column(name = "mobile_telephone_input_1")
-  private String mobileTelephoneInput1;
+  @Column(name = "mobile_telephone_1")
+  private String mobileTelephone1;
 
-  @Column(name = "mobile_telephone_input_2")
-  private String mobileTelephoneInput2;
+  @Column(name = "mobile_telephone_2")
+  private String mobileTelephone2;
 
   private Integer maxCapacity;
 
@@ -198,12 +198,12 @@ public class BeaconUse {
     this.fixedVhfRadio = fixedVhfRadio;
   }
 
-  public String getFixedVhfRadioInput() {
-    return fixedVhfRadioInput;
+  public String getFixedVhfRadioValue() {
+    return fixedVhfRadioValue;
   }
 
-  public void setFixedVhfRadioInput(String fixedVhfRadioInput) {
-    this.fixedVhfRadioInput = fixedVhfRadioInput;
+  public void setFixedVhfRadioValue(String fixedVhfRadioInput) {
+    this.fixedVhfRadioValue = fixedVhfRadioInput;
   }
 
   public Boolean getPortableVhfRadio() {
@@ -214,12 +214,12 @@ public class BeaconUse {
     this.portableVhfRadio = portableVhfRadio;
   }
 
-  public String getPortableVhfRadioInput() {
-    return portableVhfRadioInput;
+  public String getPortableVhfRadioValue() {
+    return portableVhfRadioValue;
   }
 
-  public void setPortableVhfRadioInput(String portableVhfRadioInput) {
-    this.portableVhfRadioInput = portableVhfRadioInput;
+  public void setPortableVhfRadioValue(String portableVhfRadioInput) {
+    this.portableVhfRadioValue = portableVhfRadioInput;
   }
 
   public Boolean getSatelliteTelephone() {
@@ -230,12 +230,12 @@ public class BeaconUse {
     this.satelliteTelephone = satelliteTelephone;
   }
 
-  public String getSatelliteTelephoneInput() {
-    return satelliteTelephoneInput;
+  public String getSatelliteTelephoneValue() {
+    return satelliteTelephoneValue;
   }
 
-  public void setSatelliteTelephoneInput(String satelliteTelephoneInput) {
-    this.satelliteTelephoneInput = satelliteTelephoneInput;
+  public void setSatelliteTelephoneValue(String satelliteTelephoneInput) {
+    this.satelliteTelephoneValue = satelliteTelephoneInput;
   }
 
   public Boolean getMobileTelephone() {
@@ -246,20 +246,20 @@ public class BeaconUse {
     this.mobileTelephone = mobileTelephone;
   }
 
-  public String getMobileTelephoneInput1() {
-    return mobileTelephoneInput1;
+  public String getMobileTelephone1() {
+    return mobileTelephone1;
   }
 
-  public void setMobileTelephoneInput1(String mobileTelephoneInput1) {
-    this.mobileTelephoneInput1 = mobileTelephoneInput1;
+  public void setMobileTelephone1(String mobileTelephoneInput1) {
+    this.mobileTelephone1 = mobileTelephoneInput1;
   }
 
-  public String getMobileTelephoneInput2() {
-    return mobileTelephoneInput2;
+  public String getMobileTelephone2() {
+    return mobileTelephone2;
   }
 
-  public void setMobileTelephoneInput2(String mobileTelephoneInput2) {
-    this.mobileTelephoneInput2 = mobileTelephoneInput2;
+  public void setMobileTelephone2(String mobileTelephoneInput2) {
+    this.mobileTelephone2 = mobileTelephoneInput2;
   }
 
   public Integer getMaxCapacity() {
