@@ -62,6 +62,10 @@ public class BeaconUse {
   @Column(name = "mobile_telephone_2")
   private String mobileTelephone2;
 
+  private Boolean otherCommunication;
+
+  private String otherCommunicationValue;
+
   private Integer maxCapacity;
 
   private String vesselName;
@@ -202,8 +206,8 @@ public class BeaconUse {
     return fixedVhfRadioValue;
   }
 
-  public void setFixedVhfRadioValue(String fixedVhfRadioInput) {
-    this.fixedVhfRadioValue = fixedVhfRadioInput;
+  public void setFixedVhfRadioValue(String fixedVhfRadioValue) {
+    this.fixedVhfRadioValue = fixedVhfRadioValue;
   }
 
   public Boolean getPortableVhfRadio() {
@@ -218,8 +222,8 @@ public class BeaconUse {
     return portableVhfRadioValue;
   }
 
-  public void setPortableVhfRadioValue(String portableVhfRadioInput) {
-    this.portableVhfRadioValue = portableVhfRadioInput;
+  public void setPortableVhfRadioValue(String portableVhfRadioValue) {
+    this.portableVhfRadioValue = portableVhfRadioValue;
   }
 
   public Boolean getSatelliteTelephone() {
@@ -234,8 +238,8 @@ public class BeaconUse {
     return satelliteTelephoneValue;
   }
 
-  public void setSatelliteTelephoneValue(String satelliteTelephoneInput) {
-    this.satelliteTelephoneValue = satelliteTelephoneInput;
+  public void setSatelliteTelephoneValue(String satelliteTelephoneValue) {
+    this.satelliteTelephoneValue = satelliteTelephoneValue;
   }
 
   public Boolean getMobileTelephone() {
@@ -250,16 +254,32 @@ public class BeaconUse {
     return mobileTelephone1;
   }
 
-  public void setMobileTelephone1(String mobileTelephoneInput1) {
-    this.mobileTelephone1 = mobileTelephoneInput1;
+  public void setMobileTelephone1(String mobileTelephone1) {
+    this.mobileTelephone1 = mobileTelephone1;
   }
 
   public String getMobileTelephone2() {
     return mobileTelephone2;
   }
 
-  public void setMobileTelephone2(String mobileTelephoneInput2) {
-    this.mobileTelephone2 = mobileTelephoneInput2;
+  public void setMobileTelephone2(String mobileTelephone2) {
+    this.mobileTelephone2 = mobileTelephone2;
+  }
+
+  public Boolean getOtherCommunication() {
+    return otherCommunication;
+  }
+
+  public void setOtherCommunication(Boolean otherCommunication) {
+    this.otherCommunication = otherCommunication;
+  }
+
+  public String getOtherCommunicationValue() {
+    return otherCommunicationValue;
+  }
+
+  public void setOtherCommunicationValue(String otherCommunicationValue) {
+    this.otherCommunicationValue = otherCommunicationValue;
   }
 
   public Integer getMaxCapacity() {
