@@ -24,10 +24,6 @@ public class Beacon {
   @GeneratedValue
   private UUID id;
 
-  @Enumerated(EnumType.STRING)
-  @NotNull
-  private BeaconType beaconType;
-
   @NotNull
   private String hexId;
 
@@ -74,14 +70,6 @@ public class Beacon {
 
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  public BeaconType getBeaconType() {
-    return beaconType;
-  }
-
-  public void setBeaconType(BeaconType beaconType) {
-    this.beaconType = beaconType;
   }
 
   public String getHexId() {

@@ -47,7 +47,7 @@ class RegistrationsControllerIntegrationTest {
   @ParameterizedTest
   @EnumSource(
     value = RegistrationUseCase.class,
-    names = { "NO_BEACON_TYPE", "NO_USES", "NO_EMERGENCY_CONTACTS" }
+    names = { "NO_HEX_ID", "NO_USES", "NO_EMERGENCY_CONTACTS" }
   )
   void givenInvalidRegistration_whenPosted_thenStatus400(
     RegistrationUseCase registrationJson
@@ -82,7 +82,7 @@ class RegistrationsControllerIntegrationTest {
   enum RegistrationUseCase {
     SINGLE_BEACON,
     MULTIPLE_BEACONS,
-    NO_BEACON_TYPE,
+    NO_HEX_ID,
     NO_USES,
     NO_EMERGENCY_CONTACTS,
   }

@@ -4,7 +4,6 @@
       {
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
-        "beaconType": "PLB",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
@@ -89,7 +88,6 @@
       {
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
-        "beaconType": "PLB",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
@@ -138,7 +136,6 @@
         "hexId": "ADCD0228C500401",
         "manufacturer": "McMurdo",
         "model": "S20 Lifejacket AIS Beacon",
-        "beaconType": "PLB",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
         "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
@@ -184,10 +181,9 @@
       }
     ]
   },
-  "NO_BEACON_TYPE": {
+  "NO_HEX_ID": {
     "beacons": [
       {
-        "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
