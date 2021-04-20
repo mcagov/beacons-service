@@ -31,7 +31,11 @@ public class GetAllBeaconService {
     this.beaconUseRepository = beaconUseRepository;
   }
 
-  public List<Beacon> findAll() throws Exception {
-    return new ArrayList<Beacon>();
+  public List<Beacon> findAll()  {
+    final var result = beaconRepository.findAll();
+    final var allBeacons = new ArrayList<Beacon>();
+    result.forEach(allBeacons::add);
+
+    return allBeacons;
   }
 }
