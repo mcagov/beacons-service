@@ -10,9 +10,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-  jackson:
-    deserialization:
-      fail-on-unknown-properties: true
 
 server:
   servlet:
