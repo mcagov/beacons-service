@@ -18,12 +18,13 @@ public class BeaconsSearchIntegrationTest {
     void requestAllBeaconControllerShouldReturnSomeBeacons() {
         var request = makeGetRequest("/beacons/");
 
-        request.expectBody().jsonPath("$.meta.count").exists();
-        //request.expectBody().jsonPath("$.meta.pageSize").exists();
-        //request.expectBody().jsonPath("$.data").exists();
+        request.jsonPath("$.meta.pageSize").exists();
+        request.jsonPath("$.meta.count").exists();
+        request.jsonPath("$.data").exists();
     }
 
-    private WebTestClient.ResponseSpec makeGetRequest(String url) {
-        return webTestClient.get().uri(url).exchange().expectStatus().is2xxSuccessful();
+    private WebTestClient.BodyContentSpec makeGetRequest(String url) {
+        return webTestClient.get().uri(url).exchange()
+        .expectStatus().is2xxSuccessful().expectBody();
     }
 }
