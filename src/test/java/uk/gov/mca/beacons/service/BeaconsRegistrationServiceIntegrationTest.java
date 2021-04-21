@@ -45,14 +45,4 @@ class BeaconsRegistrationServiceIntegrationTest {
       .expectStatus()
       .is2xxSuccessful();
   }
-  
-  @Test
-  void requestAllBeaconControllerShouldReturnSomeBeacons() {
-    var request = makeGetRequest("/beacons/");
-
-    request
-      .expectBody()
-      .jsonPath("$.beacons")
-      .exists();
-  }
 }
