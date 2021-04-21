@@ -10,15 +10,15 @@ public class BeaconsSearchResult {
     return beacons;
   }
 
-  public int getCount(){
+  public int getCount() {
     return beacons.size();
   }
 
-  public int getPageSize(){
+  public int getPageSize() {
     return beacons.size();
   }
 
   public void setBeacons(List<Beacon> beacons) {
     this.beacons = beacons;
-  } 
+  }
 }

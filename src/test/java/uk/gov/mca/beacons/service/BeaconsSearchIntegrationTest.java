@@ -8,23 +8,27 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-
 public class BeaconsSearchIntegrationTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+  @Autowired
+  private WebTestClient webTestClient;
 
-    @Test
-    void requestAllBeaconControllerShouldReturnSomeBeacons() {
-        var request = makeGetRequest("/beacons/");
+  @Test
+  void requestAllBeaconControllerShouldReturnSomeBeacons() {
+    var request = makeGetRequest("/beacons/");
 
-        request.jsonPath("$.meta.pageSize").exists();
-        request.jsonPath("$.meta.count").exists();
-        request.jsonPath("$.data").exists();
-    }
+    request.jsonPath("$.meta.pageSize").exists();
+    request.jsonPath("$.meta.count").exists();
+    request.jsonPath("$.data").exists();
+  }
 
-    private WebTestClient.BodyContentSpec makeGetRequest(String url) {
-        return webTestClient.get().uri(url).exchange()
-        .expectStatus().is2xxSuccessful().expectBody();
-    }
+  private WebTestClient.BodyContentSpec makeGetRequest(String url) {
+    return webTestClient
+      .get()
+      .uri(url)
+      .exchange()
+      .expectStatus()
+      .is2xxSuccessful()
+      .expectBody();
+  }
 }
