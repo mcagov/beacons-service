@@ -47,7 +47,7 @@ class GetAllBeaconServiceTest {
 
     @Test
     void shouldReturnZeroResults() {
-        final var getAllBeaconService = new GetAllBeaconService(beaconRepository, null, null);
+        final var getAllBeaconService = new GetAllBeaconsService(beaconRepository, null, null);
         final var beacons = getAllBeaconService.findAll();
 
         assertThat(beacons, is(emptyCollectionOf(Beacon.class)));
@@ -66,7 +66,7 @@ class GetAllBeaconServiceTest {
 
         given(beaconRepository.findAll()).willReturn(List.of(firstBeacon, secondBeacon));
 
-        final var getAllBeaconService = new GetAllBeaconService(beaconRepository, null, null);
+        final var getAllBeaconService = new GetAllBeaconsService(beaconRepository, null, null);
         final var allBeacons = getAllBeaconService.findAll();
 
         assertThat(allBeacons, contains(

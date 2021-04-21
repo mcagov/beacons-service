@@ -15,16 +15,16 @@ import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @Service
 @Transactional
-public class GetAllBeaconService {
+public class GetAllBeaconsService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GetAllBeaconService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetAllBeaconsService.class);
 
   private final BeaconRepository beaconRepository;
   private final BeaconUseRepository beaconUseRepository;
   private final BeaconPersonRepository beaconPersonRepository;
 
   @Autowired
-  public GetAllBeaconService(BeaconRepository beaconRepository, BeaconUseRepository beaconUseRepository,
+  public GetAllBeaconsService(BeaconRepository beaconRepository, BeaconUseRepository beaconUseRepository,
       BeaconPersonRepository beaconPersonRepository) {
     this.beaconRepository = beaconRepository;
     this.beaconPersonRepository = beaconPersonRepository;
