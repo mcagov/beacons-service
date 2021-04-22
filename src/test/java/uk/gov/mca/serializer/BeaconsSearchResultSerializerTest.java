@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -57,10 +56,17 @@ public class BeaconsSearchResultSerializerTest {
     final var serializer = new BeaconsSearchResultSerializer();
     beaconsSearchResult.setBeacons(List.of());
 
-    serializer.serialize(beaconsSearchResult, jsonGenerator, serializerProvider);
+    serializer.serialize(
+      beaconsSearchResult,
+      jsonGenerator,
+      serializerProvider
+    );
     jsonGenerator.flush();
 
-    assertThat(jsonWriter.toString().replaceAll("[\\n\\t ]", ""), is(equalTo(json)));
+    assertThat(
+      jsonWriter.toString().replaceAll("[\\n\\t ]", ""),
+      is(equalTo(json))
+    );
   }
 
   @Test
@@ -100,14 +106,26 @@ public class BeaconsSearchResultSerializerTest {
     secondEmergencyContact.setFullName("Neil Hamilton");
     secondEmergencyContact.setTelephoneNumber("04392 856626");
     secondEmergencyContact.setAlternativeTelephoneNumber("04392 856625");
-    beacon.setEmergencyContacts(List.of(firstEmergencyContact, secondEmergencyContact));
+    beacon.setEmergencyContacts(
+      List.of(firstEmergencyContact, secondEmergencyContact)
+    );
     beaconsSearchResult.setBeacons(List.of(beacon));
 
     final var serializer = new BeaconsSearchResultSerializer();
-    serializer.serialize(beaconsSearchResult, jsonGenerator, serializerProvider);
+    serializer.serialize(
+      beaconsSearchResult,
+      jsonGenerator,
+      serializerProvider
+    );
     jsonGenerator.flush();
 
-    final String expectedJson = new String(Files.readAllBytes(Paths.get(JSON_RESOURCE))).replaceAll("[\\n\\t ]", "");
-    assertThat(jsonWriter.toString().replaceAll("[\\n\\t ]", ""), is(equalTo(expectedJson)));
+    final String expectedJson = new String(
+      Files.readAllBytes(Paths.get(JSON_RESOURCE))
+    )
+    .replaceAll("[\\n\\t ]", "");
+    assertThat(
+      jsonWriter.toString().replaceAll("[\\n\\t ]", ""),
+      is(equalTo(expectedJson))
+    );
   }
 }

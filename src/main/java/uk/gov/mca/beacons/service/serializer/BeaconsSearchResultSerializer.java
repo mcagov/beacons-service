@@ -37,9 +37,7 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
       try {
         gen.writeStartObject();
         writeBeaconDetails(gen, beacon);
-        writeUses(gen, beacon);
-        writeOwner(gen, beacon);
-        writeEmergencyContacts(gen, beacon);
+        
         gen.writeEndObject();
       } catch (IOException e) {
         // TODO Auto-generated catch block
@@ -59,6 +57,7 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
   private void writeEmergencyContacts(JsonGenerator gen, Beacon beacon) throws IOException {
     gen.writeFieldName("emergencyContacts");
     gen.writeStartArray();
+    if( beacon.getEmergencyContacts()!=null){
     beacon.getEmergencyContacts().forEach(contact -> {
       try {
         gen.writeStartObject();
@@ -71,9 +70,9 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
         e.printStackTrace();
       }
     });
-    
+  }
+
     gen.writeEndArray();
-    gen.writeEndObject();
   }
 
   private void writeBeaconDetails(JsonGenerator gen, Beacon beacon) throws IOException {
@@ -87,10 +86,17 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
     gen.writeStringField("chkCode", beacon.getChkCode());
     gen.writeStringField("batteryExpiryDate", beacon.getBatteryExpiryDate().toString());
     gen.writeStringField("lastServicedDate", beacon.getLastServicedDate().toString());
+    
+    writeUses(gen, beacon);
+        writeOwner(gen, beacon);
+        writeEmergencyContacts(gen, beacon);
+
+    gen.writeEndObject();
   }
 
   private void writeOwner(JsonGenerator gen, Beacon beacon) throws IOException {
     final var owner = beacon.getOwner();
+    if(owner!=null){
     gen.writeObjectFieldStart("owner");
     gen.writeStringField("fullName", owner.getFullName());
     gen.writeStringField("email", owner.getEmail());
@@ -101,27 +107,30 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
     gen.writeStringField("county", owner.getCounty());
     gen.writeStringField("postcode", owner.getPostcode());
     gen.writeEndObject();
+    }
   }
 
   private void writeUses(JsonGenerator gen, Beacon beacon) throws IOException {
     gen.writeFieldName("uses");
     gen.writeStartArray();
-    beacon.getUses().forEach(beaconUse -> {
-      try {
-        gen.writeStartObject();
-        gen.writeObjectField("environment", beaconUse.getEnvironment());
-        gen.writeObjectField("purpose", beaconUse.getPurpose());
-        gen.writeObjectField("activity", beaconUse.getActivity());
-        gen.writeStringField("vesselName", beaconUse.getVesselName());
-        gen.writeNumberField("maxCapacity", beaconUse.getMaxCapacity());
-        gen.writeStringField("areaOfOperation", beaconUse.getAreaOfOperation());
-        gen.writeStringField("moreDetails", beaconUse.getMoreDetails());
-        gen.writeEndObject();
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    });
+    if (beacon.getUses() != null) {
+      beacon.getUses().forEach(beaconUse -> {
+        try {
+          gen.writeStartObject();
+          gen.writeObjectField("environment", beaconUse.getEnvironment());
+          gen.writeObjectField("purpose", beaconUse.getPurpose());
+          gen.writeObjectField("activity", beaconUse.getActivity());
+          gen.writeStringField("vesselName", beaconUse.getVesselName());
+          gen.writeNumberField("maxCapacity", beaconUse.getMaxCapacity());
+          gen.writeStringField("areaOfOperation", beaconUse.getAreaOfOperation());
+          gen.writeStringField("moreDetails", beaconUse.getMoreDetails());
+          gen.writeEndObject();
+        } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      });
+    }
     gen.writeEndArray();
   }
 }
