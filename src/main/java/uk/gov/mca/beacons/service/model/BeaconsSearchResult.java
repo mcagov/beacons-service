@@ -18,6 +18,10 @@ public class BeaconsSearchResult {
     return beacons.size();
   }
 
+  public List<Beacon> getBeacons(List<Beacon> beacons) {
+    return beacons;
+  }
+
   public void setBeacons(List<Beacon> beacons) {
     this.beacons = beacons;
   }
