@@ -32,8 +32,10 @@ import uk.gov.mca.beacons.service.serializer.BeaconsSearchResultSerializer;
 @ExtendWith(MockitoExtension.class)
 public class BeaconsSearchResultSerializerTest {
 
-  private static final String JSON_RESOURCE_EMPTY = "src/test/resources/fixtures/beaconSearchEmpty.json";
-  private static final String JSON_RESOURCE = "src/test/resources/fixtures/beaconSearch.json";
+  private static final String JSON_RESOURCE_EMPTY =
+    "src/test/resources/fixtures/beaconSearchEmpty.json";
+  private static final String JSON_RESOURCE =
+    "src/test/resources/fixtures/beaconSearch.json";
 
   BeaconsSearchResult beaconsSearchResult;
   JsonGenerator jsonGenerator;
@@ -52,7 +54,10 @@ public class BeaconsSearchResultSerializerTest {
 
   @Test
   void shouldSerializeResultForZeroResultsAsExpected() throws IOException {
-    final String json = new String(Files.readAllBytes(Paths.get(JSON_RESOURCE_EMPTY))).replaceAll("[\\n\\t ]", "");
+    final String json = new String(
+      Files.readAllBytes(Paths.get(JSON_RESOURCE_EMPTY))
+    )
+    .replaceAll("[\\n\\t ]", "");
     final var serializer = new BeaconsSearchResultSerializer();
     beaconsSearchResult.setBeacons(List.of());
 
