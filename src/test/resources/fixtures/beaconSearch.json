@@ -17,11 +17,7 @@
         "uses": [
           {
             "environment": "MARITIME",
-            "purpose": "COMMERCIAL",
             "activity": "SAILING",
-            "vesselName": "HMS Victory",
-            "maxCapacity": 180,
-            "areaOfOperation": "Cape of Trafalgar",
             "moreDetails": "More details of this vessel"
           }
         ],
