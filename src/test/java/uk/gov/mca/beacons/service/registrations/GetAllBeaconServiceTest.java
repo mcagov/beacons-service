@@ -45,8 +45,8 @@ class GetAllBeaconServiceTest {
   void shouldReturnZeroResults() {
     final var getAllBeaconService = new GetAllBeaconsService(
       beaconRepository,
-      null,
-      null
+      beaconUseRepository,
+      beaconPersonRepository
     );
     final var beacons = getAllBeaconService.findAll();
 
@@ -68,8 +68,8 @@ class GetAllBeaconServiceTest {
 
     final var getAllBeaconService = new GetAllBeaconsService(
       beaconRepository,
-      null,
-      null
+      beaconUseRepository,
+      beaconPersonRepository
     );
     final var allBeacons = getAllBeaconService.findAll();
 

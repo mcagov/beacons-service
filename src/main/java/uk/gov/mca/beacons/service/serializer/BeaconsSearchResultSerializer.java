@@ -118,11 +118,11 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
         try {
           gen.writeStartObject();
           gen.writeObjectField("environment", beaconUse.getEnvironment());
-          gen.writeObjectField("purpose", beaconUse.getPurpose());
+          // gen.writeObjectField("purpose", beaconUse.getPurpose());
           gen.writeObjectField("activity", beaconUse.getActivity());
-          gen.writeStringField("vesselName", beaconUse.getVesselName());
-          gen.writeNumberField("maxCapacity", beaconUse.getMaxCapacity());
-          gen.writeStringField("areaOfOperation", beaconUse.getAreaOfOperation());
+          // gen.writeStringField("vesselName", beaconUse.getVesselName());
+          // gen.writeNumberField("maxCapacity", beaconUse.getMaxCapacity());
+          // gen.writeStringField("areaOfOperation", beaconUse.getAreaOfOperation());
           gen.writeStringField("moreDetails", beaconUse.getMoreDetails());
           gen.writeEndObject();
         } catch (IOException e) {
