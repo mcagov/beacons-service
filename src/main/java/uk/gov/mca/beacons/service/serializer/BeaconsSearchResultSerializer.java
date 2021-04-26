@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
-
-import uk.gov.mca.beacons.service.exceptions.BeaconsSearchResultSerializationException;
+import uk.gov.mca.beacons.service.exceptions.BeaconsSearchResultSerializerException;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 
-public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchResult> {
+public class BeaconsSearchResultSerializer
+  extends StdSerializer<BeaconsSearchResult> {
 
   public BeaconsSearchResultSerializer() {
     super(BeaconsSearchResult.class);
@@ -22,7 +22,11 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
   }
 
   @Override
-  public void serialize(BeaconsSearchResult value, JsonGenerator gen, SerializerProvider provider) {
+  public void serialize(
+    BeaconsSearchResult value,
+    JsonGenerator gen,
+    SerializerProvider provider
+  ) {
     gen.setCodec(new ObjectMapper());
     try {
       gen.writeStartObject();
@@ -30,33 +34,46 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
       writeData(value, gen);
       gen.writeEndObject();
     } catch (IOException e) {
-      throw new BeaconsSearchResultSerializationException("failed to serialize BeaconSearchResult (IOException)", e);
+      throw new BeaconsSearchResultSerializerException(
+        "failed to serialize BeaconSearchResult (IOException)",
+        e
+      );
     }
   }
 
-  private void writeData(BeaconsSearchResult value, JsonGenerator gen) throws IOException {
+  private void writeData(BeaconsSearchResult value, JsonGenerator gen)
+    throws IOException {
     gen.writeFieldName("data");
     gen.writeStartArray();
-    value.getBeacons().forEach(beacon -> {
-      try {
-        gen.writeStartObject();
-        writeBeaconDetails(gen, beacon);
-        gen.writeEndObject();
-      } catch (IOException e) {
-        throw new BeaconsSearchResultSerializationException("failed to serialize beacon data for beaconId:" + beacon.getId(), e);
-      }
-    });
+    value
+      .getBeacons()
+      .forEach(
+        beacon -> {
+          try {
+            gen.writeStartObject();
+            writeBeaconDetails(gen, beacon);
+            gen.writeEndObject();
+          } catch (IOException e) {
+            throw new BeaconsSearchResultSerializerException(
+              "failed to serialize beacon data for beaconId:" + beacon.getId(),
+              e
+            );
+          }
+        }
+      );
     gen.writeEndArray();
   }
 
-  private void writeMeta(BeaconsSearchResult value, JsonGenerator gen) throws IOException {
+  private void writeMeta(BeaconsSearchResult value, JsonGenerator gen)
+    throws IOException {
     gen.writeObjectFieldStart("meta");
     gen.writeNumberField("count", value.getCount());
     gen.writeNumberField("pageSize", value.getPageSize());
     gen.writeEndObject();
   }
 
-  private void writeEmergencyContacts(JsonGenerator gen, Beacon beacon) throws IOException{
+  private void writeEmergencyContacts(JsonGenerator gen, Beacon beacon)
+    throws IOException {
     gen.writeFieldName("emergencyContacts");
     gen.writeStartArray();
     if (beacon.getEmergencyContacts() != null) {
@@ -77,7 +94,11 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
               );
               gen.writeEndObject();
             } catch (IOException e) {
-              throw new BeaconsSearchResultSerializationException("failed to serialize emergency contacts for beaconId:" + beacon.getId(), e);
+              throw new BeaconsSearchResultSerializerException(
+                "failed to serialize emergency contacts for beaconId:" +
+                beacon.getId(),
+                e
+              );
             }
           }
         );
@@ -86,17 +107,27 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
     gen.writeEndArray();
   }
 
-  private void writeBeaconDetails(JsonGenerator gen, Beacon beacon) throws IOException {
+  private void writeBeaconDetails(JsonGenerator gen, Beacon beacon)
+    throws IOException {
     gen.writeStringField("type", "beacon");
     gen.writeStringField("id", beacon.getId().toString());
     gen.writeObjectFieldStart("attributes");
 
     gen.writeStringField("manufacturer", beacon.getManufacturer());
     gen.writeStringField("model", beacon.getModel());
-    gen.writeStringField("manufacturerSerialNumber", beacon.getManufacturerSerialNumber());
+    gen.writeStringField(
+      "manufacturerSerialNumber",
+      beacon.getManufacturerSerialNumber()
+    );
     gen.writeStringField("chkCode", beacon.getChkCode());
-    gen.writeStringField("batteryExpiryDate", beacon.getBatteryExpiryDate().toString());
-    gen.writeStringField("lastServicedDate", beacon.getLastServicedDate().toString());
+    gen.writeStringField(
+      "batteryExpiryDate",
+      beacon.getBatteryExpiryDate().toString()
+    );
+    gen.writeStringField(
+      "lastServicedDate",
+      beacon.getLastServicedDate().toString()
+    );
 
     writeUses(gen, beacon);
     writeOwner(gen, beacon);
@@ -125,17 +156,24 @@ public class BeaconsSearchResultSerializer extends StdSerializer<BeaconsSearchRe
     gen.writeFieldName("uses");
     gen.writeStartArray();
     if (beacon.getUses() != null) {
-      beacon.getUses().forEach(beaconUse -> {
-        try {
-          gen.writeStartObject();
-          gen.writeObjectField("environment", beaconUse.getEnvironment());
-          gen.writeObjectField("activity", beaconUse.getActivity());
-          gen.writeStringField("moreDetails", beaconUse.getMoreDetails());
-          gen.writeEndObject();
-        } catch (IOException e) {
-          throw new BeaconsSearchResultSerializationException("failed to serialize uses for beaconId:" + beacon.getId(), e);
-        }
-      });
+      beacon
+        .getUses()
+        .forEach(
+          beaconUse -> {
+            try {
+              gen.writeStartObject();
+              gen.writeObjectField("environment", beaconUse.getEnvironment());
+              gen.writeObjectField("activity", beaconUse.getActivity());
+              gen.writeStringField("moreDetails", beaconUse.getMoreDetails());
+              gen.writeEndObject();
+            } catch (IOException e) {
+              throw new BeaconsSearchResultSerializerException(
+                "failed to serialize uses for beaconId:" + beacon.getId(),
+                e
+              );
+            }
+          }
+        );
     }
     gen.writeEndArray();
   }
