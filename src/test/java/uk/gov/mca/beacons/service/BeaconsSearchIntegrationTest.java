@@ -20,6 +20,12 @@ class BeaconsSearchIntegrationTest {
     request.jsonPath("$.meta.pageSize").exists();
     request.jsonPath("$.meta.count").exists();
     request.jsonPath("$.data").exists();
+    request.jsonPath("$.data[0].type").isEqualTo("beacon");
+    request.jsonPath("$.data[0].id").exists();
+    request.jsonPath("$.data[0].attributes.manufacturer").exists();
+    request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
+    request.jsonPath("$.data[0].attributes.owner.fullName").exists();
+    request.jsonPath("$.data[0].attributes.emergencyContacts[0].fullName").exists();
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {
