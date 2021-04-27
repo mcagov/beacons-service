@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.service.registrations;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,10 +85,7 @@ public class GetAllBeaconsService {
   }
 
   private Map<UUID, List<BeaconUse>> getAllUsesGroupedByBeaconId() {
-    final var usesStream = StreamSupport.stream(
-      beaconUseRepository.findAll().spliterator(),
-      false
-    );
+    final var usesStream = beaconUseRepository.findAll().stream();
     final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = usesStream.collect(
       Collectors.groupingBy(BeaconUse::getBeaconId)
     );
@@ -126,10 +122,7 @@ public class GetAllBeaconsService {
   }
 
   private Map<PersonType, List<BeaconPerson>> getAllPersonsGroupedByType() {
-    final var personStream = StreamSupport.stream(
-      beaconPersonRepository.findAll().spliterator(),
-      false
-    );
+    final var personStream = beaconPersonRepository.findAll().stream();
     final var personsGroupedByType = personStream.collect(
       Collectors.groupingBy(BeaconPerson::getPersonType)
     );
