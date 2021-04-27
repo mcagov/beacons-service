@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service;
+package uk.gov.mca.beacons.service.registrations;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +19,7 @@ import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class BeaconsSearchIntegrationTest {
+class BeaconsControllerIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
@@ -83,6 +83,7 @@ class BeaconsSearchIntegrationTest {
     request.jsonPath("$.data").exists();
     request.jsonPath("$.data[0].type").isEqualTo("beacon");
     request.jsonPath("$.data[0].id").exists();
+    request.jsonPath("$.data[0].attributes.hexId").exists();
     request.jsonPath("$.data[0].attributes.manufacturer").exists();
     request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
     request.jsonPath("$.data[0].attributes.owner.fullName").exists();

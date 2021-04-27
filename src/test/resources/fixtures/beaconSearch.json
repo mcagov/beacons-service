@@ -8,6 +8,7 @@
       "type": "beacon",
       "id": "97b306aa-cbd0-4f09-aa24-2d876b983efb",
       "attributes": {
+        "hexId": "Hex me",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",

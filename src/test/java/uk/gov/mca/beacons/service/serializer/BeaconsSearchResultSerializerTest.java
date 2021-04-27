@@ -1,4 +1,4 @@
-package uk.gov.mca.serializer;
+package uk.gov.mca.beacons.service.serializer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,7 +25,6 @@ import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
-import uk.gov.mca.beacons.service.serializer.BeaconsSearchResultSerializer;
 
 class BeaconsSearchResultSerializerTest {
 
@@ -75,6 +74,7 @@ class BeaconsSearchResultSerializerTest {
   void shouldSerializeResultForOneResultAsExpected() throws IOException {
     final var beacon = new Beacon();
     beacon.setId(UUID.fromString("97b306aa-cbd0-4f09-aa24-2d876b983efb"));
+    beacon.setHexId("Hex me");
     beacon.setManufacturer("Ocean Signal");
     beacon.setModel("EPIRB1");
     beacon.setManufacturerSerialNumber("1407312904");
