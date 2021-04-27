@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -29,8 +27,7 @@ import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
 import uk.gov.mca.beacons.service.serializer.BeaconsSearchResultSerializer;
 
-@ExtendWith(MockitoExtension.class)
-public class BeaconsSearchResultSerializerTest {
+class BeaconsSearchResultSerializerTest {
 
   private static final String JSON_RESOURCE_EMPTY =
     "src/test/resources/fixtures/beaconSearchEmpty.json";

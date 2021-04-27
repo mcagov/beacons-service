@@ -1,7 +1,8 @@
 package uk.gov.mca.beacons.service.registrations;
 
+import static java.util.Collections.emptyMap;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -24,10 +23,6 @@ import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 @Service
 @Transactional
 public class GetAllBeaconsService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-    GetAllBeaconsService.class
-  );
 
   private final BeaconRepository beaconRepository;
   private final BeaconUseRepository beaconUseRepository;
@@ -45,43 +40,42 @@ public class GetAllBeaconsService {
   }
 
   public List<Beacon> findAll() {
-    final ArrayList<Beacon> allBeacons = getAllBeacons();
+    final List<Beacon> allBeacons = getAllBeacons();
     if (allBeacons.size() == 0) return List.of();
 
-    final Map<UUID, List<BeaconUse>> groupedUsesByBeacon = getAllUsesGroupedByBeaconId();
-
-    final Map<PersonType, List<BeaconPerson>> groupedPersonsByType = getAllPersonsGroupedByType();
-    final Map<UUID, BeaconPerson> allOwners = getAllOwnersMappedByBeaconId(
-      groupedPersonsByType
+    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId();
+    final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType();
+    final Map<UUID, BeaconPerson> ownersGroupedByBeaconId = getAllOwnersGroupedByBeaconId(
+      personsGroupedByType
     );
-    final Map<UUID, List<BeaconPerson>> emergencyContactsByBeacon = getAllContactsGroupedByBeaconId(
-      groupedPersonsByType
+    final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId = getAllContactsGroupedByBeaconId(
+      personsGroupedByType
     );
 
     return mapBeaconRelationships(
       allBeacons,
-      groupedUsesByBeacon,
-      allOwners,
-      emergencyContactsByBeacon
+      usesGroupedByBeaconId,
+      ownersGroupedByBeaconId,
+      emergencyContactsGroupedByBeaconId
     );
   }
 
   private List<Beacon> mapBeaconRelationships(
-    final ArrayList<Beacon> allBeacons,
-    final Map<UUID, List<BeaconUse>> usesGroupedByBeacon,
-    final Map<UUID, BeaconPerson> allOwners,
-    final Map<UUID, List<BeaconPerson>> emergencyContactsByBeacon
+    final List<Beacon> allBeacons,
+    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId,
+    final Map<UUID, BeaconPerson> ownersGroupedByBeaconId,
+    final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId
   ) {
-    var mappedBeacons = new ArrayList<Beacon>();
+    List<Beacon> mappedBeacons = new ArrayList<Beacon>();
 
     allBeacons.forEach(
       beacon -> {
-        var beaconUses = usesGroupedByBeacon.get(beacon.getId());
+        var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
         beacon.setUses(beaconUses);
-        var beaconOwner = allOwners.get(beacon.getId());
+        var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
         beacon.setOwner(beaconOwner);
         beacon.setEmergencyContacts(
-          emergencyContactsByBeacon.get(beacon.getId())
+          emergencyContactsGroupedByBeaconId.get(beacon.getId())
         );
         mappedBeacons.add(beacon);
       }
@@ -95,41 +89,39 @@ public class GetAllBeaconsService {
       beaconUseRepository.findAll().spliterator(),
       false
     );
-    final Map<UUID, List<BeaconUse>> groupedUsesByBeacon = usesStream.collect(
+    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = usesStream.collect(
       Collectors.groupingBy(BeaconUse::getBeaconId)
     );
-    return groupedUsesByBeacon;
+    return usesGroupedByBeaconId;
   }
 
   private Map<UUID, List<BeaconPerson>> getAllContactsGroupedByBeaconId(
-    final Map<PersonType, List<BeaconPerson>> groupedPersonsByType
+    final Map<PersonType, List<BeaconPerson>> personsGroupedByType
   ) {
-    final var emergencyContacts = groupedPersonsByType.get(
+    final var emergencyContacts = personsGroupedByType.get(
       PersonType.EMERGENCY_CONTACT
     );
-    if (
-      emergencyContacts == null
-    ) return new HashMap<UUID, List<BeaconPerson>>();
+    if (emergencyContacts == null) return emptyMap();
 
-    final var emergencyContactSteam = emergencyContacts.stream();
-    final Map<UUID, List<BeaconPerson>> emergencyContactsByBeacon = emergencyContactSteam.collect(
+    final var emergencyContactStream = emergencyContacts.stream();
+    final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId = emergencyContactStream.collect(
       Collectors.groupingBy(BeaconPerson::getBeaconId)
     );
-    return emergencyContactsByBeacon;
+    return emergencyContactsGroupedByBeaconId;
   }
 
-  private Map<UUID, BeaconPerson> getAllOwnersMappedByBeaconId(
-    final Map<PersonType, List<BeaconPerson>> groupedPersonsByType
+  private Map<UUID, BeaconPerson> getAllOwnersGroupedByBeaconId(
+    final Map<PersonType, List<BeaconPerson>> personsGroupedByType
   ) {
-    final var owners = groupedPersonsByType.get(PersonType.OWNER);
-    if (owners == null) return new HashMap<UUID, BeaconPerson>();
+    final var owners = personsGroupedByType.get(PersonType.OWNER);
+    if (owners == null) return emptyMap();
 
-    var mappedOwners = new HashMap<UUID, BeaconPerson>();
+    var ownersGroupedByBeaconId = new HashMap<UUID, BeaconPerson>();
     owners.forEach(
-      owner -> mappedOwners.putIfAbsent(owner.getBeaconId(), owner)
+      owner -> ownersGroupedByBeaconId.putIfAbsent(owner.getBeaconId(), owner)
     );
 
-    return mappedOwners;
+    return ownersGroupedByBeaconId;
   }
 
   private Map<PersonType, List<BeaconPerson>> getAllPersonsGroupedByType() {
@@ -137,13 +129,13 @@ public class GetAllBeaconsService {
       beaconPersonRepository.findAll().spliterator(),
       false
     );
-    final var groupedPersonsByType = personStream.collect(
+    final var personsGroupedByType = personStream.collect(
       Collectors.groupingBy(BeaconPerson::getPersonType)
     );
-    return groupedPersonsByType;
+    return personsGroupedByType;
   }
 
-  private ArrayList<Beacon> getAllBeacons() {
+  private List<Beacon> getAllBeacons() {
     final var allBeacons = new ArrayList<Beacon>();
     final var result = beaconRepository.findAll();
     result.forEach(allBeacons::add);

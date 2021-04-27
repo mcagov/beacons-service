@@ -8,7 +8,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-public class BeaconsSearchIntegrationTest {
+class BeaconsSearchIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
