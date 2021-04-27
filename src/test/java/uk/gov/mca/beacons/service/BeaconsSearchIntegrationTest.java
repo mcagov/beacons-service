@@ -25,7 +25,9 @@ class BeaconsSearchIntegrationTest {
     request.jsonPath("$.data[0].attributes.manufacturer").exists();
     request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
     request.jsonPath("$.data[0].attributes.owner.fullName").exists();
-    request.jsonPath("$.data[0].attributes.emergencyContacts[0].fullName").exists();
+    request
+      .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
+      .exists();
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {
