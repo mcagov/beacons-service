@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.service.registrations;
 
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,8 +41,8 @@ public class GetAllBeaconsService {
   }
 
   public List<Beacon> findAll() {
-    final List<Beacon> allBeacons = getAllBeacons();
-    if (allBeacons.size() == 0) return List.of();
+    final List<Beacon> allBeacons = beaconRepository.findAll();
+    if (allBeacons.size() == 0) return emptyList();
 
     final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId();
     final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType();
@@ -133,12 +134,5 @@ public class GetAllBeaconsService {
       Collectors.groupingBy(BeaconPerson::getPersonType)
     );
     return personsGroupedByType;
-  }
-
-  private List<Beacon> getAllBeacons() {
-    final var allBeacons = new ArrayList<Beacon>();
-    final var result = beaconRepository.findAll();
-    result.forEach(allBeacons::add);
-    return allBeacons;
   }
 }
