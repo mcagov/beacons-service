@@ -82,6 +82,8 @@ public class BeaconUse {
 
   private String ssrNumber;
 
+  private String rssNumber;
+
   private String officialNumber;
 
   private String rigPlatformLocation;
@@ -344,6 +346,14 @@ public class BeaconUse {
 
   public void setSsrNumber(String ssrNumber) {
     this.ssrNumber = ssrNumber;
+  }
+
+  public String getRssNumber() {
+    return rssNumber;
+  }
+
+  public void setRssNumber(String rssNumber) {
+    this.rssNumber = rssNumber;
   }
 
   public String getOfficialNumber() {
