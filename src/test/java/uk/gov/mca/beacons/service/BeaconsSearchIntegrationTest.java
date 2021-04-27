@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -17,12 +16,8 @@ import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
 import uk.gov.mca.beacons.service.model.Registration;
 import uk.gov.mca.beacons.service.registrations.RegistrationsService;
-import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
-import uk.gov.mca.beacons.service.repository.BeaconRepository;
-import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 @AutoConfigureWebTestClient
 class BeaconsSearchIntegrationTest {
 
@@ -30,13 +25,7 @@ class BeaconsSearchIntegrationTest {
   private WebTestClient webTestClient;
 
   @Autowired
-  private BeaconRepository beaconRepository;
-
-  @Autowired
-  private BeaconUseRepository beaconUseRepository;
-
-  @Autowired
-  private BeaconPersonRepository beaconPersonRepository;
+  private RegistrationsService registrationsService;
 
   @BeforeEach
   public final void before() {
@@ -45,12 +34,13 @@ class BeaconsSearchIntegrationTest {
     beacon.setModel("EPIRB1");
     beacon.setManufacturerSerialNumber("1407312904");
     beacon.setChkCode("9480B");
+    beacon.setHexId("HEXID123");
     beacon.setBatteryExpiryDate(LocalDateTime.of(2020, 2, 1, 0, 0));
     beacon.setLastServicedDate(LocalDateTime.of(2020, 2, 1, 0, 0));
     final var owner = new BeaconPerson();
-    owner.setAddressLine1("1 The Hard");
+    owner.setAddressLine1("2 The Hard");
     owner.setAddressLine2("");
-    owner.setFullName("Vice-Admiral Horatio Nelson, 1st Viscount Nelson");
+    owner.setFullName("Vice-Admiral Horatio Nelson, 2st Viscount Nelson");
     owner.setEmail("nelson@royalnavy.mod.uk");
     owner.setTelephoneNumber("02392 856624");
     owner.setTownOrCity("Portsmouth");
@@ -81,12 +71,6 @@ class BeaconsSearchIntegrationTest {
     final var registration = new Registration();
     registration.setBeacons(List.of(beacon));
 
-    final var registrationsService =
-      new RegistrationsService(
-        beaconRepository,
-        beaconUseRepository,
-        beaconPersonRepository
-      );
     registrationsService.register(registration);
   }
 
