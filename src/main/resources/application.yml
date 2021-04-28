@@ -19,3 +19,10 @@ beacons:
   openapi:
     github:
       url: https://github.com/mcagov/beacons-service
+
+# TODO: Azure AD Configuration
+azure:
+  activedirectory:
+    tenant-id:
+    client-id:
+    client-secret:
