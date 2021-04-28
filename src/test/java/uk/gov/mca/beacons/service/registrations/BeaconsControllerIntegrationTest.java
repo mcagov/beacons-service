@@ -76,7 +76,7 @@ class BeaconsControllerIntegrationTest {
 
   @Test
   void requestAllBeaconControllerShouldReturnSomeBeacons() {
-    var request = makeGetRequest("/beacons/");
+    var request = makeGetRequest("/beacons");
 
     request.jsonPath("$.meta.pageSize").exists();
     request.jsonPath("$.meta.count").exists();

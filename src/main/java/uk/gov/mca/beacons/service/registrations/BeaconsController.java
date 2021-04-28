@@ -21,7 +21,7 @@ public class BeaconsController {
     this.getAllBeaconsService = getAllBeaconsService;
   }
 
-  @GetMapping(value = "/")
+  @GetMapping
   public BeaconsSearchResult findAll() {
     final var results = new BeaconsSearchResult();
     results.setBeacons(getAllBeaconsService.findAll());
