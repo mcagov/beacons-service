@@ -121,6 +121,7 @@ public class BeaconsSearchResultSerializer
     gen.writeObjectFieldStart("attributes");
 
     writeStringFieldWithNullCheck(gen, "hexId", beacon.getHexId());
+    writeStringFieldWithNullCheck(gen, "status", beacon.getBeaconStatus());
     writeStringFieldWithNullCheck(
       gen,
       "manufacturer",
