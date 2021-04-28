@@ -11,6 +11,7 @@ public class SecurityConfiguration extends AADWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.authorizeRequests().anyRequest().authenticated();
+    // TODO: update antMatcher below to only require Azure AD auth for backoffice endpoints
+    http.antMatcher("/**").authorizeRequests().anyRequest().authenticated();
   }
 }
