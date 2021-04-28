@@ -43,7 +43,6 @@ class CorsConfigurationTest {
 
     webMvcConfigurer = corsConfiguration.corsConfigurer(allowedOrigins);
     webMvcConfigurer.addCorsMappings(registry);
-
     then(corsRegistration).should(times(1)).allowedOrigins(allowedOrigins);
   }
 
