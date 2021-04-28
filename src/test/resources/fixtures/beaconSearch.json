@@ -11,6 +11,7 @@
         "hexId": "Hex me",
         "status": "NEW",
         "manufacturer": "Ocean Signal",
+        "createdDate": "2020-02-01T00:00",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",

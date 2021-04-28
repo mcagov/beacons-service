@@ -78,6 +78,7 @@ class BeaconsSearchResultSerializerTest {
     beacon.setBeaconStatus(BeaconStatus.NEW);
     beacon.setHexId("Hex me");
     beacon.setManufacturer("Ocean Signal");
+    beacon.setCreatedDate(LocalDateTime.of(2020, 2, 1, 0, 0));
     beacon.setModel("EPIRB1");
     beacon.setManufacturerSerialNumber("1407312904");
     beacon.setChkCode("9480B");

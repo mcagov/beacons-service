@@ -127,6 +127,7 @@ public class BeaconsSearchResultSerializer
       "manufacturer",
       beacon.getManufacturer()
     );
+    writeStringFieldWithNullCheck(gen, "createdDate", beacon.getCreatedDate());
     writeStringFieldWithNullCheck(gen, "model", beacon.getModel());
     writeStringFieldWithNullCheck(
       gen,
