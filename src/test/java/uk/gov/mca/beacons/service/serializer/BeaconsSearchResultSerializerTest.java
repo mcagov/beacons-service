@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
+import uk.gov.mca.beacons.service.model.BeaconStatus;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 import uk.gov.mca.beacons.service.model.Environment;
@@ -74,8 +75,10 @@ class BeaconsSearchResultSerializerTest {
   void shouldSerializeResultForOneResultAsExpected() throws IOException {
     final var beacon = new Beacon();
     beacon.setId(UUID.fromString("97b306aa-cbd0-4f09-aa24-2d876b983efb"));
+    beacon.setBeaconStatus(BeaconStatus.NEW);
     beacon.setHexId("Hex me");
     beacon.setManufacturer("Ocean Signal");
+    beacon.setCreatedDate(LocalDateTime.of(2020, 2, 1, 0, 0));
     beacon.setModel("EPIRB1");
     beacon.setManufacturerSerialNumber("1407312904");
     beacon.setChkCode("9480B");

@@ -19,6 +19,8 @@ beacons:
   openapi:
     github:
       url: https://github.com/mcagov/beacons-service
+  cors:
+    allowedOrigins: ${BEACONS_CORS_ALLOWED_ORIGINS:*}
 
 # TODO: Azure AD Configuration
 azure:
