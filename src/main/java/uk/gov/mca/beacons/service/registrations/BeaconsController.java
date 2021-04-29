@@ -1,6 +1,9 @@
 package uk.gov.mca.beacons.service.registrations;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +31,16 @@ public class BeaconsController {
     return results;
   }
 
-  @GetMapping(value = "/{hexId}")
-  public Beacon findByHexId(@PathVariable("hexId") String hexId) {
-    return new Beacon();
+  @GetMapping(value = "/{uuid}")
+  public BeaconsSearchResult findByUuid(
+    @PathVariable("uuid") String uuidString
+  ) {
+    final var result = new BeaconsSearchResult();
+    UUID uuid = UUID.fromString(uuidString);
+    Beacon beacon = getAllBeaconsService.find(uuid);
+    List<Beacon> beaconList = new ArrayList<Beacon>();
+    beaconList.add(beacon);
+    result.setBeacons(beaconList);
+    return result;
   }
 }

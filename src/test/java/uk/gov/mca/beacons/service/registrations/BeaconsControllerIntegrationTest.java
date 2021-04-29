@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.registrations;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
 import uk.gov.mca.beacons.service.model.Registration;
-import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -27,6 +27,8 @@ class BeaconsControllerIntegrationTest {
 
   @Autowired
   private RegistrationsService registrationsService;
+
+  private UUID uuid;
 
   @BeforeEach
   public final void before() {
@@ -74,6 +76,7 @@ class BeaconsControllerIntegrationTest {
     registration.setBeacons(List.of(beacon));
 
     registrationsService.register(registration);
+    uuid = beacon.getId();
   }
 
   @Test
@@ -85,6 +88,26 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.data").exists();
     request.jsonPath("$.data[0].type").isEqualTo("beacon");
     request.jsonPath("$.data[0].id").exists();
+    request.jsonPath("$.data[0].attributes.hexId").exists();
+    request.jsonPath("$.data[0].attributes.manufacturer").exists();
+    request.jsonPath("$.data[0].attributes.status").exists();
+    request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
+    request.jsonPath("$.data[0].attributes.owner.fullName").exists();
+    request
+      .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
+      .exists();
+  }
+
+  @Test
+  void requestBeaconControllerShouldReturnBeaconByUuid() {
+    String uuidAsString = uuid.toString();
+    var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
+
+    request.jsonPath("$.meta.pageSize").exists();
+    request.jsonPath("$.meta.count").exists();
+    request.jsonPath("$.data").exists();
+    request.jsonPath("$.data[0].type").isEqualTo("beacon");
+    request.jsonPath("$.data[0].id").isEqualTo(uuidAsString);
     request.jsonPath("$.data[0].attributes.hexId").exists();
     request.jsonPath("$.data[0].attributes.manufacturer").exists();
     request.jsonPath("$.data[0].attributes.status").exists();

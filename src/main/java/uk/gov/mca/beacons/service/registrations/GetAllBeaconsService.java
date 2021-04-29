@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -58,6 +59,40 @@ public class GetAllBeaconsService {
       ownersGroupedByBeaconId,
       emergencyContactsGroupedByBeaconId
     );
+  }
+
+  public Beacon find(UUID id) {
+    final Optional<Beacon> beacon = beaconRepository.findById(id);
+
+    return beacon
+      .map(
+        foundBeacon -> {
+          return getMappedBeacon(foundBeacon);
+        }
+      )
+      .orElse(new Beacon());
+  }
+
+  private Beacon getMappedBeacon(Beacon beacon) {
+    List<Beacon> beaconInList = new ArrayList<Beacon>();
+    beaconInList.add(beacon);
+
+    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId();
+    final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType();
+    final Map<UUID, BeaconPerson> ownersGroupedByBeaconId = getAllOwnersGroupedByBeaconId(
+      personsGroupedByType
+    );
+    final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId = getAllContactsGroupedByBeaconId(
+      personsGroupedByType
+    );
+
+    return mapBeaconRelationships(
+      beaconInList,
+      usesGroupedByBeaconId,
+      ownersGroupedByBeaconId,
+      emergencyContactsGroupedByBeaconId
+    )
+      .get(0);
   }
 
   private List<Beacon> mapBeaconRelationships(

@@ -8,6 +8,7 @@ import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,6 +74,33 @@ class GetAllBeaconServiceTest {
         hasProperty("id", is(secondBeaconId))
       )
     );
+  }
+
+  @Test
+  void shouldReturnOneResult() {
+    final var firstBeaconId = UUID.randomUUID();
+    final var firstBeacon = new Beacon();
+    firstBeacon.setId(firstBeaconId);
+
+    final var secondBeaconId = UUID.randomUUID();
+    final var secondBeacon = new Beacon();
+    secondBeacon.setId(secondBeaconId);
+
+    given(beaconRepository.findById(firstBeaconId))
+      .willReturn(Optional.of(firstBeacon));
+    given(beaconRepository.findById(secondBeaconId))
+      .willReturn(Optional.of(secondBeacon));
+
+    final var getAllBeaconService = new GetAllBeaconsService(
+      beaconRepository,
+      beaconUseRepository,
+      beaconPersonRepository
+    );
+    final var firstBeaconOnly = getAllBeaconService.find(firstBeaconId);
+    final var secondBeaconOnly = getAllBeaconService.find(secondBeaconId);
+
+    assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
+    assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
   }
 
   @Test
