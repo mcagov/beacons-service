@@ -44,21 +44,7 @@ public class GetAllBeaconsService {
     final List<Beacon> allBeacons = beaconRepository.findAll();
     if (allBeacons.size() == 0) return emptyList();
 
-    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId();
-    final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType();
-    final Map<UUID, BeaconPerson> ownersGroupedByBeaconId = getAllOwnersGroupedByBeaconId(
-      personsGroupedByType
-    );
-    final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId = getAllContactsGroupedByBeaconId(
-      personsGroupedByType
-    );
-
-    return mapBeaconRelationships(
-      allBeacons,
-      usesGroupedByBeaconId,
-      ownersGroupedByBeaconId,
-      emergencyContactsGroupedByBeaconId
-    );
+    return getMappedBeacons(allBeacons);
   }
 
   public Beacon find(UUID id) {
@@ -67,16 +53,16 @@ public class GetAllBeaconsService {
     return beacon
       .map(
         foundBeacon -> {
-          return getMappedBeacon(foundBeacon);
+          List<Beacon> beaconInList = new ArrayList<Beacon>();
+          beaconInList.add(foundBeacon);
+
+          return getMappedBeacons(beaconInList).get(0);
         }
       )
       .orElse(new Beacon());
   }
 
-  private Beacon getMappedBeacon(Beacon beacon) {
-    List<Beacon> beaconInList = new ArrayList<Beacon>();
-    beaconInList.add(beacon);
-
+  private List<Beacon> getMappedBeacons(List<Beacon> beacons) {
     final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId();
     final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType();
     final Map<UUID, BeaconPerson> ownersGroupedByBeaconId = getAllOwnersGroupedByBeaconId(
@@ -87,12 +73,11 @@ public class GetAllBeaconsService {
     );
 
     return mapBeaconRelationships(
-      beaconInList,
+      beacons,
       usesGroupedByBeaconId,
       ownersGroupedByBeaconId,
       emergencyContactsGroupedByBeaconId
-    )
-      .get(0);
+    );
   }
 
   private List<Beacon> mapBeaconRelationships(
