@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import uk.gov.mca.beacons.service.dto.BeaconDTO;
+import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 
@@ -36,23 +39,26 @@ public class BeaconsController {
   public BeaconsSearchResult findByUuid(@PathVariable("uuid") String uuidString) {
     final var result = new BeaconsSearchResult();
     UUID uuid = UUID.fromString(uuidString);
-    Optional<Beacon> beacon = getAllBeaconsService.find(uuid);
-    List<Beacon> beaconList = new ArrayList<Beacon>();
-    beacon.ifPresent(foundBeacon -> {
-      beaconList.add(foundBeacon);
-    });
-    result.setBeacons(beaconList);
-    return result;
+    BeaconDTO beacon = getAllBeaconsService.find(uuid);
+    // List<Beacon> beaconList = new ArrayList<Beacon>();
+    // beacon.ifPresent(foundBeacon -> {
+    //   beaconList.add(foundBeacon);
+    // });
+    // result.setBeacons(beaconList);
+    // return result;
+    return null;
   }
 
   @GetMapping(value = "/other/{uuid}")
-  public BeaconsSearchResult findByUuidOther(@PathVariable("uuid") String uuidString) {
+  public WrapperDTO<BeaconDTO> findByUuidOther(@PathVariable("uuid") String uuidString) {
     
     UUID uuid = UUID.fromString(uuidString);
-    Optional<Beacon> beacon = getAllBeaconsService.find(uuid);
-    
+    BeaconDTO beaconDTO = getAllBeaconsService.find(uuid);
+
+    var result = new WrapperDTO<BeaconDTO>();
+    result.Add(beaconDTO);
 
 
-    return null;
+    return result;
   }
 }

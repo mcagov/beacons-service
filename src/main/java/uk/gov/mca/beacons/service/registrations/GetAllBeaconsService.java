@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -51,19 +53,33 @@ public class GetAllBeaconsService {
     return beaconsRelationshipMapper.getMappedBeacons(allBeacons, allBeaconPersons, allBeaconUses);
   }
 
-  public Optional<Beacon> find(UUID id) {
+  public BeaconDTO find(UUID id) {
     final Optional<Beacon> beacon = beaconRepository.findById(id);
     final List<BeaconPerson> allBeaconPersons = beaconPersonRepository.findAll();
     final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
 
-    return beacon.map(
-      foundBeacon -> {
-        List<Beacon> beaconInList = new ArrayList<Beacon>();
-        beaconInList.add(foundBeacon);
+    if(beacon.isEmpty())
+    return null;
 
-        return beaconsRelationshipMapper.getMappedBeacons(beaconInList, allBeaconPersons, allBeaconUses).get(0);
-      }
-    );
+    var mappedBeacon = beaconsRelationshipMapper.getMappedBeacons(List.of(beacon.get()), allBeaconPersons, allBeaconUses).get(0);
+     
+    return convertToBeaconDTO(mappedBeacon);
+
+    // return beacon.map(
+    //   foundBeacon -> {
+    //     List<Beacon> beaconInList = new ArrayList<Beacon>();
+    //     beaconInList.add(foundBeacon);
+
+    //     return beaconsRelationshipMapper.getMappedBeacons(beaconInList, allBeaconPersons, allBeaconUses).get(0);
+    //   }
+    // );
+  }
+
+  private BeaconDTO convertToBeaconDTO(Beacon beacon){
+    var dto = new BeaconDTO();
+    dto.setId(beacon.getId());
+    dto.getAttributes().put("hexId", beacon.getHexId());
+    return dto;
   }
 
 }
