@@ -47,19 +47,17 @@ public class GetAllBeaconsService {
     return getMappedBeacons(allBeacons);
   }
 
-  public Beacon find(UUID id) {
+  public Optional<Beacon> find(UUID id) {
     final Optional<Beacon> beacon = beaconRepository.findById(id);
 
-    return beacon
-      .map(
-        foundBeacon -> {
-          List<Beacon> beaconInList = new ArrayList<Beacon>();
-          beaconInList.add(foundBeacon);
+    return beacon.map(
+      foundBeacon -> {
+        List<Beacon> beaconInList = new ArrayList<Beacon>();
+        beaconInList.add(foundBeacon);
 
-          return getMappedBeacons(beaconInList).get(0);
-        }
-      )
-      .orElse(new Beacon());
+        return getMappedBeacons(beaconInList).get(0);
+      }
+    );
   }
 
   private List<Beacon> getMappedBeacons(List<Beacon> beacons) {

@@ -77,33 +77,6 @@ class GetAllBeaconServiceTest {
   }
 
   @Test
-  void shouldReturnOneResult() {
-    final var firstBeaconId = UUID.randomUUID();
-    final var firstBeacon = new Beacon();
-    firstBeacon.setId(firstBeaconId);
-
-    final var secondBeaconId = UUID.randomUUID();
-    final var secondBeacon = new Beacon();
-    secondBeacon.setId(secondBeaconId);
-
-    given(beaconRepository.findById(firstBeaconId))
-      .willReturn(Optional.of(firstBeacon));
-    given(beaconRepository.findById(secondBeaconId))
-      .willReturn(Optional.of(secondBeacon));
-
-    final var getAllBeaconService = new GetAllBeaconsService(
-      beaconRepository,
-      beaconUseRepository,
-      beaconPersonRepository
-    );
-    final var firstBeaconOnly = getAllBeaconService.find(firstBeaconId);
-    final var secondBeaconOnly = getAllBeaconService.find(secondBeaconId);
-
-    assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
-    assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
-  }
-
-  @Test
   void shouldReturnDeepResult() {
     final var testBeaconId = UUID.randomUUID();
     final var testBeacon = new Beacon();
@@ -207,5 +180,51 @@ class GetAllBeaconServiceTest {
         hasProperty("fullName", is("Bjorn Rune Borg"))
       )
     );
+  }
+
+  @Test
+  void shouldReturnABeaconById() {
+    final var firstBeaconId = UUID.randomUUID();
+    final var firstBeacon = new Beacon();
+    firstBeacon.setId(firstBeaconId);
+
+    final var secondBeaconId = UUID.randomUUID();
+    final var secondBeacon = new Beacon();
+    secondBeacon.setId(secondBeaconId);
+
+    given(beaconRepository.findById(firstBeaconId))
+      .willReturn(Optional.of(firstBeacon));
+    given(beaconRepository.findById(secondBeaconId))
+      .willReturn(Optional.of(secondBeacon));
+
+    final var getAllBeaconService = new GetAllBeaconsService(
+      beaconRepository,
+      beaconUseRepository,
+      beaconPersonRepository
+    );
+
+    Beacon firstBeaconOnly = getAllBeaconService
+      .find(firstBeaconId)
+      .orElse(new Beacon());
+    Beacon secondBeaconOnly = getAllBeaconService
+      .find(secondBeaconId)
+      .orElse(new Beacon());
+
+    assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
+    assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
+  }
+
+  @Test
+  void shouldReturnZeroResultsIfIdNotFound() {
+    final var noExistentBeaconId = UUID.randomUUID();
+
+    final var getAllBeaconService = new GetAllBeaconsService(
+      beaconRepository,
+      beaconUseRepository,
+      beaconPersonRepository
+    );
+    final var beacon = getAllBeaconService.find(noExistentBeaconId);
+
+    assertThat(beacon, is(Optional.empty()));
   }
 }

@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.service.registrations;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +38,13 @@ public class BeaconsController {
   ) {
     final var result = new BeaconsSearchResult();
     UUID uuid = UUID.fromString(uuidString);
-    Beacon beacon = getAllBeaconsService.find(uuid);
+    Optional<Beacon> beacon = getAllBeaconsService.find(uuid);
     List<Beacon> beaconList = new ArrayList<Beacon>();
-    beaconList.add(beacon);
+    beacon.ifPresent(
+      foundBeacon -> {
+        beaconList.add(foundBeacon);
+      }
+    );
     result.setBeacons(beaconList);
     return result;
   }
