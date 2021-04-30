@@ -33,19 +33,26 @@ public class BeaconsController {
   }
 
   @GetMapping(value = "/{uuid}")
-  public BeaconsSearchResult findByUuid(
-    @PathVariable("uuid") String uuidString
-  ) {
+  public BeaconsSearchResult findByUuid(@PathVariable("uuid") String uuidString) {
     final var result = new BeaconsSearchResult();
     UUID uuid = UUID.fromString(uuidString);
     Optional<Beacon> beacon = getAllBeaconsService.find(uuid);
     List<Beacon> beaconList = new ArrayList<Beacon>();
-    beacon.ifPresent(
-      foundBeacon -> {
-        beaconList.add(foundBeacon);
-      }
-    );
+    beacon.ifPresent(foundBeacon -> {
+      beaconList.add(foundBeacon);
+    });
     result.setBeacons(beaconList);
     return result;
+  }
+
+  @GetMapping(value = "/other/{uuid}")
+  public BeaconsSearchResult findByUuidOther(@PathVariable("uuid") String uuidString) {
+    
+    UUID uuid = UUID.fromString(uuidString);
+    Optional<Beacon> beacon = getAllBeaconsService.find(uuid);
+    
+
+
+    return null;
   }
 }
