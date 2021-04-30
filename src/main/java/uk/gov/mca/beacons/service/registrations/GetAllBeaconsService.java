@@ -6,14 +6,11 @@ import static java.util.Collections.emptyMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -50,7 +47,11 @@ public class GetAllBeaconsService {
     final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
     if (allBeacons.size() == 0) return emptyList();
 
-    return beaconsRelationshipMapper.getMappedBeacons(allBeacons, allBeaconPersons, allBeaconUses);
+    return beaconsRelationshipMapper.getMappedBeacons(
+      allBeacons,
+      allBeaconPersons,
+      allBeaconUses
+    );
   }
 
   public BeaconDTO find(UUID id) {
@@ -58,28 +59,30 @@ public class GetAllBeaconsService {
     final List<BeaconPerson> allBeaconPersons = beaconPersonRepository.findAll();
     final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
 
-    if(beacon.isEmpty())
-    return null;
+    if (beacon.isEmpty()) return null;
 
-    var mappedBeacon = beaconsRelationshipMapper.getMappedBeacons(List.of(beacon.get()), allBeaconPersons, allBeaconUses).get(0);
-     
+    var mappedBeacon = beaconsRelationshipMapper
+      .getMappedBeacons(List.of(beacon.get()), allBeaconPersons, allBeaconUses)
+      .get(0);
+
     return convertToBeaconDTO(mappedBeacon);
-
-    // return beacon.map(
-    //   foundBeacon -> {
-    //     List<Beacon> beaconInList = new ArrayList<Beacon>();
-    //     beaconInList.add(foundBeacon);
-
-    //     return beaconsRelationshipMapper.getMappedBeacons(beaconInList, allBeaconPersons, allBeaconUses).get(0);
-    //   }
-    // );
   }
 
-  private BeaconDTO convertToBeaconDTO(Beacon beacon){
+  private BeaconDTO convertToBeaconDTO(Beacon beacon) {
     var dto = new BeaconDTO();
     dto.setId(beacon.getId());
     dto.AddAttribute("hexId", beacon.getHexId());
+    dto.AddAttribute("status", beacon.getBeaconStatus());
+    dto.AddAttribute("manufacturer", beacon.getManufacturer());
+    dto.AddAttribute("createdDate", beacon.getCreatedDate());
+    dto.AddAttribute("model", beacon.getModel());
+    dto.AddAttribute(
+      "manufacturerSerialNumber",
+      beacon.getManufacturerSerialNumber()
+    );
+    dto.AddAttribute("chkCode", beacon.getChkCode());
+    dto.AddAttribute("batteryExpiryDate", beacon.getBatteryExpiryDate());
+    dto.AddAttribute("lastServicedDate", beacon.getLastServicedDate());
     return dto;
   }
-
 }

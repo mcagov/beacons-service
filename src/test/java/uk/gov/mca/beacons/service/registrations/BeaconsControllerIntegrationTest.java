@@ -103,41 +103,19 @@ class BeaconsControllerIntegrationTest {
     String uuidAsString = uuid.toString();
     var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
 
-    request.jsonPath("$.meta.pageSize").exists();
-    request.jsonPath("$.meta.count").exists();
     request.jsonPath("$.data").exists();
     request.jsonPath("$.data[0].type").isEqualTo("beacon");
     request.jsonPath("$.data[0].id").isEqualTo(uuidAsString);
     request.jsonPath("$.data[0].attributes.hexId").exists();
-    request.jsonPath("$.data[0].attributes.manufacturer").exists();
     request.jsonPath("$.data[0].attributes.status").exists();
-    request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
-    request.jsonPath("$.data[0].attributes.owner.fullName").exists();
-    request
-      .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
-      .exists();
-  }
-
-  @Test
-  void requestBeaconControllerShouldReturnBeaconByUuidOther() {
-    String uuidAsString = uuid.toString();
-    var request = makeGetRequest(String.format("/beacons/other/%s", uuidAsString));
-
-     request.jsonPath("$.id").exists();
-
-    // request.jsonPath("$.meta.pageSize").exists();
-    // request.jsonPath("$.meta.count").exists();
-    // request.jsonPath("$.data").exists();
-    // request.jsonPath("$.data[0].type").isEqualTo("beacon");
-    // request.jsonPath("$.data[0].id").isEqualTo(uuidAsString);
-    // request.jsonPath("$.data[0].attributes.hexId").exists();
-    // request.jsonPath("$.data[0].attributes.manufacturer").exists();
-    // request.jsonPath("$.data[0].attributes.status").exists();
-    // request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
-    // request.jsonPath("$.data[0].attributes.owner.fullName").exists();
-    // request
-    //   .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
-    //   .exists();
+    request.jsonPath("$.data[0].attributes.manufacturer").exists();
+    request.jsonPath("$.data[0].attributes.createdDate").exists();
+    request.jsonPath("$.data[0].attributes.model").exists();
+    request.jsonPath("$.data[0].attributes.manufacturerSerialNumber").exists();
+    request.jsonPath("$.data[0].attributes.chkCode").exists();
+    request.jsonPath("$.data[0].attributes.batteryExpiryDate").exists();
+    request.jsonPath("$.data[0].attributes.lastServicedDate").exists();
+    // TODO: Assert that attributes and relationships are also returned
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {

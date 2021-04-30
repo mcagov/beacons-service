@@ -6,19 +6,27 @@ import java.util.Map;
 
 public class WrapperDTO<T> {
 
-    private Map<String, Object> meta;
-    private ArrayList<T> data;
+  public Map<String, Object> getMeta() {
+    return meta;
+  }
 
-    public WrapperDTO() {
-        meta = new HashMap<String, Object>();
-        data = new ArrayList<T>();
-    }
+  public ArrayList<T> getData() {
+    return data;
+  }
 
-    public void AddMeta(String key, String value){
-        meta.put(key, value);
-    }
+  private Map<String, Object> meta;
+  private ArrayList<T> data;
 
-    public void AddData(T dataDTO){
-        data.add(dataDTO);
-    }
+  public WrapperDTO() {
+    meta = new HashMap<String, Object>();
+    data = new ArrayList<T>();
+  }
+
+  public void AddMeta(String key, String value) {
+    meta.put(key, value);
+  }
+
+  public void AddData(T dataDTO) {
+    data.add(dataDTO);
+  }
 }

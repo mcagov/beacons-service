@@ -16,16 +16,23 @@ import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.PersonType;
 
 @Service
-public class  BeaconsRelationshipMapper{
-   
-   public BeaconsRelationshipMapper() {
-        super();
-    }
+public class BeaconsRelationshipMapper {
 
+  public BeaconsRelationshipMapper() {
+    super();
+  }
 
-  public List<Beacon> getMappedBeacons(List<Beacon> beacons, List<BeaconPerson> persons, List<BeaconUse> uses) {
-    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId(uses);
-    final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType(persons);
+  public List<Beacon> getMappedBeacons(
+    List<Beacon> beacons,
+    List<BeaconPerson> persons,
+    List<BeaconUse> uses
+  ) {
+    final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = getAllUsesGroupedByBeaconId(
+      uses
+    );
+    final Map<PersonType, List<BeaconPerson>> personsGroupedByType = getAllPersonsGroupedByType(
+      persons
+    );
     final Map<UUID, BeaconPerson> ownersGroupedByBeaconId = getAllOwnersGroupedByBeaconId(
       personsGroupedByType
     );
@@ -65,7 +72,9 @@ public class  BeaconsRelationshipMapper{
     return mappedBeacons;
   }
 
-  private Map<UUID, List<BeaconUse>> getAllUsesGroupedByBeaconId(List<BeaconUse> uses) {
+  private Map<UUID, List<BeaconUse>> getAllUsesGroupedByBeaconId(
+    List<BeaconUse> uses
+  ) {
     final var usesStream = uses.stream();
     final Map<UUID, List<BeaconUse>> usesGroupedByBeaconId = usesStream.collect(
       Collectors.groupingBy(BeaconUse::getBeaconId)
@@ -102,7 +111,9 @@ public class  BeaconsRelationshipMapper{
     return ownersGroupedByBeaconId;
   }
 
-  private Map<PersonType, List<BeaconPerson>> getAllPersonsGroupedByType(List<BeaconPerson> persons) {
+  private Map<PersonType, List<BeaconPerson>> getAllPersonsGroupedByType(
+    List<BeaconPerson> persons
+  ) {
     final var personStream = persons.stream();
     final var personsGroupedByType = personStream.collect(
       Collectors.groupingBy(BeaconPerson::getPersonType)

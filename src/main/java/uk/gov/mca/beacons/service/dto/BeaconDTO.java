@@ -6,31 +6,27 @@ import java.util.UUID;
 
 public class BeaconDTO {
 
-    private String type = "beacon";
-    private UUID id;
-    private Map<String, String> attributes = new HashMap<String, String>();
+  private String type = "beacon";
+  private UUID id;
+  private Map<String, Object> attributes = new HashMap<String, Object>();
 
-    public String getType() {
-        return type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    
-    public void AddAttribute(String key, String value){
-        attributes.put(key, value);
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    // public void setAttributes(Map<String, String> attributes) {
-    //     this.attributes = attributes;
-    // }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public UUID getId() {
-        return id;
-    }
+  public Map<String, Object> getAttributes() {
+    return attributes;
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-
-
+  public void AddAttribute(String key, Object value) {
+    attributes.put(key, value);
+  }
 }
