@@ -78,7 +78,7 @@ public class GetAllBeaconsService {
   private BeaconDTO convertToBeaconDTO(Beacon beacon){
     var dto = new BeaconDTO();
     dto.setId(beacon.getId());
-    dto.getAttributes().put("hexId", beacon.getHexId());
+    dto.AddAttribute("hexId", beacon.getHexId());
     return dto;
   }
 

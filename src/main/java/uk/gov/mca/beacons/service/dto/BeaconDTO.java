@@ -14,8 +14,9 @@ public class BeaconDTO {
         return type;
     }
 
-    public Map<String, String> getAttributes() {
-        return attributes;
+    
+    public void AddAttribute(String key, String value){
+        attributes.put(key, value);
     }
 
     // public void setAttributes(Map<String, String> attributes) {

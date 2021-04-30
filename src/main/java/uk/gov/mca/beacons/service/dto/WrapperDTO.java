@@ -6,18 +6,19 @@ import java.util.Map;
 
 public class WrapperDTO<T> {
 
-    public Map<String, Object> meta;
-    public ArrayList<T> data;
+    private Map<String, Object> meta;
+    private ArrayList<T> data;
 
     public WrapperDTO() {
         meta = new HashMap<String, Object>();
-        meta.putIfAbsent("count", 1);
-        meta.putIfAbsent("pageSize", 1);
-
         data = new ArrayList<T>();
     }
 
-    public void Add(T dataDTO){
+    public void AddMeta(String key, String value){
+        meta.put(key, value);
+    }
+
+    public void AddData(T dataDTO){
         data.add(dataDTO);
     }
 }
