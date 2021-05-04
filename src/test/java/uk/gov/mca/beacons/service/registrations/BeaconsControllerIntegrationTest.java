@@ -30,6 +30,9 @@ class BeaconsControllerIntegrationTest {
 
   private UUID uuid;
   private UUID useUuid;
+  private UUID ownerUuid;
+  private UUID firstEmergencyContactUuid;
+  private UUID secondEmergencyContactUuid;
 
   @BeforeEach
   public final void before() {
@@ -79,6 +82,9 @@ class BeaconsControllerIntegrationTest {
     registrationsService.register(registration);
     uuid = beacon.getId();
     useUuid = beacon.getUses().get(0).getId();
+    ownerUuid = beacon.getOwner().getId();
+    firstEmergencyContactUuid = beacon.getEmergencyContacts().get(0).getId();
+    secondEmergencyContactUuid = beacon.getEmergencyContacts().get(1).getId();
   }
 
   @Test
@@ -117,10 +123,21 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.data[0].attributes.chkCode").exists();
     request.jsonPath("$.data[0].attributes.batteryExpiryDate").exists();
     request.jsonPath("$.data[0].attributes.lastServicedDate").exists();
+    request
+      .jsonPath("$.data[0].relationships.uses.data[0].id")
+      .isEqualTo(useUuid.toString());
+    request
+      .jsonPath("$.data[0].relationships.owner.data[0].id")
+      .isEqualTo(ownerUuid.toString());
+    request
+      .jsonPath("$.data[0].relationships.emergencyContacts.data[0].id")
+      .isEqualTo(firstEmergencyContactUuid.toString());
+    request
+      .jsonPath("$.data[0].relationships.emergencyContacts.data[1].id")
+      .isEqualTo(secondEmergencyContactUuid.toString());
     request.jsonPath("$.included").exists();
     request.jsonPath("$.included[0].type").exists();
     request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
-    // TODO: Assert that attributes and relationships are also returned
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {
