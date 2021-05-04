@@ -100,16 +100,16 @@ public class GetAllBeaconsService {
       emergencyContactDTOs
     );
 
-    beaconDTO.AddRelationship("uses", useRelationshipDTO);
-    beaconDTO.AddRelationship("owner", ownerRelationshipDTO);
-    beaconDTO.AddRelationship(
+    beaconDTO.addRelationship("uses", useRelationshipDTO);
+    beaconDTO.addRelationship("owner", ownerRelationshipDTO);
+    beaconDTO.addRelationship(
       "emergencyContacts",
       emergencyContactRelationshipDTO
     );
 
     var wrapper = new WrapperDTO<BeaconDTO>();
-    wrapper.AddData(beaconDTO);
-    useDTOs.forEach(wrapper::AddIncluded);
+    wrapper.addData(beaconDTO);
+    useDTOs.forEach(wrapper::addIncluded);
 
     return wrapper;
   }

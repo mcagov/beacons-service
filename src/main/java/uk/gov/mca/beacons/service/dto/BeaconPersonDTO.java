@@ -13,16 +13,16 @@ public class BeaconPersonDTO extends DomainDTO {
   public static BeaconPersonDTO from(BeaconPerson domain) {
     var dto = new BeaconPersonDTO();
     dto.setId(domain.getId());
-    dto.AddAttribute("fullName", domain.getFullName());
-    dto.AddAttribute("email", domain.getEmail());
-    dto.AddAttribute("telephoneNumber", domain.getTelephoneNumber());
-    dto.AddAttribute("addressLine1", domain.getAddressLine1());
-    dto.AddAttribute("addressLine2", domain.getAddressLine2());
-    dto.AddAttribute("addressLine3", domain.getAddressLine3());
-    dto.AddAttribute("addressLine4", domain.getAddressLine4());
-    dto.AddAttribute("townOrCity", domain.getTownOrCity());
-    dto.AddAttribute("county", domain.getCounty());
-    dto.AddAttribute("postcode", domain.getPostcode());
+    dto.addAttribute("fullName", domain.getFullName());
+    dto.addAttribute("email", domain.getEmail());
+    dto.addAttribute("telephoneNumber", domain.getTelephoneNumber());
+    dto.addAttribute("addressLine1", domain.getAddressLine1());
+    dto.addAttribute("addressLine2", domain.getAddressLine2());
+    dto.addAttribute("addressLine3", domain.getAddressLine3());
+    dto.addAttribute("addressLine4", domain.getAddressLine4());
+    dto.addAttribute("townOrCity", domain.getTownOrCity());
+    dto.addAttribute("county", domain.getCounty());
+    dto.addAttribute("postcode", domain.getPostcode());
     return dto;
   }
 }

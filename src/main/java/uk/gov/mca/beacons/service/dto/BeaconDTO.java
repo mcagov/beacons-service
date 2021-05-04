@@ -13,18 +13,18 @@ public class BeaconDTO extends DomainDTO {
   public static BeaconDTO from(Beacon domain) {
     var dto = new BeaconDTO();
     dto.setId(domain.getId());
-    dto.AddAttribute("hexId", domain.getHexId());
-    dto.AddAttribute("status", domain.getBeaconStatus());
-    dto.AddAttribute("manufacturer", domain.getManufacturer());
-    dto.AddAttribute("createdDate", domain.getCreatedDate());
-    dto.AddAttribute("model", domain.getModel());
-    dto.AddAttribute(
+    dto.addAttribute("hexId", domain.getHexId());
+    dto.addAttribute("status", domain.getBeaconStatus());
+    dto.addAttribute("manufacturer", domain.getManufacturer());
+    dto.addAttribute("createdDate", domain.getCreatedDate());
+    dto.addAttribute("model", domain.getModel());
+    dto.addAttribute(
       "manufacturerSerialNumber",
       domain.getManufacturerSerialNumber()
     );
-    dto.AddAttribute("chkCode", domain.getChkCode());
-    dto.AddAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
-    dto.AddAttribute("lastServicedDate", domain.getLastServicedDate());
+    dto.addAttribute("chkCode", domain.getChkCode());
+    dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
+    dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
 
     return dto;
   }

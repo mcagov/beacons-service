@@ -24,7 +24,7 @@ public abstract class DomainDTO {
     return attributes;
   }
 
-  public void AddAttribute(String key, Object value) {
+  public void addAttribute(String key, Object value) {
     attributes.put(key, value);
   }
 
@@ -32,7 +32,7 @@ public abstract class DomainDTO {
     return relationships;
   }
 
-  public void AddRelationship(String key, RelationshipDTO value) {
+  public void addRelationship(String key, RelationshipDTO value) {
     relationships.put(key, value);
   }
 }

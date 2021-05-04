@@ -1,9 +1,7 @@
 package uk.gov.mca.beacons.service.dto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class RelationshipDTO {
@@ -12,7 +10,7 @@ public class RelationshipDTO {
 
   public static RelationshipDTO from(List<DomainDTO> related) {
     var relationship = new RelationshipDTO();
-    related.forEach(relationship::AddData);
+    related.forEach(relationship::addData);
 
     return relationship;
   }
@@ -21,7 +19,7 @@ public class RelationshipDTO {
     return data;
   }
 
-  public void AddData(DomainDTO domainDto) {
+  public void addData(DomainDTO domainDto) {
     data.add(new RelationshipData(domainDto.getType(), domainDto.getId()));
   }
 

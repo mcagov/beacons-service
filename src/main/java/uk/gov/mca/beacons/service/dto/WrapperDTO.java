@@ -20,7 +20,7 @@ public class WrapperDTO<T extends DomainDTO> {
     return meta;
   }
 
-  public void AddMeta(String key, String value) {
+  public void addMeta(String key, String value) {
     meta.put(key, value);
   }
 
@@ -28,7 +28,7 @@ public class WrapperDTO<T extends DomainDTO> {
     return data;
   }
 
-  public void AddData(T dataDTO) {
+  public void addData(T dataDTO) {
     data.add(dataDTO);
   }
 
@@ -36,7 +36,7 @@ public class WrapperDTO<T extends DomainDTO> {
     return included;
   }
 
-  public void AddIncluded(DomainDTO includedDTO) {
+  public void addIncluded(DomainDTO includedDTO) {
     included.add(includedDTO);
   }
 }
