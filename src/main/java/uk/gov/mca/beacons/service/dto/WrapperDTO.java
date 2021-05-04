@@ -6,14 +6,6 @@ import java.util.Map;
 
 public class WrapperDTO<T> {
 
-  public Map<String, Object> getMeta() {
-    return meta;
-  }
-
-  public ArrayList<T> getData() {
-    return data;
-  }
-
   private Map<String, Object> meta;
   private ArrayList<T> data;
 
@@ -22,8 +14,16 @@ public class WrapperDTO<T> {
     data = new ArrayList<T>();
   }
 
+  public Map<String, Object> getMeta() {
+    return meta;
+  }
+
   public void AddMeta(String key, String value) {
     meta.put(key, value);
+  }
+
+  public ArrayList<T> getData() {
+    return data;
   }
 
   public void AddData(T dataDTO) {
