@@ -86,9 +86,11 @@ public class GetAllBeaconsService {
       .collect(Collectors.toList());
     var useRelationshipDTO = RelationshipDTO.from(useDTOs);
 
-    DomainDTO ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
     List<DomainDTO> ownerDTOs = new ArrayList<DomainDTO>();
-    ownerDTOs.add(ownerDTO);
+    if (beacon.getOwner() != null) {
+      DomainDTO ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
+      ownerDTOs.add(ownerDTO);
+    }
     var ownerRelationshipDTO = RelationshipDTO.from(ownerDTOs);
 
     List<DomainDTO> emergencyContactDTOs = beacon
