@@ -3,11 +3,6 @@
     "count": 1,
     "pageSize": 1
   },
-  "links": {
-    "self": "IDK",
-    "next": "IDK",
-    "last": "IDK"
-  },
   "data": [
     {
       "type": "beacon",
@@ -25,32 +20,17 @@
       },
       "relationships": {
         "uses": {
-          "links": {
-            "self": "IDK",
-            "related": "IDK"
-          },
           "data": [{ "type": "beaconUse", "id": "1" }]
         },
         "owner": {
-          "links": {
-            "self": "IDK",
-            "related": "IDK"
-          },
           "data": { "type": "beaconPerson", "id": "1" }
         },
         "emergencyContacts": {
-          "links": {
-            "self": "IDK",
-            "related": "IDK"
-          },
           "data": [
             { "type": "beaconPerson", "id": "2" },
             { "type": "beaconPerson", "id": "3" }
           ]
         }
-      },
-      "links": {
-        "self": "IDK"
       }
     }
   ],
@@ -62,9 +42,6 @@
         "environment": "MARITIME",
         "activity": "SAILING",
         "moreDetails": "More details of this vessel"
-      },
-      "links": {
-        "self": "IDK"
       }
     },
     {
@@ -79,9 +56,6 @@
         "townOrCity": "Portsmouth",
         "county": "Hampshire",
         "postcode": "PO1 3DT"
-      },
-      "links": {
-        "self": "IDK"
       }
     },
     {
@@ -91,9 +65,6 @@
         "fullName": "Lady Hamilton",
         "telephoneNumber": "02392 856621",
         "alternativeTelephoneNumber": "02392 856622"
-      },
-      "links": {
-        "self": "IDK"
       }
     },
     {
@@ -103,9 +74,6 @@
         "fullName": "Neil Hamilton",
         "telephoneNumber": "04392 856626",
         "alternativeTelephoneNumber": "04392 856625"
-      },
-      "links": {
-        "self": "IDK"
       }
     }
   ]

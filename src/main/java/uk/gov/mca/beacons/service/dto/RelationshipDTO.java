@@ -8,25 +8,13 @@ import java.util.UUID;
 
 public class RelationshipDTO {
 
-  private Map<String, String> links = new HashMap<String, String>();
-
   private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
 
   public static RelationshipDTO from(List<DomainDTO> related) {
     var relationship = new RelationshipDTO();
-    relationship.AddLink("self", "TBD");
-    relationship.AddLink("related", "TDB");
     related.forEach(relationship::AddData);
 
     return relationship;
-  }
-
-  public Map<String, String> getLinks() {
-    return links;
-  }
-
-  public void AddLink(String key, String value) {
-    links.put(key, value);
   }
 
   public ArrayList<RelationshipData> getData() {
