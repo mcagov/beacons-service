@@ -31,12 +31,8 @@ public class BeaconsController {
   }
 
   @GetMapping(value = "/{uuid}")
-  public WrapperDTO<BeaconDTO> findByUuid(
-    @PathVariable("uuid") String uuidString
-  ) {
-    UUID uuid = UUID.fromString(uuidString);
+  public WrapperDTO<BeaconDTO> findByUuid(@PathVariable("uuid") UUID uuid) {
     WrapperDTO<BeaconDTO> result = getAllBeaconsService.find(uuid);
-
     return result;
   }
 }

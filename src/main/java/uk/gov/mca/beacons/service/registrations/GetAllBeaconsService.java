@@ -36,12 +36,8 @@ public class GetAllBeaconsService {
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
 
   @Autowired
-  public GetAllBeaconsService(
-    BeaconRepository beaconRepository,
-    BeaconPersonRepository beaconPersonRepository,
-    BeaconUseRepository beaconUseRepository,
-    BeaconsRelationshipMapper beaconsRelationshipMapper
-  ) {
+  public GetAllBeaconsService(BeaconRepository beaconRepository, BeaconPersonRepository beaconPersonRepository,
+      BeaconUseRepository beaconUseRepository, BeaconsRelationshipMapper beaconsRelationshipMapper) {
     this.beaconRepository = beaconRepository;
     this.beaconPersonRepository = beaconPersonRepository;
     this.beaconUseRepository = beaconUseRepository;
@@ -52,84 +48,41 @@ public class GetAllBeaconsService {
     final List<Beacon> allBeacons = beaconRepository.findAll();
     final List<BeaconPerson> allBeaconPersons = beaconPersonRepository.findAll();
     final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
-    if (allBeacons.size() == 0) return emptyList();
+    if (allBeacons.size() == 0)
+      return emptyList();
 
-    return beaconsRelationshipMapper.getMappedBeacons(
-      allBeacons,
-      allBeaconPersons,
-      allBeaconUses
-    );
+    return beaconsRelationshipMapper.getMappedBeacons(allBeacons, allBeaconPersons, allBeaconUses);
   }
 
   public WrapperDTO<BeaconDTO> find(UUID id) {
     final Optional<Beacon> beacon = beaconRepository.findById(id);
-    final List<BeaconPerson> beaconPersons = beaconPersonRepository.findAllByBeaconId(
-      id
-    );
-    final List<BeaconUse> beaconUses = beaconUseRepository.findAllByBeaconId(
-      id
-    );
+    if (beacon.isEmpty())
+      return null;
 
-    if (beacon.isEmpty()) return null;
+    final List<BeaconPerson> beaconPersons = beaconPersonRepository.findAllByBeaconId(id);
+    final List<BeaconUse> beaconUses = beaconUseRepository.findAllByBeaconId(id);
 
-    var mappedBeacon = beaconsRelationshipMapper
-      .getMappedBeacons(List.of(beacon.get()), beaconPersons, beaconUses)
-      .get(0);
+    var mappedBeacon = beaconsRelationshipMapper.getMappedBeacons(List.of(beacon.get()), beaconPersons, beaconUses)
+        .get(0);
 
     return convertToDTO(mappedBeacon);
   }
 
   private WrapperDTO<BeaconDTO> convertToDTO(Beacon beacon) {
-    var dto = new BeaconDTO();
-    dto.setId(beacon.getId());
-    dto.AddAttribute("hexId", beacon.getHexId());
-    dto.AddAttribute("status", beacon.getBeaconStatus());
-    dto.AddAttribute("manufacturer", beacon.getManufacturer());
-    dto.AddAttribute("createdDate", beacon.getCreatedDate());
-    dto.AddAttribute("model", beacon.getModel());
-    dto.AddAttribute(
-      "manufacturerSerialNumber",
-      beacon.getManufacturerSerialNumber()
-    );
-    dto.AddAttribute("chkCode", beacon.getChkCode());
-    dto.AddAttribute("batteryExpiryDate", beacon.getBatteryExpiryDate());
-    dto.AddAttribute("lastServicedDate", beacon.getLastServicedDate());
+    var beaconDTO = BeaconDTO.from(beacon);
+
+    List<DomainDTO> useDTOs = beacon.getUses().stream().map(u -> BeaconUseDTO.from(u)).collect(Collectors.toList());
+    var useRelationshipDTO = RelationshipDTO.from(useDTOs) ;
+    
+    beaconDTO.AddRelationship("uses", useRelationshipDTO);
 
     var wrapper = new WrapperDTO<BeaconDTO>();
-    wrapper.AddData(dto);
-
-    AddRelatedUsesToDTO(beacon, dto, wrapper);
+    wrapper.AddData(beaconDTO);
+    useDTOs.forEach(wrapper::AddIncluded);
 
     return wrapper;
   }
 
-  private void AddRelatedUsesToDTO(
-    Beacon beacon,
-    BeaconDTO dto,
-    WrapperDTO<BeaconDTO> wrapper
-  ) {
-    List<DomainDTO> useDtos = beacon
-      .getUses()
-      .stream()
-      .map(u -> convertToBeaconUseDTO(u))
-      .collect(Collectors.toList());
+  
 
-    var rel = new RelationshipDTO();
-    rel.AddLink("self", "TBD");
-    rel.AddLink("related", "TDB");
-    useDtos.forEach(rel::AddData);
-
-    dto.AddRelationship("uses", rel);
-
-    useDtos.forEach(wrapper::AddIncluded);
-  }
-
-  private BeaconUseDTO convertToBeaconUseDTO(BeaconUse use) {
-    var dto = new BeaconUseDTO();
-    dto.setId(use.getId());
-    dto.AddAttribute("environment", use.getEnvironment());
-    dto.AddAttribute("activity", use.getActivity());
-    dto.AddAttribute("moreDetails", use.getMoreDetails());
-    return dto;
-  }
 }
