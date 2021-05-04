@@ -47,9 +47,10 @@ public class GetAllBeaconsService {
 
   public List<Beacon> findAll() {
     final List<Beacon> allBeacons = beaconRepository.findAll();
+    if (allBeacons.size() == 0) return emptyList();
+
     final List<BeaconPerson> allBeaconPersons = beaconPersonRepository.findAll();
     final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
-    if (allBeacons.size() == 0) return emptyList();
 
     return beaconsRelationshipMapper.getMappedBeacons(
       allBeacons,
@@ -59,9 +60,10 @@ public class GetAllBeaconsService {
   }
 
   public WrapperDTO<BeaconDTO> find(UUID id) {
-    final Optional<Beacon> beacon = beaconRepository.findById(id);
-    if (beacon.isEmpty()) return null;
+    final Optional<Beacon> beaconResult = beaconRepository.findById(id);
+    if (beaconResult.isEmpty()) return null;
 
+    final Beacon beacon = beaconResult.get();
     final List<BeaconPerson> beaconPersons = beaconPersonRepository.findAllByBeaconId(
       id
     );
@@ -69,9 +71,11 @@ public class GetAllBeaconsService {
       id
     );
 
-    var mappedBeacon = beaconsRelationshipMapper
-      .getMappedBeacons(List.of(beacon.get()), beaconPersons, beaconUses)
-      .get(0);
+    var mappedBeacon = beaconsRelationshipMapper.getMappedBeacon(
+      beacon,
+      beaconPersons,
+      beaconUses
+    );
 
     return convertToDTO(mappedBeacon);
   }

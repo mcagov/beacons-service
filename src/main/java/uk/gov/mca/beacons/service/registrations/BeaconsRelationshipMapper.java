@@ -22,6 +22,14 @@ public class BeaconsRelationshipMapper {
     super();
   }
 
+  public Beacon getMappedBeacon(
+    Beacon beacons,
+    List<BeaconPerson> persons,
+    List<BeaconUse> uses
+  ) {
+    return getMappedBeacons(List.of(beacons), persons, uses).get(0);
+  }
+
   public List<Beacon> getMappedBeacons(
     List<Beacon> beacons,
     List<BeaconPerson> persons,
@@ -59,9 +67,11 @@ public class BeaconsRelationshipMapper {
     allBeacons.forEach(
       beacon -> {
         var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
-        if (beaconUses == null) beacon.setUses(
-          java.util.Collections.emptyList()
-        ); else beacon.setUses(beaconUses);
+        if (beaconUses == null) {
+          beacon.setUses(java.util.Collections.emptyList());
+        } else {
+          beacon.setUses(beaconUses);
+        }
 
         var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
         beacon.setOwner(beaconOwner);
@@ -69,9 +79,11 @@ public class BeaconsRelationshipMapper {
         var beaconContacts = emergencyContactsGroupedByBeaconId.get(
           beacon.getId()
         );
-        if (beaconContacts == null) beacon.setEmergencyContacts(
-          java.util.Collections.emptyList()
-        ); else beacon.setEmergencyContacts(beaconContacts);
+        if (beaconContacts == null) {
+          beacon.setEmergencyContacts(java.util.Collections.emptyList());
+        } else {
+          beacon.setEmergencyContacts(beaconContacts);
+        }
 
         mappedBeacons.add(beacon);
       }
