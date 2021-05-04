@@ -56,13 +56,17 @@ public class GetAllBeaconsService {
 
   public BeaconDTO find(UUID id) {
     final Optional<Beacon> beacon = beaconRepository.findById(id);
-    final List<BeaconPerson> allBeaconPersons = beaconPersonRepository.findAll();
-    final List<BeaconUse> allBeaconUses = beaconUseRepository.findAll();
+    final List<BeaconPerson> beaconPersons = beaconPersonRepository.findAllByBeaconId(
+      id
+    );
+    final List<BeaconUse> beaconUses = beaconUseRepository.findAllByBeaconId(
+      id
+    );
 
     if (beacon.isEmpty()) return null;
 
     var mappedBeacon = beaconsRelationshipMapper
-      .getMappedBeacons(List.of(beacon.get()), allBeaconPersons, allBeaconUses)
+      .getMappedBeacons(List.of(beacon.get()), beaconPersons, beaconUses)
       .get(0);
 
     return convertToBeaconDTO(mappedBeacon);
