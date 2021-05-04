@@ -10,7 +10,6 @@ public class BeaconDTO extends DomainDTO {
     return type;
   }
 
-
   public static BeaconDTO from(Beacon domain) {
     var dto = new BeaconDTO();
     dto.setId(domain.getId());

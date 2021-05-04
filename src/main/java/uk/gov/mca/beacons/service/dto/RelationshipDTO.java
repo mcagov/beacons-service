@@ -12,8 +12,8 @@ public class RelationshipDTO {
 
   private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
 
-  public static RelationshipDTO from (List<DomainDTO> related){
-    var relationship = new RelationshipDTO(); 
+  public static RelationshipDTO from(List<DomainDTO> related) {
+    var relationship = new RelationshipDTO();
     relationship.AddLink("self", "TBD");
     relationship.AddLink("related", "TDB");
     related.forEach(relationship::AddData);

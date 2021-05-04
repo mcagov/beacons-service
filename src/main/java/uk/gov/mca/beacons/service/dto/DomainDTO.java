@@ -31,9 +31,8 @@ public abstract class DomainDTO {
   public Map<String, RelationshipDTO> getRelationships() {
     return relationships;
   }
-  
+
   public void AddRelationship(String key, RelationshipDTO value) {
     relationships.put(key, value);
   }
 }
-  
