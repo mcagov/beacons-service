@@ -197,8 +197,14 @@ class GetAllBeaconServiceTest {
     given(beaconRepository.findById(secondBeaconId))
       .willReturn(Optional.of(secondBeacon));
 
-    BeaconDTO firstBeaconOnly = getAllBeaconService.find(firstBeaconId);
-    BeaconDTO secondBeaconOnly = getAllBeaconService.find(secondBeaconId);
+    BeaconDTO firstBeaconOnly = getAllBeaconService
+      .find(firstBeaconId)
+      .getData()
+      .get(0);
+    BeaconDTO secondBeaconOnly = getAllBeaconService
+      .find(secondBeaconId)
+      .getData()
+      .get(0);
 
     assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
     assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));

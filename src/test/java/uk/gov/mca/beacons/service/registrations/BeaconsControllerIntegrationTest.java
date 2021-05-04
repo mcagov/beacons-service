@@ -29,6 +29,7 @@ class BeaconsControllerIntegrationTest {
   private RegistrationsService registrationsService;
 
   private UUID uuid;
+  private UUID useUuid;
 
   @BeforeEach
   public final void before() {
@@ -77,6 +78,7 @@ class BeaconsControllerIntegrationTest {
 
     registrationsService.register(registration);
     uuid = beacon.getId();
+    useUuid = beacon.getUses().get(0).getId();
   }
 
   @Test
@@ -115,6 +117,9 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.data[0].attributes.chkCode").exists();
     request.jsonPath("$.data[0].attributes.batteryExpiryDate").exists();
     request.jsonPath("$.data[0].attributes.lastServicedDate").exists();
+    request.jsonPath("$.included").exists();
+    request.jsonPath("$.included[0].type").exists();
+    request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
     // TODO: Assert that attributes and relationships are also returned
   }
 

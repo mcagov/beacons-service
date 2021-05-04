@@ -35,10 +35,7 @@ public class BeaconsController {
     @PathVariable("uuid") String uuidString
   ) {
     UUID uuid = UUID.fromString(uuidString);
-    BeaconDTO beaconDTO = getAllBeaconsService.find(uuid);
-
-    var result = new WrapperDTO<BeaconDTO>();
-    result.AddData(beaconDTO);
+    WrapperDTO<BeaconDTO> result = getAllBeaconsService.find(uuid);
 
     return result;
   }

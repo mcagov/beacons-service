@@ -1,8 +1,8 @@
 package uk.gov.mca.beacons.service.dto;
 
-public class BeaconDTO extends DomainDTO {
+public class BeaconUseDTO extends DomainDTO {
 
-  private String type = "beacon";
+  private String type = "beaconUse";
 
   public String getType() {
     return type;

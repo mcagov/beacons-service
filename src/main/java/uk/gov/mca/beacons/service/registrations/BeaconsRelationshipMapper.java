@@ -59,12 +59,20 @@ public class BeaconsRelationshipMapper {
     allBeacons.forEach(
       beacon -> {
         var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
-        beacon.setUses(beaconUses);
+        if (beaconUses == null) beacon.setUses(
+          java.util.Collections.emptyList()
+        ); else beacon.setUses(beaconUses);
+
         var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
         beacon.setOwner(beaconOwner);
-        beacon.setEmergencyContacts(
-          emergencyContactsGroupedByBeaconId.get(beacon.getId())
+
+        var beaconContacts = emergencyContactsGroupedByBeaconId.get(
+          beacon.getId()
         );
+        if (beaconContacts == null) beacon.setEmergencyContacts(
+          java.util.Collections.emptyList()
+        ); else beacon.setEmergencyContacts(beaconContacts);
+
         mappedBeacons.add(beacon);
       }
     );
