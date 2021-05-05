@@ -8,6 +8,12 @@ public class RelationshipDTO {
 
   private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
 
+  public static RelationshipDTO from(DomainDTO related) {
+    var relationship = new RelationshipDTO();
+    relationship.addData(related);
+    return relationship;
+  }
+
   public static RelationshipDTO from(List<DomainDTO> related) {
     var relationship = new RelationshipDTO();
     related.forEach(relationship::addData);
