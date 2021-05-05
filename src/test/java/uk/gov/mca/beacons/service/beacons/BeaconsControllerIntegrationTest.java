@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +17,7 @@ import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
 import uk.gov.mca.beacons.service.model.Registration;
+import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient

@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
