@@ -138,6 +138,13 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.included").exists();
     request.jsonPath("$.included[0].type").exists();
     request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
+    request.jsonPath("$.included[1].id").isEqualTo(ownerUuid.toString());
+    request
+      .jsonPath("$.included[2].id")
+      .isEqualTo(firstEmergencyContactUuid.toString());
+    request
+      .jsonPath("$.included[3].id")
+      .isEqualTo(secondEmergencyContactUuid.toString());
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {

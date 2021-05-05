@@ -115,7 +115,10 @@ public class GetAllBeaconsService {
 
     var wrapper = new WrapperDTO<BeaconDTO>();
     wrapper.addData(beaconDTO);
+
     useDTOs.forEach(wrapper::addIncluded);
+    ownerDTOs.forEach(wrapper::addIncluded);
+    emergencyContactDTOs.forEach(wrapper::addIncluded);
 
     return wrapper;
   }
