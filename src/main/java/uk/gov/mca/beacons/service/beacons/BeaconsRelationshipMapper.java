@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -17,10 +16,6 @@ import uk.gov.mca.beacons.service.model.PersonType;
 
 @Service
 public class BeaconsRelationshipMapper {
-
-  public BeaconsRelationshipMapper() {
-    super();
-  }
 
   public Beacon getMappedBeacon(
     Beacon beacons,
