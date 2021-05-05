@@ -2,19 +2,13 @@ package uk.gov.mca.beacons.service.beacons;
 
 import static java.util.Collections.emptyList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
-import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
-import uk.gov.mca.beacons.service.dto.DomainDTO;
-import uk.gov.mca.beacons.service.dto.RelationshipDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -77,49 +71,6 @@ public class BeaconsService {
       beaconUses
     );
 
-    return convertToDTO(mappedBeacon);
-  }
-
-  private WrapperDTO<BeaconDTO> convertToDTO(Beacon beacon) {
-    var beaconDTO = BeaconDTO.from(beacon);
-
-    List<DomainDTO> useDTOs = beacon
-      .getUses()
-      .stream()
-      .map(u -> BeaconUseDTO.from(u))
-      .collect(Collectors.toList());
-    var useRelationshipDTO = RelationshipDTO.from(useDTOs);
-
-    List<DomainDTO> ownerDTOs = new ArrayList<DomainDTO>();
-    if (beacon.getOwner() != null) {
-      DomainDTO ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
-      ownerDTOs.add(ownerDTO);
-    }
-    var ownerRelationshipDTO = RelationshipDTO.from(ownerDTOs);
-
-    List<DomainDTO> emergencyContactDTOs = beacon
-      .getEmergencyContacts()
-      .stream()
-      .map(emergencyContact -> BeaconPersonDTO.from(emergencyContact))
-      .collect(Collectors.toList());
-    var emergencyContactRelationshipDTO = RelationshipDTO.from(
-      emergencyContactDTOs
-    );
-
-    beaconDTO.addRelationship("uses", useRelationshipDTO);
-    beaconDTO.addRelationship("owner", ownerRelationshipDTO);
-    beaconDTO.addRelationship(
-      "emergencyContacts",
-      emergencyContactRelationshipDTO
-    );
-
-    var wrapper = new WrapperDTO<BeaconDTO>();
-    wrapper.addData(beaconDTO);
-
-    useDTOs.forEach(wrapper::addIncluded);
-    ownerDTOs.forEach(wrapper::addIncluded);
-    emergencyContactDTOs.forEach(wrapper::addIncluded);
-
-    return wrapper;
+    return BeaconsResponseFactory.buildDTO(mappedBeacon);
   }
 }
