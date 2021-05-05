@@ -61,24 +61,11 @@ public class BeaconsRelationshipMapper {
 
     allBeacons.forEach(
       beacon -> {
-        var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
-        if (beaconUses == null) {
-          beacon.setUses(java.util.Collections.emptyList());
-        } else {
-          beacon.setUses(beaconUses);
-        }
+        setUsesOnBeacon(usesGroupedByBeaconId, beacon);
 
-        var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
-        beacon.setOwner(beaconOwner);
+        setOwnerOnBeacon(ownersGroupedByBeaconId, beacon);
 
-        var beaconContacts = emergencyContactsGroupedByBeaconId.get(
-          beacon.getId()
-        );
-        if (beaconContacts == null) {
-          beacon.setEmergencyContacts(java.util.Collections.emptyList());
-        } else {
-          beacon.setEmergencyContacts(beaconContacts);
-        }
+        setContactsOnBeacon(emergencyContactsGroupedByBeaconId, beacon);
 
         mappedBeacons.add(beacon);
       }
@@ -134,5 +121,37 @@ public class BeaconsRelationshipMapper {
       Collectors.groupingBy(BeaconPerson::getPersonType)
     );
     return personsGroupedByType;
+  }
+
+  private void setUsesOnBeacon(
+    Map<UUID, List<BeaconUse>> usesGroupedByBeaconId,
+    Beacon beacon
+  ) {
+    var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
+    if (beaconUses == null) {
+      beacon.setUses(java.util.Collections.emptyList());
+    } else {
+      beacon.setUses(beaconUses);
+    }
+  }
+
+  private void setOwnerOnBeacon(
+    Map<UUID, BeaconPerson> ownersGroupedByBeaconId,
+    Beacon beacon
+  ) {
+    var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
+    beacon.setOwner(beaconOwner);
+  }
+
+  private void setContactsOnBeacon(
+    Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId,
+    Beacon beacon
+  ) {
+    var beaconContacts = emergencyContactsGroupedByBeaconId.get(beacon.getId());
+    if (beaconContacts == null) {
+      beacon.setEmergencyContacts(java.util.Collections.emptyList());
+    } else {
+      beacon.setEmergencyContacts(beaconContacts);
+    }
   }
 }
