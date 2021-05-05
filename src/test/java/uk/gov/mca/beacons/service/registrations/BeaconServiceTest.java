@@ -27,7 +27,7 @@ import uk.gov.mca.beacons.service.repository.BeaconRepository;
 import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @ExtendWith(MockitoExtension.class)
-class GetAllBeaconServiceTest {
+class BeaconServiceTest {
 
   @Mock
   private BeaconRepository beaconRepository;
@@ -38,12 +38,12 @@ class GetAllBeaconServiceTest {
   @Mock
   private BeaconUseRepository beaconUseRepository;
 
-  private GetAllBeaconsService getAllBeaconService;
+  private BeaconsService beaconsService;
 
   @BeforeEach
   void before() {
-    getAllBeaconService =
-      new GetAllBeaconsService(
+    beaconsService =
+      new BeaconsService(
         beaconRepository,
         beaconPersonRepository,
         beaconUseRepository,
@@ -53,7 +53,7 @@ class GetAllBeaconServiceTest {
 
   @Test
   void shouldReturnZeroResults() {
-    final var beacons = getAllBeaconService.findAll();
+    final var beacons = beaconsService.findAll();
     assertThat(beacons, is(emptyCollectionOf(Beacon.class)));
   }
 
@@ -70,7 +70,7 @@ class GetAllBeaconServiceTest {
     given(beaconRepository.findAll())
       .willReturn(List.of(firstBeacon, secondBeacon));
 
-    final var allBeacons = getAllBeaconService.findAll();
+    final var allBeacons = beaconsService.findAll();
 
     assertThat(
       allBeacons,
@@ -142,7 +142,7 @@ class GetAllBeaconServiceTest {
     given(beaconUseRepository.findAll())
       .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
 
-    final var allBeacons = getAllBeaconService.findAll();
+    final var allBeacons = beaconsService.findAll();
 
     final var resultBeacon = allBeacons.get(0);
     assertThat("one beacon is returned", allBeacons.size(), is(1));
@@ -197,11 +197,11 @@ class GetAllBeaconServiceTest {
     given(beaconRepository.findById(secondBeaconId))
       .willReturn(Optional.of(secondBeacon));
 
-    BeaconDTO firstBeaconOnly = getAllBeaconService
+    BeaconDTO firstBeaconOnly = beaconsService
       .find(firstBeaconId)
       .getData()
       .get(0);
-    BeaconDTO secondBeaconOnly = getAllBeaconService
+    BeaconDTO secondBeaconOnly = beaconsService
       .find(secondBeaconId)
       .getData()
       .get(0);
@@ -214,7 +214,7 @@ class GetAllBeaconServiceTest {
   void shouldReturnZeroResultsIfIdNotFound() {
     final var noExistentBeaconId = UUID.randomUUID();
 
-    final var beacon = getAllBeaconService.find(noExistentBeaconId);
+    final var beacon = beaconsService.find(noExistentBeaconId);
 
     assertNull(beacon);
   }

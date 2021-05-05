@@ -16,23 +16,23 @@ import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 @Tag(name = "Beacons Controller")
 public class BeaconsController {
 
-  private final GetAllBeaconsService getAllBeaconsService;
+  private final BeaconsService beaconsService;
 
   @Autowired
-  public BeaconsController(GetAllBeaconsService getAllBeaconsService) {
-    this.getAllBeaconsService = getAllBeaconsService;
+  public BeaconsController(BeaconsService beaconsService) {
+    this.beaconsService = beaconsService;
   }
 
   @GetMapping
   public BeaconsSearchResult findAll() {
     final var results = new BeaconsSearchResult();
-    results.setBeacons(getAllBeaconsService.findAll());
+    results.setBeacons(beaconsService.findAll());
     return results;
   }
 
   @GetMapping(value = "/{uuid}")
   public WrapperDTO<BeaconDTO> findByUuid(@PathVariable("uuid") UUID uuid) {
-    WrapperDTO<BeaconDTO> result = getAllBeaconsService.find(uuid);
+    WrapperDTO<BeaconDTO> result = beaconsService.find(uuid);
     return result;
   }
 }

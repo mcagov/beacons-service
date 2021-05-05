@@ -25,7 +25,7 @@ import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @Service
 @Transactional
-public class GetAllBeaconsService {
+public class BeaconsService {
 
   private final BeaconRepository beaconRepository;
   private final BeaconPersonRepository beaconPersonRepository;
@@ -33,7 +33,7 @@ public class GetAllBeaconsService {
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
 
   @Autowired
-  public GetAllBeaconsService(
+  public BeaconsService(
     BeaconRepository beaconRepository,
     BeaconPersonRepository beaconPersonRepository,
     BeaconUseRepository beaconUseRepository,
