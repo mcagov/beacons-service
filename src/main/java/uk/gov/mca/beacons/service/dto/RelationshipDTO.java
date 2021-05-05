@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class RelationshipDTO<T extends DomainDTO> {
 
-  private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
+  private List<RelationshipData> data = new ArrayList<RelationshipData>();
 
   public static <T extends DomainDTO> RelationshipDTO<T> from(T related) {
     final var relationship = new RelationshipDTO<T>();
@@ -21,7 +21,7 @@ public class RelationshipDTO<T extends DomainDTO> {
     return relationship;
   }
 
-  public ArrayList<RelationshipData> getData() {
+  public List<RelationshipData> getData() {
     return data;
   }
 
