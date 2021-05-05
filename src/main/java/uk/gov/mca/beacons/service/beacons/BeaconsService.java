@@ -8,8 +8,6 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -53,7 +51,7 @@ public class BeaconsService {
     );
   }
 
-  public WrapperDTO<BeaconDTO> find(UUID id) {
+  public Beacon find(UUID id) {
     final Optional<Beacon> beaconResult = beaconRepository.findById(id);
     if (beaconResult.isEmpty()) return null;
 
@@ -65,12 +63,10 @@ public class BeaconsService {
       id
     );
 
-    var mappedBeacon = beaconsRelationshipMapper.getMappedBeacon(
+    return beaconsRelationshipMapper.getMappedBeacon(
       beacon,
       beaconPersons,
       beaconUses
     );
-
-    return BeaconsResponseFactory.buildDTO(mappedBeacon);
   }
 }

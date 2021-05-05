@@ -16,9 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.beacons.BeaconsRelationshipMapper;
-import uk.gov.mca.beacons.service.beacons.BeaconsService;
-import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -199,14 +196,8 @@ class BeaconServiceTest {
     given(beaconRepository.findById(secondBeaconId))
       .willReturn(Optional.of(secondBeacon));
 
-    BeaconDTO firstBeaconOnly = beaconsService
-      .find(firstBeaconId)
-      .getData()
-      .get(0);
-    BeaconDTO secondBeaconOnly = beaconsService
-      .find(secondBeaconId)
-      .getData()
-      .get(0);
+    Beacon firstBeaconOnly = beaconsService.find(firstBeaconId);
+    Beacon secondBeaconOnly = beaconsService.find(secondBeaconId);
 
     assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
     assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
