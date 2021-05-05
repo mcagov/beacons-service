@@ -1,11 +1,11 @@
 package uk.gov.mca.beacons.service.beacons;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
-import uk.gov.mca.beacons.service.dto.DomainDTO;
 import uk.gov.mca.beacons.service.dto.RelationshipDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -13,9 +13,11 @@ import uk.gov.mca.beacons.service.model.Beacon;
 public class BeaconsResponseFactory {
 
   public static WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
-    List<DomainDTO> useDTOs = getUseDTOs(beacon);
+    List<BeaconUseDTO> useDTOs = getUseDTOs(beacon);
     BeaconPersonDTO ownerDTO = getOwnerDTO(beacon);
-    List<DomainDTO> emergencyContactDTOs = getEmergencyContactDTOs(beacon);
+    List<BeaconPersonDTO> emergencyContactDTOs = getEmergencyContactDTOs(
+      beacon
+    );
 
     BeaconDTO beaconDTO = buildBeaconDTO(
       beacon,
@@ -34,7 +36,7 @@ public class BeaconsResponseFactory {
     return wrapper;
   }
 
-  private static List<DomainDTO> getUseDTOs(Beacon beacon) {
+  private static List<BeaconUseDTO> getUseDTOs(Beacon beacon) {
     return beacon
       .getUses()
       .stream()
@@ -50,7 +52,7 @@ public class BeaconsResponseFactory {
     return null;
   }
 
-  private static List<DomainDTO> getEmergencyContactDTOs(Beacon beacon) {
+  private static List<BeaconPersonDTO> getEmergencyContactDTOs(Beacon beacon) {
     return beacon
       .getEmergencyContacts()
       .stream()
@@ -60,9 +62,9 @@ public class BeaconsResponseFactory {
 
   private static BeaconDTO buildBeaconDTO(
     Beacon beacon,
-    List<DomainDTO> useDTOs,
+    List<BeaconUseDTO> useDTOs,
     BeaconPersonDTO ownerDTO,
-    List<DomainDTO> emergencyContactDTOs
+    List<BeaconPersonDTO> emergencyContactDTOs
   ) {
     var beaconDTO = BeaconDTO.from(beacon);
     var useRelationshipDTO = RelationshipDTO.from(useDTOs);
@@ -82,16 +84,32 @@ public class BeaconsResponseFactory {
 
   private static WrapperDTO<BeaconDTO> getWrappedDTO(
     BeaconDTO beaconDTO,
-    List<DomainDTO> useDTOs,
+    List<BeaconUseDTO> useDTOs,
     BeaconPersonDTO ownerDTO,
-    List<DomainDTO> emergencyContactDTOs
+    List<BeaconPersonDTO> emergencyContactDTOs
+  ) {
+    return getWrappedDTO(
+      List.of(beaconDTO),
+      useDTOs,
+      List.of(ownerDTO),
+      emergencyContactDTOs
+    );
+  }
+
+  private static WrapperDTO<BeaconDTO> getWrappedDTO(
+    List<BeaconDTO> beaconDTOs,
+    List<BeaconUseDTO> useDTOs,
+    List<BeaconPersonDTO> ownerDTOs,
+    List<BeaconPersonDTO> emergencyContactDTOs
   ) {
     var wrapper = new WrapperDTO<BeaconDTO>();
-    wrapper.addData(beaconDTO);
+
+    beaconDTOs.forEach(wrapper::addData);
 
     useDTOs.forEach(wrapper::addIncluded);
-    wrapper.addIncluded(ownerDTO);
+    ownerDTOs.forEach(wrapper::addIncluded);
     emergencyContactDTOs.forEach(wrapper::addIncluded);
+
     return wrapper;
   }
 }

@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RelationshipDTO {
+public class RelationshipDTO<T extends DomainDTO> {
 
   private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
 
-  public static RelationshipDTO from(DomainDTO related) {
-    var relationship = new RelationshipDTO();
+  public static <T extends DomainDTO> RelationshipDTO<T> from(T related) {
+    var relationship = new RelationshipDTO<T>();
     relationship.addData(related);
     return relationship;
   }
 
-  public static RelationshipDTO from(List<DomainDTO> related) {
-    var relationship = new RelationshipDTO();
+  public static <T extends DomainDTO> RelationshipDTO<T> from(List<T> related) {
+    var relationship = new RelationshipDTO<T>();
     related.forEach(relationship::addData);
 
     return relationship;
