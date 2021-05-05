@@ -117,7 +117,7 @@ public class BeaconsRelationshipMapper {
     Map<UUID, List<BeaconUse>> usesGroupedByBeaconId,
     Beacon beacon
   ) {
-    var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
+    final var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
     if (beaconUses == null) {
       beacon.setUses(java.util.Collections.emptyList());
     } else {
@@ -129,7 +129,7 @@ public class BeaconsRelationshipMapper {
     Map<UUID, BeaconPerson> ownersGroupedByBeaconId,
     Beacon beacon
   ) {
-    var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
+    final var beaconOwner = ownersGroupedByBeaconId.get(beacon.getId());
     beacon.setOwner(beaconOwner);
   }
 
@@ -137,7 +137,9 @@ public class BeaconsRelationshipMapper {
     Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId,
     Beacon beacon
   ) {
-    var beaconContacts = emergencyContactsGroupedByBeaconId.get(beacon.getId());
+    final var beaconContacts = emergencyContactsGroupedByBeaconId.get(
+      beacon.getId()
+    );
     if (beaconContacts == null) {
       beacon.setEmergencyContacts(java.util.Collections.emptyList());
     } else {

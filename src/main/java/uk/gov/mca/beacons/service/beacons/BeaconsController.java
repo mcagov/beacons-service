@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconsSearchResult;
 
 @RestController
@@ -33,7 +32,7 @@ public class BeaconsController {
 
   @GetMapping(value = "/{uuid}")
   public WrapperDTO<BeaconDTO> findByUuid(@PathVariable("uuid") UUID uuid) {
-    Beacon beacon = beaconsService.find(uuid);
+    final var beacon = beaconsService.find(uuid);
     return BeaconsResponseFactory.buildDTO(beacon);
   }
 }

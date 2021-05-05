@@ -11,7 +11,7 @@ public class BeaconUseDTO extends DomainDTO {
   }
 
   public static BeaconUseDTO from(BeaconUse domain) {
-    var dto = new BeaconUseDTO();
+    final var dto = new BeaconUseDTO();
     dto.setId(domain.getId());
     dto.addAttribute("environment", domain.getEnvironment());
     dto.addAttribute("activity", domain.getActivity());

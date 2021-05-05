@@ -11,7 +11,7 @@ public class BeaconDTO extends DomainDTO {
   }
 
   public static BeaconDTO from(Beacon domain) {
-    var dto = new BeaconDTO();
+    final var dto = new BeaconDTO();
     dto.setId(domain.getId());
     dto.addAttribute("hexId", domain.getHexId());
     dto.addAttribute("status", domain.getBeaconStatus());

@@ -7,8 +7,8 @@ import java.util.UUID;
 public abstract class DomainDTO {
 
   private UUID id;
-  private Map<String, Object> attributes = new HashMap<String, Object>();
-  private Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
+  private final Map<String, Object> attributes = new HashMap<String, Object>();
+  private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
 
   public abstract String getType();
 

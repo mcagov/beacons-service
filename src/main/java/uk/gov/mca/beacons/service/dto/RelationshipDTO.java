@@ -9,13 +9,13 @@ public class RelationshipDTO<T extends DomainDTO> {
   private ArrayList<RelationshipData> data = new ArrayList<RelationshipData>();
 
   public static <T extends DomainDTO> RelationshipDTO<T> from(T related) {
-    var relationship = new RelationshipDTO<T>();
+    final var relationship = new RelationshipDTO<T>();
     relationship.addData(related);
     return relationship;
   }
 
   public static <T extends DomainDTO> RelationshipDTO<T> from(List<T> related) {
-    var relationship = new RelationshipDTO<T>();
+    final var relationship = new RelationshipDTO<T>();
     related.forEach(relationship::addData);
 
     return relationship;

@@ -13,20 +13,18 @@ import uk.gov.mca.beacons.service.model.Beacon;
 public class BeaconsResponseFactory {
 
   public static WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
-    List<BeaconUseDTO> useDTOs = getUseDTOs(beacon);
-    BeaconPersonDTO ownerDTO = getOwnerDTO(beacon);
-    List<BeaconPersonDTO> emergencyContactDTOs = getEmergencyContactDTOs(
-      beacon
-    );
+    final var useDTOs = getUseDTOs(beacon);
+    final var ownerDTO = getOwnerDTO(beacon);
+    final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
 
-    BeaconDTO beaconDTO = buildBeaconDTO(
+    final var beaconDTO = buildBeaconDTO(
       beacon,
       useDTOs,
       ownerDTO,
       emergencyContactDTOs
     );
 
-    WrapperDTO<BeaconDTO> wrapper = getWrappedDTO(
+    final var wrapper = getWrappedDTO(
       beaconDTO,
       useDTOs,
       ownerDTO,
@@ -46,7 +44,7 @@ public class BeaconsResponseFactory {
 
   private static BeaconPersonDTO getOwnerDTO(Beacon beacon) {
     if (beacon.getOwner() != null) {
-      var ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
+      final var ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
       return ownerDTO;
     }
     return null;
@@ -66,10 +64,10 @@ public class BeaconsResponseFactory {
     BeaconPersonDTO ownerDTO,
     List<BeaconPersonDTO> emergencyContactDTOs
   ) {
-    var beaconDTO = BeaconDTO.from(beacon);
-    var useRelationshipDTO = RelationshipDTO.from(useDTOs);
-    var ownerRelationshipDTO = RelationshipDTO.from(ownerDTO);
-    var emergencyContactRelationshipDTO = RelationshipDTO.from(
+    final var beaconDTO = BeaconDTO.from(beacon);
+    final var useRelationshipDTO = RelationshipDTO.from(useDTOs);
+    final var ownerRelationshipDTO = RelationshipDTO.from(ownerDTO);
+    final var emergencyContactRelationshipDTO = RelationshipDTO.from(
       emergencyContactDTOs
     );
 
@@ -102,7 +100,7 @@ public class BeaconsResponseFactory {
     List<BeaconPersonDTO> ownerDTOs,
     List<BeaconPersonDTO> emergencyContactDTOs
   ) {
-    var wrapper = new WrapperDTO<BeaconDTO>();
+    final var wrapper = new WrapperDTO<BeaconDTO>();
 
     beaconDTOs.forEach(wrapper::addData);
 

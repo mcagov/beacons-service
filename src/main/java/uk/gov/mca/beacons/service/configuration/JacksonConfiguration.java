@@ -15,14 +15,14 @@ public class JacksonConfiguration {
 
   @Bean
   public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
+    final ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.configure(
       DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
       true
     );
     objectMapper.registerModule(new JavaTimeModule());
     objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-    SimpleModule module = new SimpleModule();
+    final SimpleModule module = new SimpleModule();
     module.addSerializer(
       BeaconsSearchResult.class,
       new BeaconsSearchResultSerializer()

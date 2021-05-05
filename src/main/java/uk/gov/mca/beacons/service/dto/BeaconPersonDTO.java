@@ -11,7 +11,7 @@ public class BeaconPersonDTO extends DomainDTO {
   }
 
   public static BeaconPersonDTO from(BeaconPerson domain) {
-    var dto = new BeaconPersonDTO();
+    final var dto = new BeaconPersonDTO();
     dto.setId(domain.getId());
     dto.addAttribute("fullName", domain.getFullName());
     dto.addAttribute("email", domain.getEmail());

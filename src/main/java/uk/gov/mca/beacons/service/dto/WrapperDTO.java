@@ -6,15 +6,9 @@ import java.util.Map;
 
 public class WrapperDTO<T extends DomainDTO> {
 
-  private Map<String, Object> meta;
-  private ArrayList<T> data;
-  private ArrayList<DomainDTO> included;
-
-  public WrapperDTO() {
-    meta = new HashMap<String, Object>();
-    data = new ArrayList<T>();
-    included = new ArrayList<DomainDTO>();
-  }
+  private final Map<String, Object> meta = new HashMap<String, Object>();
+  private final ArrayList<T> data = new ArrayList<T>();
+  private final ArrayList<DomainDTO> included = new ArrayList<DomainDTO>();
 
   public Map<String, Object> getMeta() {
     return meta;
