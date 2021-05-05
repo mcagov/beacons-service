@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
 import static java.util.Collections.emptyList;
 
