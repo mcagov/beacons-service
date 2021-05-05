@@ -86,17 +86,12 @@ public class BeaconsResponseFactory {
     BeaconPersonDTO ownerDTO,
     List<DomainDTO> emergencyContactDTOs
   ) {
-    WrapperDTO<BeaconDTO> wrapper = getWrapperDTO(beaconDTO);
+    var wrapper = new WrapperDTO<BeaconDTO>();
+    wrapper.addData(beaconDTO);
 
     useDTOs.forEach(wrapper::addIncluded);
     wrapper.addIncluded(ownerDTO);
     emergencyContactDTOs.forEach(wrapper::addIncluded);
-    return wrapper;
-  }
-
-  private static WrapperDTO<BeaconDTO> getWrapperDTO(BeaconDTO beaconDTO) {
-    var wrapper = new WrapperDTO<BeaconDTO>();
-    wrapper.addData(beaconDTO);
     return wrapper;
   }
 }
