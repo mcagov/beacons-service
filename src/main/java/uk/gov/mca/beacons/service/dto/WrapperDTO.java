@@ -8,7 +8,7 @@ import java.util.Map;
 public class WrapperDTO<T extends DomainDTO> {
 
   private final Map<String, Object> meta = new HashMap<String, Object>();
-  private final List<T> data = new ArrayList<T>();
+  private T data = null;
   private final List<DomainDTO> included = new ArrayList<DomainDTO>();
 
   public Map<String, Object> getMeta() {
@@ -19,12 +19,12 @@ public class WrapperDTO<T extends DomainDTO> {
     meta.put(key, value);
   }
 
-  public List<T> getData() {
+  public T getData() {
     return data;
   }
 
-  public void addData(T dataDTO) {
-    data.add(dataDTO);
+  public void setData(T dataDTO) {
+    this.data = dataDTO;
   }
 
   public List<DomainDTO> getIncluded() {

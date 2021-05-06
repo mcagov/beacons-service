@@ -113,28 +113,28 @@ class BeaconsControllerIntegrationTest {
     var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
 
     request.jsonPath("$.data").exists();
-    request.jsonPath("$.data[0].type").isEqualTo("beacon");
-    request.jsonPath("$.data[0].id").isEqualTo(uuidAsString);
-    request.jsonPath("$.data[0].attributes.hexId").exists();
-    request.jsonPath("$.data[0].attributes.status").exists();
-    request.jsonPath("$.data[0].attributes.manufacturer").exists();
-    request.jsonPath("$.data[0].attributes.createdDate").exists();
-    request.jsonPath("$.data[0].attributes.model").exists();
-    request.jsonPath("$.data[0].attributes.manufacturerSerialNumber").exists();
-    request.jsonPath("$.data[0].attributes.chkCode").exists();
-    request.jsonPath("$.data[0].attributes.batteryExpiryDate").exists();
-    request.jsonPath("$.data[0].attributes.lastServicedDate").exists();
+    request.jsonPath("$.data.type").isEqualTo("beacon");
+    request.jsonPath("$.data.id").isEqualTo(uuidAsString);
+    request.jsonPath("$.data.attributes.hexId").exists();
+    request.jsonPath("$.data.attributes.status").exists();
+    request.jsonPath("$.data.attributes.manufacturer").exists();
+    request.jsonPath("$.data.attributes.createdDate").exists();
+    request.jsonPath("$.data.attributes.model").exists();
+    request.jsonPath("$.data.attributes.manufacturerSerialNumber").exists();
+    request.jsonPath("$.data.attributes.chkCode").exists();
+    request.jsonPath("$.data.attributes.batteryExpiryDate").exists();
+    request.jsonPath("$.data.attributes.lastServicedDate").exists();
     request
-      .jsonPath("$.data[0].relationships.uses.data[0].id")
+      .jsonPath("$.data.relationships.uses.data[0].id")
       .isEqualTo(useUuid.toString());
     request
-      .jsonPath("$.data[0].relationships.owner.data[0].id")
+      .jsonPath("$.data.relationships.owner.data[0].id")
       .isEqualTo(ownerUuid.toString());
     request
-      .jsonPath("$.data[0].relationships.emergencyContacts.data[0].id")
+      .jsonPath("$.data.relationships.emergencyContacts.data[0].id")
       .isEqualTo(firstEmergencyContactUuid.toString());
     request
-      .jsonPath("$.data[0].relationships.emergencyContacts.data[1].id")
+      .jsonPath("$.data.relationships.emergencyContacts.data[1].id")
       .isEqualTo(secondEmergencyContactUuid.toString());
     request.jsonPath("$.included").exists();
     request.jsonPath("$.included[0].type").exists();

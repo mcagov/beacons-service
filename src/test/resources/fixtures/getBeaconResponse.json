@@ -3,42 +3,51 @@
     "count": 1,
     "pageSize": 1
   },
-  "data": [
-    {
-      "type": "beacon",
-      "id": "97b306aa-cbd0-4f09-aa24-2d876b983efb",
-      "attributes": {
-        "hexId": "Hex me",
-        "status": "NEW",
-        "manufacturer": "Ocean Signal",
-        "createdDate": "2020-02-01T00:00",
-        "model": "EPIRB1",
-        "manufacturerSerialNumber": "1407312904",
-        "chkCode": "9480B",
-        "batteryExpiryDate": "2020-02-01T00:00",
-        "lastServicedDate": "2020-02-01T00:00"
+  "data": {
+    "type": "beacon",
+    "id": "97b306aa-cbd0-4f09-aa24-2d876b983efb",
+    "attributes": {
+      "hexId": "Hex me",
+      "status": "NEW",
+      "manufacturer": "Ocean Signal",
+      "createdDate": "2020-02-01T00:00",
+      "model": "EPIRB1",
+      "manufacturerSerialNumber": "1407312904",
+      "chkCode": "9480B",
+      "batteryExpiryDate": "2020-02-01T00:00",
+      "lastServicedDate": "2020-02-01T00:00"
+    },
+    "relationships": {
+      "uses": {
+        "data": [
+          {
+            "type": "beaconUse",
+            "id": "1"
+          }
+        ]
       },
-      "relationships": {
-        "uses": {
-          "data": [{ "type": "beaconUse", "id": "1" }]
-        },
-        "owner": {
-          "data": [
-            {
-              "type": "beaconPerson",
-              "id": "1"
-            }
-          ]
-        },
-        "emergencyContacts": {
-          "data": [
-            { "type": "beaconPerson", "id": "2" },
-            { "type": "beaconPerson", "id": "3" }
-          ]
-        }
+      "owner": {
+        "data": [
+          {
+            "type": "beaconPerson",
+            "id": "1"
+          }
+        ]
+      },
+      "emergencyContacts": {
+        "data": [
+          {
+            "type": "beaconPerson",
+            "id": "2"
+          },
+          {
+            "type": "beaconPerson",
+            "id": "3"
+          }
+        ]
       }
     }
-  ],
+  },
   "included": [
     {
       "type": "beaconUse",
