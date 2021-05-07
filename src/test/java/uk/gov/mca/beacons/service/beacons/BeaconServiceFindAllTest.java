@@ -5,20 +5,17 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.BDDMockito.given;
-import static uk.gov.mca.beacons.service.model.Environment.AVIATION;
-import static uk.gov.mca.beacons.service.model.Environment.MARITIME;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -28,7 +25,7 @@ import uk.gov.mca.beacons.service.repository.BeaconRepository;
 import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @ExtendWith(MockitoExtension.class)
-class BeaconServiceTest {
+class BeaconServiceFindAllTest {
 
   @Mock
   private BeaconRepository beaconRepository;
@@ -53,13 +50,13 @@ class BeaconServiceTest {
   }
 
   @Test
-  void shouldReturnZeroResults() {
+  void findAllShouldReturnZeroResultsIfRepoIsEmpty() {
     final var beacons = beaconsService.findAll();
     assertThat(beacons, is(emptyCollectionOf(Beacon.class)));
   }
 
   @Test
-  void shouldReturnResultSet() {
+  void findAllShouldReturnAllBeacons() {
     final var firstBeaconId = UUID.randomUUID();
     final var firstBeacon = new Beacon();
     firstBeacon.setId(firstBeaconId);
@@ -83,59 +80,8 @@ class BeaconServiceTest {
   }
 
   @Test
-  void shouldReturnDeepResult() {
-    final var testBeaconId = UUID.randomUUID();
-    final var testBeacon = new Beacon();
-    testBeacon.setId(testBeaconId);
-    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
-
-    final var owner = new BeaconPerson();
-    owner.setPersonType(PersonType.OWNER);
-    owner.setAddressLine1("My House");
-    owner.setAddressLine2("My Street");
-    owner.setFullName("Me Myself");
-    owner.setBeaconId(testBeaconId);
-    final var firstContact = new BeaconPerson();
-    firstContact.setPersonType(PersonType.EMERGENCY_CONTACT);
-    firstContact.setFullName("Jean-Luc Picard");
-    firstContact.setAddressLine1("The Bridge");
-    firstContact.setAddressLine2("Enterprise");
-    firstContact.setTelephoneNumber("NNC-1701-D");
-    firstContact.setBeaconId(testBeaconId);
-    final var secondContact = new BeaconPerson();
-    secondContact.setPersonType(PersonType.EMERGENCY_CONTACT);
-    secondContact.setFullName("Bjorn Rune Borg");
-    secondContact.setAddressLine1("Pod 13");
-    secondContact.setAddressLine2("The Cube");
-    secondContact.setBeaconId(testBeaconId);
-    final var unrelatedContact = new BeaconPerson();
-    unrelatedContact.setPersonType(PersonType.EMERGENCY_CONTACT);
-    unrelatedContact.setFullName("A Stranger");
-    unrelatedContact.setAddressLine1("Shadowy Corner");
-    unrelatedContact.setAddressLine2("Not Round Here");
-    unrelatedContact.setBeaconId(UUID.randomUUID());
-    given(beaconPersonRepository.findAll())
-      .willReturn(
-        List.of(firstContact, unrelatedContact, owner, secondContact)
-      );
-
-    final var firstBeaconUse = new BeaconUse();
-    firstBeaconUse.setActivity(Activity.HOT_AIR_BALLOON);
-    firstBeaconUse.setEnvironment(AVIATION);
-    firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
-    firstBeaconUse.setBeaconId(testBeaconId);
-    final var secondBeaconUse = new BeaconUse();
-    secondBeaconUse.setActivity(Activity.JET_AIRCRAFT);
-    secondBeaconUse.setEnvironment(AVIATION);
-    secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
-    secondBeaconUse.setBeaconId(testBeaconId);
-    final var unrelatedBeaconUse = new BeaconUse();
-    unrelatedBeaconUse.setActivity(Activity.WORKING_REMOTELY);
-    unrelatedBeaconUse.setEnvironment(MARITIME);
-    unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
-    unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseRepository.findAll())
-      .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
+  void findAllShouldReturnMappedResultsList() {
+    final var testBeaconId = assembleTestData();
 
     final var allBeacons = beaconsService.findAll();
 
@@ -147,64 +93,131 @@ class BeaconServiceTest {
       hasProperty("id", is(testBeaconId))
     );
     assertThat(
-      "the beacon has the correct owner",
-      resultBeacon.getOwner().getFullName(),
-      is("Me Myself")
+      "the beacon has an owner",
+      resultBeacon.getOwner(),
+      is(notNullValue())
     );
-    final var resultUses = resultBeacon.getUses();
-    assertThat("the beacon has only 2 uses mapped", resultUses.size(), is(2));
     assertThat(
-      "the uses are the ones expected",
-      resultUses,
-      contains(
-        hasProperty("moreDetails", is("Neunundneunzig Luftballons")),
-        hasProperty("moreDetails", is("Neunundneunzig Düsenflieger"))
-      )
-    );
-    final var resultContacts = resultBeacon.getEmergencyContacts();
-    assertThat(
-      "the beacon has only 2 contacts mapped",
-      resultContacts.size(),
+      "the beacon has only 2 uses mapped",
+      resultBeacon.getUses().size(),
       is(2)
     );
     assertThat(
-      "the contacts are the expected ones",
-      resultContacts,
-      contains(
-        hasProperty("fullName", is("Jean-Luc Picard")),
-        hasProperty("fullName", is("Bjorn Rune Borg"))
-      )
+      "the beacon has only 2 contacts mapped",
+      resultBeacon.getEmergencyContacts().size(),
+      is(2)
     );
   }
 
   @Test
-  void shouldReturnABeaconById() {
-    final var firstBeaconId = UUID.randomUUID();
-    final var firstBeacon = new Beacon();
-    firstBeacon.setId(firstBeaconId);
+  void findAllShouldReturnABeaconByIdEvenWithMissingData() {
+    final var testBeaconId = assembleFaultyTestData();
 
-    final var secondBeaconId = UUID.randomUUID();
-    final var secondBeacon = new Beacon();
-    secondBeacon.setId(secondBeaconId);
+    final var allBeacons = beaconsService.findAll();
+    assertThat("one beacon is returned", allBeacons.size(), is(1));
 
-    given(beaconRepository.findById(firstBeaconId))
-      .willReturn(Optional.of(firstBeacon));
-    given(beaconRepository.findById(secondBeaconId))
-      .willReturn(Optional.of(secondBeacon));
-
-    Beacon firstBeaconOnly = beaconsService.find(firstBeaconId);
-    Beacon secondBeaconOnly = beaconsService.find(secondBeaconId);
-
-    assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
-    assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
+    final var resultBeacon = allBeacons.get(0);
+    assertThat(
+      "the one beacon has the expected id",
+      resultBeacon,
+      hasProperty("id", is(testBeaconId))
+    );
+    assertThat(
+      "the beacon has no owner",
+      resultBeacon.getOwner(),
+      is(nullValue())
+    );
+    assertThat(
+      "the beacon has no uses mapped",
+      resultBeacon.getUses().size(),
+      is(0)
+    );
+    assertThat(
+      "the beacon has no contacts mapped",
+      resultBeacon.getEmergencyContacts().size(),
+      is(0)
+    );
   }
 
-  @Test
-  void shouldReturnZeroResultsIfIdNotFound() {
-    final var noExistentBeaconId = UUID.randomUUID();
+  private UUID assembleTestData() {
+    final var testBeaconId = UUID.randomUUID();
+    final var testBeacon = new Beacon();
+    testBeacon.setId(testBeaconId);
+    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
 
-    final var beacon = beaconsService.find(noExistentBeaconId);
+    final var owner = new BeaconPerson();
+    owner.setPersonType(PersonType.OWNER);
+    owner.setFullName("Me Myself");
+    owner.setBeaconId(testBeaconId);
+    final var firstContact = new BeaconPerson();
+    firstContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    firstContact.setFullName("Jean-Luc Picard");
+    firstContact.setBeaconId(testBeaconId);
+    final var secondContact = new BeaconPerson();
+    secondContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    secondContact.setFullName("Bjorn Rune Borg");
+    secondContact.setBeaconId(testBeaconId);
+    final var unrelatedContact = new BeaconPerson();
+    unrelatedContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    unrelatedContact.setFullName("A Stranger");
+    unrelatedContact.setBeaconId(UUID.randomUUID());
+    given(beaconPersonRepository.findAll())
+      .willReturn(
+        List.of(firstContact, unrelatedContact, owner, secondContact)
+      );
 
-    assertNull(beacon);
+    final var firstBeaconUse = new BeaconUse();
+    firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
+    firstBeaconUse.setBeaconId(testBeaconId);
+    final var secondBeaconUse = new BeaconUse();
+    secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
+    secondBeaconUse.setBeaconId(testBeaconId);
+    final var unrelatedBeaconUse = new BeaconUse();
+    unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
+    unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
+    given(beaconUseRepository.findAll())
+      .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
+    return testBeaconId;
+  }
+
+  private UUID assembleFaultyTestData() {
+    final var testBeaconId = UUID.randomUUID();
+    final var testBeacon = new Beacon();
+    testBeacon.setId(testBeaconId);
+    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
+
+    final var owner = new BeaconPerson();
+    owner.setPersonType(PersonType.OWNER);
+    owner.setFullName("Me Myself");
+    owner.setBeaconId(UUID.randomUUID());
+    final var firstContact = new BeaconPerson();
+    firstContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    firstContact.setFullName("Jean-Luc Picard");
+    firstContact.setBeaconId(UUID.randomUUID());
+    final var secondContact = new BeaconPerson();
+    secondContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    secondContact.setFullName("Bjorn Rune Borg");
+    secondContact.setBeaconId(UUID.randomUUID());
+    final var unrelatedContact = new BeaconPerson();
+    unrelatedContact.setPersonType(PersonType.EMERGENCY_CONTACT);
+    unrelatedContact.setFullName("A Stranger");
+    unrelatedContact.setBeaconId(UUID.randomUUID());
+    given(beaconPersonRepository.findAll())
+      .willReturn(
+        List.of(firstContact, unrelatedContact, owner, secondContact)
+      );
+
+    final var firstBeaconUse = new BeaconUse();
+    firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
+    firstBeaconUse.setBeaconId(UUID.randomUUID());
+    final var secondBeaconUse = new BeaconUse();
+    secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
+    secondBeaconUse.setBeaconId(UUID.randomUUID());
+    final var unrelatedBeaconUse = new BeaconUse();
+    unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
+    unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
+    given(beaconUseRepository.findAll())
+      .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
+    return testBeaconId;
   }
 }
