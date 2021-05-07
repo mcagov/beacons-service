@@ -1,7 +1,8 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,12 @@ class BeaconsControllerIntegrationTest {
 
   @Autowired
   private RegistrationsService registrationsService;
+
+  private UUID uuid;
+  private UUID useUuid;
+  private UUID ownerUuid;
+  private UUID firstEmergencyContactUuid;
+  private UUID secondEmergencyContactUuid;
 
   @BeforeEach
   public final void before() {
@@ -74,6 +81,11 @@ class BeaconsControllerIntegrationTest {
     registration.setBeacons(List.of(beacon));
 
     registrationsService.register(registration);
+    uuid = beacon.getId();
+    useUuid = beacon.getUses().get(0).getId();
+    ownerUuid = beacon.getOwner().getId();
+    firstEmergencyContactUuid = beacon.getEmergencyContacts().get(0).getId();
+    secondEmergencyContactUuid = beacon.getEmergencyContacts().get(1).getId();
   }
 
   @Test
@@ -93,6 +105,47 @@ class BeaconsControllerIntegrationTest {
     request
       .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
       .exists();
+  }
+
+  @Test
+  void requestBeaconControllerShouldReturnBeaconByUuid() {
+    String uuidAsString = uuid.toString();
+    var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
+
+    request.jsonPath("$.data").exists();
+    request.jsonPath("$.data.type").isEqualTo("beacon");
+    request.jsonPath("$.data.id").isEqualTo(uuidAsString);
+    request.jsonPath("$.data.attributes.hexId").exists();
+    request.jsonPath("$.data.attributes.status").exists();
+    request.jsonPath("$.data.attributes.manufacturer").exists();
+    request.jsonPath("$.data.attributes.createdDate").exists();
+    request.jsonPath("$.data.attributes.model").exists();
+    request.jsonPath("$.data.attributes.manufacturerSerialNumber").exists();
+    request.jsonPath("$.data.attributes.chkCode").exists();
+    request.jsonPath("$.data.attributes.batteryExpiryDate").exists();
+    request.jsonPath("$.data.attributes.lastServicedDate").exists();
+    request
+      .jsonPath("$.data.relationships.uses.data[0].id")
+      .isEqualTo(useUuid.toString());
+    request
+      .jsonPath("$.data.relationships.owner.data[0].id")
+      .isEqualTo(ownerUuid.toString());
+    request
+      .jsonPath("$.data.relationships.emergencyContacts.data[0].id")
+      .isEqualTo(firstEmergencyContactUuid.toString());
+    request
+      .jsonPath("$.data.relationships.emergencyContacts.data[1].id")
+      .isEqualTo(secondEmergencyContactUuid.toString());
+    request.jsonPath("$.included").exists();
+    request.jsonPath("$.included[0].type").exists();
+    request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
+    request.jsonPath("$.included[1].id").isEqualTo(ownerUuid.toString());
+    request
+      .jsonPath("$.included[2].id")
+      .isEqualTo(firstEmergencyContactUuid.toString());
+    request
+      .jsonPath("$.included[3].id")
+      .isEqualTo(secondEmergencyContactUuid.toString());
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {

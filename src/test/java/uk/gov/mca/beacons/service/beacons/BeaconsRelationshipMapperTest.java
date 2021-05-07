@@ -1,53 +1,30 @@
-package uk.gov.mca.beacons.service.registrations;
+package uk.gov.mca.beacons.service.beacons;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static org.mockito.BDDMockito.given;
+import static uk.gov.mca.beacons.service.model.Environment.AVIATION;
+import static uk.gov.mca.beacons.service.model.Environment.MARITIME;
 
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.PersonType;
-import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
-import uk.gov.mca.beacons.service.repository.BeaconRepository;
-import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @ExtendWith(MockitoExtension.class)
-class GetAllBeaconServiceTest {
-
-  @Mock
-  private BeaconRepository beaconRepository;
-
-  @Mock
-  private BeaconPersonRepository beaconPersonRepository;
-
-  @Mock
-  private BeaconUseRepository beaconUseRepository;
+class BeaconsRelationshipMapperTest {
 
   @Test
-  void shouldReturnZeroResults() {
-    final var getAllBeaconService = new GetAllBeaconsService(
-      beaconRepository,
-      beaconUseRepository,
-      beaconPersonRepository
-    );
-    final var beacons = getAllBeaconService.findAll();
-
-    assertThat(beacons, is(emptyCollectionOf(Beacon.class)));
-  }
-
-  @Test
-  void shouldReturnResultSet() {
+  void shouldReturnResultSetEvenWithoutUsesAndPersons() {
     final var firstBeaconId = UUID.randomUUID();
     final var firstBeacon = new Beacon();
     firstBeacon.setId(firstBeaconId);
@@ -56,15 +33,13 @@ class GetAllBeaconServiceTest {
     final var secondBeacon = new Beacon();
     secondBeacon.setId(secondBeaconId);
 
-    given(beaconRepository.findAll())
-      .willReturn(List.of(firstBeacon, secondBeacon));
+    final var mapper = new BeaconsRelationshipMapper();
 
-    final var getAllBeaconService = new GetAllBeaconsService(
-      beaconRepository,
-      beaconUseRepository,
-      beaconPersonRepository
+    var allBeacons = mapper.getMappedBeacons(
+      List.of(firstBeacon, secondBeacon),
+      emptyList(),
+      emptyList()
     );
-    final var allBeacons = getAllBeaconService.findAll();
 
     assertThat(
       allBeacons,
@@ -80,7 +55,6 @@ class GetAllBeaconServiceTest {
     final var testBeaconId = UUID.randomUUID();
     final var testBeacon = new Beacon();
     testBeacon.setId(testBeaconId);
-    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
 
     final var owner = new BeaconPerson();
     owner.setPersonType(PersonType.OWNER);
@@ -107,44 +81,33 @@ class GetAllBeaconServiceTest {
     unrelatedContact.setAddressLine1("Shadowy Corner");
     unrelatedContact.setAddressLine2("Not Round Here");
     unrelatedContact.setBeaconId(UUID.randomUUID());
-    given(beaconPersonRepository.findAll())
-      .willReturn(
-        List.of(firstContact, unrelatedContact, owner, secondContact)
-      );
+    var allPersons = List.of(
+      owner,
+      unrelatedContact,
+      secondContact,
+      firstContact
+    );
 
     final var firstBeaconUse = new BeaconUse();
     firstBeaconUse.setActivity(Activity.HOT_AIR_BALLOON);
-    firstBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    firstBeaconUse.setEnvironment(AVIATION);
     firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
     firstBeaconUse.setBeaconId(testBeaconId);
     final var secondBeaconUse = new BeaconUse();
     secondBeaconUse.setActivity(Activity.JET_AIRCRAFT);
-    secondBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    secondBeaconUse.setEnvironment(AVIATION);
     secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
     secondBeaconUse.setBeaconId(testBeaconId);
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setActivity(Activity.WORKING_REMOTELY);
-    unrelatedBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.OTHER
-    );
+    unrelatedBeaconUse.setEnvironment(MARITIME);
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseRepository.findAll())
-      .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
+    var allUses = List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse);
 
-    final var getAllBeaconService = new GetAllBeaconsService(
-      beaconRepository,
-      beaconUseRepository,
-      beaconPersonRepository
-    );
-    final var allBeacons = getAllBeaconService.findAll();
+    final var resultBeacon = new BeaconsRelationshipMapper()
+    .getMappedBeacon(testBeacon, allPersons, allUses);
 
-    final var resultBeacon = allBeacons.get(0);
-    assertThat("one beacon is returned", allBeacons.size(), is(1));
     assertThat(
       "the one beacon has the expected id",
       resultBeacon,
@@ -175,9 +138,22 @@ class GetAllBeaconServiceTest {
       "the contacts are the expected ones",
       resultContacts,
       contains(
-        hasProperty("fullName", is("Jean-Luc Picard")),
-        hasProperty("fullName", is("Bjorn Rune Borg"))
+        hasProperty("fullName", is("Bjorn Rune Borg")),
+        hasProperty("fullName", is("Jean-Luc Picard"))
       )
     );
+  }
+
+  @Test
+  void shouldReturnZeroResultsIfNoBeacons() {
+    final var mapper = new BeaconsRelationshipMapper();
+
+    var allBeacons = mapper.getMappedBeacons(
+      emptyList(),
+      emptyList(),
+      emptyList()
+    );
+
+    assertThat(allBeacons.size(), is(0));
   }
 }
