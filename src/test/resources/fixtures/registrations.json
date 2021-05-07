@@ -13,7 +13,6 @@
         "uses": [
           {
             "environment": "MARITIME",
-            "otherEnvironment": "Cotswold",
             "purpose": "COMMERCIAL",
             "activity": "SAILING",
             "otherActivity": "On my boat",

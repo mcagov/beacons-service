@@ -7,5 +7,4 @@ public enum Environment {
   MARITIME,
   AVIATION,
   LAND,
-  OTHER,
 }

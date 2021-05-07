@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
+import static uk.gov.mca.beacons.service.model.Environment.AVIATION;
+import static uk.gov.mca.beacons.service.model.Environment.MARITIME;
 
 import java.util.List;
 import java.util.Optional;
@@ -119,23 +121,17 @@ class BeaconServiceTest {
 
     final var firstBeaconUse = new BeaconUse();
     firstBeaconUse.setActivity(Activity.HOT_AIR_BALLOON);
-    firstBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    firstBeaconUse.setEnvironment(AVIATION);
     firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
     firstBeaconUse.setBeaconId(testBeaconId);
     final var secondBeaconUse = new BeaconUse();
     secondBeaconUse.setActivity(Activity.JET_AIRCRAFT);
-    secondBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    secondBeaconUse.setEnvironment(AVIATION);
     secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
     secondBeaconUse.setBeaconId(testBeaconId);
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setActivity(Activity.WORKING_REMOTELY);
-    unrelatedBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.OTHER
-    );
+    unrelatedBeaconUse.setEnvironment(MARITIME);
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
     given(beaconUseRepository.findAll())

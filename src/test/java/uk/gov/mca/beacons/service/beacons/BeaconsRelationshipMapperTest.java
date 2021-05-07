@@ -5,6 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static uk.gov.mca.beacons.service.model.Environment.AVIATION;
+import static uk.gov.mca.beacons.service.model.Environment.MARITIME;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.PersonType;
 
 @ExtendWith(MockitoExtension.class)
@@ -87,23 +90,17 @@ class BeaconsRelationshipMapperTest {
 
     final var firstBeaconUse = new BeaconUse();
     firstBeaconUse.setActivity(Activity.HOT_AIR_BALLOON);
-    firstBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    firstBeaconUse.setEnvironment(AVIATION);
     firstBeaconUse.setMoreDetails("Neunundneunzig Luftballons");
     firstBeaconUse.setBeaconId(testBeaconId);
     final var secondBeaconUse = new BeaconUse();
     secondBeaconUse.setActivity(Activity.JET_AIRCRAFT);
-    secondBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.AVIATION
-    );
+    secondBeaconUse.setEnvironment(AVIATION);
     secondBeaconUse.setMoreDetails("Neunundneunzig Düsenflieger");
     secondBeaconUse.setBeaconId(testBeaconId);
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setActivity(Activity.WORKING_REMOTELY);
-    unrelatedBeaconUse.setEnvironment(
-      uk.gov.mca.beacons.service.model.Environment.OTHER
-    );
+    unrelatedBeaconUse.setEnvironment(MARITIME);
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
     var allUses = List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse);

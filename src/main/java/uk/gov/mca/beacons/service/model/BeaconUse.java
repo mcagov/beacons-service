@@ -27,8 +27,6 @@ public class BeaconUse {
   @NotNull
   private Environment environment;
 
-  private String otherEnvironment;
-
   @Enumerated(EnumType.STRING)
   private Purpose purpose;
 
@@ -146,14 +144,6 @@ public class BeaconUse {
 
   public void setEnvironment(Environment environment) {
     this.environment = environment;
-  }
-
-  public String getOtherEnvironment() {
-    return otherEnvironment;
-  }
-
-  public void setOtherEnvironment(String otherEnvironment) {
-    this.otherEnvironment = otherEnvironment;
   }
 
   public Purpose getPurpose() {
