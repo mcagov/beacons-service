@@ -2,8 +2,6 @@ package uk.gov.mca.beacons.service.mappers;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-
-
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -20,7 +18,10 @@ public class BeaconMapper {
     dto.addAttribute("manufacturer", domain.getManufacturer());
     dto.addAttribute("createdDate", domain.getCreatedDate());
     dto.addAttribute("model", domain.getModel());
-    dto.addAttribute("manufacturerSerialNumber", domain.getManufacturerSerialNumber());
+    dto.addAttribute(
+      "manufacturerSerialNumber",
+      domain.getManufacturerSerialNumber()
+    );
     dto.addAttribute("chkCode", domain.getChkCode());
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
@@ -29,7 +30,6 @@ public class BeaconMapper {
   }
 
   public Beacon fromDTO(BeaconDTO dto) {
-
     final var attributes = dto.getAttributes();
 
     final var beacon = new Beacon();
@@ -38,7 +38,9 @@ public class BeaconMapper {
     beacon.setManufacturer((String) attributes.get("manufacturer"));
     beacon.setModel((String) attributes.get("model"));
     beacon.setChkCode((String) attributes.get("chkCode"));
-    beacon.setManufacturerSerialNumber((String) attributes.get("manufacturerSerialNumber" ));
+    beacon.setManufacturerSerialNumber(
+      (String) attributes.get("manufacturerSerialNumber")
+    );
 
     beacon.setBeaconStatus(getStatusOrNull("status", attributes));
 
@@ -49,19 +51,23 @@ public class BeaconMapper {
     return beacon;
   }
 
-  private static LocalDateTime getDateOrNull(String key, Map<String, Object> attributes) {
+  private static LocalDateTime getDateOrNull(
+    String key,
+    Map<String, Object> attributes
+  ) {
     var attributeValue = attributes.get(key);
-    if (attributeValue == null)
-      return null;
+    if (attributeValue == null) return null;
 
     var result = LocalDateTime.parse((String) attributeValue);
     return result;
   }
 
-  private BeaconStatus getStatusOrNull(String key, Map<String, Object> attributes) {
+  private BeaconStatus getStatusOrNull(
+    String key,
+    Map<String, Object> attributes
+  ) {
     var attributeValue = attributes.get(key);
-    if (attributeValue == null)
-      return null;
+    if (attributeValue == null) return null;
 
     var result = BeaconStatus.valueOf((String) attributeValue);
 

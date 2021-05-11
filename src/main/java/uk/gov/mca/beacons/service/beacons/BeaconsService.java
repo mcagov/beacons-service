@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,31 +73,39 @@ public class BeaconsService {
   }
 
   public void update(UUID id, Beacon update) {
-    final Optional<Beacon> beaconResult = beaconRepository.findById(id);
-    if (beaconResult.isEmpty()) 
-      throw new RuntimeException(); //TODO: pick an exception
+    final Beacon beacon = this.find(id); // TODO: we HAVE TO populate the uses/persons to allow validation on save, inefficient :(
+    if (beacon == null) throw new RuntimeException(); //TODO: pick an exception
 
-    final Beacon beacon = beaconResult.get();
     final var patcher = new ModelPatcher<Beacon>(beacon, update);
 
-    patcher.patchModel(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate);
+    patcher.patchModel(
+      Beacon::getBatteryExpiryDate,
+      Beacon::setBatteryExpiryDate
+    );
     patcher.patchModel(Beacon::getBeaconStatus, Beacon::setBeaconStatus);
     patcher.patchModel(Beacon::getChkCode, Beacon::setChkCode);
     patcher.patchModel(Beacon::getCreatedDate, Beacon::setCreatedDate);
-    patcher.patchModel(Beacon::getEmergencyContacts, Beacon::setEmergencyContacts);
+    patcher.patchModel(
+      Beacon::getEmergencyContacts,
+      Beacon::setEmergencyContacts
+    );
     patcher.patchModel(Beacon::getHexId, Beacon::setHexId);
-    patcher.patchModel(Beacon::getLastServicedDate, Beacon::setLastServicedDate);
+    patcher.patchModel(
+      Beacon::getLastServicedDate,
+      Beacon::setLastServicedDate
+    );
     patcher.patchModel(Beacon::getManufacturer, Beacon::setManufacturer);
-    patcher.patchModel(Beacon::getManufacturerSerialNumber, Beacon::setManufacturerSerialNumber);
+    patcher.patchModel(
+      Beacon::getManufacturerSerialNumber,
+      Beacon::setManufacturerSerialNumber
+    );
     patcher.patchModel(Beacon::getModel, Beacon::setModel);
     patcher.patchModel(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
 
     beaconRepository.save(beacon);
   }
 
-  
-
-  public class ModelPatcher<T>{
+  public class ModelPatcher<T> {
 
     private T model;
     private T update;
@@ -109,13 +116,14 @@ public class BeaconsService {
       this.update = update;
     }
 
-    public <TValue> void patchModel( Function<T, TValue> get, BiConsumer<T, TValue> set) {
-    TValue updateValue = get.apply(update);
-    if(updateValue==null)
-      return;
-    
-    set.accept(model, updateValue);
-  }
-  }
+    public <TValue> void patchModel(
+      Function<T, TValue> get,
+      BiConsumer<T, TValue> set
+    ) {
+      TValue updateValue = get.apply(update);
+      if (updateValue == null) return;
 
+      set.accept(model, updateValue);
+    }
+  }
 }

@@ -1,14 +1,12 @@
 package uk.gov.mca.beacons.service.mappers;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import uk.gov.mca.beacons.service.dto.DomainDTO;
 import uk.gov.mca.beacons.service.dto.RelationshipDTO;
 
 @Service
-public class RelationshipMapper<T extends DomainDTO>  {
+public class RelationshipMapper<T extends DomainDTO> {
 
   public RelationshipDTO<T> toDTO(T related) {
     final var relationship = new RelationshipDTO<T>();

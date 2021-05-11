@@ -24,8 +24,11 @@ public class BeaconsController {
   private final BeaconMapper beaconMapper;
 
   @Autowired
-  public BeaconsController(BeaconsService beaconsService, BeaconsResponseFactory responseFactory,
-      BeaconMapper beaconMapper) {
+  public BeaconsController(
+    BeaconsService beaconsService,
+    BeaconsResponseFactory responseFactory,
+    BeaconMapper beaconMapper
+  ) {
     this.beaconsService = beaconsService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
@@ -50,10 +53,12 @@ public class BeaconsController {
   // PATCH
   // http://localhost:8080/spring-api/beacons/b60ec8f3-36eb-4459-aa66-a873af457595
   @PatchMapping(value = "/{uuid}")
-  public void update(@PathVariable("uuid") UUID uuid, @RequestBody WrapperDTO<BeaconDTO> dto) {
+  public void update(
+    @PathVariable("uuid") UUID uuid,
+    @RequestBody WrapperDTO<BeaconDTO> dto
+  ) {
     final var update = beaconMapper.fromDTO(dto.getData());
-    if (!uuid.equals(dto.getData().getId() ))
-      throw new RuntimeException(); // TODO: pick a card
+    if (!uuid.equals(dto.getData().getId())) throw new RuntimeException(); // TODO: pick a card
 
     beaconsService.update(uuid, update);
     return;
