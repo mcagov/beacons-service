@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RelationshipDTO<T extends DomainDTO> {
+public class RelationshipDTO {
 
   private List<RelationshipData> data = new ArrayList<RelationshipData>();
 

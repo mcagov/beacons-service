@@ -6,16 +6,16 @@ import uk.gov.mca.beacons.service.dto.DomainDTO;
 import uk.gov.mca.beacons.service.dto.RelationshipDTO;
 
 @Service
-public class RelationshipMapper<T extends DomainDTO> {
+public class RelationshipMapper {
 
-  public RelationshipDTO<T> toDTO(T related) {
-    final var relationship = new RelationshipDTO<T>();
+  public RelationshipDTO toDTO(DomainDTO related) {
+    final var relationship = new RelationshipDTO();
     relationship.addData(related);
     return relationship;
   }
 
-  public RelationshipDTO<T> toDTO(List<T> related) {
-    final var relationship = new RelationshipDTO<T>();
+  public RelationshipDTO toDTO(List<DomainDTO> related) {
+    final var relationship = new RelationshipDTO();
     related.forEach(relationship::addData);
 
     return relationship;

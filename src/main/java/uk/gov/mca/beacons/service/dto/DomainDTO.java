@@ -32,7 +32,10 @@ public abstract class DomainDTO {
     return relationships;
   }
 
-  public void addRelationship(String key, RelationshipDTO value) {
+  public <T extends DomainDTO> void addRelationship(
+    String key,
+    RelationshipDTO value
+  ) {
     relationships.put(key, value);
   }
 }
