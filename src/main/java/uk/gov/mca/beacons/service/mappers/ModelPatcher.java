@@ -1,26 +1,49 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class ModelPatcher<T> {
 
-  private T model;
-  private T update;
+  private final List<ModelUpdateMapping> mapping = new ArrayList<ModelUpdateMapping>();
 
-  public ModelPatcher(T model, T update) {
-    super();
-    this.model = model;
-    this.update = update;
+  public <TValue> ModelPatcher<T> addMapping(
+    Function<T, TValue> getter,
+    BiConsumer<T, TValue> setter
+  ) {
+    mapping.add(new ModelUpdateMapping<TValue>(getter, setter));
+    return this;
   }
 
-  public <TValue> void patchModel(
-    Function<T, TValue> get,
-    BiConsumer<T, TValue> set
-  ) {
-    TValue updateValue = get.apply(update);
-    if (updateValue == null) return;
+  public <TValue> T patchModel(T model, T update) {
+    this.mapping.forEach(
+        mapping -> {
+          final Function<T, TValue> getter = mapping.getter;
+          final BiConsumer<T, TValue> setter = mapping.setter;
 
-    set.accept(model, updateValue);
+          TValue updateValue = getter.apply(update);
+          if (updateValue == null) return;
+
+          setter.accept(model, updateValue);
+        }
+      );
+
+    return model;
+  }
+
+  class ModelUpdateMapping<TValue> {
+
+    public final Function<T, TValue> getter;
+    public final BiConsumer<T, TValue> setter;
+
+    public ModelUpdateMapping(
+      Function<T, TValue> getter,
+      BiConsumer<T, TValue> setter
+    ) {
+      this.getter = getter;
+      this.setter = setter;
+    }
   }
 }

@@ -72,35 +72,28 @@ public class BeaconsService {
   }
 
   public void update(UUID id, Beacon update) {
-    final Beacon beacon = this.find(id); // TODO: we HAVE TO populate the uses/persons to allow validation on save, inefficient :(
-    if (beacon == null) throw new RuntimeException(); //TODO: pick an exception
+    final Beacon beacon = this.find(id); // TODO: we HAVE TO populate the uses/persons to allow validation on save,
+    // inefficient :(
+    if (beacon == null) throw new RuntimeException(); // TODO: pick an exception
 
-    final var patcher = new ModelPatcher<Beacon>(beacon, update);
+    final var patcher = new ModelPatcher<Beacon>()
+      .addMapping(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate)
+      .addMapping(Beacon::getBeaconStatus, Beacon::setBeaconStatus)
+      .addMapping(Beacon::getChkCode, Beacon::setChkCode)
+      .addMapping(Beacon::getCreatedDate, Beacon::setCreatedDate)
+      .addMapping(Beacon::getEmergencyContacts, Beacon::setEmergencyContacts)
+      .addMapping(Beacon::getHexId, Beacon::setHexId)
+      .addMapping(Beacon::getLastServicedDate, Beacon::setLastServicedDate)
+      .addMapping(Beacon::getManufacturer, Beacon::setManufacturer)
+      .addMapping(
+        Beacon::getManufacturerSerialNumber,
+        Beacon::setManufacturerSerialNumber
+      )
+      .addMapping(Beacon::getModel, Beacon::setModel)
+      .addMapping(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
 
-    patcher.patchModel(
-      Beacon::getBatteryExpiryDate,
-      Beacon::setBatteryExpiryDate
-    );
-    patcher.patchModel(Beacon::getBeaconStatus, Beacon::setBeaconStatus);
-    patcher.patchModel(Beacon::getChkCode, Beacon::setChkCode);
-    patcher.patchModel(Beacon::getCreatedDate, Beacon::setCreatedDate);
-    patcher.patchModel(
-      Beacon::getEmergencyContacts,
-      Beacon::setEmergencyContacts
-    );
-    patcher.patchModel(Beacon::getHexId, Beacon::setHexId);
-    patcher.patchModel(
-      Beacon::getLastServicedDate,
-      Beacon::setLastServicedDate
-    );
-    patcher.patchModel(Beacon::getManufacturer, Beacon::setManufacturer);
-    patcher.patchModel(
-      Beacon::getManufacturerSerialNumber,
-      Beacon::setManufacturerSerialNumber
-    );
-    patcher.patchModel(Beacon::getModel, Beacon::setModel);
-    patcher.patchModel(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+    var updatedModel = patcher.patchModel(beacon, update);
 
-    beaconRepository.save(beacon);
+    beaconRepository.save(updatedModel);
   }
 }
