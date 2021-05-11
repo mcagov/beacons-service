@@ -5,11 +5,10 @@ import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.service.mappers.ModelPatcher;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -103,27 +102,5 @@ public class BeaconsService {
     patcher.patchModel(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
 
     beaconRepository.save(beacon);
-  }
-
-  public class ModelPatcher<T> {
-
-    private T model;
-    private T update;
-
-    public ModelPatcher(T model, T update) {
-      super();
-      this.model = model;
-      this.update = update;
-    }
-
-    public <TValue> void patchModel(
-      Function<T, TValue> get,
-      BiConsumer<T, TValue> set
-    ) {
-      TValue updateValue = get.apply(update);
-      if (updateValue == null) return;
-
-      set.accept(model, updateValue);
-    }
   }
 }
