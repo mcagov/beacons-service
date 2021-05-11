@@ -5,6 +5,9 @@ import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,4 +72,35 @@ public class BeaconsService {
       beaconUses
     );
   }
+
+  public void update(UUID id, Beacon update) {
+    final Optional<Beacon> beaconResult = beaconRepository.findById(id);
+    if (beaconResult.isEmpty()) 
+      throw new RuntimeException(); //TODO: pick an exception
+
+    final Beacon beacon = beaconResult.get();
+
+    updateIfNotNull(beacon, update, Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate);
+    updateIfNotNull(beacon, update, Beacon::getBeaconStatus, Beacon::setBeaconStatus);
+    updateIfNotNull(beacon, update, Beacon::getChkCode, Beacon::setChkCode);
+    updateIfNotNull(beacon, update, Beacon::getCreatedDate, Beacon::setCreatedDate);
+    updateIfNotNull(beacon, update, Beacon::getEmergencyContacts, Beacon::setEmergencyContacts);
+    updateIfNotNull(beacon, update, Beacon::getHexId, Beacon::setHexId);
+    updateIfNotNull(beacon, update, Beacon::getLastServicedDate, Beacon::setLastServicedDate);
+    updateIfNotNull(beacon, update, Beacon::getManufacturer, Beacon::setManufacturer);
+    updateIfNotNull(beacon, update, Beacon::getManufacturerSerialNumber, Beacon::setManufacturerSerialNumber);
+    updateIfNotNull(beacon, update, Beacon::getModel, Beacon::setModel);
+    updateIfNotNull(beacon, update, Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+
+    beaconRepository.save(beacon);
+  }
+
+  private <TModel, T> void updateIfNotNull(TModel beacon, TModel update, Function<TModel, T> get, BiConsumer<TModel, T> set) {
+    T updateValue = get.apply(update);
+    if(updateValue==null)
+      return;
+    
+    set.accept(beacon, updateValue);
+  }
+
 }
