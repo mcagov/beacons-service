@@ -52,7 +52,7 @@ public class BeaconsController {
   @PatchMapping(value = "/{uuid}")
   public void update(@PathVariable("uuid") UUID uuid, @RequestBody WrapperDTO<BeaconDTO> dto) {
     final var update = beaconMapper.fromDTO(dto.getData());
-    if (dto.getData().getId() != uuid)
+    if (!uuid.equals(dto.getData().getId() ))
       throw new RuntimeException(); // TODO: pick a card
 
     beaconsService.update(uuid, update);

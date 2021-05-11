@@ -79,28 +79,43 @@ public class BeaconsService {
       throw new RuntimeException(); //TODO: pick an exception
 
     final Beacon beacon = beaconResult.get();
+    final var patcher = new ModelPatcher<Beacon>(beacon, update);
 
-    updateIfNotNull(beacon, update, Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate);
-    updateIfNotNull(beacon, update, Beacon::getBeaconStatus, Beacon::setBeaconStatus);
-    updateIfNotNull(beacon, update, Beacon::getChkCode, Beacon::setChkCode);
-    updateIfNotNull(beacon, update, Beacon::getCreatedDate, Beacon::setCreatedDate);
-    updateIfNotNull(beacon, update, Beacon::getEmergencyContacts, Beacon::setEmergencyContacts);
-    updateIfNotNull(beacon, update, Beacon::getHexId, Beacon::setHexId);
-    updateIfNotNull(beacon, update, Beacon::getLastServicedDate, Beacon::setLastServicedDate);
-    updateIfNotNull(beacon, update, Beacon::getManufacturer, Beacon::setManufacturer);
-    updateIfNotNull(beacon, update, Beacon::getManufacturerSerialNumber, Beacon::setManufacturerSerialNumber);
-    updateIfNotNull(beacon, update, Beacon::getModel, Beacon::setModel);
-    updateIfNotNull(beacon, update, Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+    patcher.patchModel(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate);
+    patcher.patchModel(Beacon::getBeaconStatus, Beacon::setBeaconStatus);
+    patcher.patchModel(Beacon::getChkCode, Beacon::setChkCode);
+    patcher.patchModel(Beacon::getCreatedDate, Beacon::setCreatedDate);
+    patcher.patchModel(Beacon::getEmergencyContacts, Beacon::setEmergencyContacts);
+    patcher.patchModel(Beacon::getHexId, Beacon::setHexId);
+    patcher.patchModel(Beacon::getLastServicedDate, Beacon::setLastServicedDate);
+    patcher.patchModel(Beacon::getManufacturer, Beacon::setManufacturer);
+    patcher.patchModel(Beacon::getManufacturerSerialNumber, Beacon::setManufacturerSerialNumber);
+    patcher.patchModel(Beacon::getModel, Beacon::setModel);
+    patcher.patchModel(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
 
     beaconRepository.save(beacon);
   }
 
-  private <TModel, T> void updateIfNotNull(TModel beacon, TModel update, Function<TModel, T> get, BiConsumer<TModel, T> set) {
-    T updateValue = get.apply(update);
+  
+
+  public class ModelPatcher<T>{
+
+    private T model;
+    private T update;
+
+    public ModelPatcher(T model, T update) {
+      super();
+      this.model = model;
+      this.update = update;
+    }
+
+    public <TValue> void patchModel( Function<T, TValue> get, BiConsumer<T, TValue> set) {
+    TValue updateValue = get.apply(update);
     if(updateValue==null)
       return;
     
-    set.accept(beacon, updateValue);
+    set.accept(model, updateValue);
+  }
   }
 
 }
