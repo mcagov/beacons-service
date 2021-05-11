@@ -12,6 +12,7 @@ public class BeaconUseMapper {
     dto.setId(domain.getId());
     dto.addAttribute("environment", domain.getEnvironment());
     dto.addAttribute("activity", domain.getActivity());
+    dto.addAttribute("otherActivity", domain.getOtherActivity());
     dto.addAttribute("moreDetails", domain.getMoreDetails());
     dto.addAttribute("purpose", domain.getPurpose());
     dto.addAttribute("callSign", domain.getCallSign());

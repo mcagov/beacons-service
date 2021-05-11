@@ -55,6 +55,7 @@
       "attributes": {
         "environment": "MARITIME",
         "activity": "SAILING",
+        "otherActivity": null,
         "moreDetails": "More details of this vessel",
         "purpose": "PLEASURE",
         "callSign": "Call me",
