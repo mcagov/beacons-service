@@ -17,7 +17,6 @@ import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
-import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.PersonType;
 
 @ExtendWith(MockitoExtension.class)
