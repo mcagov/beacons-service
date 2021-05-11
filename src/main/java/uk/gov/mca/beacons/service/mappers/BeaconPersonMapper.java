@@ -7,7 +7,7 @@ import uk.gov.mca.beacons.service.model.BeaconPerson;
 @Service
 public class BeaconPersonMapper {
 
-  public BeaconPersonDTO from(BeaconPerson domain) {
+  public BeaconPersonDTO toDTO(BeaconPerson domain) {
     final var dto = new BeaconPersonDTO();
     dto.setId(domain.getId());
     dto.addAttribute("fullName", domain.getFullName());

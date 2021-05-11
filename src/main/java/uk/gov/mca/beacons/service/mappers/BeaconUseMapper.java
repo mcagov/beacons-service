@@ -7,7 +7,7 @@ import uk.gov.mca.beacons.service.model.BeaconUse;
 @Service
 public class BeaconUseMapper {
 
-  public BeaconUseDTO from(BeaconUse domain) {
+  public BeaconUseDTO toDTO(BeaconUse domain) {
     final var dto = new BeaconUseDTO();
     dto.setId(domain.getId());
     dto.addAttribute("environment", domain.getEnvironment());

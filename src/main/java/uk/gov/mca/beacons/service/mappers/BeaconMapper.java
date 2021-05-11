@@ -7,7 +7,7 @@ import uk.gov.mca.beacons.service.model.Beacon;
 @Service
 public class BeaconMapper {
 
-  public BeaconDTO from(Beacon domain) {
+  public BeaconDTO toDTO(Beacon domain) {
     final var dto = new BeaconDTO();
     dto.setId(domain.getId());
     dto.addAttribute("hexId", domain.getHexId());
@@ -25,7 +25,8 @@ public class BeaconMapper {
 
     return dto;
   }
-  // public static Beacon to(BeaconDTO dto) {
+
+  // public static Beacon fromDTO(BeaconDTO dto) {
 
   //   final var updates = dto.getAttributes();
 

@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
-import uk.gov.mca.beacons.service.dto.RelationshipDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.BeaconMapper;
 import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
 import uk.gov.mca.beacons.service.mappers.BeaconUseMapper;
+import uk.gov.mca.beacons.service.mappers.RelationshipMapper;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @Service
@@ -20,16 +20,22 @@ public class BeaconsResponseFactory {
   private final BeaconMapper beaconMapper;
   private final BeaconPersonMapper personMapper;
   private final BeaconUseMapper useMapper;
+  private final RelationshipMapper<BeaconPersonDTO> personRelationshipMapper;
+  private final RelationshipMapper<BeaconUseDTO> useRelationshipMapper;
 
   @Autowired
   public BeaconsResponseFactory(
     BeaconMapper beaconMapper,
     BeaconPersonMapper personMapper,
-    BeaconUseMapper useMapper
+    BeaconUseMapper useMapper,
+    RelationshipMapper<BeaconPersonDTO> personRelationshipMapper,
+    RelationshipMapper<BeaconUseDTO> useRelationshipMapper
   ) {
     this.beaconMapper = beaconMapper;
     this.personMapper = personMapper;
     this.useMapper = useMapper;
+    this.personRelationshipMapper = personRelationshipMapper;
+    this.useRelationshipMapper = useRelationshipMapper;
   }
 
   public WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
@@ -58,13 +64,13 @@ public class BeaconsResponseFactory {
     return beacon
       .getUses()
       .stream()
-      .map(beaconUse -> useMapper.from(beaconUse))
+      .map(beaconUse -> useMapper.toDTO(beaconUse))
       .collect(Collectors.toList());
   }
 
   private BeaconPersonDTO getOwnerDTO(Beacon beacon) {
     if (beacon.getOwner() != null) {
-      final var ownerDTO = personMapper.from(beacon.getOwner());
+      final var ownerDTO = personMapper.toDTO(beacon.getOwner());
       return ownerDTO;
     }
     return null;
@@ -74,7 +80,7 @@ public class BeaconsResponseFactory {
     return beacon
       .getEmergencyContacts()
       .stream()
-      .map(emergencyContact -> personMapper.from(emergencyContact))
+      .map(emergencyContact -> personMapper.toDTO(emergencyContact))
       .collect(Collectors.toList());
   }
 
@@ -84,10 +90,10 @@ public class BeaconsResponseFactory {
     BeaconPersonDTO ownerDTO,
     List<BeaconPersonDTO> emergencyContactDTOs
   ) {
-    final var beaconDTO = beaconMapper.from(beacon);
-    final var useRelationshipDTO = RelationshipDTO.from(useDTOs);
-    final var ownerRelationshipDTO = RelationshipDTO.from(ownerDTO);
-    final var emergencyContactRelationshipDTO = RelationshipDTO.from(
+    final var beaconDTO = beaconMapper.toDTO(beacon);
+    final var useRelationshipDTO = useRelationshipMapper.toDTO(useDTOs);
+    final var ownerRelationshipDTO = personRelationshipMapper.toDTO(ownerDTO);
+    final var emergencyContactRelationshipDTO = personRelationshipMapper.toDTO(
       emergencyContactDTOs
     );
 
