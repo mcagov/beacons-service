@@ -55,10 +55,10 @@ public class BeaconMapper {
     String key,
     Map<String, Object> attributes
   ) {
-    var attributeValue = attributes.get(key);
+    final var attributeValue = attributes.get(key);
     if (attributeValue == null) return null;
 
-    var result = LocalDateTime.parse((String) attributeValue);
+    final var result = LocalDateTime.parse((String) attributeValue);
     return result;
   }
 
@@ -66,10 +66,10 @@ public class BeaconMapper {
     String key,
     Map<String, Object> attributes
   ) {
-    var attributeValue = attributes.get(key);
+    final var attributeValue = attributes.get(key);
     if (attributeValue == null) return null;
 
-    var result = BeaconStatus.valueOf((String) attributeValue);
+    final var result = BeaconStatus.valueOf((String) attributeValue);
 
     return result;
   }
