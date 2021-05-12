@@ -57,6 +57,5 @@ public class BeaconsController {
     if (!uuid.equals(dto.getData().getId())) throw new InvalidPatchException();
 
     beaconsService.update(uuid, update);
-    return;
   }
 }
