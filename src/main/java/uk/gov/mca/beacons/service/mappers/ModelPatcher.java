@@ -9,7 +9,7 @@ public class ModelPatcher<T> {
 
   private final List<ModelUpdateMapping> mapping = new ArrayList<ModelUpdateMapping>();
 
-  public <TValue> ModelPatcher<T> addMapping(
+  public <TValue> ModelPatcher<T> withMapping(
     Function<T, TValue> getter,
     BiConsumer<T, TValue> setter
   ) {

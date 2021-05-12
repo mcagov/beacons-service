@@ -8,7 +8,7 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.service.mappers.ModelPatcher;
+import uk.gov.mca.beacons.service.mappers.ModelPatcherFactory;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -24,18 +24,21 @@ public class BeaconsService {
   private final BeaconPersonRepository beaconPersonRepository;
   private final BeaconUseRepository beaconUseRepository;
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
+  private final ModelPatcherFactory<Beacon> beaconPatcherFactory;
 
   @Autowired
   public BeaconsService(
     BeaconRepository beaconRepository,
     BeaconPersonRepository beaconPersonRepository,
     BeaconUseRepository beaconUseRepository,
-    BeaconsRelationshipMapper beaconsRelationshipMapper
+    BeaconsRelationshipMapper beaconsRelationshipMapper,
+    ModelPatcherFactory<Beacon> beaconPatcherFactory
   ) {
     this.beaconRepository = beaconRepository;
     this.beaconPersonRepository = beaconPersonRepository;
     this.beaconUseRepository = beaconUseRepository;
     this.beaconsRelationshipMapper = beaconsRelationshipMapper;
+    this.beaconPatcherFactory = beaconPatcherFactory;
   }
 
   public List<Beacon> findAll() {
@@ -76,21 +79,22 @@ public class BeaconsService {
     // inefficient :(
     if (beacon == null) throw new RuntimeException(); // TODO: pick an exception
 
-    final var patcher = new ModelPatcher<Beacon>()
-      .addMapping(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate)
-      .addMapping(Beacon::getBeaconStatus, Beacon::setBeaconStatus)
-      .addMapping(Beacon::getChkCode, Beacon::setChkCode)
-      .addMapping(Beacon::getCreatedDate, Beacon::setCreatedDate)
-      .addMapping(Beacon::getEmergencyContacts, Beacon::setEmergencyContacts)
-      .addMapping(Beacon::getHexId, Beacon::setHexId)
-      .addMapping(Beacon::getLastServicedDate, Beacon::setLastServicedDate)
-      .addMapping(Beacon::getManufacturer, Beacon::setManufacturer)
-      .addMapping(
+    final var patcher = beaconPatcherFactory
+      .getModelPatcher()
+      .withMapping(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate)
+      .withMapping(Beacon::getBeaconStatus, Beacon::setBeaconStatus)
+      .withMapping(Beacon::getChkCode, Beacon::setChkCode)
+      .withMapping(Beacon::getCreatedDate, Beacon::setCreatedDate)
+      .withMapping(Beacon::getEmergencyContacts, Beacon::setEmergencyContacts)
+      .withMapping(Beacon::getHexId, Beacon::setHexId)
+      .withMapping(Beacon::getLastServicedDate, Beacon::setLastServicedDate)
+      .withMapping(Beacon::getManufacturer, Beacon::setManufacturer)
+      .withMapping(
         Beacon::getManufacturerSerialNumber,
         Beacon::setManufacturerSerialNumber
       )
-      .addMapping(Beacon::getModel, Beacon::setModel)
-      .addMapping(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+      .withMapping(Beacon::getModel, Beacon::setModel)
+      .withMapping(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
 
     var updatedModel = patcher.patchModel(beacon, update);
 
