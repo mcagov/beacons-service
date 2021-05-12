@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.ModelPatcherFactory;
 import uk.gov.mca.beacons.service.model.Beacon;

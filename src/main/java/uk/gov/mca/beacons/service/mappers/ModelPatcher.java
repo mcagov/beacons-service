@@ -10,24 +10,28 @@ public class ModelPatcher<T> {
   @SuppressWarnings("rawtypes")
   private final List<ModelUpdateMapping> mapping = new ArrayList<ModelUpdateMapping>();
 
-  public <TValue> ModelPatcher<T> withMapping(Function<T, TValue> getter, BiConsumer<T, TValue> setter) {
+  public <TValue> ModelPatcher<T> withMapping(
+    Function<T, TValue> getter,
+    BiConsumer<T, TValue> setter
+  ) {
     mapping.add(new ModelUpdateMapping<TValue>(getter, setter));
     return this;
   }
 
   public <TValue> T patchModel(T model, T update) {
-    this.mapping.forEach(mapping -> {
-      @SuppressWarnings("unchecked")
-      final Function<T, TValue> getter = mapping.getter;
-      @SuppressWarnings("unchecked")
-      final BiConsumer<T, TValue> setter = mapping.setter;
+    this.mapping.forEach(
+        mapping -> {
+          @SuppressWarnings("unchecked")
+          final Function<T, TValue> getter = mapping.getter;
+          @SuppressWarnings("unchecked")
+          final BiConsumer<T, TValue> setter = mapping.setter;
 
-      TValue updateValue = getter.apply(update);
-      if (updateValue == null)
-        return;
+          TValue updateValue = getter.apply(update);
+          if (updateValue == null) return;
 
-      setter.accept(model, updateValue);
-    });
+          setter.accept(model, updateValue);
+        }
+      );
 
     return model;
   }
@@ -37,7 +41,10 @@ public class ModelPatcher<T> {
     public final Function<T, TValue> getter;
     public final BiConsumer<T, TValue> setter;
 
-    public ModelUpdateMapping(Function<T, TValue> getter, BiConsumer<T, TValue> setter) {
+    public ModelUpdateMapping(
+      Function<T, TValue> getter,
+      BiConsumer<T, TValue> setter
+    ) {
       this.getter = getter;
       this.setter = setter;
     }
