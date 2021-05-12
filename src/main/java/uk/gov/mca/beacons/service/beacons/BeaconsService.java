@@ -8,6 +8,8 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.ModelPatcherFactory;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -75,9 +77,8 @@ public class BeaconsService {
   }
 
   public void update(UUID id, Beacon update) {
-    final Beacon beacon = this.find(id); // TODO: we HAVE TO populate the uses/persons to allow validation on save,
-    // inefficient :(
-    if (beacon == null) throw new RuntimeException(); // TODO: pick an exception
+    final Beacon beacon = this.find(id);
+    if (beacon == null) throw new ResourceNotFoundException();
 
     final var patcher = beaconPatcherFactory
       .getModelPatcher()
