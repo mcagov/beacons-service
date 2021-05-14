@@ -31,18 +31,13 @@ class BeaconsServicePatchIntegrationTest {
   private BeaconsService beaconService;
 
   @MockBean
-  BeaconRepository mockBeaconRepo;
+  private BeaconRepository mockBeaconRepo;
 
   @MockBean
-  BeaconPersonRepository mockPersonRepo;
+  private BeaconPersonRepository mockPersonRepo;
 
   @MockBean
-  BeaconUseRepository mockUseRepo;
-
-  @BeforeEach
-  public final void before() {
-    //final var payload = "{\"data\": {\"type\": \"beacons\",\"id\": \"1\",\"attributes\": {\"model\": \"New model value\",\"manufacturer\": \"New manufacturer value\"}}";
-  }
+  private BeaconUseRepository mockUseRepo;
 
   @Test
   void updateShouldThrowExceptionIfBeaconNotFound() {
