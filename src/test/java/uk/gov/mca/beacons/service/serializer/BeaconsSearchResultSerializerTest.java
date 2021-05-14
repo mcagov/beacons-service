@@ -54,7 +54,7 @@ class BeaconsSearchResultSerializerTest {
     final String json = new String(
       Files.readAllBytes(Paths.get(JSON_RESOURCE_EMPTY))
     )
-      .replaceAll("[\\n\\t ]", "");
+    .replaceAll("[\\n\\t ]", "");
     final var serializer = new BeaconsSearchResultSerializer();
     beaconsSearchResult.setBeacons(List.of());
 
@@ -127,7 +127,7 @@ class BeaconsSearchResultSerializerTest {
     final String expectedJson = new String(
       Files.readAllBytes(Paths.get(JSON_RESOURCE))
     )
-      .replaceAll("[\\n\\t ]", "");
+    .replaceAll("[\\n\\t ]", "");
     assertThat(
       jsonWriter.toString().replaceAll("[\\n\\t ]", ""),
       is(equalTo(expectedJson))
