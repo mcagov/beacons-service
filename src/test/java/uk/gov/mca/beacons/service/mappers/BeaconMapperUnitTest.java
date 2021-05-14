@@ -6,6 +6,7 @@ import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -21,7 +22,9 @@ class BeaconMapperUnitTest {
 
     @Test
     void shouldSetAllTheFieldsOnTheBeaconFromTheDTO() {
+        var beaconId = UUID.randomUUID();
         var beaconDTO = new BeaconDTO();
+        beaconDTO.setId(beaconId);
         beaconDTO.addAttribute("hexId", "1");
         beaconDTO.addAttribute("manufacturer", "Trousers");
         beaconDTO.addAttribute("model", "ASOS");
@@ -34,6 +37,7 @@ class BeaconMapperUnitTest {
 
         var beacon = beaconMapper.fromDTO(beaconDTO);
 
+        assertThat(beacon.getId(), is(beaconId));
         assertThat(beacon.getHexId(), is("1"));
         assertThat(beacon.getManufacturer(), is("Trousers"));
         assertThat(beacon.getModel(), is("ASOS"));
