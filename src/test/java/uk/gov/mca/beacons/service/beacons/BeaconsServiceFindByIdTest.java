@@ -1,21 +1,22 @@
 package uk.gov.mca.beacons.service.beacons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.mappers.ModelPatcherFactory;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
@@ -25,7 +26,7 @@ import uk.gov.mca.beacons.service.repository.BeaconRepository;
 import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @ExtendWith(MockitoExtension.class)
-class BeaconServiceFindAllTest {
+class BeaconsServiceFindByIdTest {
 
   @Mock
   private BeaconRepository beaconRepository;
@@ -36,6 +37,9 @@ class BeaconServiceFindAllTest {
   @Mock
   private BeaconUseRepository beaconUseRepository;
 
+  @Mock
+  private ModelPatcherFactory<Beacon> patcherFactory;
+
   private BeaconsService beaconsService;
 
   @BeforeEach
@@ -45,18 +49,22 @@ class BeaconServiceFindAllTest {
         beaconRepository,
         beaconPersonRepository,
         beaconUseRepository,
-        new BeaconsRelationshipMapper()
+        new BeaconsRelationshipMapper(),
+        patcherFactory
       );
   }
 
   @Test
-  void findAllShouldReturnZeroResultsIfRepoIsEmpty() {
-    final var beacons = beaconsService.findAll();
-    assertThat(beacons, is(emptyCollectionOf(Beacon.class)));
+  void findByIdShouldReturnNullResultsIfIdNotFound() {
+    final var noExistentBeaconId = UUID.randomUUID();
+
+    final var beacon = beaconsService.find(noExistentBeaconId);
+
+    assertNull(beacon);
   }
 
   @Test
-  void findAllShouldReturnAllBeacons() {
+  void findByIdShouldReturnOneBeaconById() {
     final var firstBeaconId = UUID.randomUUID();
     final var firstBeacon = new Beacon();
     firstBeacon.setId(firstBeaconId);
@@ -65,28 +73,24 @@ class BeaconServiceFindAllTest {
     final var secondBeacon = new Beacon();
     secondBeacon.setId(secondBeaconId);
 
-    given(beaconRepository.findAll())
-      .willReturn(List.of(firstBeacon, secondBeacon));
+    given(beaconRepository.findById(firstBeaconId))
+      .willReturn(Optional.of(firstBeacon));
+    given(beaconRepository.findById(secondBeaconId))
+      .willReturn(Optional.of(secondBeacon));
 
-    final var allBeacons = beaconsService.findAll();
+    Beacon firstBeaconOnly = beaconsService.find(firstBeaconId);
+    Beacon secondBeaconOnly = beaconsService.find(secondBeaconId);
 
-    assertThat(
-      allBeacons,
-      contains(
-        hasProperty("id", is(firstBeaconId)),
-        hasProperty("id", is(secondBeaconId))
-      )
-    );
+    assertThat(firstBeaconOnly, hasProperty("id", is(firstBeaconId)));
+    assertThat(secondBeaconOnly, hasProperty("id", is(secondBeaconId)));
   }
 
   @Test
-  void findAllShouldReturnMappedResultsList() {
-    final var testBeaconId = assembleTestData();
+  void findByIdShouldReturnMappedSingleResult() {
+    final var testBeaconId = AssembleTestData();
 
-    final var allBeacons = beaconsService.findAll();
+    final var resultBeacon = beaconsService.find(testBeaconId);
 
-    final var resultBeacon = allBeacons.get(0);
-    assertThat("one beacon is returned", allBeacons.size(), is(1));
     assertThat(
       "the one beacon has the expected id",
       resultBeacon,
@@ -110,17 +114,15 @@ class BeaconServiceFindAllTest {
   }
 
   @Test
-  void findAllShouldReturnABeaconByIdEvenWithMissingData() {
-    final var testBeaconId = assembleFaultyTestData();
+  void findByIdShouldReturnABeaconByIdEvenWithMissingData() {
+    final var testBeaconId = AssembleFaultyTestData();
 
-    final var allBeacons = beaconsService.findAll();
-    assertThat("one beacon is returned", allBeacons.size(), is(1));
+    final var resultBeacon = beaconsService.find(testBeaconId);
 
-    final var resultBeacon = allBeacons.get(0);
     assertThat(
       "the one beacon has the expected id",
-      resultBeacon,
-      hasProperty("id", is(testBeaconId))
+      resultBeacon.getId(),
+      is(testBeaconId)
     );
     assertThat(
       "the beacon has no owner",
@@ -139,11 +141,12 @@ class BeaconServiceFindAllTest {
     );
   }
 
-  private UUID assembleTestData() {
+  private UUID AssembleTestData() {
     final var testBeaconId = UUID.randomUUID();
-    final var testBeacon = new Beacon();
+    final Beacon testBeacon = new Beacon();
     testBeacon.setId(testBeaconId);
-    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
+    given(beaconRepository.findById(testBeaconId))
+      .willReturn(Optional.of(testBeacon));
 
     final var owner = new BeaconPerson();
     owner.setPersonType(PersonType.OWNER);
@@ -161,7 +164,7 @@ class BeaconServiceFindAllTest {
     unrelatedContact.setPersonType(PersonType.EMERGENCY_CONTACT);
     unrelatedContact.setFullName("A Stranger");
     unrelatedContact.setBeaconId(UUID.randomUUID());
-    given(beaconPersonRepository.findAll())
+    given(beaconPersonRepository.findAllByBeaconId(testBeaconId))
       .willReturn(
         List.of(firstContact, unrelatedContact, owner, secondContact)
       );
@@ -175,16 +178,17 @@ class BeaconServiceFindAllTest {
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseRepository.findAll())
+    given(beaconUseRepository.findAllByBeaconId(testBeaconId))
       .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
     return testBeaconId;
   }
 
-  private UUID assembleFaultyTestData() {
+  private UUID AssembleFaultyTestData() {
     final var testBeaconId = UUID.randomUUID();
     final var testBeacon = new Beacon();
     testBeacon.setId(testBeaconId);
-    given(beaconRepository.findAll()).willReturn(List.of(testBeacon));
+    given(beaconRepository.findById(testBeaconId))
+      .willReturn(Optional.of(testBeacon));
 
     final var owner = new BeaconPerson();
     owner.setPersonType(PersonType.OWNER);
@@ -202,7 +206,7 @@ class BeaconServiceFindAllTest {
     unrelatedContact.setPersonType(PersonType.EMERGENCY_CONTACT);
     unrelatedContact.setFullName("A Stranger");
     unrelatedContact.setBeaconId(UUID.randomUUID());
-    given(beaconPersonRepository.findAll())
+    given(beaconPersonRepository.findAllByBeaconId(testBeaconId))
       .willReturn(
         List.of(firstContact, unrelatedContact, owner, secondContact)
       );
@@ -216,7 +220,7 @@ class BeaconServiceFindAllTest {
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseRepository.findAll())
+    given(beaconUseRepository.findAllByBeaconId(testBeaconId))
       .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
     return testBeaconId;
   }

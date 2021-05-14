@@ -1,18 +1,45 @@
 package uk.gov.mca.beacons.service.beacons;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
-import uk.gov.mca.beacons.service.dto.RelationshipDTO;
+import uk.gov.mca.beacons.service.dto.DomainDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
+import uk.gov.mca.beacons.service.mappers.BeaconMapper;
+import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
+import uk.gov.mca.beacons.service.mappers.BeaconUseMapper;
+import uk.gov.mca.beacons.service.mappers.RelationshipMapper;
 import uk.gov.mca.beacons.service.model.Beacon;
 
+@Service
 public class BeaconsResponseFactory {
 
-  public static WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
+  private final BeaconMapper beaconMapper;
+  private final BeaconPersonMapper personMapper;
+  private final BeaconUseMapper useMapper;
+  private final RelationshipMapper personRelationshipMapper;
+  private final RelationshipMapper useRelationshipMapper;
+
+  @Autowired
+  public BeaconsResponseFactory(
+    BeaconMapper beaconMapper,
+    BeaconPersonMapper personMapper,
+    BeaconUseMapper useMapper,
+    RelationshipMapper personRelationshipMapper,
+    RelationshipMapper useRelationshipMapper
+  ) {
+    this.beaconMapper = beaconMapper;
+    this.personMapper = personMapper;
+    this.useMapper = useMapper;
+    this.personRelationshipMapper = personRelationshipMapper;
+    this.useRelationshipMapper = useRelationshipMapper;
+  }
+
+  public WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
     final var useDTOs = getUseDTOs(beacon);
     final var ownerDTO = getOwnerDTO(beacon);
     final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
@@ -34,41 +61,46 @@ public class BeaconsResponseFactory {
     return wrapper;
   }
 
-  private static List<BeaconUseDTO> getUseDTOs(Beacon beacon) {
+  private List<BeaconUseDTO> getUseDTOs(Beacon beacon) {
     return beacon
       .getUses()
       .stream()
-      .map(beaconUse -> BeaconUseDTO.from(beaconUse))
+      .map(beaconUse -> useMapper.toDTO(beaconUse))
       .collect(Collectors.toList());
   }
 
-  private static BeaconPersonDTO getOwnerDTO(Beacon beacon) {
+  private BeaconPersonDTO getOwnerDTO(Beacon beacon) {
     if (beacon.getOwner() != null) {
-      final var ownerDTO = BeaconPersonDTO.from(beacon.getOwner());
+      final var ownerDTO = personMapper.toDTO(beacon.getOwner());
       return ownerDTO;
     }
     return null;
   }
 
-  private static List<BeaconPersonDTO> getEmergencyContactDTOs(Beacon beacon) {
+  private List<BeaconPersonDTO> getEmergencyContactDTOs(Beacon beacon) {
     return beacon
       .getEmergencyContacts()
       .stream()
-      .map(emergencyContact -> BeaconPersonDTO.from(emergencyContact))
+      .map(emergencyContact -> personMapper.toDTO(emergencyContact))
       .collect(Collectors.toList());
   }
 
-  private static BeaconDTO buildBeaconDTO(
+  private BeaconDTO buildBeaconDTO(
     Beacon beacon,
     List<BeaconUseDTO> useDTOs,
     BeaconPersonDTO ownerDTO,
     List<BeaconPersonDTO> emergencyContactDTOs
   ) {
-    final var beaconDTO = BeaconDTO.from(beacon);
-    final var useRelationshipDTO = RelationshipDTO.from(useDTOs);
-    final var ownerRelationshipDTO = RelationshipDTO.from(ownerDTO);
-    final var emergencyContactRelationshipDTO = RelationshipDTO.from(
+    final var beaconDTO = beaconMapper.toDTO(beacon);
+    final var useRelationshipDTO = useRelationshipMapper.toDTO(
+      useDTOs.stream().map(dto -> (DomainDTO) dto).collect(Collectors.toList())
+    );
+    final var ownerRelationshipDTO = personRelationshipMapper.toDTO(ownerDTO);
+    final var emergencyContactRelationshipDTO = personRelationshipMapper.toDTO(
       emergencyContactDTOs
+        .stream()
+        .map(dto -> (DomainDTO) dto)
+        .collect(Collectors.toList())
     );
 
     beaconDTO.addRelationship("uses", useRelationshipDTO);

@@ -4,22 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RelationshipDTO<T extends DomainDTO> {
+public class RelationshipDTO {
 
   private List<RelationshipData> data = new ArrayList<RelationshipData>();
-
-  public static <T extends DomainDTO> RelationshipDTO<T> from(T related) {
-    final var relationship = new RelationshipDTO<T>();
-    relationship.addData(related);
-    return relationship;
-  }
-
-  public static <T extends DomainDTO> RelationshipDTO<T> from(List<T> related) {
-    final var relationship = new RelationshipDTO<T>();
-    related.forEach(relationship::addData);
-
-    return relationship;
-  }
 
   public List<RelationshipData> getData() {
     return data;
