@@ -105,7 +105,7 @@ class BeaconsRelationshipMapperTest {
     var allUses = List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse);
 
     final var resultBeacon = new BeaconsRelationshipMapper()
-    .getMappedBeacon(testBeacon, allPersons, allUses);
+      .getMappedBeacon(testBeacon, allPersons, allUses);
 
     assertThat(
       "the one beacon has the expected id",
