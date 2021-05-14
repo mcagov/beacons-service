@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ModelPatcherTest {
+class ModelPatcherTest {
 
   private ModelPatcher<FakeModel> patcher;
 
@@ -32,7 +32,7 @@ public class ModelPatcherTest {
   }
 
   @Test
-  public void shouldMapUpdatedValuesWithoutChangingTheRest() {
+  void shouldMapUpdatedValuesWithoutChangingTheRest() {
     var oldModel = new FakeModel();
     oldModel.setFirstDate(LocalDateTime.of(1983, 3, 13, 13, 13, 0));
     oldModel.setSecondString("The A String");
@@ -60,7 +60,7 @@ public class ModelPatcherTest {
   }
 
   @Test
-  public void shouldMapNewValuesWithoutChangingTheExisting() {
+  void shouldMapNewValuesWithoutChangingTheExisting() {
     var oldModel = new FakeModel();
     oldModel.setFirstDate(LocalDateTime.of(1983, 3, 13, 13, 13, 0));
     oldModel.setSecondString("The A String");

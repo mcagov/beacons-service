@@ -27,9 +27,9 @@ public class ModelPatcher<T> {
           final BiConsumer<T, TValue> setter = mapping.setter;
 
           TValue updateValue = getter.apply(update);
-          if (updateValue == null) return;
-
-          setter.accept(model, updateValue);
+          if (updateValue != null) {
+            setter.accept(model, updateValue);
+          }
         }
       );
 
