@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
@@ -60,12 +61,12 @@ class BeaconsServicePatchIntegrationTest {
       .willReturn(Collections.emptyList());
 
     var updateBeacon = new Beacon();
-    updateBeacon.setBatteryExpiryDate(LocalDateTime.of(2001, 01, 02, 03, 04));
+    updateBeacon.setBatteryExpiryDate(LocalDate.of(2001, 1, 2));
     updateBeacon.setBeaconStatus(BeaconStatus.NEW);
     updateBeacon.setChkCode("a-chk-code");
     updateBeacon.setCreatedDate(LocalDateTime.of(2002, 11, 12, 13, 14));
     updateBeacon.setHexId("HEXID");
-    updateBeacon.setLastServicedDate(LocalDateTime.of(1983, 03, 13, 03, 04));
+    updateBeacon.setLastServicedDate(LocalDate.of(1983, 3, 13));
     updateBeacon.setManufacturer("Beacons-R-Us");
     updateBeacon.setManufacturerSerialNumber("mambonbr5");
     updateBeacon.setModel("Naomi");
@@ -77,7 +78,7 @@ class BeaconsServicePatchIntegrationTest {
     verify(mockBeaconRepo).save(beaconCapture.capture());
     assertThat(
       beaconCapture.getValue().getBatteryExpiryDate(),
-      is(LocalDateTime.of(2001, 01, 02, 03, 04))
+      is(LocalDate.of(2001, 1, 2))
     );
     assertThat(
       beaconCapture.getValue().getBeaconStatus(),
@@ -91,7 +92,7 @@ class BeaconsServicePatchIntegrationTest {
     assertThat(beaconCapture.getValue().getHexId(), is("HEXID"));
     assertThat(
       beaconCapture.getValue().getLastServicedDate(),
-      is(LocalDateTime.of(1983, 03, 13, 03, 04))
+      is(LocalDate.of(1983, 3, 13))
     );
     assertThat(beaconCapture.getValue().getManufacturer(), is("Beacons-R-Us"));
     assertThat(
@@ -113,7 +114,7 @@ class BeaconsServicePatchIntegrationTest {
     oldBeacon.setManufacturerSerialNumber("mambonbr5");
     oldBeacon.setReferenceNumber("a-ref-num");
 
-    oldBeacon.setLastServicedDate(LocalDateTime.of(1992, 11, 8, 03, 04));
+    oldBeacon.setLastServicedDate(LocalDate.of(1992, 11, 8));
     oldBeacon.setManufacturer("Beacon-4-U");
     oldBeacon.setModel("Naomi");
 
@@ -124,10 +125,10 @@ class BeaconsServicePatchIntegrationTest {
       .willReturn(Collections.emptyList());
 
     var updateBeacon = new Beacon();
-    updateBeacon.setBatteryExpiryDate(LocalDateTime.of(2001, 01, 02, 03, 04));
+    updateBeacon.setBatteryExpiryDate(LocalDate.of(2001, 1, 2));
     updateBeacon.setBeaconStatus(BeaconStatus.NEW);
     updateBeacon.setHexId("HEXID");
-    updateBeacon.setLastServicedDate(LocalDateTime.of(1983, 03, 13, 03, 04));
+    updateBeacon.setLastServicedDate(LocalDate.of(1983, 3, 13));
     updateBeacon.setManufacturer("Beacons-R-Us");
     updateBeacon.setModel("ASOS");
 
@@ -137,7 +138,7 @@ class BeaconsServicePatchIntegrationTest {
     verify(mockBeaconRepo).save(beaconCapture.capture());
     assertThat(
       beaconCapture.getValue().getBatteryExpiryDate(),
-      is(LocalDateTime.of(2001, 01, 02, 03, 04))
+      is(LocalDate.of(2001, 1, 2))
     );
     assertThat(
       beaconCapture.getValue().getBeaconStatus(),
@@ -151,7 +152,7 @@ class BeaconsServicePatchIntegrationTest {
     assertThat(beaconCapture.getValue().getHexId(), is("HEXID"));
     assertThat(
       beaconCapture.getValue().getLastServicedDate(),
-      is(LocalDateTime.of(1983, 03, 13, 03, 04))
+      is(LocalDate.of(1983, 3, 13))
     );
     assertThat(beaconCapture.getValue().getManufacturer(), is("Beacons-R-Us"));
     assertThat(

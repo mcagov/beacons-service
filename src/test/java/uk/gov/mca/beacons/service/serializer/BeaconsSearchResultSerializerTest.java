@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,7 @@ class BeaconsSearchResultSerializerTest {
     beaconsSearchResult = new BeaconsSearchResult();
 
     beaconsSearchResult.setBeacons(List.of());
-    jsonWriter = (Writer) new StringWriter();
+    jsonWriter = new StringWriter();
     jsonGenerator = new JsonFactory().createGenerator(jsonWriter);
     serializerProvider = new ObjectMapper().getSerializerProvider();
   }
@@ -82,8 +83,8 @@ class BeaconsSearchResultSerializerTest {
     beacon.setModel("EPIRB1");
     beacon.setManufacturerSerialNumber("1407312904");
     beacon.setChkCode("9480B");
-    beacon.setBatteryExpiryDate(LocalDateTime.of(2020, 2, 1, 0, 0));
-    beacon.setLastServicedDate(LocalDateTime.of(2020, 2, 1, 0, 0));
+    beacon.setBatteryExpiryDate(LocalDate.of(2020, 2, 1));
+    beacon.setLastServicedDate(LocalDate.of(2020, 2, 1));
     final var owner = new BeaconPerson();
     owner.setAddressLine1("1 The Hard");
     owner.setAddressLine2("");

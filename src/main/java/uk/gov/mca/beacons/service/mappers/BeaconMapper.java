@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -44,22 +45,36 @@ public class BeaconMapper {
 
     beacon.setBeaconStatus(getStatusOrNull("status", attributes));
 
-    beacon.setCreatedDate(getDateOrNull("createdDate", attributes));
+    beacon.setCreatedDate(getDateTimeOrNull("createdDate", attributes));
     beacon.setBatteryExpiryDate(getDateOrNull("batteryExpiryDate", attributes));
     beacon.setLastServicedDate(getDateOrNull("lastServicedDate", attributes));
 
     return beacon;
   }
 
-  private static LocalDateTime getDateOrNull(
+  private static LocalDateTime getDateTimeOrNull(
     String key,
     Map<String, Object> attributes
   ) {
     final var attributeValue = attributes.get(key);
     if (attributeValue == null) return null;
 
-    final var result = LocalDateTime.parse((String) attributeValue);
-    return result;
+    return LocalDateTime.parse((String) attributeValue);
+  }
+
+  private static LocalDate getDateOrNull(
+    String key,
+    Map<String, Object> attributes
+  ) {
+    final var attributeValue = (String) attributes.get(key);
+    if (attributeValue == null) return null;
+
+    return LocalDate.parse(removeTime(attributeValue));
+  }
+
+  private static String removeTime(String dateTimeString) {
+    final var isoDateStringLength = 10; // YYYY-MM-DD
+    return dateTimeString.substring(0, isoDateStringLength);
   }
 
   private BeaconStatus getStatusOrNull(
@@ -69,8 +84,6 @@ public class BeaconMapper {
     final var attributeValue = attributes.get(key);
     if (attributeValue == null) return null;
 
-    final var result = BeaconStatus.valueOf((String) attributeValue);
-
-    return result;
+    return BeaconStatus.valueOf((String) attributeValue);
   }
 }
