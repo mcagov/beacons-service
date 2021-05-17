@@ -4,7 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import uk.gov.mca.beacons.service.dto.LinkDTOBuilder;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @ExtendWith(MockitoExtension.class)
-class BeaconMapperUnitTest {
+class BeaconMapperUnitFromDTOTest {
 
   private BeaconMapper beaconMapper;
 
@@ -60,14 +62,8 @@ class BeaconMapperUnitTest {
       beacon.getCreatedDate(),
       is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
     );
-    assertThat(
-      beacon.getBatteryExpiryDate(),
-      is(LocalDateTime.of(2022, 2, 1, 0, 0, 0))
-    );
-    assertThat(
-      beacon.getLastServicedDate(),
-      is(LocalDateTime.of(2019, 2, 1, 0, 0, 0))
-    );
+    assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
+    assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));
   }
 
   @Test
