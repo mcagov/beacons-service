@@ -29,13 +29,6 @@ class BeaconMapperUnitTest {
   }
 
   @Test
-  void shouldNotSetTheCreatedDate() {
-    beaconDTO.addAttribute("createdDate", "2020-02-01T00:00");
-    var beacon = beaconMapper.fromDTO(beaconDTO);
-    assertThat(beacon.getCreatedDate(), is(nullValue()));
-  }
-
-  @Test
   void shouldSetAllTheFieldsOnTheBeaconFromTheDTO() {
     beaconDTO.addAttribute("hexId", "1");
     beaconDTO.addAttribute("manufacturer", "Trousers");
@@ -43,6 +36,7 @@ class BeaconMapperUnitTest {
     beaconDTO.addAttribute("chkCode", "2");
     beaconDTO.addAttribute("manufacturerSerialNumber", "3");
     beaconDTO.addAttribute("status", "NEW");
+    beaconDTO.addAttribute("createdDate", "2020-02-01T00:00");
     beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
     beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
 
@@ -58,6 +52,10 @@ class BeaconMapperUnitTest {
     assertThat(
       beacon.getBatteryExpiryDate(),
       is(LocalDateTime.of(2022, 2, 1, 0, 0, 0))
+    );
+    assertThat(
+      beacon.getCreatedDate(),
+      is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
     );
     assertThat(
       beacon.getLastServicedDate(),
@@ -93,7 +91,7 @@ class BeaconMapperUnitTest {
   @Test
   void shouldThrowAnExceptionIfItCannotParseAValidDate() {
     var invalidDate = "2020-of-march";
-    beaconDTO.addAttribute("batteryExpiryDate", invalidDate);
+    beaconDTO.addAttribute("createdDate", invalidDate);
 
     assertThrows(
       DateTimeException.class,

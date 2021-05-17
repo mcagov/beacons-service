@@ -45,6 +45,7 @@ public class BeaconMapper extends BaseMapper {
     beacon.setBeaconStatus(
       parseEnumValueOrNull(attributes.get("status"), BeaconStatus.class)
     );
+    beacon.setCreatedDate(getDateOrNull("createdDate", attributes));
     beacon.setBatteryExpiryDate(getDateOrNull("batteryExpiryDate", attributes));
     beacon.setLastServicedDate(getDateOrNull("lastServicedDate", attributes));
 
