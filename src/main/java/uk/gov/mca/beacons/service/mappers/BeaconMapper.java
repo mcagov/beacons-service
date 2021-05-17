@@ -2,13 +2,22 @@ package uk.gov.mca.beacons.service.mappers;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
+import uk.gov.mca.beacons.service.dto.LinkDTOBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
 public class BeaconMapper {
+
+  final LinkDTOBuilder linkBuilder;
+
+  @Autowired
+  public BeaconMapper(LinkDTOBuilder linkBuilder) {
+    this.linkBuilder = linkBuilder;
+  }
 
   public BeaconDTO toDTO(Beacon domain) {
     final var dto = new BeaconDTO();
@@ -25,6 +34,10 @@ public class BeaconMapper {
     dto.addAttribute("chkCode", domain.getChkCode());
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
+
+    final String linkPath = linkBuilder.buildFor(domain);
+    dto.addLink("GET", linkPath);
+    dto.addLink("PATCH", linkPath);
 
     return dto;
   }
