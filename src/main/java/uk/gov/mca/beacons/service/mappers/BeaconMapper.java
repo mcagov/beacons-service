@@ -66,10 +66,15 @@ public class BeaconMapper {
           String key,
           Map<String, Object> attributes
   ) {
-    final var attributeValue = attributes.get(key);
+    final var attributeValue = (String) attributes.get(key);
     if (attributeValue == null) return null;
 
-    return LocalDate.parse((String) attributeValue);
+    return LocalDate.parse(removeTime(attributeValue));
+  }
+
+  private static String removeTime(String dateTimeString) {
+    final var isoDateStringLength = 10; // YYYY-MMM-DD
+    return dateTimeString.substring(0, isoDateStringLength);
   }
 
   private BeaconStatus getStatusOrNull(

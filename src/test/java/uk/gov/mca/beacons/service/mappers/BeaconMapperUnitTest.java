@@ -97,4 +97,21 @@ class BeaconMapperUnitTest {
       () -> beaconMapper.fromDTO(beaconDTO)
     );
   }
+
+  @Test
+  void shouldAccuratelyStripTimeInformationFromDateFields() {
+    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
+    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
+
+    var beacon = beaconMapper.fromDTO(beaconDTO);
+
+    assertThat(
+            beacon.getBatteryExpiryDate(),
+            is(LocalDate.of(2022, 2, 1))
+    );
+    assertThat(
+            beacon.getLastServicedDate(),
+            is(LocalDate.of(2019, 2, 1))
+    );
+  }
 }
