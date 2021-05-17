@@ -1,4 +1,4 @@
--- Change TIMESTAMP types on battery_expiry and last_serviced to LOCALDATE
+-- Change timestamp types on battery_expiry and last_serviced to date
 -- The underlying data is a date type; this migration removes time information, resulting in greater accuracy and
 -- avoids off-by-one errors where the time is incorrectly interpreted
 
