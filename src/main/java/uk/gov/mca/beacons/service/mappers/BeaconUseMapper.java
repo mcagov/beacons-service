@@ -3,10 +3,13 @@ package uk.gov.mca.beacons.service.mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
+import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.model.Environment;
+import uk.gov.mca.beacons.service.model.Purpose;
 
 @Service
-public class BeaconUseMapper {
+public class BeaconUseMapper extends BaseMapper {
 
   public BeaconUseDTO toDTO(BeaconUse domain) {
     final var dto = new BeaconUseDTO();
@@ -79,7 +82,21 @@ public class BeaconUseMapper {
     return dto;
   }
 
-  public BeaconUse fromDTO(WrapperDTO<BeaconUseDTO> beaconUseDto) {
-    return new BeaconUse();
+  public BeaconUse fromDTO(BeaconUseDTO beaconUseDto) {
+    final var attributes = beaconUseDto.getAttributes();
+
+    final var beaconUse = new BeaconUse();
+
+    beaconUse.setEnvironment(
+      parseEnumValueOrNull(attributes.get("environment"), Environment.class)
+    );
+    beaconUse.setPurpose(
+      parseEnumValueOrNull(attributes.get("purpose"), Purpose.class)
+    );
+    beaconUse.setActivity(
+      parseEnumValueOrNull(attributes.get("activity"), Activity.class)
+    );
+
+    return beaconUse;
   }
 }

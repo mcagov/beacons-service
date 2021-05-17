@@ -8,7 +8,7 @@ import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
-public class BeaconMapper {
+public class BeaconMapper extends BaseMapper {
 
   public BeaconDTO toDTO(Beacon domain) {
     final var dto = new BeaconDTO();
@@ -42,9 +42,9 @@ public class BeaconMapper {
       (String) attributes.get("manufacturerSerialNumber")
     );
 
-    beacon.setBeaconStatus(getStatusOrNull("status", attributes));
-
-    beacon.setCreatedDate(getDateOrNull("createdDate", attributes));
+    beacon.setBeaconStatus(
+      parseEnumValueOrNull(attributes.get("status"), BeaconStatus.class)
+    );
     beacon.setBatteryExpiryDate(getDateOrNull("batteryExpiryDate", attributes));
     beacon.setLastServicedDate(getDateOrNull("lastServicedDate", attributes));
 
@@ -59,18 +59,6 @@ public class BeaconMapper {
     if (attributeValue == null) return null;
 
     final var result = LocalDateTime.parse((String) attributeValue);
-    return result;
-  }
-
-  private BeaconStatus getStatusOrNull(
-    String key,
-    Map<String, Object> attributes
-  ) {
-    final var attributeValue = attributes.get(key);
-    if (attributeValue == null) return null;
-
-    final var result = BeaconStatus.valueOf((String) attributeValue);
-
     return result;
   }
 }

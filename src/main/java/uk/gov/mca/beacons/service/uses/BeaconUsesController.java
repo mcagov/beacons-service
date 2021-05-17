@@ -36,13 +36,13 @@ public class BeaconUsesController {
     @PathVariable("uuid") UUID uuid,
     @RequestBody WrapperDTO<BeaconUseDTO> beaconUseDto
   ) {
-    if (!idEqualsDtoId(uuid, beaconUseDto)) throw new InvalidPatchException();
+    if (!idIsEqualDtoId(uuid, beaconUseDto)) throw new InvalidPatchException();
 
-    final var beaconToUpdate = beaconUseMapper.fromDTO(beaconUseDto);
+    final var beaconToUpdate = beaconUseMapper.fromDTO(beaconUseDto.getData());
     beaconUsesService.update(uuid, beaconToUpdate);
   }
 
-  private boolean idEqualsDtoId(
+  private boolean idIsEqualDtoId(
     UUID id,
     WrapperDTO<BeaconUseDTO> beaconUseDto
   ) {

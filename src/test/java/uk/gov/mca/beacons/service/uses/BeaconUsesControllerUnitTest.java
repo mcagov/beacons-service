@@ -1,11 +1,10 @@
 package uk.gov.mca.beacons.service.uses;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +37,7 @@ class BeaconUsesControllerUnitTest {
     dto.setData(beaconUseDto);
     final var beaconUse = new BeaconUse();
 
-    given(beaconUseMapper.fromDTO(dto)).willReturn(beaconUse);
+    given(beaconUseMapper.fromDTO(dto.getData())).willReturn(beaconUse);
 
     beaconUsesController.update(id, dto);
 
