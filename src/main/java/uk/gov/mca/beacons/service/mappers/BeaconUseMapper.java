@@ -124,6 +124,24 @@ public class BeaconUseMapper extends BaseMapper {
       (String) attributes.get("otherCommunicationValue")
     );
     beaconUse.setMaxCapacity((Integer) attributes.get("maxCapacity"));
+    beaconUse.setVesselName((String) attributes.get("vesselName"));
+    beaconUse.setPortLetterNumber((String) attributes.get("portLetterNumber"));
+    beaconUse.setHomeport((String) attributes.get("homeport"));
+    beaconUse.setAreaOfOperation((String) attributes.get("areaOfOperation"));
+    beaconUse.setBeaconLocation((String) attributes.get("beaconLocation"));
+    beaconUse.setImoNumber((String) attributes.get("imoNumber"));
+    beaconUse.setSsrNumber((String) attributes.get("ssrNumber"));
+    beaconUse.setRssNumber((String) attributes.get("rssNumber"));
+    beaconUse.setOfficialNumber((String) attributes.get("officialNumber"));
+    beaconUse.setRigPlatformLocation(
+      (String) attributes.get("rigPlatformLocation")
+    );
+    beaconUse.setMainUse(
+      Boolean.parseBoolean((String) attributes.get("mainUse"))
+    );
+    beaconUse.setAircraftManufacturer(
+      (String) attributes.get("aircraftManufacturer")
+    );
 
     return beaconUse;
   }
