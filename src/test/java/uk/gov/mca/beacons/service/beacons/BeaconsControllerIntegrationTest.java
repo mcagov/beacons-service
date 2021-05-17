@@ -124,6 +124,7 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.data.attributes.chkCode").exists();
     request.jsonPath("$.data.attributes.batteryExpiryDate").exists();
     request.jsonPath("$.data.attributes.lastServicedDate").exists();
+    request.jsonPath("$.data.links").exists();
     request
       .jsonPath("$.data.relationships.uses.data[0].id")
       .isEqualTo(useUuid.toString());
@@ -139,6 +140,7 @@ class BeaconsControllerIntegrationTest {
     request.jsonPath("$.included").exists();
     request.jsonPath("$.included[0].type").exists();
     request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
+    request.jsonPath("$.included[0].links").exists();
     request.jsonPath("$.included[1].id").isEqualTo(ownerUuid.toString());
     request
       .jsonPath("$.included[2].id")
