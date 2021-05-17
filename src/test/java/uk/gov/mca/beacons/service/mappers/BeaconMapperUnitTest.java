@@ -6,6 +6,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,8 +46,8 @@ class BeaconMapperUnitTest {
     beaconDTO.addAttribute("manufacturerSerialNumber", "3");
     beaconDTO.addAttribute("status", "NEW");
     beaconDTO.addAttribute("createdDate", "2020-02-01T00:00");
-    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
-    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
+    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01");
+    beaconDTO.addAttribute("lastServicedDate", "2019-02-01");
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
@@ -61,14 +62,8 @@ class BeaconMapperUnitTest {
       beacon.getCreatedDate(),
       is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
     );
-    assertThat(
-      beacon.getBatteryExpiryDate(),
-      is(LocalDateTime.of(2022, 2, 1, 0, 0, 0))
-    );
-    assertThat(
-      beacon.getLastServicedDate(),
-      is(LocalDateTime.of(2019, 2, 1, 0, 0, 0))
-    );
+    assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
+    assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));
   }
 
   @Test
@@ -90,9 +85,7 @@ class BeaconMapperUnitTest {
     beaconDTO.addAttribute("status", "RETIRED");
     assertThrows(
       IllegalArgumentException.class,
-      () -> {
-        beaconMapper.fromDTO(beaconDTO);
-      }
+      () -> beaconMapper.fromDTO(beaconDTO)
     );
   }
 
@@ -103,9 +96,18 @@ class BeaconMapperUnitTest {
 
     assertThrows(
       DateTimeException.class,
-      () -> {
-        beaconMapper.fromDTO(beaconDTO);
-      }
+      () -> beaconMapper.fromDTO(beaconDTO)
     );
+  }
+
+  @Test
+  void shouldAccuratelyStripTimeInformationFromDateFields() {
+    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
+    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
+
+    var beacon = beaconMapper.fromDTO(beaconDTO);
+
+    assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
+    assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));
   }
 }
