@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -40,9 +41,9 @@ public class Beacon {
 
   private String chkCode;
 
-  private LocalDateTime batteryExpiryDate;
+  private LocalDate batteryExpiryDate;
 
-  private LocalDateTime lastServicedDate;
+  private LocalDate lastServicedDate;
 
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
@@ -120,19 +121,19 @@ public class Beacon {
     this.chkCode = chkCode;
   }
 
-  public LocalDateTime getBatteryExpiryDate() {
+  public LocalDate getBatteryExpiryDate() {
     return batteryExpiryDate;
   }
 
-  public void setBatteryExpiryDate(LocalDateTime batteryExpiryDate) {
+  public void setBatteryExpiryDate(LocalDate batteryExpiryDate) {
     this.batteryExpiryDate = batteryExpiryDate;
   }
 
-  public LocalDateTime getLastServicedDate() {
+  public LocalDate getLastServicedDate() {
     return lastServicedDate;
   }
 
-  public void setLastServicedDate(LocalDateTime lastServicedDate) {
+  public void setLastServicedDate(LocalDate lastServicedDate) {
     this.lastServicedDate = lastServicedDate;
   }
 

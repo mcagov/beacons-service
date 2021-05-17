@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.beacons;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -44,8 +45,8 @@ class BeaconsControllerIntegrationTest {
     beacon.setManufacturerSerialNumber("1407312904");
     beacon.setChkCode("9480B");
     beacon.setHexId("HEXID123");
-    beacon.setBatteryExpiryDate(LocalDateTime.of(2020, 2, 1, 0, 0));
-    beacon.setLastServicedDate(LocalDateTime.of(2020, 2, 1, 0, 0));
+    beacon.setBatteryExpiryDate(LocalDate.of(2020, 2, 1));
+    beacon.setLastServicedDate(LocalDate.of(2020, 2, 1));
     final var owner = new BeaconPerson();
     owner.setAddressLine1("2 The Hard");
     owner.setAddressLine2("");
