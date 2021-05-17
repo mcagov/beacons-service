@@ -8,8 +8,8 @@
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
         "referenceNumber": "ABCDE4",
-        "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
-        "lastServicedDate": "2020-02-01T00:00:00.000Z",
+        "batteryExpiryDate": "2020-02-01",
+        "lastServicedDate": "2020-02-01",
         "uses": [
           {
             "environment": "MARITIME",
@@ -138,8 +138,8 @@
         "model": "S20 Lifejacket AIS Beacon",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
-        "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
-        "lastServicedDate": "2020-02-01T00:00:00.000Z",
+        "batteryExpiryDate": "2020-02-01",
+        "lastServicedDate": "2020-02-01",
         "uses": [
           {
             "environment": "MARITIME",
@@ -189,8 +189,8 @@
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
-        "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
-        "lastServicedDate": "2020-02-01T00:00:00.000Z",
+        "batteryExpiryDate": "2020-02-01",
+        "lastServicedDate": "2020-02-01",
         "uses": [
           {
             "environment": "MARITIME",
@@ -235,8 +235,8 @@
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
         "chkCode": "9480B",
-        "batteryExpiryDate": "2020-02-01T00:00:00.000Z",
-        "lastServicedDate": "2020-02-01T00:00:00.000Z",
+        "batteryExpiryDate": "2020-02-01",
+        "lastServicedDate": "2020-02-01",
         "uses": [],
         "owner": {
           "fullName": "Vice-Admiral Horatio Nelson, 1st Viscount Nelson",
