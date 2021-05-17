@@ -73,7 +73,7 @@ public class BeaconMapper {
   }
 
   private static String removeTime(String dateTimeString) {
-    final var isoDateStringLength = 10; // YYYY-MMM-DD
+    final var isoDateStringLength = 10; // YYYY-MM-DD
     return dateTimeString.substring(0, isoDateStringLength);
   }
 
