@@ -8,6 +8,7 @@ public abstract class DomainDTO {
 
   private UUID id;
   private final Map<String, Object> attributes = new HashMap<String, Object>();
+  private final Map<String, Object> links = new HashMap<String, Object>();
   private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
 
   public abstract String getType();

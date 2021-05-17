@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.mappers;
 
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
+import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 
 @Service
@@ -76,5 +77,9 @@ public class BeaconUseMapper {
       domain.getOtherActivityPeopleCount()
     );
     return dto;
+  }
+
+  public BeaconUse fromDTO(WrapperDTO<BeaconUseDTO> beaconUseDto) {
+    return new BeaconUse();
   }
 }
