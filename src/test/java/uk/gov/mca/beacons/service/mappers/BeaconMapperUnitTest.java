@@ -54,14 +54,8 @@ class BeaconMapperUnitTest {
       beacon.getCreatedDate(),
       is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
     );
-    assertThat(
-      beacon.getBatteryExpiryDate(),
-      is(LocalDate.of(2022, 2, 1))
-    );
-    assertThat(
-      beacon.getLastServicedDate(),
-      is(LocalDate.of(2019, 2, 1))
-    );
+    assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
+    assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));
   }
 
   @Test
@@ -105,13 +99,7 @@ class BeaconMapperUnitTest {
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
-    assertThat(
-            beacon.getBatteryExpiryDate(),
-            is(LocalDate.of(2022, 2, 1))
-    );
-    assertThat(
-            beacon.getLastServicedDate(),
-            is(LocalDate.of(2019, 2, 1))
-    );
+    assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
+    assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));
   }
 }

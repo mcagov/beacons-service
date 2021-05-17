@@ -63,8 +63,8 @@ public class BeaconMapper {
   }
 
   private static LocalDate getDateOrNull(
-          String key,
-          Map<String, Object> attributes
+    String key,
+    Map<String, Object> attributes
   ) {
     final var attributeValue = (String) attributes.get(key);
     if (attributeValue == null) return null;
