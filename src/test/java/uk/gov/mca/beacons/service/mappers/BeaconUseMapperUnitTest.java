@@ -24,10 +24,22 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void shouldNotSetTheCreatedDate() {
-    beaconUseDto.addAttribute("createdDate", "2020-02-01T00:00");
+  void itShouldSetNullValuesAsNull() {
+    beaconUseDto.addAttribute("callSign", null);
+    beaconUseDto.addAttribute("vhfRadio", null);
+    beaconUseDto.addAttribute("maxCapacity", null);
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertThat(beaconUse.getCreatedDate(), is(nullValue()));
+    assertThat(beaconUse.getCallSign(), is(nullValue()));
+    assertThat(beaconUse.getVhfRadio(), is(nullValue()));
+    assertThat(beaconUse.getMaxCapacity(), is(nullValue()));
+  }
+
+  @Test
+  void itShouldSetUnSetValuesAsNull() {
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertThat(beaconUse.getCallSign(), is(nullValue()));
+    assertThat(beaconUse.getVhfRadio(), is(nullValue()));
+    assertThat(beaconUse.getMaxCapacity(), is(nullValue()));
   }
 
   @Test

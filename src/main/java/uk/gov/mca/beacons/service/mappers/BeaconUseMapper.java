@@ -97,6 +97,34 @@ public class BeaconUseMapper extends BaseMapper {
       parseEnumValueOrNull(attributes.get("activity"), Activity.class)
     );
 
+    beaconUse.setOtherActivity((String) attributes.get("otherActivity"));
+    beaconUse.setCallSign((String) attributes.get("callSign"));
+    beaconUse.setVhfRadio((Boolean) attributes.get("vhfRadio"));
+    beaconUse.setFixedVhfRadio((Boolean) attributes.get("fixedVhfRadio"));
+    beaconUse.setFixedVhfRadioValue(
+      (String) attributes.get("fixedVhfRadioValue")
+    );
+    beaconUse.setPortableVhfRadio((Boolean) attributes.get("portableVhfRadio"));
+    beaconUse.setPortableVhfRadioValue(
+      (String) attributes.get("portableVhfRadioValue")
+    );
+    beaconUse.setSatelliteTelephone(
+      (Boolean) attributes.get("satelliteTelephone")
+    );
+    beaconUse.setSatelliteTelephoneValue(
+      (String) attributes.get("satelliteTelephoneValue")
+    );
+    beaconUse.setMobileTelephone((Boolean) attributes.get("mobileTelephone"));
+    beaconUse.setMobileTelephone1((String) attributes.get("mobileTelephone1"));
+    beaconUse.setMobileTelephone2((String) attributes.get("mobileTelephone2"));
+    beaconUse.setOtherCommunication(
+      (Boolean) attributes.get("otherCommunication")
+    );
+    beaconUse.setOtherCommunicationValue(
+      (String) attributes.get("otherCommunicationValue")
+    );
+    beaconUse.setMaxCapacity((Integer) attributes.get("maxCapacity"));
+
     return beaconUse;
   }
 }
