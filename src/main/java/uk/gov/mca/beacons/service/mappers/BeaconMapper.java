@@ -3,13 +3,23 @@ package uk.gov.mca.beacons.service.mappers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
 public class BeaconMapper extends BaseMapper {
+
+  final HateoasLinkBuilder linkBuilder;
+
+  @Autowired
+  public BeaconMapper(HateoasLinkBuilder linkBuilder) {
+    this.linkBuilder = linkBuilder;
+  }
 
   public BeaconDTO toDTO(Beacon domain) {
     final var dto = new BeaconDTO();
@@ -26,6 +36,9 @@ public class BeaconMapper extends BaseMapper {
     dto.addAttribute("chkCode", domain.getChkCode());
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
+
+    linkBuilder.addLinkFor(domain, SupportedMethod.GET, dto);
+    linkBuilder.addLinkFor(domain, SupportedMethod.PATCH, dto);
 
     return dto;
   }

@@ -11,19 +11,27 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
-class BeaconMapperUnitTest {
+@ExtendWith(MockitoExtension.class)
+class BeaconMapperUnitFromDTOTest {
 
   private BeaconMapper beaconMapper;
 
   private BeaconDTO beaconDTO;
   private UUID beaconId;
 
+  @Mock
+  private HateoasLinkBuilder linkBuilder;
+
   @BeforeEach
   void init() {
-    beaconMapper = new BeaconMapper();
+    beaconMapper = new BeaconMapper(linkBuilder);
     beaconDTO = new BeaconDTO();
     beaconId = UUID.randomUUID();
     beaconDTO.setId(beaconId);
@@ -38,8 +46,8 @@ class BeaconMapperUnitTest {
     beaconDTO.addAttribute("manufacturerSerialNumber", "3");
     beaconDTO.addAttribute("status", "NEW");
     beaconDTO.addAttribute("createdDate", "2020-02-01T00:00");
-    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01");
-    beaconDTO.addAttribute("lastServicedDate", "2019-02-01");
+    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
+    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
@@ -77,7 +85,9 @@ class BeaconMapperUnitTest {
     beaconDTO.addAttribute("status", "RETIRED");
     assertThrows(
       IllegalArgumentException.class,
-      () -> beaconMapper.fromDTO(beaconDTO)
+      () -> {
+        beaconMapper.fromDTO(beaconDTO);
+      }
     );
   }
 
@@ -88,7 +98,9 @@ class BeaconMapperUnitTest {
 
     assertThrows(
       DateTimeException.class,
-      () -> beaconMapper.fromDTO(beaconDTO)
+      () -> {
+        beaconMapper.fromDTO(beaconDTO);
+      }
     );
   }
 
