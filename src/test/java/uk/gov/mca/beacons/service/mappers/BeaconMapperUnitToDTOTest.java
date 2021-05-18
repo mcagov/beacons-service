@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
-import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder.SupportedMethod;
+import uk.gov.mca.beacons.service.linkBuilders.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.linkBuilders.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
