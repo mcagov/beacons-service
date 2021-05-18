@@ -10,31 +10,26 @@ abstract class BaseMapper {
     Class<T> enumType
   ) {
     if (value == null) return null;
-
     return Enum.valueOf(enumType, value.toString());
   }
 
   protected Boolean parseBooleanOrNull(Object value) {
     if (value == null) return null;
-
     return Boolean.parseBoolean(value.toString());
   }
 
   protected Integer parseIntegerOrNull(Object value) {
     if (value == null) return null;
-
     return Integer.parseInt(value.toString());
   }
 
   protected LocalDateTime getDateTimeOrNull(Object value) {
     if (value == null) return null;
-
     return LocalDateTime.parse((String) value);
   }
 
   protected LocalDate getDateOrNull(Object value) {
     if (value == null) return null;
-
     return LocalDate.parse(removeTime((String) value));
   }
 

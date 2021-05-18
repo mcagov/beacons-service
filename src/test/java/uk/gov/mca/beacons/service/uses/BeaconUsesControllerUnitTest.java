@@ -33,6 +33,7 @@ class BeaconUsesControllerUnitTest {
     final var id = UUID.randomUUID();
     final var beaconUseDto = new BeaconUseDTO();
     beaconUseDto.setId(id);
+
     final var dto = new WrapperDTO<BeaconUseDTO>();
     dto.setData(beaconUseDto);
     final var beaconUse = new BeaconUse();
@@ -49,6 +50,7 @@ class BeaconUsesControllerUnitTest {
     var id = UUID.randomUUID();
     var beaconUseDto = new BeaconUseDTO();
     beaconUseDto.setId(UUID.randomUUID());
+
     var dto = new WrapperDTO<BeaconUseDTO>();
     dto.setData(beaconUseDto);
 

@@ -103,7 +103,7 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void shouldSetNullValuesAsNull() {
+  void shouldSetNullValuesForDifferentPrimitiveTypesAsNull() {
     beaconUseDto.addAttribute("callSign", null);
     beaconUseDto.addAttribute("vhfRadio", null);
     beaconUseDto.addAttribute("maxCapacity", null);
@@ -114,7 +114,7 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void shouldSetUnSetValuesAsNull() {
+  void shouldSetUndefinedValuesAsNull() {
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getCallSign(), is(nullValue()));
     assertThat(beaconUse.getVhfRadio(), is(nullValue()));
