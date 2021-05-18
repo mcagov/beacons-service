@@ -26,7 +26,7 @@ class BeaconUsesControllerUnitTest {
   private BeaconUseMapper beaconUseMapper;
 
   @Mock
-  private BeaconUsesService beaconUsesService;
+  private BeaconUsesPatchService beaconUsesPatchService;
 
   @Test
   void shouldCallThroughToTheBeaconsBeaconsUsesService() {
@@ -41,7 +41,7 @@ class BeaconUsesControllerUnitTest {
 
     beaconUsesController.update(id, dto);
 
-    then(beaconUsesService).should().update(id, beaconUse);
+    then(beaconUsesPatchService).should().update(id, beaconUse);
   }
 
   @Test

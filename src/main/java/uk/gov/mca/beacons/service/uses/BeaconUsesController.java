@@ -20,15 +20,15 @@ public class BeaconUsesController {
 
   private final BeaconUseMapper beaconUseMapper;
 
-  private final BeaconUsesService beaconUsesService;
+  private final BeaconUsesPatchService beaconUsesPatchService;
 
   @Autowired
   public BeaconUsesController(
     BeaconUseMapper beaconUseMapper,
-    BeaconUsesService beaconUsesService
+    BeaconUsesPatchService beaconUsesPatchService
   ) {
     this.beaconUseMapper = beaconUseMapper;
-    this.beaconUsesService = beaconUsesService;
+    this.beaconUsesPatchService = beaconUsesPatchService;
   }
 
   @PatchMapping(value = "/{uuid}")
@@ -36,13 +36,15 @@ public class BeaconUsesController {
     @PathVariable("uuid") UUID uuid,
     @RequestBody WrapperDTO<BeaconUseDTO> beaconUseDto
   ) {
-    if (!idIsEqualDtoId(uuid, beaconUseDto)) throw new InvalidPatchException();
+    if (
+      !idIsEqualToDtoId(uuid, beaconUseDto)
+    ) throw new InvalidPatchException();
 
     final var beaconToUpdate = beaconUseMapper.fromDTO(beaconUseDto.getData());
-    beaconUsesService.update(uuid, beaconToUpdate);
+    beaconUsesPatchService.update(uuid, beaconToUpdate);
   }
 
-  private boolean idIsEqualDtoId(
+  private boolean idIsEqualToDtoId(
     UUID id,
     WrapperDTO<BeaconUseDTO> beaconUseDto
   ) {
