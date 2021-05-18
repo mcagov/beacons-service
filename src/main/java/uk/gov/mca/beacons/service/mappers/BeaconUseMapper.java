@@ -142,6 +142,31 @@ public class BeaconUseMapper extends BaseMapper {
     beaconUse.setAircraftManufacturer(
       (String) attributes.get("aircraftManufacturer")
     );
+    beaconUse.setPrincipalAirport((String) attributes.get("principalAirport"));
+    beaconUse.setSecondaryAirport((String) attributes.get("secondaryAirport"));
+    beaconUse.setRegistrationMark((String) attributes.get("registrationMark"));
+    beaconUse.setHexAddress((String) attributes.get("hexAddress"));
+    beaconUse.setCnOrMsnNumber((String) attributes.get("cnOrMsnNumber"));
+    beaconUse.setDongle((Boolean) attributes.get("dongle"));
+    beaconUse.setBeaconPosition((String) attributes.get("beaconPosition"));
+    beaconUse.setWorkingRemotelyLocation(
+      (String) attributes.get("workingRemotelyLocation")
+    );
+    beaconUse.setWorkingRemotelyPeopleCount(
+      (String) attributes.get("workingRemotelyPeopleCount")
+    );
+    beaconUse.setWindfarmLocation((String) attributes.get("windfarmLocation"));
+    beaconUse.setWindfarmPeopleCount(
+      (String) attributes.get("windfarmPeopleCount")
+    );
+    beaconUse.setOtherActivityLocation(
+      (String) attributes.get("otherActivityLocation")
+    );
+    beaconUse.setOtherActivityPeopleCount(
+      (String) attributes.get("otherActivityPeopleCount")
+    );
+    beaconUse.setMoreDetails((String) attributes.get("moreDetails"));
+    beaconUse.setCreatedDate(getDateTimeOrNull(attributes.get("createdDate")));
 
     return beaconUse;
   }
