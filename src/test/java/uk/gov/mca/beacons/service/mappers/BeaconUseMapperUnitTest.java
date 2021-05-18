@@ -94,6 +94,15 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
+  void shouldThrowAnExceptionIfAnInvalidNumber() {
+    beaconUseDto.addAttribute("maxCapacity", "NaN");
+    assertThrows(
+      NumberFormatException.class,
+      () -> beaconUseMapper.fromDTO(beaconUseDto)
+    );
+  }
+
+  @Test
   void shouldSetNullValuesAsNull() {
     beaconUseDto.addAttribute("callSign", null);
     beaconUseDto.addAttribute("vhfRadio", null);
