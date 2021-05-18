@@ -14,7 +14,7 @@ import uk.gov.mca.beacons.service.exceptions.InvalidPatchException;
 import uk.gov.mca.beacons.service.mappers.BeaconUseMapper;
 
 @RestController
-@RequestMapping("/uses")
+@RequestMapping("/beacon-uses")
 @Tag(name = "Beacon Uses Controller")
 public class BeaconUsesController {
 
