@@ -15,6 +15,9 @@ public class HateoasLinkBuilder {
     PATCH,
   }
 
+  private final Class<BeaconsController> beaconController =
+    BeaconsController.class;
+
   public void addLinkFor(Beacon domain, SupportedMethod method, BeaconDTO dto) {
     if (method == SupportedMethod.GET) dto.addLink(
       method.toString(),
@@ -26,17 +29,15 @@ public class HateoasLinkBuilder {
   }
 
   private String buildForGet(Beacon domain) {
-    var controller = BeaconsController.class;
-    var methodRoute = WebMvcLinkBuilder
-      .methodOn(controller)
+    final var methodRoute = WebMvcLinkBuilder
+      .methodOn(beaconController)
       .findByUuid(domain.getId());
     return build(linkTo(methodRoute));
   }
 
   private String buildForPatch(Beacon domain) {
-    var controller = BeaconsController.class;
-    var methodRoute = WebMvcLinkBuilder
-      .methodOn(controller)
+    final var methodRoute = WebMvcLinkBuilder
+      .methodOn(beaconController)
       .update(domain.getId(), new WrapperDTO<BeaconDTO>());
     return build(linkTo(methodRoute));
   }
