@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -36,8 +37,8 @@ public class BeaconMapper {
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
 
-    dto.addLink("GET", linkBuilder.buildGetFor(domain));
-    dto.addLink("PATCH", linkBuilder.buildPatchFor(domain));
+    linkBuilder.addLinkFor(domain, SupportedMethod.GET, dto);
+    linkBuilder.addLinkFor(domain, SupportedMethod.PATCH, dto);
 
     return dto;
   }

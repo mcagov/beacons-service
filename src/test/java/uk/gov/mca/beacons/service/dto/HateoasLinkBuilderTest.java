@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
@@ -17,11 +18,12 @@ class HateoasLinkBuilderTest {
     var beacon = new Beacon();
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
+    var dto = new BeaconDTO();
 
     var linkBuilder = new HateoasLinkBuilder();
-    var result = linkBuilder.buildGetFor(beacon);
+    linkBuilder.addLinkFor(beacon, SupportedMethod.GET, dto);
 
-    assertThat(result, is("/beacons/" + beacon.getId()));
+    assertThat(dto.getLinks().get("GET"), is("/beacons/" + beacon.getId()));
   }
 
   @Test
@@ -29,10 +31,11 @@ class HateoasLinkBuilderTest {
     var beacon = new Beacon();
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
+    var dto = new BeaconDTO();
 
     var linkBuilder = new HateoasLinkBuilder();
-    var result = linkBuilder.buildPatchFor(beacon);
+    linkBuilder.addLinkFor(beacon, SupportedMethod.PATCH, dto);
 
-    assertThat(result, is("/beacons/" + beacon.getId()));
+    assertThat(dto.getLinks().get("PATCH"), is("/beacons/" + beacon.getId()));
   }
 }

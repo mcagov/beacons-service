@@ -2,7 +2,8 @@ package uk.gov.mca.beacons.service.mappers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -27,19 +29,12 @@ class BeaconMapperUnitToDTOTest {
   @Mock
   private HateoasLinkBuilder linkBuilder;
 
-  private String expectedGetPath = "/a-get-path/";
-  private String expectedPatchPath = "/a-patch-path/";
-
   @BeforeEach
   void init() {
     beaconMapper = new BeaconMapper(linkBuilder);
     domainBeacon = new Beacon();
     beaconId = UUID.randomUUID();
     domainBeacon.setId(beaconId);
-    given(linkBuilder.buildGetFor(domainBeacon))
-      .willReturn(expectedGetPath + beaconId);
-    given(linkBuilder.buildPatchFor(domainBeacon))
-      .willReturn(expectedPatchPath + beaconId);
   }
 
   @Test
@@ -75,10 +70,11 @@ class BeaconMapperUnitToDTOTest {
       dtoAttributes.get("lastServicedDate"),
       is(LocalDate.of(2019, 2, 1))
     );
-    assertThat(beaconDTO.getLinks().get("GET"), is(expectedGetPath + beaconId));
-    assertThat(
-      beaconDTO.getLinks().get("PATCH"),
-      is(expectedPatchPath + beaconId)
-    );
+    then(linkBuilder)
+      .should(times(1))
+      .addLinkFor(domainBeacon, SupportedMethod.GET, beaconDTO);
+    then(linkBuilder)
+      .should(times(1))
+      .addLinkFor(domainBeacon, SupportedMethod.PATCH, beaconDTO);
   }
 }
