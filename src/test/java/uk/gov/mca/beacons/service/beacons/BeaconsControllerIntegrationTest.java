@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -21,6 +22,7 @@ import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
+@WithMockUser
 class BeaconsControllerIntegrationTest {
 
   @Autowired
@@ -109,6 +111,7 @@ class BeaconsControllerIntegrationTest {
   }
 
   @Test
+  @WithMockUser(authorities = "APPROLE_READ_RECORDS")
   void requestBeaconControllerShouldReturnBeaconByUuid() {
     String uuidAsString = uuid.toString();
     var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
