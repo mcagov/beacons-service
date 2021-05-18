@@ -1,10 +1,12 @@
-package uk.gov.mca.beacons.service.dto;
+package uk.gov.mca.beacons.service.linkBuilders;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.beacons.BeaconsController;
+import uk.gov.mca.beacons.service.dto.BeaconDTO;
+import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @Service
