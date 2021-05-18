@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.service.configuration;
 import com.azure.spring.aad.webapi.AADResourceServerWebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @EnableWebSecurity
@@ -17,7 +18,12 @@ public class SecurityConfiguration
       .cors()
       .and()
       .authorizeRequests()
-      .antMatchers("/beacons/**")
+      .antMatchers("/**")
       .authenticated();
+  }
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/registrations/**", "/actuator/health");
   }
 }
