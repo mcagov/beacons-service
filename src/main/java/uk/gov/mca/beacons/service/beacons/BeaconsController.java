@@ -3,6 +3,8 @@ package uk.gov.mca.beacons.service.beacons;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ public class BeaconsController {
   }
 
   @PatchMapping(value = "/{uuid}")
-  public void update(
+  public ResponseEntity<Void> update(
     @PathVariable("uuid") UUID uuid,
     @RequestBody WrapperDTO<BeaconDTO> dto
   ) {
@@ -57,5 +59,6 @@ public class BeaconsController {
     if (!uuid.equals(dto.getData().getId())) throw new InvalidPatchException();
 
     beaconsService.update(uuid, update);
+    return new ResponseEntity<Void>(HttpStatus.OK);
   }
 }
