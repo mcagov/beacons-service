@@ -6,17 +6,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.dto.LinkDTOBuilder;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
 public class BeaconMapper {
 
-  final LinkDTOBuilder linkBuilder;
+  final HateoasLinkBuilder linkBuilder;
 
   @Autowired
-  public BeaconMapper(LinkDTOBuilder linkBuilder) {
+  public BeaconMapper(HateoasLinkBuilder linkBuilder) {
     this.linkBuilder = linkBuilder;
   }
 
@@ -36,9 +36,8 @@ public class BeaconMapper {
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
 
-    final String linkPath = linkBuilder.buildFor(domain);
-    dto.addLink("GET", linkPath);
-    dto.addLink("PATCH", linkPath);
+    dto.addLink("GET", linkBuilder.buildGetFor(domain));
+    dto.addLink("PATCH", linkBuilder.buildPatchFor(domain));
 
     return dto;
   }

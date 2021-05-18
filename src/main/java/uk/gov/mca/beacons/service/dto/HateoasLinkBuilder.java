@@ -8,13 +8,21 @@ import uk.gov.mca.beacons.service.beacons.BeaconsController;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @Service
-public class LinkDTOBuilder {
+public class HateoasLinkBuilder {
 
-  public String buildFor(Beacon domain) {
+  public String buildGetFor(Beacon domain) {
     var controller = BeaconsController.class;
     var methodRoute = WebMvcLinkBuilder
       .methodOn(controller)
       .findByUuid(domain.getId());
+    return build(linkTo(methodRoute));
+  }
+
+  public String buildPatchFor(Beacon domain) {
+    var controller = BeaconsController.class;
+    var methodRoute = WebMvcLinkBuilder
+      .methodOn(controller)
+      .update(domain.getId(), new WrapperDTO<BeaconDTO>());
     return build(linkTo(methodRoute));
   }
 

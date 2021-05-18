@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.dto.LinkDTOBuilder;
+import uk.gov.mca.beacons.service.dto.HateoasLinkBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -25,9 +25,10 @@ class BeaconMapperUnitToDTOTest {
   private UUID beaconId;
 
   @Mock
-  private LinkDTOBuilder linkBuilder;
+  private HateoasLinkBuilder linkBuilder;
 
-  private String expectedPath = "/a-test-path/";
+  private String expectedGetPath = "/a-get-path/";
+  private String expectedPatchPath = "/a-patch-path/";
 
   @BeforeEach
   void init() {
@@ -35,8 +36,10 @@ class BeaconMapperUnitToDTOTest {
     domainBeacon = new Beacon();
     beaconId = UUID.randomUUID();
     domainBeacon.setId(beaconId);
-    given(linkBuilder.buildFor(domainBeacon))
-      .willReturn(expectedPath + beaconId);
+    given(linkBuilder.buildGetFor(domainBeacon))
+      .willReturn(expectedGetPath + beaconId);
+    given(linkBuilder.buildPatchFor(domainBeacon))
+      .willReturn(expectedPatchPath + beaconId);
   }
 
   @Test
@@ -72,8 +75,10 @@ class BeaconMapperUnitToDTOTest {
       dtoAttributes.get("lastServicedDate"),
       is(LocalDate.of(2019, 2, 1))
     );
-    var expectedLink = expectedPath + beaconId;
-    assertThat(beaconDTO.getLinks().get("GET"), is(expectedLink));
-    assertThat(beaconDTO.getLinks().get("PATCH"), is(expectedLink));
+    assertThat(beaconDTO.getLinks().get("GET"), is(expectedGetPath + beaconId));
+    assertThat(
+      beaconDTO.getLinks().get("PATCH"),
+      is(expectedPatchPath + beaconId)
+    );
   }
 }
