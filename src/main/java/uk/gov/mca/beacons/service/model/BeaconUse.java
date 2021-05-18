@@ -66,7 +66,6 @@ public class BeaconUse {
 
   private Integer maxCapacity;
 
-  // TODO
   private String vesselName;
 
   private String portLetterNumber;
