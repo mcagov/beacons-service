@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.ModelPatcher;
 import uk.gov.mca.beacons.service.mappers.ModelPatcherFactory;
-import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 

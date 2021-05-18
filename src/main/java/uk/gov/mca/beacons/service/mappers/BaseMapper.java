@@ -14,6 +14,18 @@ abstract class BaseMapper {
     return Enum.valueOf(enumType, value.toString());
   }
 
+  protected Boolean parseBooleanOrNull(Object value) {
+    if (value == null) return null;
+
+    return Boolean.parseBoolean(value.toString());
+  }
+
+  protected Integer parseIntegerOrNull(Object value) {
+    if (value == null) return null;
+
+    return Integer.parseInt(value.toString());
+  }
+
   protected LocalDateTime getDateTimeOrNull(Object value) {
     if (value == null) return null;
 

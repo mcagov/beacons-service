@@ -3,7 +3,9 @@ package uk.gov.mca.beacons.service.mappers;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,75 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void itShouldSetNullValuesAsNull() {
+  void shouldSetTheMainUseToFalseIfNotDefined() {
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertFalse(beaconUse.isMainUse());
+  }
+
+  @Test
+  void shouldSetTheMainUseToFalse() {
+    beaconUseDto.addAttribute("mainUse", false);
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertFalse(beaconUse.isMainUse());
+  }
+
+  @Test
+  void shouldSetTheMainUseToFalseForAStringWithValueFalse() {
+    beaconUseDto.addAttribute("mainUse", "false");
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertFalse(beaconUse.isMainUse());
+  }
+
+  @Test
+  void shouldSetTheMainUseToTrue() {
+    beaconUseDto.addAttribute("mainUse", true);
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertTrue(beaconUse.isMainUse());
+  }
+
+  @Test
+  void shouldSetTheMainUseToTrueForAStringWithValueTrue() {
+    beaconUseDto.addAttribute("mainUse", "true");
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertTrue(beaconUse.isMainUse());
+  }
+
+  @Test
+  void shouldSetStringFields() {
+    beaconUseDto.addAttribute("otherActivity", "sailing");
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertThat(beaconUse.getOtherActivity(), is("sailing"));
+  }
+
+  @Test
+  void shouldSetBooleanValues() {
+    beaconUseDto.addAttribute("vhfRadio", true);
+    beaconUseDto.addAttribute("fixedVhfRadio", "true");
+    beaconUseDto.addAttribute("portableVhfRadio", false);
+    beaconUseDto.addAttribute("satelliteTelephone", "false");
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertTrue(beaconUse.getVhfRadio());
+    assertTrue(beaconUse.getFixedVhfRadio());
+    assertFalse(beaconUse.getPortableVhfRadio());
+    assertFalse(beaconUse.getSatelliteTelephone());
+  }
+
+  @Test
+  void shouldSetNumericalValues() {
+    beaconUseDto.addAttribute("maxCapacity", 1);
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertThat(beaconUse.getMaxCapacity(), is(1));
+  }
+
+  @Test
+  void shouldSetNumericalValuesAsStrings() {
+    beaconUseDto.addAttribute("maxCapacity", "1");
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertThat(beaconUse.getMaxCapacity(), is(1));
+  }
+
+  @Test
+  void shouldSetNullValuesAsNull() {
     beaconUseDto.addAttribute("callSign", null);
     beaconUseDto.addAttribute("vhfRadio", null);
     beaconUseDto.addAttribute("maxCapacity", null);
@@ -35,7 +105,7 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void itShouldSetUnSetValuesAsNull() {
+  void shouldSetUnSetValuesAsNull() {
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getCallSign(), is(nullValue()));
     assertThat(beaconUse.getVhfRadio(), is(nullValue()));

@@ -99,31 +99,37 @@ public class BeaconUseMapper extends BaseMapper {
 
     beaconUse.setOtherActivity((String) attributes.get("otherActivity"));
     beaconUse.setCallSign((String) attributes.get("callSign"));
-    beaconUse.setVhfRadio((Boolean) attributes.get("vhfRadio"));
-    beaconUse.setFixedVhfRadio((Boolean) attributes.get("fixedVhfRadio"));
+    beaconUse.setVhfRadio(parseBooleanOrNull(attributes.get("vhfRadio")));
+    beaconUse.setFixedVhfRadio(
+      parseBooleanOrNull(attributes.get("fixedVhfRadio"))
+    );
     beaconUse.setFixedVhfRadioValue(
       (String) attributes.get("fixedVhfRadioValue")
     );
-    beaconUse.setPortableVhfRadio((Boolean) attributes.get("portableVhfRadio"));
+    beaconUse.setPortableVhfRadio(
+      parseBooleanOrNull(attributes.get("portableVhfRadio"))
+    );
     beaconUse.setPortableVhfRadioValue(
       (String) attributes.get("portableVhfRadioValue")
     );
     beaconUse.setSatelliteTelephone(
-      (Boolean) attributes.get("satelliteTelephone")
+      parseBooleanOrNull(attributes.get("satelliteTelephone"))
     );
     beaconUse.setSatelliteTelephoneValue(
       (String) attributes.get("satelliteTelephoneValue")
     );
-    beaconUse.setMobileTelephone((Boolean) attributes.get("mobileTelephone"));
+    beaconUse.setMobileTelephone(
+      parseBooleanOrNull(attributes.get("mobileTelephone"))
+    );
     beaconUse.setMobileTelephone1((String) attributes.get("mobileTelephone1"));
     beaconUse.setMobileTelephone2((String) attributes.get("mobileTelephone2"));
     beaconUse.setOtherCommunication(
-      (Boolean) attributes.get("otherCommunication")
+      parseBooleanOrNull(attributes.get("otherCommunication"))
     );
     beaconUse.setOtherCommunicationValue(
       (String) attributes.get("otherCommunicationValue")
     );
-    beaconUse.setMaxCapacity((Integer) attributes.get("maxCapacity"));
+    beaconUse.setMaxCapacity(parseIntegerOrNull(attributes.get("maxCapacity")));
     beaconUse.setVesselName((String) attributes.get("vesselName"));
     beaconUse.setPortLetterNumber((String) attributes.get("portLetterNumber"));
     beaconUse.setHomeport((String) attributes.get("homeport"));
@@ -136,8 +142,9 @@ public class BeaconUseMapper extends BaseMapper {
     beaconUse.setRigPlatformLocation(
       (String) attributes.get("rigPlatformLocation")
     );
+    var mainUse = attributes.get("mainUse");
     beaconUse.setMainUse(
-      Boolean.parseBoolean((String) attributes.get("mainUse"))
+      mainUse != null && Boolean.parseBoolean(mainUse.toString())
     );
     beaconUse.setAircraftManufacturer(
       (String) attributes.get("aircraftManufacturer")
@@ -147,7 +154,7 @@ public class BeaconUseMapper extends BaseMapper {
     beaconUse.setRegistrationMark((String) attributes.get("registrationMark"));
     beaconUse.setHexAddress((String) attributes.get("hexAddress"));
     beaconUse.setCnOrMsnNumber((String) attributes.get("cnOrMsnNumber"));
-    beaconUse.setDongle((Boolean) attributes.get("dongle"));
+    beaconUse.setDongle(parseBooleanOrNull(attributes.get("dongle")));
     beaconUse.setBeaconPosition((String) attributes.get("beaconPosition"));
     beaconUse.setWorkingRemotelyLocation(
       (String) attributes.get("workingRemotelyLocation")
