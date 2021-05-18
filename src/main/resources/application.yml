@@ -10,11 +10,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          jwk-set-uri: https://login.microsoftonline.com/513fb495-9a90-425b-a49a-bc6ebe2a429e/wsfed
 
 server:
   servlet:
@@ -29,5 +24,5 @@ beacons:
 
 azure:
   activedirectory:
-    client-id: fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4
-    app-id-uri: api://fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4
+    client-id: ${AZURE_AD_API_CLIENT_ID:fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4}
+    app-id-uri: ${AZURE_AD_API_ID_URI:api://fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4}

@@ -1,18 +1,15 @@
-package uk.gov.mca.beacons.service;
+package uk.gov.mca.beacons.service.configuration;
 
 import com.azure.spring.aad.webapi.AADResourceServerWebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class AADOAuth2ResourceServerSecurityConfig
+public class SecurityConfiguration
   extends AADResourceServerWebSecurityConfigurerAdapter {
 
-  /**
-   * Add configuration logic as needed.
-   */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
