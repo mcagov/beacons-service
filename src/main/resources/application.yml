@@ -24,5 +24,5 @@ beacons:
 
 azure:
   activedirectory:
-    client-id: ${AZURE_AD_API_CLIENT_ID:fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4}
-    app-id-uri: ${AZURE_AD_API_ID_URI:api://fedbd6b5-e88a-4cc7-86dc-06cb2f3b35d4}
+    client-id: ${AZURE_AD_API_CLIENT_ID:5cdcbb41-958a-43b6-baa1-bbafd80b4f70}
+    app-id-uri: ${AZURE_AD_API_ID_URI:api://5cdcbb41-958a-43b6-baa1-bbafd80b4f70}
