@@ -130,7 +130,7 @@ class BeaconUsesPatchServiceIntegrationTest {
     assertThat(updatedBeaconUse.getRssNumber(), is("30"));
     assertThat(updatedBeaconUse.getOfficialNumber(), is("40"));
     assertThat(updatedBeaconUse.getRigPlatformLocation(), is("Manchester"));
-    assertTrue(updatedBeaconUse.isMainUse());
+    assertTrue(updatedBeaconUse.getMainUse());
     assertThat(updatedBeaconUse.getAircraftManufacturer(), is("Boeing"));
     assertThat(updatedBeaconUse.getPrincipalAirport(), is("Glasgow"));
     assertThat(updatedBeaconUse.getSecondaryAirport(), is("Cardiff"));
@@ -174,7 +174,7 @@ class BeaconUsesPatchServiceIntegrationTest {
     var updatedBeaconUse = argumentCapture.getValue();
     assertThat(updatedBeaconUse.getEnvironment(), is(Environment.MARITIME));
     assertThat(updatedBeaconUse.getActivity(), is(Activity.SAILING));
-    assertTrue(updatedBeaconUse.isMainUse());
+    assertTrue(updatedBeaconUse.getMainUse());
     assertThat(updatedBeaconUse.getMaxCapacity(), is(10));
     assertFalse(updatedBeaconUse.getVhfRadio());
     assertThat(updatedBeaconUse.getVesselName(), is("Andy"));

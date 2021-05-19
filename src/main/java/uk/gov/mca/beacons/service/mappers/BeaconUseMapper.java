@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.service.mappers;
 
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
-import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.Environment;
@@ -52,7 +51,7 @@ public class BeaconUseMapper extends BaseMapper {
     dto.addAttribute("rssNumber", domain.getRssNumber());
     dto.addAttribute("officialNumber", domain.getOfficialNumber());
     dto.addAttribute("rigPlatformLocation", domain.getRigPlatformLocation());
-    dto.addAttribute("mainUse", domain.isMainUse());
+    dto.addAttribute("mainUse", domain.getMainUse());
     dto.addAttribute("aircraftManufacturer", domain.getAircraftManufacturer());
     dto.addAttribute("principalAirport", domain.getPrincipalAirport());
     dto.addAttribute("secondaryAirport", domain.getSecondaryAirport());

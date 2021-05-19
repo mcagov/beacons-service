@@ -101,7 +101,7 @@ public class BeaconUsesPatchService {
         BeaconUse::getRigPlatformLocation,
         BeaconUse::setRigPlatformLocation
       )
-      .withMapping(BeaconUse::isMainUse, BeaconUse::setMainUse)
+      .withMapping(BeaconUse::getMainUse, BeaconUse::setMainUse)
       .withMapping(
         BeaconUse::getAircraftManufacturer,
         BeaconUse::setAircraftManufacturer

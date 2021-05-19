@@ -29,7 +29,7 @@ class BeaconUseMapperUnitTest {
   void shouldSetTheMainUseToFalseForAStringWithValueFalse() {
     beaconUseDto.addAttribute("mainUse", "false");
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertFalse(beaconUse.isMainUse());
+    assertFalse(beaconUse.getMainUse());
   }
 
   @Test
@@ -47,7 +47,7 @@ class BeaconUseMapperUnitTest {
     beaconUseDto.addAttribute("portableVhfRadio", false);
     beaconUseDto.addAttribute("satelliteTelephone", "false");
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertFalse(beaconUse.isMainUse());
+    assertFalse(beaconUse.getMainUse());
     assertTrue(beaconUse.getVhfRadio());
     assertTrue(beaconUse.getFixedVhfRadio());
     assertFalse(beaconUse.getPortableVhfRadio());
@@ -57,7 +57,7 @@ class BeaconUseMapperUnitTest {
   @Test
   void shouldSetBooleanValuesToNull() {
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertThat(beaconUse.isMainUse(), is(nullValue()));
+    assertThat(beaconUse.getMainUse(), is(nullValue()));
     assertThat(beaconUse.getVhfRadio(), is(nullValue()));
     assertThat(beaconUse.getFixedVhfRadio(), is(nullValue()));
     assertThat(beaconUse.getPortableVhfRadio(), is(nullValue()));

@@ -201,7 +201,8 @@
             "vesselName": "HMS Victory",
             "maxCapacity": 180,
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           }
         ],
         "owner": {
@@ -280,7 +281,8 @@
             "vesselName": "HMS Victory",
             "maxCapacity": 180,
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           }
         ],
         "owner": {

@@ -363,7 +363,7 @@ public class BeaconUse {
     this.rigPlatformLocation = rigPlatformLocation;
   }
 
-  public Boolean isMainUse() {
+  public Boolean getMainUse() {
     return mainUse;
   }
 
