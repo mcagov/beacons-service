@@ -142,10 +142,7 @@ public class BeaconUseMapper extends BaseMapper {
     beaconUse.setRigPlatformLocation(
       (String) attributes.get("rigPlatformLocation")
     );
-    var mainUse = attributes.get("mainUse");
-    beaconUse.setMainUse(
-      mainUse != null && Boolean.parseBoolean(mainUse.toString())
-    );
+    beaconUse.setMainUse(parseBooleanOrNull(attributes.get("mainUse")));
     beaconUse.setAircraftManufacturer(
       (String) attributes.get("aircraftManufacturer")
     );

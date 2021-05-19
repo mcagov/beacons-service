@@ -26,37 +26,10 @@ class BeaconUseMapperUnitTest {
   }
 
   @Test
-  void shouldSetTheMainUseToFalseIfNotDefined() {
-    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertFalse(beaconUse.isMainUse());
-  }
-
-  @Test
-  void shouldSetTheMainUseToFalse() {
-    beaconUseDto.addAttribute("mainUse", false);
-    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertFalse(beaconUse.isMainUse());
-  }
-
-  @Test
   void shouldSetTheMainUseToFalseForAStringWithValueFalse() {
     beaconUseDto.addAttribute("mainUse", "false");
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertFalse(beaconUse.isMainUse());
-  }
-
-  @Test
-  void shouldSetTheMainUseToTrue() {
-    beaconUseDto.addAttribute("mainUse", true);
-    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertTrue(beaconUse.isMainUse());
-  }
-
-  @Test
-  void shouldSetTheMainUseToTrueForAStringWithValueTrue() {
-    beaconUseDto.addAttribute("mainUse", "true");
-    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
-    assertTrue(beaconUse.isMainUse());
   }
 
   @Test
@@ -68,15 +41,27 @@ class BeaconUseMapperUnitTest {
 
   @Test
   void shouldSetBooleanValues() {
+    beaconUseDto.addAttribute("mainUse", false);
     beaconUseDto.addAttribute("vhfRadio", true);
     beaconUseDto.addAttribute("fixedVhfRadio", "true");
     beaconUseDto.addAttribute("portableVhfRadio", false);
     beaconUseDto.addAttribute("satelliteTelephone", "false");
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertFalse(beaconUse.isMainUse());
     assertTrue(beaconUse.getVhfRadio());
     assertTrue(beaconUse.getFixedVhfRadio());
     assertFalse(beaconUse.getPortableVhfRadio());
     assertFalse(beaconUse.getSatelliteTelephone());
+  }
+
+  @Test
+  void shouldSetBooleanValuesToNull() {
+    var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
+    assertThat(beaconUse.isMainUse(), is(nullValue()));
+    assertThat(beaconUse.getVhfRadio(), is(nullValue()));
+    assertThat(beaconUse.getFixedVhfRadio(), is(nullValue()));
+    assertThat(beaconUse.getPortableVhfRadio(), is(nullValue()));
+    assertThat(beaconUse.getSatelliteTelephone(), is(nullValue()));
   }
 
   @Test
