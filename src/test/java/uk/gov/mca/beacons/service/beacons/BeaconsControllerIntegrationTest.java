@@ -22,7 +22,6 @@ import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-@WithMockUser
 class BeaconsControllerIntegrationTest {
 
   @Autowired
@@ -111,7 +110,6 @@ class BeaconsControllerIntegrationTest {
   }
 
   @Test
-  @WithMockUser(authorities = "APPROLE_READ_RECORDS")
   void requestBeaconControllerShouldReturnBeaconByUuid() {
     String uuidAsString = uuid.toString();
     var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
