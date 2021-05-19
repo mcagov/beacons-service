@@ -12,7 +12,7 @@ import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
-public class BeaconMapper {
+public class BeaconMapper extends BaseMapper {
 
   final HateoasLinkBuilder linkBuilder;
 
@@ -55,48 +55,17 @@ public class BeaconMapper {
     beacon.setManufacturerSerialNumber(
       (String) attributes.get("manufacturerSerialNumber")
     );
-
-    beacon.setBeaconStatus(getStatusOrNull("status", attributes));
-
-    beacon.setCreatedDate(getDateTimeOrNull("createdDate", attributes));
-    beacon.setBatteryExpiryDate(getDateOrNull("batteryExpiryDate", attributes));
-    beacon.setLastServicedDate(getDateOrNull("lastServicedDate", attributes));
+    beacon.setBeaconStatus(
+      parseEnumValueOrNull(attributes.get("status"), BeaconStatus.class)
+    );
+    beacon.setCreatedDate(getDateTimeOrNull(attributes.get("createdDate")));
+    beacon.setBatteryExpiryDate(
+      getDateOrNull(attributes.get("batteryExpiryDate"))
+    );
+    beacon.setLastServicedDate(
+      getDateOrNull(attributes.get("lastServicedDate"))
+    );
 
     return beacon;
-  }
-
-  private static LocalDateTime getDateTimeOrNull(
-    String key,
-    Map<String, Object> attributes
-  ) {
-    final var attributeValue = attributes.get(key);
-    if (attributeValue == null) return null;
-
-    return LocalDateTime.parse((String) attributeValue);
-  }
-
-  private static LocalDate getDateOrNull(
-    String key,
-    Map<String, Object> attributes
-  ) {
-    final var attributeValue = (String) attributes.get(key);
-    if (attributeValue == null) return null;
-
-    return LocalDate.parse(removeTime(attributeValue));
-  }
-
-  private static String removeTime(String dateTimeString) {
-    final var isoDateStringLength = 10; // YYYY-MM-DD
-    return dateTimeString.substring(0, isoDateStringLength);
-  }
-
-  private BeaconStatus getStatusOrNull(
-    String key,
-    Map<String, Object> attributes
-  ) {
-    final var attributeValue = attributes.get(key);
-    if (attributeValue == null) return null;
-
-    return BeaconStatus.valueOf((String) attributeValue);
   }
 }

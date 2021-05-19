@@ -101,12 +101,14 @@
             "maxCapacity": 180,
             "rssNumber": "1",
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           },
           {
             "environment": "LAND",
             "activity": "CYCLING",
-            "moreDetails": "Out on the bike"
+            "moreDetails": "Out on the bike",
+            "mainUse": false
           }
         ],
         "owner": {
@@ -149,12 +151,14 @@
             "maxCapacity": 180,
             "rssNumber": "2",
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           },
           {
             "environment": "LAND",
             "activity": "CYCLING",
-            "moreDetails": "Out on the bike"
+            "moreDetails": "Out on the bike",
+            "mainUse": false
           }
         ],
         "owner": {
@@ -199,7 +203,8 @@
             "vesselName": "HMS Victory",
             "maxCapacity": 180,
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           }
         ],
         "owner": {
@@ -278,7 +283,8 @@
             "vesselName": "HMS Victory",
             "maxCapacity": 180,
             "areaOfOperation": "Cape of Trafalgar",
-            "moreDetails": "More details of this vessel"
+            "moreDetails": "More details of this vessel",
+            "mainUse": true
           }
         ],
         "owner": {

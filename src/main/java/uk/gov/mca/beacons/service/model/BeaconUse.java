@@ -86,7 +86,8 @@ public class BeaconUse {
 
   private String rigPlatformLocation;
 
-  private boolean mainUse;
+  @NotNull
+  private Boolean mainUse;
 
   private String aircraftManufacturer;
 
@@ -362,11 +363,11 @@ public class BeaconUse {
     this.rigPlatformLocation = rigPlatformLocation;
   }
 
-  public boolean isMainUse() {
+  public Boolean getMainUse() {
     return mainUse;
   }
 
-  public void setMainUse(boolean mainUse) {
+  public void setMainUse(Boolean mainUse) {
     this.mainUse = mainUse;
   }
 

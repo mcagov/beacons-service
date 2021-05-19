@@ -64,6 +64,7 @@ class BeaconsControllerIntegrationTest {
     beaconUse.setMaxCapacity(180);
     beaconUse.setAreaOfOperation("Cape of Trafalgar");
     beaconUse.setMoreDetails("More details of this vessel");
+    beaconUse.setMainUse(true);
     beacon.setUses(List.of(beaconUse));
     final var firstEmergencyContact = new BeaconPerson();
     firstEmergencyContact.setFullName("Lady Hamilton");
