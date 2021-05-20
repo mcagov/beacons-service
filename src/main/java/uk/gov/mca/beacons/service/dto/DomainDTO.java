@@ -1,14 +1,17 @@
 package uk.gov.mca.beacons.service.dto;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import uk.gov.mca.beacons.service.hateoas.HateoasLink;
 
 public abstract class DomainDTO {
 
   private UUID id;
   private final Map<String, Object> attributes = new HashMap<String, Object>();
-  private final Map<String, String> links = new HashMap<String, String>();
+  private final List<HateoasLink> links = new ArrayList<HateoasLink>();
   private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
 
   public abstract String getType();
@@ -29,12 +32,12 @@ public abstract class DomainDTO {
     attributes.put(key, value);
   }
 
-  public Map<String, String> getLinks() {
+  public List<HateoasLink> getLinks() {
     return links;
   }
 
-  public void addLink(String key, String value) {
-    links.put(key, value);
+  public void addLink(HateoasLink link) {
+    links.add(link);
   }
 
   public Map<String, RelationshipDTO> getRelationships() {

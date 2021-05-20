@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.linkBuilders;
+package uk.gov.mca.beacons.service.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -22,11 +22,9 @@ public class HateoasLinkBuilder {
 
   public void addLinkFor(Beacon domain, SupportedMethod method, BeaconDTO dto) {
     if (method == SupportedMethod.GET) dto.addLink(
-      method.toString(),
-      buildForGet(domain)
+      new HateoasLink(method.toString(), buildForGet(domain))
     ); else if (method == SupportedMethod.PATCH) dto.addLink(
-      method.toString(),
-      buildForPatch(domain)
+      new HateoasLink(method.toString(), buildForPatch(domain))
     );
   }
 

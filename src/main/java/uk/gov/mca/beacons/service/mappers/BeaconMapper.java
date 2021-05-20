@@ -1,13 +1,10 @@
 package uk.gov.mca.beacons.service.mappers;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.linkBuilders.HateoasLinkBuilder;
-import uk.gov.mca.beacons.service.linkBuilders.HateoasLinkBuilder.SupportedMethod;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 

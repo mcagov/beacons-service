@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.linkBuilders.HateoasLinkBuilder.SupportedMethod;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +25,12 @@ class HateoasLinkBuilderTest {
     var linkBuilder = new HateoasLinkBuilder();
     linkBuilder.addLinkFor(beacon, SupportedMethod.GET, dto);
 
-    assertThat(dto.getLinks().get("GET"), is("/beacons/" + beacon.getId()));
+    assertThat(dto.getLinks().size(), is(1));
+    assertThat(dto.getLinks().get(0).getVerb(), is("GET"));
+    assertThat(
+      dto.getLinks().get(0).getPath(),
+      is("/beacons/" + beacon.getId())
+    );
   }
 
   @Test
@@ -37,6 +43,11 @@ class HateoasLinkBuilderTest {
     var linkBuilder = new HateoasLinkBuilder();
     linkBuilder.addLinkFor(beacon, SupportedMethod.PATCH, dto);
 
-    assertThat(dto.getLinks().get("PATCH"), is("/beacons/" + beacon.getId()));
+    assertThat(dto.getLinks().size(), is(1));
+    assertThat(dto.getLinks().get(0).getVerb(), is("PATCH"));
+    assertThat(
+      dto.getLinks().get(0).getPath(),
+      is("/beacons/" + beacon.getId())
+    );
   }
 }
