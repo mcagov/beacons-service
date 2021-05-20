@@ -14,12 +14,7 @@ public class SecurityConfiguration
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http
-      .cors()
-      .and()
-      .authorizeRequests()
-      .antMatchers("/**")
-      .authenticated();
+    http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
   }
 
   @Override
