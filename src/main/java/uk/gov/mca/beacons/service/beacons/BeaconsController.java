@@ -46,7 +46,6 @@ public class BeaconsController {
   }
 
   @GetMapping(value = "/{uuid}")
-  @PreAuthorize("hasAuthority('APPROLE_READ_RECORDS')")
   public WrapperDTO<BeaconDTO> findByUuid(@PathVariable("uuid") UUID uuid) {
     final var beacon = beaconsService.find(uuid);
     return responseFactory.buildDTO(beacon);
