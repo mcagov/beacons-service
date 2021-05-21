@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,19 @@ public class HateoasLinkBuilder {
   private final Class<BeaconsController> beaconController =
     BeaconsController.class;
 
+  private final BeaconRolesService beaconRolesService;
+
+  @Autowired
+  public HateoasLinkBuilder(BeaconRolesService beaconsRolesService) {
+    this.beaconRolesService = beaconsRolesService;
+  }
+
   public void addLinkFor(Beacon domain, SupportedMethod method, BeaconDTO dto) {
-    final var userRoles = SecurityContextHolder
-      .getContext()
-      .getAuthentication()
-      .getAuthorities()
-      .stream();
     if (method == SupportedMethod.GET) dto.addLink(
       new HateoasLink(method.toString(), buildForGet(domain))
     ); else if (
       method == SupportedMethod.PATCH &&
-      userRoles.anyMatch(
-        role -> role.getAuthority().equals("APPROLE_UPDATE_RECORDS")
-      )
+      this.beaconRolesService.getUserRoles().contains("APPROLE_UPDATE_RECORDS")
     ) dto.addLink(new HateoasLink(method.toString(), buildForPatch(domain)));
   }
 
