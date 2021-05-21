@@ -12,14 +12,12 @@ public class BeaconRolesService {
   public List<String> getUserRoles() {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
-      return authentication
-        .getAuthorities()
-        .stream()
-        .map(role -> role.toString())
-        .collect(Collectors.toList());
-    } else {
-      return new ArrayList<>();
-    }
+    if (authentication == null) return new ArrayList<>();
+
+    return authentication
+      .getAuthorities()
+      .stream()
+      .map(role -> role.toString())
+      .collect(Collectors.toList());
   }
 }
