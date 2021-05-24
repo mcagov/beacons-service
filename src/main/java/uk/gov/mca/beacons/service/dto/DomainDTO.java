@@ -36,8 +36,8 @@ public abstract class DomainDTO {
     return links;
   }
 
-  public void addLink(HateoasLink link) {
-    links.add(link);
+  public void addLinks(List<HateoasLink> links) {
+    links.addAll(links);
   }
 
   public Map<String, RelationshipDTO> getRelationships() {
