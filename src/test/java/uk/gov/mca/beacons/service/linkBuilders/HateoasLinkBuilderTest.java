@@ -10,10 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.hateoas.BeaconRolesService;
 import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,17 +25,13 @@ class HateoasLinkBuilderTest {
     var beacon = new Beacon();
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
-    var dto = new BeaconDTO();
 
     var linkBuilder = new HateoasLinkBuilder(beaconRolesService);
-    linkBuilder.addLinkFor(beacon, SupportedMethod.GET, dto);
+    var result = linkBuilder.getLinksFor(beacon);
 
-    assertThat(dto.getLinks().size(), is(1));
-    assertThat(dto.getLinks().get(0).getVerb(), is("GET"));
-    assertThat(
-      dto.getLinks().get(0).getPath(),
-      is("/beacons/" + beacon.getId())
-    );
+    assertThat(result.size(), is(1));
+    assertThat(result.get(0).getVerb(), is("GET"));
+    assertThat(result.get(0).getPath(), is("/beacons/" + beacon.getId()));
   }
 
   @Test
@@ -45,20 +39,18 @@ class HateoasLinkBuilderTest {
     var beacon = new Beacon();
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
-    var dto = new BeaconDTO();
 
     var userRoles = new ArrayList<String>();
     userRoles.add("APPROLE_UPDATE_RECORDS");
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
     var linkBuilder = new HateoasLinkBuilder(beaconRolesService);
-    linkBuilder.addLinkFor(beacon, SupportedMethod.PATCH, dto);
+    var result = linkBuilder.getLinksFor(beacon);
 
-    assertThat(dto.getLinks().size(), is(1));
-    assertThat(dto.getLinks().get(0).getVerb(), is("PATCH"));
-    assertThat(
-      dto.getLinks().get(0).getPath(),
-      is("/beacons/" + beacon.getId())
-    );
+    assertThat(result.size(), is(2));
+    assertThat(result.get(0).getVerb(), is("GET"));
+    assertThat(result.get(0).getPath(), is("/beacons/" + beacon.getId()));
+    assertThat(result.get(1).getVerb(), is("PATCH"));
+    assertThat(result.get(1).getPath(), is("/beacons/" + beacon.getId()));
   }
 }

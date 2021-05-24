@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder.SupportedMethod;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -70,11 +69,6 @@ class BeaconMapperUnitToDTOTest {
       dtoAttributes.get("lastServicedDate"),
       is(LocalDate.of(2019, 2, 1))
     );
-    then(linkBuilder)
-      .should(times(1))
-      .addLinkFor(domainBeacon, SupportedMethod.GET, beaconDTO);
-    then(linkBuilder)
-      .should(times(1))
-      .addLinkFor(domainBeacon, SupportedMethod.PATCH, beaconDTO);
+    then(linkBuilder).should(times(1)).getLinksFor(domainBeacon);
   }
 }
