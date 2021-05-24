@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.linkBuilders;
+package uk.gov.mca.beacons.service.hateoas;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -16,7 +16,7 @@ import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
-class BeaconLinkBuilderTest {
+class HateoasLinkManagerTest {
 
   @Mock
   BeaconRolesService beaconRolesService;
