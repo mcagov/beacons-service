@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.service.hateoas;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
