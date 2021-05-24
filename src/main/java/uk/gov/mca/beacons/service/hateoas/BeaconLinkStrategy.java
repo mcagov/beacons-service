@@ -13,7 +13,8 @@ import uk.gov.mca.beacons.service.model.Beacon;
 @Service
 public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
 
-  private final Class<BeaconsController> beaconController = BeaconsController.class;
+  private final Class<BeaconsController> beaconController =
+    BeaconsController.class;
 
   private final BeaconRolesService beaconRolesService;
 
@@ -27,18 +28,21 @@ public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
   }
 
   public String getGetPath(Beacon domain) {
-    final var methodRoute = WebMvcLinkBuilder.methodOn(beaconController).findByUuid(domain.getId());
+    final var methodRoute = WebMvcLinkBuilder
+      .methodOn(beaconController)
+      .findByUuid(domain.getId());
     return HateoasLinkManager.build(linkTo(methodRoute));
   }
 
   public boolean checkPatchPermission(Beacon domain) {
-    return this.beaconRolesService.getUserRoles().contains("APPROLE_UPDATE_RECORDS");
+    return this.beaconRolesService.getUserRoles()
+      .contains("APPROLE_UPDATE_RECORDS");
   }
 
   public String getPatchPath(Beacon domain) {
-    final var methodRoute = WebMvcLinkBuilder.methodOn(beaconController).update(domain.getId(),
-        new WrapperDTO<BeaconDTO>());
+    final var methodRoute = WebMvcLinkBuilder
+      .methodOn(beaconController)
+      .update(domain.getId(), new WrapperDTO<BeaconDTO>());
     return HateoasLinkManager.build(linkTo(methodRoute));
   }
-
 }

@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.hateoas.BeaconLinkStrategy;
 import uk.gov.mca.beacons.service.hateoas.BeaconRolesService;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,10 @@ class BeaconLinkBuilderTest {
     beacon.setId(beaconId);
 
     var linkBuilder = new HateoasLinkManager<Beacon>();
-    var result = linkBuilder.getLinksFor(beacon, new BeaconLinkStrategy(beaconRolesService));
+    var result = linkBuilder.getLinksFor(
+      beacon,
+      new BeaconLinkStrategy(beaconRolesService)
+    );
 
     assertThat(result.size(), is(1));
     assertThat(result.get(0).getVerb(), is("GET"));
@@ -46,7 +49,10 @@ class BeaconLinkBuilderTest {
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
     var linkBuilder = new HateoasLinkManager<Beacon>();
-    var result = linkBuilder.getLinksFor(beacon, new BeaconLinkStrategy(beaconRolesService));
+    var result = linkBuilder.getLinksFor(
+      beacon,
+      new BeaconLinkStrategy(beaconRolesService)
+    );
 
     assertThat(result.size(), is(2));
     assertThat(result.get(0).getVerb(), is("GET"));
