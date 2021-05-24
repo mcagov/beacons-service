@@ -31,7 +31,7 @@ public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
     final var methodRoute = WebMvcLinkBuilder
       .methodOn(beaconController)
       .findByUuid(domain.getId());
-    return HateoasLinkManager.build(linkTo(methodRoute));
+    return HateoasLinkPathBuilder.build(linkTo(methodRoute));
   }
 
   public boolean checkPatchPermission(Beacon domain) {
@@ -43,6 +43,6 @@ public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
     final var methodRoute = WebMvcLinkBuilder
       .methodOn(beaconController)
       .update(domain.getId(), new WrapperDTO<BeaconDTO>());
-    return HateoasLinkManager.build(linkTo(methodRoute));
+    return HateoasLinkPathBuilder.build(linkTo(methodRoute));
   }
 }

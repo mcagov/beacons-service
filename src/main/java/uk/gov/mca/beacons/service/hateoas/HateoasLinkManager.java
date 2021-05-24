@@ -57,8 +57,4 @@ public class HateoasLinkManager<T> {
     );
     links.add(link);
   }
-
-  public static String build(WebMvcLinkBuilder linkBuilder) {
-    return linkBuilder.toUriComponentsBuilder().build().getPath();
-  }
 }

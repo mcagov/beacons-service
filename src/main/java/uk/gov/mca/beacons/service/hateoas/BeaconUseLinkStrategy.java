@@ -41,6 +41,6 @@ public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {
     final var methodRoute = WebMvcLinkBuilder
       .methodOn(beaconUsesController)
       .update(domain.getId(), new WrapperDTO<BeaconUseDTO>());
-    return HateoasLinkManager.build(linkTo(methodRoute));
+    return HateoasLinkPathBuilder.build(linkTo(methodRoute));
   }
 }
