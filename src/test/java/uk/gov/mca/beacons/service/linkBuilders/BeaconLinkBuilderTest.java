@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
 import uk.gov.mca.beacons.service.hateoas.BeaconRolesService;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
-class HateoasLinkBuilderTest {
+class BeaconLinkBuilderTest {
 
   @Mock
   BeaconRolesService beaconRolesService;
@@ -26,7 +26,7 @@ class HateoasLinkBuilderTest {
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
 
-    var linkBuilder = new HateoasLinkBuilder(beaconRolesService);
+    var linkBuilder = new BeaconLinkBuilder(beaconRolesService);
     var result = linkBuilder.getLinksFor(beacon);
 
     assertThat(result.size(), is(1));
@@ -44,7 +44,7 @@ class HateoasLinkBuilderTest {
     userRoles.add("APPROLE_UPDATE_RECORDS");
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-    var linkBuilder = new HateoasLinkBuilder(beaconRolesService);
+    var linkBuilder = new BeaconLinkBuilder(beaconRolesService);
     var result = linkBuilder.getLinksFor(beacon);
 
     assertThat(result.size(), is(2));

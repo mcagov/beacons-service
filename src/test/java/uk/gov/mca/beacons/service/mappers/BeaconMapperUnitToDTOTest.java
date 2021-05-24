@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -26,7 +26,7 @@ class BeaconMapperUnitToDTOTest {
   private UUID beaconId;
 
   @Mock
-  private HateoasLinkBuilder linkBuilder;
+  private BeaconLinkBuilder linkBuilder;
 
   @BeforeEach
   void init() {

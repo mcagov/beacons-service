@@ -3,18 +3,17 @@ package uk.gov.mca.beacons.service.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkBuilder.SupportedMethod;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
 public class BeaconMapper extends BaseMapper {
 
-  final HateoasLinkBuilder linkBuilder;
+  final BeaconLinkBuilder linkBuilder;
 
   @Autowired
-  public BeaconMapper(HateoasLinkBuilder linkBuilder) {
+  public BeaconMapper(BeaconLinkBuilder linkBuilder) {
     this.linkBuilder = linkBuilder;
   }
 

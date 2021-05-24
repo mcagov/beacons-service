@@ -14,7 +14,7 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @Service
-public class HateoasLinkBuilder {
+public class BeaconLinkBuilder {
 
   public enum SupportedMethod {
     GET,
@@ -27,7 +27,7 @@ public class HateoasLinkBuilder {
   private final BeaconRolesService beaconRolesService;
 
   @Autowired
-  public HateoasLinkBuilder(BeaconRolesService beaconsRolesService) {
+  public BeaconLinkBuilder(BeaconRolesService beaconsRolesService) {
     this.beaconRolesService = beaconsRolesService;
   }
 
