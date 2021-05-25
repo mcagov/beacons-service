@@ -1,7 +1,10 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
+import uk.gov.mca.beacons.service.hateoas.BeaconUseLinkStrategy;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Activity;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.Environment;
@@ -9,6 +12,18 @@ import uk.gov.mca.beacons.service.model.Purpose;
 
 @Service
 public class BeaconUseMapper extends BaseMapper {
+
+  final HateoasLinkManager<BeaconUse> linkManager;
+  final BeaconUseLinkStrategy linkStrategy;
+
+  @Autowired
+  public BeaconUseMapper(
+    HateoasLinkManager<BeaconUse> linkManager,
+    BeaconUseLinkStrategy linkStrategy
+  ) {
+    this.linkManager = linkManager;
+    this.linkStrategy = linkStrategy;
+  }
 
   public BeaconUseDTO toDTO(BeaconUse domain) {
     final var dto = new BeaconUseDTO();
@@ -78,6 +93,8 @@ public class BeaconUseMapper extends BaseMapper {
       "otherActivityPeopleCount",
       domain.getOtherActivityPeopleCount()
     );
+
+    dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
   }
 
