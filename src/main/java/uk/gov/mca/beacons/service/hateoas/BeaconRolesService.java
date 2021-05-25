@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.service.hateoas;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,18 @@ public class BeaconRolesService {
     return authentication
       .getAuthorities()
       .stream()
-      .map(role -> SupportedPermissions.valueOf(role.toString()))
+      .map(role -> SupportedPermissionsFromString(role))
+      .filter(role -> role != null)
       .collect(Collectors.toList());
+  }
+
+  private SupportedPermissions SupportedPermissionsFromString(
+    GrantedAuthority role
+  ) {
+    try {
+      return SupportedPermissions.valueOf(role.toString());
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 }
