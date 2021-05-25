@@ -18,9 +18,7 @@ public class SecurityConfiguration
   }
 
   @Override
-  public void configure(WebSecurity web) throws Exception {
-    web
-      .ignoring()
-      .antMatchers("/registrations/**", "/actuator/health", "/actuator/info");
+  public void configure(WebSecurity web) {
+    web.ignoring().antMatchers("/actuator/health");
   }
 }
