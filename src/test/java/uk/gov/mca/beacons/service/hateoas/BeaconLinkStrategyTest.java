@@ -5,6 +5,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class BeaconLinkStrategyTest {
   BeaconRolesService beaconRolesService;
 
   Beacon beacon;
-  ArrayList<String> userRoles;
+  List<String> userRoles;
   BeaconLinkStrategy linkStrategy;
 
   @BeforeEach

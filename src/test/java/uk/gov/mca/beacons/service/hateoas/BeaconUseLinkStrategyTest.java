@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ class BeaconUseLinkStrategyTest {
   BeaconRolesService beaconRolesService;
 
   BeaconUse beaconUse;
-  ArrayList<String> userRoles;
+  List<String> userRoles;
   BeaconUseLinkStrategy linkStrategy;
 
   @BeforeEach

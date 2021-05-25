@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import uk.gov.mca.beacons.service.hateoas.HateoasLink;
 
-public class DomainDTOTest {
+class DomainDTOTest {
 
   @Test
   void ShouldAddLinksCorrectly() {
