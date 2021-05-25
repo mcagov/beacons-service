@@ -18,13 +18,13 @@ public class HateoasLinkManager<T> {
   ) {
     final ArrayList<HateoasLink> links = new ArrayList<HateoasLink>();
 
-    if (linkStrategy.checkGetPermission(domain)) addGetLink(
+    if (linkStrategy.userCanGetEntity(domain)) addGetLink(
       domain,
       linkStrategy,
       links
     );
 
-    if (linkStrategy.checkPatchPermission(domain)) addPatchLink(
+    if (linkStrategy.userCanPatchEntity(domain)) addPatchLink(
       domain,
       linkStrategy,
       links

@@ -24,7 +24,7 @@ public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {
     this.beaconRolesService = beaconsRolesService;
   }
 
-  public boolean checkGetPermission(BeaconUse domain) {
+  public boolean userCanGetEntity(BeaconUse domain) {
     return false;
   }
 
@@ -32,7 +32,7 @@ public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {
     throw new NotImplementedException();
   }
 
-  public boolean checkPatchPermission(BeaconUse domain) {
+  public boolean userCanPatchEntity(BeaconUse domain) {
     return this.beaconRolesService.getUserRoles()
       .contains("APPROLE_UPDATE_RECORDS");
   }

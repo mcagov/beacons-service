@@ -57,7 +57,7 @@ class BeaconUseLinkStrategyTest {
   void checkPermissionForGetShouldReturnFalse() {
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-    var result = linkStrategy.checkPatchPermission(beaconUse);
+    var result = linkStrategy.userCanPatchEntity(beaconUse);
 
     assertThat(result, is(false));
   }
@@ -67,7 +67,7 @@ class BeaconUseLinkStrategyTest {
     userRoles.add("APPROLE_UPDATE_RECORDS");
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-    var result = linkStrategy.checkPatchPermission(beaconUse);
+    var result = linkStrategy.userCanPatchEntity(beaconUse);
 
     assertThat(result, is(true));
   }
@@ -75,7 +75,7 @@ class BeaconUseLinkStrategyTest {
   @Test
   void checkPermissionForPatchShouldReturnFalseWhenRoleNotPresent() {
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
-    var result = linkStrategy.checkPatchPermission(beaconUse);
+    var result = linkStrategy.userCanPatchEntity(beaconUse);
 
     assertThat(result, is(false));
   }

@@ -23,7 +23,7 @@ public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
     this.beaconRolesService = beaconsRolesService;
   }
 
-  public boolean checkGetPermission(Beacon domain) {
+  public boolean userCanGetEntity(Beacon domain) {
     return true;
   }
 
@@ -34,7 +34,7 @@ public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {
     return HateoasLinkPathBuilder.build(linkTo(methodRoute));
   }
 
-  public boolean checkPatchPermission(Beacon domain) {
+  public boolean userCanPatchEntity(Beacon domain) {
     return this.beaconRolesService.getUserRoles()
       .contains("APPROLE_UPDATE_RECORDS");
   }
