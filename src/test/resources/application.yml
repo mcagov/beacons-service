@@ -9,6 +9,14 @@ spring:
     deserialization:
       fail-on-unknown-properties: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+
 beacons:
   openapi:
     github:

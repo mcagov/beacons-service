@@ -15,6 +15,14 @@ server:
   servlet:
     context-path: /spring-api
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+
 beacons:
   openapi:
     github:
