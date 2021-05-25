@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class BeaconUsesController {
   }
 
   @PatchMapping(value = "/{uuid}")
+  @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
   public ResponseEntity<Void> update(
     @PathVariable("uuid") UUID uuid,
     @RequestBody WrapperDTO<BeaconUseDTO> beaconUseDto
