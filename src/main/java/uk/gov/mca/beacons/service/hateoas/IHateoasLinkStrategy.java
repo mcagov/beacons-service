@@ -1,11 +1,11 @@
 package uk.gov.mca.beacons.service.hateoas;
 
 public interface IHateoasLinkStrategy<T> {
-  public boolean checkGetPermission(T domain);
+  boolean checkGetPermission(T domain);
 
-  public String getGetPath(T domain);
+  String getGetPath(T domain);
 
-  public boolean checkPatchPermission(T domain);
+  boolean checkPatchPermission(T domain);
 
-  public String getPatchPath(T domain);
+  String getPatchPath(T domain);
 }
