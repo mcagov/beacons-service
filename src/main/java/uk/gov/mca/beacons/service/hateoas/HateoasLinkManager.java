@@ -16,7 +16,7 @@ public class HateoasLinkManager<T> {
     T domain,
     IHateoasLinkStrategy<T> linkStrategy
   ) {
-    final ArrayList<HateoasLink> links = new ArrayList<HateoasLink>();
+    final List<HateoasLink> links = new ArrayList<HateoasLink>();
 
     if (linkStrategy.userCanGetEntity(domain)) addGetLink(
       domain,
@@ -36,7 +36,7 @@ public class HateoasLinkManager<T> {
   private void addGetLink(
     T domain,
     IHateoasLinkStrategy<T> linkStrategy,
-    ArrayList<HateoasLink> links
+    List<HateoasLink> links
   ) {
     var link = new HateoasLink(
       SupportedMethod.GET.toString(),
@@ -48,7 +48,7 @@ public class HateoasLinkManager<T> {
   private void addPatchLink(
     T domain,
     IHateoasLinkStrategy<T> linkStrategy,
-    ArrayList<HateoasLink> links
+    List<HateoasLink> links
   ) {
     var link = new HateoasLink(
       SupportedMethod.PATCH.toString(),
