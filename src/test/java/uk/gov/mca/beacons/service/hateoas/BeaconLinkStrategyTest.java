@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.service.hateoas;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static uk.gov.mca.beacons.service.hateoas.BeaconRolesService.SupportedPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ class BeaconLinkStrategyTest {
   BeaconRolesService beaconRolesService;
 
   Beacon beacon;
-  List<String> userRoles;
+  List<SupportedPermissions> userRoles;
   BeaconLinkStrategy linkStrategy;
 
   @BeforeEach
@@ -30,7 +31,7 @@ class BeaconLinkStrategyTest {
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
 
-    userRoles = new ArrayList<String>();
+    userRoles = new ArrayList<SupportedPermissions>();
 
     linkStrategy = new BeaconLinkStrategy(beaconRolesService);
   }
@@ -51,7 +52,7 @@ class BeaconLinkStrategyTest {
 
   @Test
   void checkPermissionForPatchShouldReturnTrueWhenRoleIsPresent() {
-    userRoles.add("APPROLE_UPDATE_RECORDS");
+    userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
     var result = linkStrategy.userCanPatchEntity(beacon);

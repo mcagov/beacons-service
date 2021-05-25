@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BeaconRolesService {
 
-  public List<String> getUserRoles() {
+  public enum SupportedPermissions {
+    APPROLE_UPDATE_RECORDS,
+  }
+
+  public List<SupportedPermissions> getUserRoles() {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication == null) return new ArrayList<>();
@@ -17,7 +21,7 @@ public class BeaconRolesService {
     return authentication
       .getAuthorities()
       .stream()
-      .map(role -> role.toString())
+      .map(role -> SupportedPermissions.valueOf(role.toString()))
       .collect(Collectors.toList());
   }
 }

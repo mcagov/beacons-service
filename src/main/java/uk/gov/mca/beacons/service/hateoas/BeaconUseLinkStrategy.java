@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.service.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static uk.gov.mca.beacons.service.hateoas.BeaconRolesService.SupportedPermissions;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {
 
   public boolean userCanPatchEntity(BeaconUse domain) {
     return this.beaconRolesService.getUserRoles()
-      .contains("APPROLE_UPDATE_RECORDS");
+      .contains(SupportedPermissions.APPROLE_UPDATE_RECORDS);
   }
 
   public String getPatchPath(BeaconUse domain) {

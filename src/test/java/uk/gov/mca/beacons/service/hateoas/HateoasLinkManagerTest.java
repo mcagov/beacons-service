@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.service.hateoas;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static uk.gov.mca.beacons.service.hateoas.BeaconRolesService.SupportedPermissions;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -41,8 +42,9 @@ class HateoasLinkManagerTest {
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
 
-    var userRoles = new ArrayList<String>();
-    userRoles.add("APPROLE_UPDATE_RECORDS");
+    var userRoles = new ArrayList<SupportedPermissions>();
+
+    userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
     given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
     var linkBuilder = new HateoasLinkManager<Beacon>();
