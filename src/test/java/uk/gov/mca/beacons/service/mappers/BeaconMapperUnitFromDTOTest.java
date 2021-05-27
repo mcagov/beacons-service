@@ -15,7 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkStrategy;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
+import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,11 +29,14 @@ class BeaconMapperUnitFromDTOTest {
   private UUID beaconId;
 
   @Mock
-  private BeaconLinkBuilder linkBuilder;
+  private HateoasLinkManager<Beacon> linkManager;
+
+  @Mock
+  private BeaconLinkStrategy linkStrategy;
 
   @BeforeEach
   void init() {
-    beaconMapper = new BeaconMapper(linkBuilder);
+    beaconMapper = new BeaconMapper(linkManager, linkStrategy);
     beaconDTO = new BeaconDTO();
     beaconId = UUID.randomUUID();
     beaconDTO.setId(beaconId);

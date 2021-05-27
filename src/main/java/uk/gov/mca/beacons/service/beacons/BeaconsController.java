@@ -52,6 +52,7 @@ public class BeaconsController {
   }
 
   @PatchMapping(value = "/{uuid}")
+  @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
   public ResponseEntity<Void> update(
     @PathVariable("uuid") UUID uuid,
     @RequestBody WrapperDTO<BeaconDTO> dto

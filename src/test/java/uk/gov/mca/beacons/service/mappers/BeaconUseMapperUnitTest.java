@@ -9,8 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
+import uk.gov.mca.beacons.service.hateoas.BeaconUseLinkStrategy;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Activity;
+import uk.gov.mca.beacons.service.model.BeaconUse;
 import uk.gov.mca.beacons.service.model.Environment;
 import uk.gov.mca.beacons.service.model.Purpose;
 
@@ -19,9 +23,15 @@ class BeaconUseMapperUnitTest {
   private BeaconUseMapper beaconUseMapper;
   private BeaconUseDTO beaconUseDto;
 
+  @Mock
+  private HateoasLinkManager<BeaconUse> linkManager;
+
+  @Mock
+  private BeaconUseLinkStrategy linkStrategy;
+
   @BeforeEach
   void init() {
-    beaconUseMapper = new BeaconUseMapper();
+    beaconUseMapper = new BeaconUseMapper(linkManager, linkStrategy);
     beaconUseDto = new BeaconUseDTO();
   }
 
