@@ -19,6 +19,6 @@ public class SecurityConfiguration
 
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/actuator/health");
+    web.ignoring().antMatchers("/actuator/health", "/actuator/info");
   }
 }
