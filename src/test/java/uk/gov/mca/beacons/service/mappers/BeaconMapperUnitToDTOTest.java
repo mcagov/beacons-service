@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkStrategy;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
@@ -26,11 +27,14 @@ class BeaconMapperUnitToDTOTest {
   private UUID beaconId;
 
   @Mock
-  private BeaconLinkBuilder linkBuilder;
+  private HateoasLinkManager<Beacon> linkManager;
+
+  @Mock
+  private BeaconLinkStrategy linkStrategy;
 
   @BeforeEach
   void init() {
-    beaconMapper = new BeaconMapper(linkBuilder);
+    beaconMapper = new BeaconMapper(linkManager, linkStrategy);
     domainBeacon = new Beacon();
     beaconId = UUID.randomUUID();
     domainBeacon.setId(beaconId);
@@ -69,6 +73,6 @@ class BeaconMapperUnitToDTOTest {
       dtoAttributes.get("lastServicedDate"),
       is(LocalDate.of(2019, 2, 1))
     );
-    then(linkBuilder).should(times(1)).getLinksFor(domainBeacon);
+    then(linkManager).should(times(1)).getLinksFor(domainBeacon, linkStrategy);
   }
 }

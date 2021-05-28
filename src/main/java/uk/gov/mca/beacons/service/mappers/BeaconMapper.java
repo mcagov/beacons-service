@@ -3,18 +3,24 @@ package uk.gov.mca.beacons.service.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
-import uk.gov.mca.beacons.service.hateoas.BeaconLinkBuilder;
+import uk.gov.mca.beacons.service.hateoas.BeaconLinkStrategy;
+import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 
 @Service
 public class BeaconMapper extends BaseMapper {
 
-  final BeaconLinkBuilder linkBuilder;
+  final HateoasLinkManager<Beacon> linkManager;
+  final BeaconLinkStrategy linkStrategy;
 
   @Autowired
-  public BeaconMapper(BeaconLinkBuilder linkBuilder) {
-    this.linkBuilder = linkBuilder;
+  public BeaconMapper(
+    HateoasLinkManager<Beacon> linkManager,
+    BeaconLinkStrategy linkStrategy
+  ) {
+    this.linkManager = linkManager;
+    this.linkStrategy = linkStrategy;
   }
 
   public BeaconDTO toDTO(Beacon domain) {
@@ -33,7 +39,7 @@ public class BeaconMapper extends BaseMapper {
     dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
     dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
 
-    dto.addLinks(linkBuilder.getLinksFor(domain));
+    dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
   }
 
