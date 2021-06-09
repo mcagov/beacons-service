@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.service.accounts;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
@@ -14,7 +14,7 @@ import uk.gov.mca.beacons.service.model.AccountHolder;
 import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountsServiceUnitTest {
+class GetAccountHolderByAuthIdServiceUnitTest {
 
   @Mock
   private AccountHolderRepository mockAccountHolderRepository;
@@ -24,29 +24,29 @@ public class AccountsServiceUnitTest {
 
   @Test
   void getByAuthId_shouldReturnNullResultsIfNotFound() {
-    AccountsService accountsService = new AccountsService(
+    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService = new GetAccountHolderByAuthIdService(
       mockAccountHolderRepository
     );
     String nonExistentAuthId = UUID.randomUUID().toString();
     given(mockAccountHolderRepository.getByAuthId(nonExistentAuthId))
       .willReturn(null);
 
-    assertNull(accountsService.getByAuthId(nonExistentAuthId));
+    assertNull(getAccountHolderByAuthIdService.execute(nonExistentAuthId));
   }
 
   @Test
   void getByAuthId_shouldReturnTheAccountHolderByAuthId() {
-    AccountsService accountsService = new AccountsService(
+    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService = new GetAccountHolderByAuthIdService(
       mockAccountHolderRepository
     );
     String existingAuthId = UUID.randomUUID().toString();
     given(mockAccountHolderRepository.getByAuthId(existingAuthId))
       .willReturn(mockAccountHolder);
 
-    AccountHolder foundAccountHolder = accountsService.getByAuthId(
+    AccountHolder foundAccountHolder = getAccountHolderByAuthIdService.execute(
       existingAuthId
     );
 
-    assertEquals(foundAccountHolder, mockAccountHolder);
+    assertThat(foundAccountHolder, equalTo(mockAccountHolder));
   }
 }

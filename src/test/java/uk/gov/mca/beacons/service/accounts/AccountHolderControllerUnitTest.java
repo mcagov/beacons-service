@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.service.accounts;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -23,23 +22,23 @@ import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
 @WebMvcTest(
-  controllers = AccountsController.class,
+  controllers = AccountHolderController.class,
   excludeAutoConfiguration = { SecurityAutoConfiguration.class }
 )
 @AutoConfigureMockMvc
-public class AccountsControllerUnitTest {
+class AccountHolderControllerUnitTest {
 
   @Autowired
   private MockMvc mvc;
 
   @MockBean
-  private AccountsService accountService;
+  private GetAccountHolderByAuthIdService accountService;
 
-  private UUID accountHolderId = UUID.fromString(
+  private final UUID accountHolderId = UUID.fromString(
     "432e083d-7bd8-402b-9520-05da24ad143f"
   );
-  private String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
-  private AccountHolder accountHolder = new AccountHolder();
+  private final String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
+  private final AccountHolder accountHolder = new AccountHolder();
 
   @BeforeEach
   public final void before() {
@@ -50,20 +49,20 @@ public class AccountsControllerUnitTest {
   @Test
   void requestAccountHolderIdByAuthId_shouldRequestAccountHolderIdFromServiceByAuthId()
     throws Exception {
-    given(accountService.getByAuthId(authId)).willReturn(accountHolder);
+    given(accountService.execute(authId)).willReturn(accountHolder);
 
     mvc.perform(
       get("/account-holder/auth-id/" + authId)
         .contentType(MediaType.APPLICATION_JSON)
     );
 
-    verify(accountService, times(1)).getByAuthId(authId);
+    verify(accountService, times(1)).execute(authId);
   }
 
   @Test
   void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound()
     throws Exception {
-    given(accountService.getByAuthId("04c4dbf3-ca7c-4df9-98b6-fb2ccf422526"))
+    given(accountService.execute(authId))
       .willReturn(accountHolder);
 
     mvc
@@ -77,29 +76,20 @@ public class AccountsControllerUnitTest {
   @Test
   void requestAccountHolderIdByAuthId_shouldReturnTheAccountHolderId()
     throws Exception {
-    given(accountService.getByAuthId(authId)).willReturn(accountHolder);
+    given(accountService.execute(authId)).willReturn(accountHolder);
 
-    String responseBody = mvc
+    mvc
       .perform(
         get("/account-holder/auth-id/" + authId)
           .contentType(MediaType.APPLICATION_JSON)
       )
-      .andReturn()
-      .getResponse()
-      .getContentAsString();
-
-    String expectedBody = String.format(
-      "{\"id\":\"%s\"}",
-      accountHolder.getId()
-    );
-
-    assertThat(responseBody, equalTo(expectedBody));
+      .andExpect(jsonPath("$.id", is(accountHolderId.toString())));
   }
 
   @Test
   void requestAccountHolderIdByAuthId_shouldReturn404IfAccountHolderNotFound()
     throws Exception {
-    given(accountService.getByAuthId(authId)).willReturn(null);
+    given(accountService.execute(authId)).willReturn(null);
 
     mvc
       .perform(
@@ -110,6 +100,6 @@ public class AccountsControllerUnitTest {
   }
 
   @Configuration
-  @ComponentScan(basePackageClasses = { AccountsController.class })
+  @ComponentScan(basePackageClasses = { AccountHolderController.class })
   public static class TestConf {}
 }

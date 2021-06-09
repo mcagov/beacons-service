@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.service.accounts;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,19 +13,20 @@ import uk.gov.mca.beacons.service.model.AccountHolder;
 @RestController
 @RequestMapping("/account-holder")
 @Tag(name = "Account Holder")
-public class AccountsController {
+public class AccountHolderController {
 
-  private final AccountsService accountsService;
+  private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
-  public AccountsController(AccountsService accountsService) {
-    this.accountsService = accountsService;
+  @Autowired
+  public AccountHolderController(GetAccountHolderByAuthIdService getAccountHolderByAuthIdService) {
+    this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
   }
 
   @GetMapping(value = "/auth-id/{authId}")
-  public AccountHolderIdDTO getAccountHolder(
+  public AccountHolderIdDTO getAccountHolderId(
     @PathVariable("authId") String authId
   ) {
-    AccountHolder accountHolder = accountsService.getByAuthId(authId);
+    AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(authId);
 
     if (accountHolder == null) throw new ResourceNotFoundException();
 
