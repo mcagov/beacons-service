@@ -24,26 +24,28 @@ public class AccountsServiceUnitTest {
 
   @Test
   void getByAuthId_shouldReturnNullResultsIfNotFound() {
-    AccountsService accountsService = new AccountsService(mockAccountHolderRepository);
+    AccountsService accountsService = new AccountsService(
+      mockAccountHolderRepository
+    );
     String nonExistentAuthId = UUID.randomUUID().toString();
-    given(mockAccountHolderRepository
-            .getByAuthId(nonExistentAuthId))
-            .willReturn(null);
+    given(mockAccountHolderRepository.getByAuthId(nonExistentAuthId))
+      .willReturn(null);
 
-    assertNull(accountsService.getByAuthId(
-            nonExistentAuthId
-    ));
+    assertNull(accountsService.getByAuthId(nonExistentAuthId));
   }
 
   @Test
   void getByAuthId_shouldReturnTheAccountHolderByAuthId() {
-    AccountsService accountsService = new AccountsService(mockAccountHolderRepository);
+    AccountsService accountsService = new AccountsService(
+      mockAccountHolderRepository
+    );
     String existingAuthId = UUID.randomUUID().toString();
-    given(mockAccountHolderRepository
-            .getByAuthId(existingAuthId))
-            .willReturn(mockAccountHolder);
+    given(mockAccountHolderRepository.getByAuthId(existingAuthId))
+      .willReturn(mockAccountHolder);
 
-    AccountHolder foundAccountHolder = accountsService.getByAuthId(existingAuthId);
+    AccountHolder foundAccountHolder = accountsService.getByAuthId(
+      existingAuthId
+    );
 
     assertEquals(foundAccountHolder, mockAccountHolder);
   }

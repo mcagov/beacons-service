@@ -2,7 +2,10 @@ package uk.gov.mca.beacons.service.model;
 
 import java.util.UUID;
 import javax.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class AccountHolder {
 
   @Id
