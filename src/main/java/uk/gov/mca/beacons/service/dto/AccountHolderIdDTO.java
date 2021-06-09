@@ -1,13 +1,15 @@
 package uk.gov.mca.beacons.service.dto;
 
-public class AccountHolderIdDTO {
-    private final String id;
+import java.util.UUID;
 
-    public AccountHolderIdDTO(String id) {
+public class AccountHolderIdDTO {
+    private final UUID id;
+
+    public AccountHolderIdDTO(UUID id) {
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 }

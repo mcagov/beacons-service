@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Service
 public class AccountsService {
-    public UUID getId(String authId) {
-        return UUID.randomUUID();
+    public AccountHolder getByAuthId(String authId) {
+        return new AccountHolder();
     }
 }

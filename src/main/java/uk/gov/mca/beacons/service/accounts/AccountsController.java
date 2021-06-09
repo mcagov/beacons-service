@@ -1,13 +1,15 @@
 package uk.gov.mca.beacons.service.accounts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.service.dto.AccountHolderIdDTO;
+import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
+import uk.gov.mca.beacons.service.model.AccountHolder;
+
+import java.util.UUID;
 
 
 @RestController
@@ -23,10 +25,10 @@ public class AccountsController {
 
     @GetMapping(value = "/auth-id/{authId}")
     public AccountHolderIdDTO getAccountHolder(@PathVariable("authId") String authId) {
-        String accountHolderId = accountsService.getId(authId).toString();
+        AccountHolder accountHolder = accountsService.getByAuthId(authId);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        if (accountHolder == null) throw new ResourceNotFoundException();
 
-        return new AccountHolderIdDTO(accountHolderId);
+        return new AccountHolderIdDTO(accountHolder.getId());
     }
 }

@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.accounts;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.service.model.AccountHolder;
 
 import java.util.UUID;
 
@@ -31,37 +33,45 @@ public class AccountsControllerUnitTest {
     @MockBean
     private AccountsService accountService;
 
+    private UUID accountHolderId = UUID.fromString("432e083d-7bd8-402b-9520-05da24ad143f");
+    private String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
+    private AccountHolder accountHolder = new AccountHolder();
+
+    @BeforeEach
+    public final void before() {
+        accountHolder.setId(accountHolderId);
+        accountHolder.setAuthId(authId);
+    }
+
     @Test
     void requestAccountHolderIdByAuthId_shouldRequestAccountHolderIdFromServiceByAuthId() throws Exception {
         given(accountService
-                .getId("04c4dbf3-ca7c-4df9-98b6-fb2ccf422526"))
-                .willReturn(UUID.fromString("ab54f98a-6906-4a2d-b897-663990a602fa"));
+                .getByAuthId(authId))
+                .willReturn(accountHolder);
 
-        mvc.perform(get("/account-holder/auth-id/04c4dbf3-ca7c-4df9-98b6-fb2ccf422526")
+        mvc.perform(get("/account-holder/auth-id/" + authId)
                 .contentType(MediaType.APPLICATION_JSON));
 
-        verify(accountService, times(1)).getId("04c4dbf3-ca7c-4df9-98b6-fb2ccf422526");
+        verify(accountService, times(1)).getByAuthId(authId);
     }
 
     @Test
     void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound() throws Exception {
         given(accountService
-                .getId("04c4dbf3-ca7c-4df9-98b6-fb2ccf422526"))
-                .willReturn(UUID.fromString("ab54f98a-6906-4a2d-b897-663990a602fa"));
+                .getByAuthId("04c4dbf3-ca7c-4df9-98b6-fb2ccf422526"))
+                .willReturn(accountHolder);
 
         mvc.perform(
-                get("/account-holder/auth-id/04c4dbf3-ca7c-4df9-98b6-fb2ccf422526")
+                get("/account-holder/auth-id/" + authId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void requestAccountHolderIdByAuthId_shouldReturnTheAccountHolderId() throws Exception {
-        String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
-        UUID accountHolderId = UUID.fromString("ab54f98a-6906-4a2d-b897-663990a602fa");
         given(accountService
-                .getId(authId))
-                .willReturn(accountHolderId);
+                .getByAuthId(authId))
+                .willReturn(accountHolder);
 
         String responseBody = mvc.perform(get("/account-holder/auth-id/" + authId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -69,9 +79,20 @@ public class AccountsControllerUnitTest {
                 .getResponse()
                 .getContentAsString();
 
-        String expectedBody = String.format("{\"id\":\"%s\"}", accountHolderId);
+        String expectedBody = String.format("{\"id\":\"%s\"}", accountHolder.getId());
 
         assertThat(responseBody, equalTo(expectedBody));
+    }
+
+    @Test
+    void requestAccountHolderIdByAuthId_shouldReturn404IfAccountHolderNotFound() throws Exception {
+        given(accountService
+                .getByAuthId(authId))
+                .willReturn(null);
+
+        mvc.perform(get("/account-holder/auth-id/" + authId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Configuration
