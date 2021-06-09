@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS beacon_account_holder (
                                              id uuid PRIMARY KEY,
-                                             auth_id text,
+                                             auth_id text UNIQUE,
                                              email text,
                                              full_name text,
                                              telephone_number text,
