@@ -1,9 +1,13 @@
 package uk.gov.mca.beacons.service.accounts;
 
-import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
+import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.service.model.AccountHolder;
 
+import java.util.UUID;
+
+@Service
 public class AccountsService {
-    public AccountHolderDTO getAccountHolderByAuthId(String authId) {
-        return new AccountHolderDTO();
+    public UUID getId(String authId) {
+        return UUID.randomUUID();
     }
 }
