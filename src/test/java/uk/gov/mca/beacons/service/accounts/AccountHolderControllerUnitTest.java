@@ -62,8 +62,7 @@ class AccountHolderControllerUnitTest {
   @Test
   void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound()
     throws Exception {
-    given(accountService.execute(authId))
-      .willReturn(accountHolder);
+    given(accountService.execute(authId)).willReturn(accountHolder);
 
     mvc
       .perform(

@@ -18,7 +18,9 @@ public class AccountHolderController {
   private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
   @Autowired
-  public AccountHolderController(GetAccountHolderByAuthIdService getAccountHolderByAuthIdService) {
+  public AccountHolderController(
+    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService
+  ) {
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
   }
 
@@ -26,7 +28,9 @@ public class AccountHolderController {
   public AccountHolderIdDTO getAccountHolderId(
     @PathVariable("authId") String authId
   ) {
-    AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(authId);
+    AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
+      authId
+    );
 
     if (accountHolder == null) throw new ResourceNotFoundException();
 

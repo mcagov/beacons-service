@@ -11,7 +11,9 @@ public class GetAccountHolderByAuthIdService {
 
   private final AccountHolderRepository accountHolderRepository;
 
-  public GetAccountHolderByAuthIdService(AccountHolderRepository accountHolderRepository) {
+  public GetAccountHolderByAuthIdService(
+    AccountHolderRepository accountHolderRepository
+  ) {
     this.accountHolderRepository = accountHolderRepository;
   }
 
