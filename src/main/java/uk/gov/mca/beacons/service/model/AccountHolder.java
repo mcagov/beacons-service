@@ -1,139 +1,139 @@
 package uk.gov.mca.beacons.service.model;
 
-import javax.persistence.*;
 import java.util.UUID;
+import javax.persistence.*;
 
 public class AccountHolder {
-    @Id
-    @GeneratedValue
-    private UUID id;
 
-    private String authId;
+  @Id
+  @GeneratedValue
+  private UUID id;
 
-    private String email;
+  private String authId;
 
-    private String fullName;
+  private String email;
 
-    private String telephoneNumber;
+  private String fullName;
 
-    private String alternativeTelephoneNumber;
+  private String telephoneNumber;
 
-    private String addressLine1;
+  private String alternativeTelephoneNumber;
 
-    private String addressLine2;
+  private String addressLine1;
 
-    private String addressLine3;
+  private String addressLine2;
 
-    private String addressLine4;
+  private String addressLine3;
 
-    private String townOrCity;
+  private String addressLine4;
 
-    private String postcode;
+  private String townOrCity;
 
-    private String county;
+  private String postcode;
 
-    public UUID getId() {
-        return id;
-    }
+  private String county;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public String getAuthId() {
-        return authId;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public void setAuthId(String authId) {
-        this.authId = authId;
-    }
+  public String getAuthId() {
+    return authId;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setAuthId(String authId) {
+    this.authId = authId;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getFullName() {
-        return fullName;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+  public String getFullName() {
+    return fullName;
+  }
 
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
 
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
+  public String getTelephoneNumber() {
+    return telephoneNumber;
+  }
 
-    public String getAlternativeTelephoneNumber() {
-        return alternativeTelephoneNumber;
-    }
+  public void setTelephoneNumber(String telephoneNumber) {
+    this.telephoneNumber = telephoneNumber;
+  }
 
-    public void setAlternativeTelephoneNumber(String alternativeTelephoneNumber) {
-        this.alternativeTelephoneNumber = alternativeTelephoneNumber;
-    }
+  public String getAlternativeTelephoneNumber() {
+    return alternativeTelephoneNumber;
+  }
 
-    public String getAddressLine1() {
-        return addressLine1;
-    }
+  public void setAlternativeTelephoneNumber(String alternativeTelephoneNumber) {
+    this.alternativeTelephoneNumber = alternativeTelephoneNumber;
+  }
 
-    public void setAddressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
-    }
+  public String getAddressLine1() {
+    return addressLine1;
+  }
 
-    public String getAddressLine2() {
-        return addressLine2;
-    }
+  public void setAddressLine1(String addressLine1) {
+    this.addressLine1 = addressLine1;
+  }
 
-    public void setAddressLine2(String addressLine2) {
-        this.addressLine2 = addressLine2;
-    }
+  public String getAddressLine2() {
+    return addressLine2;
+  }
 
-    public String getAddressLine3() {
-        return addressLine3;
-    }
+  public void setAddressLine2(String addressLine2) {
+    this.addressLine2 = addressLine2;
+  }
 
-    public void setAddressLine3(String addressLine3) {
-        this.addressLine3 = addressLine3;
-    }
+  public String getAddressLine3() {
+    return addressLine3;
+  }
 
-    public String getAddressLine4() {
-        return addressLine4;
-    }
+  public void setAddressLine3(String addressLine3) {
+    this.addressLine3 = addressLine3;
+  }
 
-    public void setAddressLine4(String addressLine4) {
-        this.addressLine4 = addressLine4;
-    }
+  public String getAddressLine4() {
+    return addressLine4;
+  }
 
-    public String getTownOrCity() {
-        return townOrCity;
-    }
+  public void setAddressLine4(String addressLine4) {
+    this.addressLine4 = addressLine4;
+  }
 
-    public void setTownOrCity(String townOrCity) {
-        this.townOrCity = townOrCity;
-    }
+  public String getTownOrCity() {
+    return townOrCity;
+  }
 
-    public String getPostcode() {
-        return postcode;
-    }
+  public void setTownOrCity(String townOrCity) {
+    this.townOrCity = townOrCity;
+  }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
+  public String getPostcode() {
+    return postcode;
+  }
 
-    public String getCounty() {
-        return county;
-    }
+  public void setPostcode(String postcode) {
+    this.postcode = postcode;
+  }
 
-    public void setCounty(String county) {
-        this.county = county;
-    }
+  public String getCounty() {
+    return county;
+  }
+
+  public void setCounty(String county) {
+    this.county = county;
+  }
 }
-

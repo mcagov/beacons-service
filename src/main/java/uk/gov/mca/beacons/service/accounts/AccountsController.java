@@ -9,26 +9,25 @@ import uk.gov.mca.beacons.service.dto.AccountHolderIdDTO;
 import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
-import java.util.UUID;
-
-
 @RestController
 @RequestMapping("/account-holder")
 @Tag(name = "Account Holder")
 public class AccountsController {
 
-    private final AccountsService accountsService;
+  private final AccountsService accountsService;
 
-    public AccountsController(AccountsService accountsService) {
-        this.accountsService = accountsService;
-    }
+  public AccountsController(AccountsService accountsService) {
+    this.accountsService = accountsService;
+  }
 
-    @GetMapping(value = "/auth-id/{authId}")
-    public AccountHolderIdDTO getAccountHolder(@PathVariable("authId") String authId) {
-        AccountHolder accountHolder = accountsService.getByAuthId(authId);
+  @GetMapping(value = "/auth-id/{authId}")
+  public AccountHolderIdDTO getAccountHolder(
+    @PathVariable("authId") String authId
+  ) {
+    AccountHolder accountHolder = accountsService.getByAuthId(authId);
 
-        if (accountHolder == null) throw new ResourceNotFoundException();
+    if (accountHolder == null) throw new ResourceNotFoundException();
 
-        return new AccountHolderIdDTO(accountHolder.getId());
-    }
+    return new AccountHolderIdDTO(accountHolder.getId());
+  }
 }
