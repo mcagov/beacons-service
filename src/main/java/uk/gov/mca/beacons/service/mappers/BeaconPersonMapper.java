@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -10,16 +12,20 @@ public class BeaconPersonMapper {
   public BeaconPersonDTO toDTO(BeaconPerson domain) {
     final var dto = new BeaconPersonDTO();
     dto.setId(domain.getId());
-    dto.addAttribute("fullName", domain.getFullName());
-    dto.addAttribute("email", domain.getEmail());
-    dto.addAttribute("telephoneNumber", domain.getTelephoneNumber());
-    dto.addAttribute("addressLine1", domain.getAddressLine1());
-    dto.addAttribute("addressLine2", domain.getAddressLine2());
-    dto.addAttribute("addressLine3", domain.getAddressLine3());
-    dto.addAttribute("addressLine4", domain.getAddressLine4());
-    dto.addAttribute("townOrCity", domain.getTownOrCity());
-    dto.addAttribute("county", domain.getCounty());
-    dto.addAttribute("postcode", domain.getPostcode());
+
+    final Map<String, Object> attributes = new HashMap<>();
+    attributes.put("fullName", domain.getFullName());
+    attributes.put("email", domain.getEmail());
+    attributes.put("telephoneNumber", domain.getTelephoneNumber());
+    attributes.put("addressLine1", domain.getAddressLine1());
+    attributes.put("addressLine2", domain.getAddressLine2());
+    attributes.put("addressLine3", domain.getAddressLine3());
+    attributes.put("addressLine4", domain.getAddressLine4());
+    attributes.put("townOrCity", domain.getTownOrCity());
+    attributes.put("county", domain.getCounty());
+    attributes.put("postcode", domain.getPostcode());
+    dto.setAttributes(attributes);
+
     return dto;
   }
 }

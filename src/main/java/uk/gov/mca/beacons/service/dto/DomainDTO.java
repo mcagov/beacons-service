@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.UUID;
 import uk.gov.mca.beacons.service.hateoas.HateoasLink;
 
-public abstract class DomainDTO {
+public abstract class DomainDTO<T> {
 
   private UUID id;
-  private final Map<String, Object> attributes = new HashMap<String, Object>();
+  protected T attributes;
   private final List<HateoasLink> links = new ArrayList<HateoasLink>();
   private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
 
@@ -24,12 +24,12 @@ public abstract class DomainDTO {
     this.id = id;
   }
 
-  public Map<String, Object> getAttributes() {
+  public T getAttributes() {
     return attributes;
   }
 
-  public void addAttribute(String key, Object value) {
-    attributes.put(key, value);
+  public void setAttributes(T attributes) {
+    this.attributes = attributes;
   }
 
   public List<HateoasLink> getLinks() {
@@ -44,10 +44,7 @@ public abstract class DomainDTO {
     return relationships;
   }
 
-  public <T extends DomainDTO> void addRelationship(
-    String key,
-    RelationshipDTO value
-  ) {
+  public void addRelationship(String key, RelationshipDTO value) {
     relationships.put(key, value);
   }
 }

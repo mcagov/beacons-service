@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,25 +36,29 @@ class BeaconMapperUnitFromDTOTest {
   @Mock
   private BeaconLinkStrategy linkStrategy;
 
+  private Map<String, Object> attributes;
+
   @BeforeEach
   void init() {
     beaconMapper = new BeaconMapper(linkManager, linkStrategy);
     beaconDTO = new BeaconDTO();
     beaconId = UUID.randomUUID();
     beaconDTO.setId(beaconId);
+    attributes = new HashMap<>();
   }
 
   @Test
   void shouldSetAllTheFieldsOnTheBeaconFromTheDTO() {
-    beaconDTO.addAttribute("hexId", "1");
-    beaconDTO.addAttribute("manufacturer", "Trousers");
-    beaconDTO.addAttribute("model", "ASOS");
-    beaconDTO.addAttribute("chkCode", "2");
-    beaconDTO.addAttribute("manufacturerSerialNumber", "3");
-    beaconDTO.addAttribute("status", "NEW");
-    beaconDTO.addAttribute("createdDate", "2020-02-01T00:00");
-    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
-    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
+    attributes.put("hexId", "1");
+    attributes.put("manufacturer", "Trousers");
+    attributes.put("model", "ASOS");
+    attributes.put("chkCode", "2");
+    attributes.put("manufacturerSerialNumber", "3");
+    attributes.put("status", "NEW");
+    attributes.put("createdDate", "2020-02-01T00:00");
+    attributes.put("batteryExpiryDate", "2022-02-01T00:00");
+    attributes.put("lastServicedDate", "2019-02-01T00:00");
+    beaconDTO.setAttributes(attributes);
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
@@ -73,7 +79,8 @@ class BeaconMapperUnitFromDTOTest {
 
   @Test
   void shouldCastValuesToNullIfNotDefined() {
-    beaconDTO.addAttribute("chkCode", null);
+    attributes.put("chkCode", null);
+    beaconDTO.setAttributes(attributes);
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
@@ -87,7 +94,8 @@ class BeaconMapperUnitFromDTOTest {
 
   @Test
   void shouldThrowAnExceptionIfTheStatusIsNotAValidEnumValue() {
-    beaconDTO.addAttribute("status", "RETIRED");
+    attributes.put("status", "RETIRED");
+    beaconDTO.setAttributes(attributes);
     assertThrows(
       IllegalArgumentException.class,
       () -> {
@@ -99,7 +107,8 @@ class BeaconMapperUnitFromDTOTest {
   @Test
   void shouldThrowAnExceptionIfItCannotParseAValidDate() {
     var invalidDate = "2020-of-march";
-    beaconDTO.addAttribute("createdDate", invalidDate);
+    attributes.put("createdDate", invalidDate);
+    beaconDTO.setAttributes(attributes);
 
     assertThrows(
       DateTimeException.class,
@@ -111,8 +120,9 @@ class BeaconMapperUnitFromDTOTest {
 
   @Test
   void shouldAccuratelyStripTimeInformationFromDateFields() {
-    beaconDTO.addAttribute("batteryExpiryDate", "2022-02-01T00:00");
-    beaconDTO.addAttribute("lastServicedDate", "2019-02-01T00:00");
+    attributes.put("batteryExpiryDate", "2022-02-01T00:00");
+    attributes.put("lastServicedDate", "2019-02-01T00:00");
+    beaconDTO.setAttributes(attributes);
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
 
