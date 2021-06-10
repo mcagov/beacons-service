@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.accounts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
+import uk.gov.mca.beacons.service.dto.WrapperDTO;
+import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
 import java.util.UUID;
@@ -28,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountHolderControllerUnitTest {
 
   private final UUID accountHolderId = UUID.fromString(
-    "432e083d-7bd8-402b-9520-05da24ad143f"
+          "432e083d-7bd8-402b-9520-05da24ad143f"
   );
   private final String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
   private final AccountHolder accountHolder = new AccountHolder();
@@ -39,6 +43,12 @@ class AccountHolderControllerUnitTest {
   @MockBean
   private GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
+  @MockBean
+  private CreateAccountHolderService createAccountHolderService;
+
+  @MockBean
+  private AccountHolderMapper accountHolderMapper;
+
   @BeforeEach
   public final void before() {
     accountHolder.setId(accountHolderId);
@@ -47,7 +57,7 @@ class AccountHolderControllerUnitTest {
 
   @Test
   void requestAccountHolderIdByAuthId_shouldRequestAccountHolderIdFromServiceByAuthId()
-    throws Exception {
+          throws Exception {
     given(getAccountHolderByAuthIdService.execute(authId))
       .willReturn(accountHolder);
 
@@ -107,5 +117,18 @@ class AccountHolderControllerUnitTest {
                     .contentType(MediaType.APPLICATION_JSON)
     )
             .andExpect(status().isOk());
+  }
+
+  @Test
+  void requestCreateAccountHolder_shouldMapDTOToDomainAccountHolder() throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper().writeValueAsString(newAccountHolderDTO);
+
+    mvc.perform(
+            post("/account-holder")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(newAccountHolderRequest));
+
+    verify(accountHolderMapper, times(1)).fromDTO(newAccountHolderDTO.getData());
   }
 }
