@@ -25,7 +25,7 @@ public class AccountHolderController {
   public AccountHolderIdDTO getAccountHolderId(
     @PathVariable("authId") String authId
   ) {
-    AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
+    final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
       authId
     );
 
