@@ -1,30 +1,28 @@
 package uk.gov.mca.beacons.service.accounts;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.service.model.AccountHolder;
+
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.mca.beacons.service.model.AccountHolder;
-
 @WebMvcTest(
-  controllers = AccountHolderController.class,
-  excludeAutoConfiguration = { SecurityAutoConfiguration.class }
+        controllers = AccountHolderController.class
 )
 @AutoConfigureMockMvc
 class AccountHolderControllerUnitTest {
@@ -103,9 +101,11 @@ class AccountHolderControllerUnitTest {
   }
 
   @Test
-  void createAccountHolder_shouldReturn200IfSuccessful() {}
-
-  @Configuration
-  @ComponentScan(basePackageClasses = { AccountHolderController.class })
-  public static class TestConf {}
+  void requestCreateAccountHolder_shouldReturn200IfSuccessful() throws Exception {
+    mvc.perform(
+            post("/account-holder")
+                    .contentType(MediaType.APPLICATION_JSON)
+    )
+            .andExpect(status().isOk());
+  }
 }
