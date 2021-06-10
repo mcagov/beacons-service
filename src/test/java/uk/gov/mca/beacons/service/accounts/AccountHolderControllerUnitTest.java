@@ -5,7 +5,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,11 +103,7 @@ class AccountHolderControllerUnitTest {
   }
 
   @Test
-  void requestCreateAccountHolder_whenAccountHolderCreated_shouldReturn200() throws Exception {
-    mvc.perform(post("/account-holder")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-  }
+  void createAccountHolder_shouldReturn200IfSuccessful() {}
 
   @Configuration
   @ComponentScan(basePackageClasses = { AccountHolderController.class })
