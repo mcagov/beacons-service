@@ -56,6 +56,9 @@ public class Beacon {
   @Valid
   private List<BeaconUse> uses;
 
+  //  private UUID ownerId;
+  //  private UUID accountId;
+  //  Delete below ----
   @Transient
   @Valid
   private BeaconPerson owner;
@@ -65,6 +68,7 @@ public class Beacon {
   @Valid
   private List<BeaconPerson> emergencyContacts;
 
+  // -----
   public UUID getId() {
     return id;
   }
