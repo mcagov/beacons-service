@@ -28,8 +28,10 @@ public class AccountHolderController {
 
   @Autowired
   public AccountHolderController(
-          AccountHolderMapper accountHolderMapper, GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-          CreateAccountHolderService createAccountHolderService) {
+    AccountHolderMapper accountHolderMapper,
+    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
+    CreateAccountHolderService createAccountHolderService
+  ) {
     this.accountHolderMapper = accountHolderMapper;
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
     this.createAccountHolderService = createAccountHolderService;
@@ -49,13 +51,17 @@ public class AccountHolderController {
   }
 
   @PostMapping
-  public void createAccountHolder(@RequestBody WrapperDTO<AccountHolderDTO> dto) {
+  public void createAccountHolder(
+    @RequestBody WrapperDTO<AccountHolderDTO> dto
+  ) {
     final AccountHolderDTO accountHolderDTO = dto.getData();
 
-    final AccountHolder accountHolderRequest = accountHolderMapper.fromDTO(accountHolderDTO);
+    final AccountHolder accountHolderRequest = accountHolderMapper.fromDTO(
+      accountHolderDTO
+    );
 
-    AccountHolder createdAccountHolder = createAccountHolderService.execute(accountHolderRequest);
-
-    return accountHolderMapper.toDTO(accountHolder);
+    final AccountHolder createdAccountHolder = createAccountHolderService.execute(
+      accountHolderRequest
+    );
   }
 }
