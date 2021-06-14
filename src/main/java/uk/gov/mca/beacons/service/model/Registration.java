@@ -6,13 +6,7 @@ import javax.validation.Valid;
 public class Registration {
 
   @Valid
-  private Beacon beacon;
-
-  private List<BeaconUse> uses;
-
-  private BeaconPerson owner;
-
-  private List<BeaconPerson> emergencyContacts;
+  private List<Beacon> beacons;
 
   public List<Beacon> getBeacon() {
     return beacons;
