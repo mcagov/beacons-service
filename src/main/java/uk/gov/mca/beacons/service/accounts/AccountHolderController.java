@@ -52,8 +52,10 @@ public class AccountHolderController {
   public void createAccountHolder(@RequestBody WrapperDTO<AccountHolderDTO> dto) {
     final AccountHolderDTO accountHolderDTO = dto.getData();
 
-    final AccountHolder accountHolder = accountHolderMapper.fromDTO(accountHolderDTO);
+    final AccountHolder accountHolderRequest = accountHolderMapper.fromDTO(accountHolderDTO);
 
-    createAccountHolderService.execute(accountHolder);
+    AccountHolder createdAccountHolder = createAccountHolderService.execute(accountHolderRequest);
+
+    return accountHolderMapper.toDTO(accountHolder);
   }
 }
