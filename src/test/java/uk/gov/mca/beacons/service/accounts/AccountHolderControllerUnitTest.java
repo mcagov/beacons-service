@@ -14,6 +14,7 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -146,5 +148,21 @@ class AccountHolderControllerUnitTest {
                     .content(newAccountHolderRequest));
 
     verify(createAccountHolderService, times(1)).execute(accountHolder);
+  }
+
+
+  @Test
+  void requestCreateAccountHolder_shouldRespondWithTheCreatedResourceInTheJsonApiFormat() throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper().writeValueAsString(newAccountHolderDTO);
+    given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData())).willReturn(accountHolder);
+
+    String expectedResponse = new String(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("fixtures/getAccountHolderResponse.json")).readAllBytes());
+
+    mvc.perform(
+            post("/account-holder")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(newAccountHolderRequest))
+            .andExpect(content().string(expectedResponse));
   }
 }
