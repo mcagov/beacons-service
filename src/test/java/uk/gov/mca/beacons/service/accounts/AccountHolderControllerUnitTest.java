@@ -112,11 +112,13 @@ class AccountHolderControllerUnitTest {
 
   @Test
   void requestCreateAccountHolder_shouldReturn200IfSuccessful() throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper().writeValueAsString(newAccountHolderDTO);
     mvc.perform(
             post("/account-holder")
                     .contentType(MediaType.APPLICATION_JSON)
-    )
-            .andExpect(status().isOk());
+                    .content(newAccountHolderRequest))
+            .andExpect(status().isCreated());
   }
 
   @Test
@@ -130,5 +132,19 @@ class AccountHolderControllerUnitTest {
                     .content(newAccountHolderRequest));
 
     verify(accountHolderMapper, times(1)).fromDTO(newAccountHolderDTO.getData());
+  }
+
+  @Test
+  void requestCreateAccountHolder_shouldCallTheAccountHolderServiceToCreateANewResource() throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper().writeValueAsString(newAccountHolderDTO);
+    given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData())).willReturn(accountHolder);
+
+    mvc.perform(
+            post("/account-holder")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(newAccountHolderRequest));
+
+    verify(createAccountHolderService, times(1)).execute(accountHolder);
   }
 }

@@ -24,12 +24,15 @@ public class AccountHolderController {
 
   private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
+  private final CreateAccountHolderService createAccountHolderService;
+
   @Autowired
   public AccountHolderController(
-          AccountHolderMapper accountHolderMapper, GetAccountHolderByAuthIdService getAccountHolderByAuthIdService
-  ) {
+          AccountHolderMapper accountHolderMapper, GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
+          CreateAccountHolderService createAccountHolderService) {
     this.accountHolderMapper = accountHolderMapper;
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
+    this.createAccountHolderService = createAccountHolderService;
   }
 
   @GetMapping(value = "/auth-id/{authId}")
@@ -50,5 +53,7 @@ public class AccountHolderController {
     final AccountHolderDTO accountHolderDTO = dto.getData();
 
     final AccountHolder accountHolder = accountHolderMapper.fromDTO(accountHolderDTO);
+
+    createAccountHolderService.execute(accountHolder);
   }
 }
