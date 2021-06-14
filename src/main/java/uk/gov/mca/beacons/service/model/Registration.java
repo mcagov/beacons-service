@@ -8,7 +8,7 @@ public class Registration {
   @Valid
   private List<Beacon> beacons;
 
-  public List<Beacon> getBeacon() {
+  public List<Beacon> getBeacons() {
     return beacons;
   }
 

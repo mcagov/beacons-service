@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
+@Entity(name = "person")
 @EntityListeners(AuditingEntityListener.class)
 public class BeaconPerson {
 
