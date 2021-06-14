@@ -56,9 +56,10 @@ public class Beacon {
   @Valid
   private List<BeaconUse> uses;
 
-  //  private UUID ownerId;
-  //  private UUID accountId;
-  //  Delete below ----
+  private UUID ownerId;
+
+  private UUID accountId;
+
   @Transient
   @Valid
   private BeaconPerson owner;
@@ -68,7 +69,6 @@ public class Beacon {
   @Valid
   private List<BeaconPerson> emergencyContacts;
 
-  // -----
   public UUID getId() {
     return id;
   }
@@ -113,8 +113,8 @@ public class Beacon {
     return referenceNumber;
   }
 
-  public void setReferenceNumber(String reference) {
-    this.referenceNumber = reference;
+  public void setReferenceNumber(String referenceNumber) {
+    this.referenceNumber = referenceNumber;
   }
 
   public String getChkCode() {
@@ -163,6 +163,22 @@ public class Beacon {
 
   public void setUses(List<BeaconUse> uses) {
     this.uses = uses;
+  }
+
+  public UUID getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(UUID ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public UUID getAccountId() {
+    return accountId;
+  }
+
+  public void setAccountId(UUID accountId) {
+    this.accountId = accountId;
   }
 
   public BeaconPerson getOwner() {
