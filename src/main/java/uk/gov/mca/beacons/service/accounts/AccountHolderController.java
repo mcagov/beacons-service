@@ -47,6 +47,8 @@ public class AccountHolderController {
 
   @PostMapping
   public void createAccountHolder(@RequestBody WrapperDTO<AccountHolderDTO> dto) {
-    AccountHolder accountHolder = accountHolderMapper.fromDTO(dto.getData());
+    final AccountHolderDTO accountHolderDTO = dto.getData();
+
+    final AccountHolder accountHolder = accountHolderMapper.fromDTO(accountHolderDTO);
   }
 }

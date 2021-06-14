@@ -7,5 +7,4 @@ public class AccountHolderDTO extends DomainDTO {
         return "accountHolder";
     }
 
-
 }
