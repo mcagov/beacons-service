@@ -60,8 +60,6 @@ public class Beacon {
   @Valid
   private List<BeaconUse> uses;
 
-  private UUID ownerId;
-
   private UUID accountId;
 
   @Transient
