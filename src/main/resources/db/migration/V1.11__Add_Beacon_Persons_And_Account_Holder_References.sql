@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS emergency_contact_linker (
                                              person_id uuid REFERENCES person (id) NOT NULL
 );
 
+INSERT INTO emergency_contact_linker (id, beacon_id, person_id)
+    (SELECT uuid_generate_v4(), person.beacon_id, person.id FROM person WHERE person.person_type = 'EMERGENCY_CONTACT');
+
 ALTER TABLE person
     DROP COLUMN person_type,
     DROP COLUMN beacon_id,
