@@ -3,8 +3,7 @@ package uk.gov.mca.beacons.service.registrations;
 import java.util.List;
 import java.util.UUID;
 import javax.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -19,11 +18,8 @@ import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
 @Service
 @Transactional
+@Slf4j
 public class RegistrationsService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-    RegistrationsService.class
-  );
 
   private final BeaconRepository beaconRepository;
   private final BeaconUseRepository beaconUseRepository;
@@ -41,7 +37,7 @@ public class RegistrationsService {
   }
 
   public Registration register(Registration registration) {
-    LOGGER.info("Attempting to persist registration {}", registration);
+    log.info("Attempting to persist registration {}", registration);
 
     final List<Beacon> beacons = registration.getBeacons();
     beacons.forEach(this::registerBeacon);

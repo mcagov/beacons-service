@@ -24,6 +24,15 @@ Clone this repo
 
 Install node packages (needed for code formatting): `npm install`
 
+### Project Lombok
+
+We use [Project Lombok](https://projectlombok.org/) which provides annotations to reduce boilerplate Java code.
+
+Guides on how to setup the plugin for IDE's:
+
+- [IntelliJ](https://projectlombok.org/setup/intellij)
+- [Visual Studio Code](https://projectlombok.org/setup/vscode)
+
 ## Testing
 
 Integration tests use the naming convention `<name>IntegrationTest`.
