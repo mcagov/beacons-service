@@ -28,7 +28,7 @@ Install node packages (needed for code formatting): `npm install`
 
 We use [Project Lombok](https://projectlombok.org/) which provides annotations to reduce boilerplate Java code.
 
-Guides on how to setup the plugin for IDE's:
+Please see Project Lombok's website for all their guides on setting up for your IDE. The links below are to the ones currently used within the team:
 
 - [IntelliJ](https://projectlombok.org/setup/intellij)
 - [Visual Studio Code](https://projectlombok.org/setup/vscode)
