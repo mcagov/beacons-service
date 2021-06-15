@@ -6,6 +6,8 @@ import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
+import uk.gov.mca.beacons.service.gateway.OwnerGateway;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
@@ -24,16 +26,19 @@ public class RegistrationsService {
   private final BeaconRepository beaconRepository;
   private final BeaconUseRepository beaconUseRepository;
   private final BeaconPersonRepository beaconPersonRepository;
+  private final OwnerGateway ownerGateway;
 
   @Autowired
   public RegistrationsService(
     BeaconRepository beaconRepository,
     BeaconUseRepository beaconUseRepository,
-    BeaconPersonRepository beaconPersonRepository
+    BeaconPersonRepository beaconPersonRepository,
+    OwnerGateway ownerGateway
   ) {
     this.beaconRepository = beaconRepository;
     this.beaconPersonRepository = beaconPersonRepository;
     this.beaconUseRepository = beaconUseRepository;
+    this.ownerGateway = ownerGateway;
   }
 
   public Registration register(Registration registration) {
@@ -70,7 +75,11 @@ public class RegistrationsService {
     final BeaconPerson owner = beacon.getOwner();
     final UUID beaconId = beacon.getId();
 
-    registerPerson(owner, beaconId, PersonType.OWNER);
+    final CreateOwnerRequest createOwnerRequest = new CreateOwnerRequest(
+      owner,
+      beaconId
+    );
+    ownerGateway.save(createOwnerRequest);
   }
 
   private void registerEmergencyContacts(Beacon beacon) {
@@ -90,5 +99,8 @@ public class RegistrationsService {
     person.setBeaconId(beaconId);
     person.setPersonType(personType);
     beaconPersonRepository.save(person);
+    // Make request
+    //    ownerGateway.createOwner(createOwnerRequest);
   }
+  //  private CreateOwnerRequest getRequestFromOwner
 }

@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.registrations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -13,9 +14,13 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
+import uk.gov.mca.beacons.service.gateway.OwnerGateway;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
@@ -41,11 +46,18 @@ class RegistrationsServiceUnitTest {
   @Mock
   private BeaconUseRepository beaconUseRepository;
 
+  @Mock
+  private OwnerGateway ownerGateway;
+
+  @Captor
+  private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
+
   private Registration registration;
   private UUID beaconId;
   private Beacon beacon;
   private BeaconUse beaconUse;
   private BeaconPerson owner;
+  private CreateOwnerRequest ownerRequest;
   private BeaconPerson emergencyContact;
 
   @BeforeEach
@@ -54,6 +66,7 @@ class RegistrationsServiceUnitTest {
     beacon = new Beacon();
     beacon.setId(beaconId);
     owner = new BeaconPerson();
+    ownerRequest = new CreateOwnerRequest(owner, beaconId);
     beaconUse = new BeaconUse();
     emergencyContact = new BeaconPerson();
     beacon.setOwner(owner);
@@ -84,12 +97,13 @@ class RegistrationsServiceUnitTest {
     assertThat(beaconUse.getBeaconId(), is(beaconId));
   }
 
-  @Test
-  void shouldSetTheBeaconIdAndPersonTypeOnTheOwner() {
-    registrationsService.register(registration);
-    assertThat(owner.getBeaconId(), is(beaconId));
-    assertThat(owner.getPersonType(), is(PersonType.OWNER));
-  }
+  //  We don't need this behaviour anymore right? So this test can go?
+  //  @Test
+  //  void shouldSetTheBeaconIdAndPersonTypeOnTheOwner() {
+  //    registrationsService.register(registration);
+  //    assertThat(owner.getBeaconId(), is(beaconId));
+  //    assertThat(owner.getPersonType(), is(PersonType.OWNER));
+  //  }
 
   @Test
   void shouldSetTheBeaconIdAndPersonTypeOnTheEmergencyContact() {
@@ -107,9 +121,11 @@ class RegistrationsServiceUnitTest {
 
     then(beaconRepository).should(times(1)).save(beacon);
     then(beaconUseRepository).should(times(1)).save(beaconUse);
-    then(beaconPersonRepository).should(times(2)).save(isA(BeaconPerson.class));
+    then(beaconPersonRepository).should(times(1)).save(isA(BeaconPerson.class));
     then(beaconPersonRepository).should(times(1)).save(emergencyContact);
-    then(beaconPersonRepository).should(times(1)).save(owner);
+    then(ownerGateway).should(times(1)).save(ownerRequestCaptor.capture());
+    CreateOwnerRequest savedOwnerRequest = ownerRequestCaptor.getValue();
+    assertThat(savedOwnerRequest, samePropertyValuesAs(ownerRequest));
   }
 
   @Test
@@ -119,7 +135,8 @@ class RegistrationsServiceUnitTest {
 
     then(beaconRepository).should(times(2)).save(beacon);
     then(beaconUseRepository).should(times(4)).save(beaconUse);
-    then(beaconPersonRepository).should(times(6)).save(isA(BeaconPerson.class));
+    then(beaconPersonRepository).should(times(4)).save(isA(BeaconPerson.class));
+    then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
   }
 
   private void setupMultipleBeacons() {

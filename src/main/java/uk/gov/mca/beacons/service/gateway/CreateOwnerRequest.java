@@ -5,13 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.mca.beacons.service.model.PersonType;
+import uk.gov.mca.beacons.service.model.BeaconPerson;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
 public class CreateOwnerRequest {
+
+  public CreateOwnerRequest(BeaconPerson owner, UUID beaconId) {
+    this.fullName = owner.getFullName();
+    this.beaconId = beaconId;
+    this.telephoneNumber = owner.getTelephoneNumber();
+    this.alternativeTelephoneNumber = owner.getAlternativeTelephoneNumber();
+    this.email = owner.getEmail();
+    this.addressLine1 = owner.getAddressLine1();
+    this.addressLine2 = owner.getAddressLine2();
+    this.addressLine3 = owner.getAddressLine3();
+    this.addressLine4 = owner.getAddressLine4();
+    this.townOrCity = owner.getTownOrCity();
+    this.postcode = owner.getPostcode();
+    this.county = owner.getCounty();
+  }
 
   private String fullName;
 
