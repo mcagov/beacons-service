@@ -27,8 +27,6 @@ public class BeaconPerson {
 
   private UUID beaconId;
 
-  private UUID accountId;
-
   private String fullName;
 
   private String telephoneNumber;
