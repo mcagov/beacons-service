@@ -19,7 +19,7 @@ public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
   }
 
   @Override
-  public void createEmergencyContact(CreateEmergencyContactRequest request) {
+  public void save(CreateEmergencyContactRequest request) {
     final BeaconPerson emergencyContact = getEmergencyContactFromRequest(
       request
     );

@@ -16,7 +16,7 @@ public class OwnerGatewayImpl implements OwnerGateway {
     this.beaconPersonRepository = beaconPersonRepository;
   }
 
-  public void createOwner(CreateOwnerRequest request) {
+  public void save(CreateOwnerRequest request) {
     final BeaconPerson owner = getOwnerFromRequest(request);
     beaconPersonRepository.save(owner);
   }

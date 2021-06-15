@@ -38,9 +38,7 @@ class EmergencyContactGatewayImplUnitTest {
       .beaconId(beaconId)
       .build();
 
-    emergencyContactGateway.createEmergencyContact(
-      createEmergencyContactRequest
-    );
+    emergencyContactGateway.save(createEmergencyContactRequest);
 
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
 

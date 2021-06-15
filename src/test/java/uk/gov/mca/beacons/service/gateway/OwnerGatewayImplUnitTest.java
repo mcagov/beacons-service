@@ -39,7 +39,7 @@ class OwnerGatewayImplUnitTest {
       .beaconId(beaconId)
       .build();
 
-    ownerGateway.createOwner(createOwnerRequest);
+    ownerGateway.save(createOwnerRequest);
     verify(beaconPersonRepository).save(ownerCaptor.capture());
     BeaconPerson owner = ownerCaptor.getValue();
     assertThat(owner.getFullName(), is("Hello World"));
