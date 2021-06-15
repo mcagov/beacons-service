@@ -5,19 +5,29 @@ import org.springframework.stereotype.Repository;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.PersonType;
 import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
+import uk.gov.mca.beacons.service.repository.BeaconRepository;
 
 @Repository
 public class OwnerGatewayImpl implements OwnerGateway {
 
+  private final BeaconRepository beaconRepository;
   private final BeaconPersonRepository beaconPersonRepository;
 
   @Autowired
-  public OwnerGatewayImpl(BeaconPersonRepository beaconPersonRepository) {
+  public OwnerGatewayImpl(
+    BeaconPersonRepository beaconPersonRepository,
+    BeaconRepository beaconRepository
+  ) {
+    this.beaconRepository = beaconRepository;
     this.beaconPersonRepository = beaconPersonRepository;
   }
 
   public void save(CreateOwnerRequest request) {
     final BeaconPerson owner = getOwnerFromRequest(request);
+    beaconRepository
+      .findById(request.getBeaconId())
+      .ifPresent(beacon -> beacon.setOwner(owner));
+    //  Do we need to handle what happens if beacon isn't present?
     beaconPersonRepository.save(owner);
   }
 
