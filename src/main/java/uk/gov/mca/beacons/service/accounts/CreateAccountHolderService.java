@@ -21,7 +21,6 @@ public class CreateAccountHolderService {
   }
 
   public AccountHolder execute(AccountHolder accountHolder) {
-
     return accountHolderRepository.save(accountHolder);
   }
 }
