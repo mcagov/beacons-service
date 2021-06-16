@@ -29,7 +29,7 @@ public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
   }
 
   @Override
-  public List<BeaconPerson> findByBeaconId(UUID beaconId) {
+  public List<BeaconPerson> findAllByBeaconId(UUID beaconId) {
     return beaconPersonRepository.findEmergencyContactsByBeaconId(beaconId);
   }
 }

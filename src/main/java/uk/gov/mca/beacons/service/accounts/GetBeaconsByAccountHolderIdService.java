@@ -51,7 +51,7 @@ public class GetBeaconsByAccountHolderIdService {
         final BeaconPerson owner = ownerGateway.findByBeaconId(beaconId);
         beacon.setOwner(owner);
 
-        final List<BeaconPerson> emergencyContacts = emergencyContactGateway.findByBeaconId(
+        final List<BeaconPerson> emergencyContacts = emergencyContactGateway.findAllByBeaconId(
           beaconId
         );
         beacon.setEmergencyContacts(emergencyContacts);

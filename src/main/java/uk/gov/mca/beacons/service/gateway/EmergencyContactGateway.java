@@ -7,5 +7,5 @@ import uk.gov.mca.beacons.service.model.BeaconPerson;
 public interface EmergencyContactGateway {
   void save(CreateEmergencyContactRequest request);
 
-  List<BeaconPerson> findByBeaconId(UUID beaconId);
+  List<BeaconPerson> findAllByBeaconId(UUID beaconId);
 }

@@ -105,7 +105,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
 
     given(beaconGateway.findAllByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
-    given(emergencyContactGateway.findByBeaconId(beaconId))
+    given(emergencyContactGateway.findAllByBeaconId(beaconId))
       .willReturn(Collections.singletonList(emergencyContact));
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
