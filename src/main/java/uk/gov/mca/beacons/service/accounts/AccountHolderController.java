@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.service.accounts;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,6 @@ import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/account-holder")
 @Tag(name = "Account Holder")
@@ -34,9 +33,10 @@ public class AccountHolderController {
 
   @Autowired
   public AccountHolderController(
-          AccountHolderMapper accountHolderMapper,
-          GetAccountHolderByIdService getAccountHolderByIdService, GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-          CreateAccountHolderService createAccountHolderService
+    AccountHolderMapper accountHolderMapper,
+    GetAccountHolderByIdService getAccountHolderByIdService,
+    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
+    CreateAccountHolderService createAccountHolderService
   ) {
     this.accountHolderMapper = accountHolderMapper;
     this.getAccountHolderByIdService = getAccountHolderByIdService;
@@ -46,9 +46,11 @@ public class AccountHolderController {
 
   @GetMapping(value = "/{id}")
   public WrapperDTO<AccountHolderDTO> getAccountHolder(
-          @PathVariable("id") String id
+    @PathVariable("id") String id
   ) {
-    final AccountHolder accountHolder = getAccountHolderByIdService.execute(UUID.fromString(id));
+    final AccountHolder accountHolder = getAccountHolderByIdService.execute(
+      UUID.fromString(id)
+    );
 
     if (accountHolder == null) throw new ResourceNotFoundException();
 
@@ -57,10 +59,10 @@ public class AccountHolderController {
 
   @GetMapping(value = "/auth-id/{authId}")
   public AccountHolderIdDTO getAccountHolderId(
-          @PathVariable("authId") String authId
+    @PathVariable("authId") String authId
   ) {
     final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
-            authId
+      authId
     );
 
     if (accountHolder == null) throw new ResourceNotFoundException();
