@@ -5,27 +5,26 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
+import uk.gov.mca.beacons.service.dto.WrapperDTO;
+import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
-@WebMvcTest(
-  controllers = AccountHolderController.class,
-  excludeAutoConfiguration = { SecurityAutoConfiguration.class }
-)
+@WebMvcTest(controllers = AccountHolderController.class)
 @AutoConfigureMockMvc
 class AccountHolderControllerUnitTest {
 
@@ -40,6 +39,12 @@ class AccountHolderControllerUnitTest {
 
   @MockBean
   private GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
+
+  @MockBean
+  private CreateAccountHolderService createAccountHolderService;
+
+  @MockBean
+  private AccountHolderMapper accountHolderMapper;
 
   @BeforeEach
   public final void before() {
@@ -103,9 +108,52 @@ class AccountHolderControllerUnitTest {
   }
 
   @Test
-  void createAccountHolder_shouldReturn200IfSuccessful() {}
+  void requestCreateAccountHolder_shouldReturn201IfSuccessful()
+    throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper()
+      .writeValueAsString(newAccountHolderDTO);
+    mvc
+      .perform(
+        post("/account-holder")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newAccountHolderRequest)
+      )
+      .andExpect(status().isCreated());
+  }
 
-  @Configuration
-  @ComponentScan(basePackageClasses = { AccountHolderController.class })
-  public static class TestConf {}
+  @Test
+  void requestCreateAccountHolder_shouldMapDTOToDomainAccountHolder()
+    throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper()
+      .writeValueAsString(newAccountHolderDTO);
+
+    mvc.perform(
+      post("/account-holder")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(newAccountHolderRequest)
+    );
+
+    verify(accountHolderMapper, times(1))
+      .fromDTO(newAccountHolderDTO.getData());
+  }
+
+  @Test
+  void requestCreateAccountHolder_shouldCallTheAccountHolderServiceToCreateANewResource()
+    throws Exception {
+    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+    String newAccountHolderRequest = new ObjectMapper()
+      .writeValueAsString(newAccountHolderDTO);
+    given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
+      .willReturn(accountHolder);
+
+    mvc.perform(
+      post("/account-holder")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(newAccountHolderRequest)
+    );
+
+    verify(createAccountHolderService, times(1)).execute(accountHolder);
+  }
 }
