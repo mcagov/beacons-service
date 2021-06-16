@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.gateway.BeaconGateway;
+import uk.gov.mca.beacons.service.gateway.EmergencyContactGateway;
 import uk.gov.mca.beacons.service.gateway.OwnerGateway;
 import uk.gov.mca.beacons.service.gateway.UseGateway;
 import uk.gov.mca.beacons.service.model.Beacon;
@@ -34,8 +35,11 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
   @Mock
   private OwnerGateway ownerGateway;
 
+  @Mock
+  private EmergencyContactGateway emergencyContactGateway;
+
   @Test
-  void shouldReturnAnEmptyListIfThereAreNoBeaconsForTheAccountId() {
+  void shouldReturnAnEmptyListIfThereAreNoBeaconsFound() {
     final var accountId = UUID.randomUUID();
     given(beaconGateway.findAllByAccountHolderId(accountId))
       .willReturn(Collections.emptyList());
@@ -47,21 +51,18 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
   @Test
   void shouldReturnASingleBeacon() {
     final var accountId = UUID.randomUUID();
-    final var beaconId = UUID.randomUUID();
     final var beacon = new Beacon();
 
     given(beaconGateway.findAllByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
-
     assertThat(result.size(), is(1));
-    final var beaconResult = result.get(0);
-    assertThat(beaconResult, is(beacon));
+    assertThat(result.get(0), is(beacon));
   }
 
   @Test
-  void shouldReturnABeaconWithItsUses() {
+  void shouldReturnABeaconsUses() {
     final var accountId = UUID.randomUUID();
     final var beaconId = UUID.randomUUID();
     final var beacon = new Beacon();
@@ -74,13 +75,12 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
       .willReturn(Collections.singletonList(beaconUse));
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
-
     assertThat(result.get(0).getUses().size(), is(1));
     assertThat(result.get(0).getUses().get(0), is(beaconUse));
   }
 
   @Test
-  void shouldReturnABeaconWithItsOwner() {
+  void shouldReturnABeaconsOwner() {
     final var accountId = UUID.randomUUID();
     final var beaconId = UUID.randomUUID();
     final var beacon = new Beacon();
@@ -93,5 +93,26 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
     assertThat(result.get(0).getOwner(), is(owner));
+  }
+
+  @Test
+  void shouldReturnABeaconsEmergencyContacts() {
+    final var accountId = UUID.randomUUID();
+    final var beaconId = UUID.randomUUID();
+    final var beacon = new Beacon();
+    beacon.setId(beaconId);
+    final var emergencyContact = new BeaconPerson();
+
+    given(beaconGateway.findAllByAccountHolderId(accountId))
+      .willReturn(Collections.singletonList(beacon));
+    given(emergencyContactGateway.findByBeaconId(beaconId))
+      .willReturn(Collections.singletonList(emergencyContact));
+
+    final var result = getBeaconsByAccountHolderIdService.execute(accountId);
+    assertThat(result.get(0).getEmergencyContacts().size(), is(1));
+    assertThat(
+      result.get(0).getEmergencyContacts().get(0),
+      is(emergencyContact)
+    );
   }
 }

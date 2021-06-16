@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.service.gateway;
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.gov.mca.beacons.service.mappers.CreateEmergencyContactRequestMapper;
@@ -24,5 +26,10 @@ public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
       request
     );
     beaconPersonRepository.save(emergencyContact);
+  }
+
+  @Override
+  public List<BeaconPerson> findByBeaconId(UUID beaconId) {
+    return beaconPersonRepository.findEmergencyContactsByBeaconId(beaconId);
   }
 }
