@@ -8,13 +8,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
 public class CreateEmergencyContactRequest {
 
-  private String fullName;
-
   private UUID beaconId;
+
+  private String fullName;
 
   private String telephoneNumber;
 

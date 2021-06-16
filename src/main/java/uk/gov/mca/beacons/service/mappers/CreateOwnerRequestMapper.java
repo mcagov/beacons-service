@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.util.UUID;
 import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.PersonType;
@@ -25,5 +26,26 @@ public class CreateOwnerRequestMapper {
     owner.setCounty(request.getCounty());
 
     return owner;
+  }
+
+  public static CreateOwnerRequest fromBeaconPerson(
+    BeaconPerson owner,
+    UUID beaconId
+  ) {
+    return CreateOwnerRequest
+      .builder()
+      .beaconId(beaconId)
+      .fullName(owner.getFullName())
+      .telephoneNumber(owner.getTelephoneNumber())
+      .alternativeTelephoneNumber(owner.getAlternativeTelephoneNumber())
+      .email(owner.getEmail())
+      .addressLine1(owner.getAddressLine1())
+      .addressLine2(owner.getAddressLine2())
+      .addressLine3(owner.getAddressLine3())
+      .addressLine4(owner.getAddressLine4())
+      .townOrCity(owner.getTownOrCity())
+      .postcode(owner.getPostcode())
+      .county(owner.getCounty())
+      .build();
   }
 }

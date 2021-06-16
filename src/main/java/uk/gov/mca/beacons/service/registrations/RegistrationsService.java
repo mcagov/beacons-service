@@ -6,15 +6,17 @@ import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.service.gateway.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
+import uk.gov.mca.beacons.service.gateway.EmergencyContactGateway;
 import uk.gov.mca.beacons.service.gateway.OwnerGateway;
+import uk.gov.mca.beacons.service.mappers.CreateEmergencyContactRequestMapper;
+import uk.gov.mca.beacons.service.mappers.CreateOwnerRequestMapper;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
 import uk.gov.mca.beacons.service.model.BeaconUse;
-import uk.gov.mca.beacons.service.model.PersonType;
 import uk.gov.mca.beacons.service.model.Registration;
-import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
 import uk.gov.mca.beacons.service.repository.BeaconRepository;
 import uk.gov.mca.beacons.service.repository.BeaconUseRepository;
 
@@ -25,20 +27,20 @@ public class RegistrationsService {
 
   private final BeaconRepository beaconRepository;
   private final BeaconUseRepository beaconUseRepository;
-  private final BeaconPersonRepository beaconPersonRepository;
   private final OwnerGateway ownerGateway;
+  private final EmergencyContactGateway emergencyContactGateway;
 
   @Autowired
   public RegistrationsService(
     BeaconRepository beaconRepository,
     BeaconUseRepository beaconUseRepository,
-    BeaconPersonRepository beaconPersonRepository,
-    OwnerGateway ownerGateway
+    OwnerGateway ownerGateway,
+    EmergencyContactGateway emergencyContactGateway
   ) {
     this.beaconRepository = beaconRepository;
-    this.beaconPersonRepository = beaconPersonRepository;
     this.beaconUseRepository = beaconUseRepository;
     this.ownerGateway = ownerGateway;
+    this.emergencyContactGateway = emergencyContactGateway;
   }
 
   public Registration register(Registration registration) {
@@ -53,17 +55,15 @@ public class RegistrationsService {
   private void registerBeacon(Beacon beacon) {
     beacon.setBeaconStatus(BeaconStatus.NEW);
     final Beacon persistedBeacon = beaconRepository.save(beacon);
+    final UUID beaconId = persistedBeacon.getId();
 
-    registerBeaconUses(persistedBeacon);
-    registerOwner(persistedBeacon);
-    registerEmergencyContacts(persistedBeacon);
+    registerBeaconUses(persistedBeacon.getUses(), beaconId);
+    registerOwner(persistedBeacon.getOwner(), beaconId);
+    registerEmergencyContacts(persistedBeacon.getEmergencyContacts(), beaconId);
   }
 
-  private void registerBeaconUses(Beacon beacon) {
-    final List<BeaconUse> beaconUses = beacon.getUses();
-    final UUID beaconId = beacon.getId();
-
-    beaconUses.forEach(
+  private void registerBeaconUses(List<BeaconUse> uses, UUID beaconId) {
+    uses.forEach(
       use -> {
         use.setBeaconId(beaconId);
         beaconUseRepository.save(use);
@@ -71,36 +71,31 @@ public class RegistrationsService {
     );
   }
 
-  private void registerOwner(Beacon beacon) {
-    final BeaconPerson owner = beacon.getOwner();
-    final UUID beaconId = beacon.getId();
-
-    final CreateOwnerRequest createOwnerRequest = new CreateOwnerRequest(
+  private void registerOwner(BeaconPerson owner, UUID beaconId) {
+    final CreateOwnerRequest request = CreateOwnerRequestMapper.fromBeaconPerson(
       owner,
       beaconId
     );
-    ownerGateway.save(createOwnerRequest);
+    ownerGateway.save(request);
   }
 
-  private void registerEmergencyContacts(Beacon beacon) {
-    final List<BeaconPerson> emergencyContacts = beacon.getEmergencyContacts();
-    final UUID beaconId = beacon.getId();
-
+  private void registerEmergencyContacts(
+    List<BeaconPerson> emergencyContacts,
+    UUID beaconId
+  ) {
     emergencyContacts.forEach(
-      person -> registerPerson(person, beaconId, PersonType.EMERGENCY_CONTACT)
+      emergencyContact -> registerEmergencyContact(emergencyContact, beaconId)
     );
   }
 
-  private void registerPerson(
-    BeaconPerson person,
-    UUID beaconId,
-    PersonType personType
+  private void registerEmergencyContact(
+    BeaconPerson emergencyContact,
+    UUID beaconId
   ) {
-    person.setBeaconId(beaconId);
-    person.setPersonType(personType);
-    beaconPersonRepository.save(person);
-    // Make request
-    //    ownerGateway.createOwner(createOwnerRequest);
+    final CreateEmergencyContactRequest request = CreateEmergencyContactRequestMapper.fromBeaconPerson(
+      emergencyContact,
+      beaconId
+    );
+    emergencyContactGateway.save(request);
   }
-  //  private CreateOwnerRequest getRequestFromOwner
 }

@@ -4,18 +4,18 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
 public class CreateOwnerRequest {
 
-  private String fullName;
-
   private UUID beaconId;
+
+  private String fullName;
 
   private String telephoneNumber;
 

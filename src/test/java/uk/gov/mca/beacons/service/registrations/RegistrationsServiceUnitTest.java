@@ -19,8 +19,12 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.gateway.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
+import uk.gov.mca.beacons.service.gateway.EmergencyContactGateway;
 import uk.gov.mca.beacons.service.gateway.OwnerGateway;
+import uk.gov.mca.beacons.service.mappers.CreateEmergencyContactRequestMapper;
+import uk.gov.mca.beacons.service.mappers.CreateOwnerRequestMapper;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
@@ -41,13 +45,13 @@ class RegistrationsServiceUnitTest {
   private BeaconRepository beaconRepository;
 
   @Mock
-  private BeaconPersonRepository beaconPersonRepository;
-
-  @Mock
   private BeaconUseRepository beaconUseRepository;
 
   @Mock
   private OwnerGateway ownerGateway;
+
+  @Mock
+  private EmergencyContactGateway emergencyContactGateway;
 
   @Captor
   private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
@@ -56,8 +60,6 @@ class RegistrationsServiceUnitTest {
   private UUID beaconId;
   private Beacon beacon;
   private BeaconUse beaconUse;
-  private BeaconPerson owner;
-  private CreateOwnerRequest ownerRequest;
   private BeaconPerson emergencyContact;
 
   @BeforeEach
@@ -65,8 +67,7 @@ class RegistrationsServiceUnitTest {
     beaconId = UUID.randomUUID();
     beacon = new Beacon();
     beacon.setId(beaconId);
-    owner = new BeaconPerson();
-    ownerRequest = new CreateOwnerRequest(owner, beaconId);
+    final BeaconPerson owner = new BeaconPerson();
     beaconUse = new BeaconUse();
     emergencyContact = new BeaconPerson();
     beacon.setOwner(owner);
@@ -77,12 +78,6 @@ class RegistrationsServiceUnitTest {
     registration.setBeacons(Collections.singletonList(beacon));
 
     given(beaconRepository.save(beacon)).willReturn(beacon);
-  }
-
-  @Test
-  void shouldReturnTheSameRegistrationObjectProvided() {
-    final Registration expected = registrationsService.register(registration);
-    assertThat(registration, is(expected));
   }
 
   @Test
@@ -97,35 +92,16 @@ class RegistrationsServiceUnitTest {
     assertThat(beaconUse.getBeaconId(), is(beaconId));
   }
 
-  //  We don't need this behaviour anymore right? So this test can go?
-  //  @Test
-  //  void shouldSetTheBeaconIdAndPersonTypeOnTheOwner() {
-  //    registrationsService.register(registration);
-  //    assertThat(owner.getBeaconId(), is(beaconId));
-  //    assertThat(owner.getPersonType(), is(PersonType.OWNER));
-  //  }
-
-  @Test
-  void shouldSetTheBeaconIdAndPersonTypeOnTheEmergencyContact() {
-    registrationsService.register(registration);
-    assertThat(emergencyContact.getBeaconId(), is(beaconId));
-    assertThat(
-      emergencyContact.getPersonType(),
-      is(PersonType.EMERGENCY_CONTACT)
-    );
-  }
-
   @Test
   void shouldRegisterASingleBeacon() {
     registrationsService.register(registration);
 
     then(beaconRepository).should(times(1)).save(beacon);
     then(beaconUseRepository).should(times(1)).save(beaconUse);
-    then(beaconPersonRepository).should(times(1)).save(isA(BeaconPerson.class));
-    then(beaconPersonRepository).should(times(1)).save(emergencyContact);
-    then(ownerGateway).should(times(1)).save(ownerRequestCaptor.capture());
-    CreateOwnerRequest savedOwnerRequest = ownerRequestCaptor.getValue();
-    assertThat(savedOwnerRequest, samePropertyValuesAs(ownerRequest));
+    then(ownerGateway).should(times(1)).save(isA(CreateOwnerRequest.class));
+    then(emergencyContactGateway)
+      .should(times(1))
+      .save(isA(CreateEmergencyContactRequest.class));
   }
 
   @Test
@@ -135,7 +111,9 @@ class RegistrationsServiceUnitTest {
 
     then(beaconRepository).should(times(2)).save(beacon);
     then(beaconUseRepository).should(times(4)).save(beaconUse);
-    then(beaconPersonRepository).should(times(4)).save(isA(BeaconPerson.class));
+    then(emergencyContactGateway)
+      .should(times(4))
+      .save(isA(CreateEmergencyContactRequest.class));
     then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
   }
 
