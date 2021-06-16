@@ -14,8 +14,6 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
@@ -24,7 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,7 +109,7 @@ class AccountHolderControllerUnitTest {
   }
 
   @Test
-  void requestCreateAccountHolder_shouldReturn200IfSuccessful()
+  void requestCreateAccountHolder_shouldReturn201IfSuccessful()
           throws Exception {
     WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
     String newAccountHolderRequest = new ObjectMapper()
@@ -159,24 +156,5 @@ class AccountHolderControllerUnitTest {
     );
 
     verify(createAccountHolderService, times(1)).execute(accountHolder);
-  }
-
-  @Test
-  void requestCreateAccountHolder_shouldRespondWithTheCreatedResourceInTheJsonApiFormat()
-          throws Exception {
-    String newAccountHolderRequest = new String(
-            Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json"))
-    );
-
-    String expectedResponse = new String(
-            Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderResponse.json"))
-    );
-
-    mvc
-            .perform(
-                    post("/account-holder")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newAccountHolderRequest)
-            ).andExpect(content().string(expectedResponse));
   }
 }
