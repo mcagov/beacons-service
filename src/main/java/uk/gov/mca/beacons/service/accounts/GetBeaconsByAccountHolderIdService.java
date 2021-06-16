@@ -7,8 +7,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.gateway.BeaconGateway;
+import uk.gov.mca.beacons.service.gateway.OwnerGateway;
 import uk.gov.mca.beacons.service.gateway.UseGateway;
 import uk.gov.mca.beacons.service.model.Beacon;
+import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconUse;
 
 @Service
@@ -16,14 +18,17 @@ public class GetBeaconsByAccountHolderIdService {
 
   private final BeaconGateway beaconGateway;
   private final UseGateway useGateway;
+  private final OwnerGateway ownerGateway;
 
   @Autowired
   public GetBeaconsByAccountHolderIdService(
     BeaconGateway beaconGateway,
-    UseGateway useGateway
+    UseGateway useGateway,
+    OwnerGateway ownerGateway
   ) {
     this.beaconGateway = beaconGateway;
     this.useGateway = useGateway;
+    this.ownerGateway = ownerGateway;
   }
 
   public List<Beacon> execute(UUID accountId) {
@@ -37,6 +42,9 @@ public class GetBeaconsByAccountHolderIdService {
         final UUID beaconId = beacon.getId();
         final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
         beacon.setUses(uses);
+
+        final BeaconPerson owner = ownerGateway.findByBeaconId(beaconId);
+        beacon.setOwner(owner);
       }
     );
 

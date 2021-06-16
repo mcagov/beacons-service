@@ -45,6 +45,22 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
   }
 
   @Test
+  void shouldReturnASingleBeacon() {
+    final var accountId = UUID.randomUUID();
+    final var beaconId = UUID.randomUUID();
+    final var beacon = new Beacon();
+
+    given(beaconGateway.findAllByAccountHolderId(accountId))
+      .willReturn(Collections.singletonList(beacon));
+
+    final var result = getBeaconsByAccountHolderIdService.execute(accountId);
+
+    assertThat(result.size(), is(1));
+    final var beaconResult = result.get(0);
+    assertThat(beaconResult, is(beacon));
+  }
+
+  @Test
   void shouldReturnABeaconWithItsUses() {
     final var accountId = UUID.randomUUID();
     final var beaconId = UUID.randomUUID();
@@ -59,11 +75,8 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
 
-    assertThat(result.size(), is(1));
-    final var beaconResult = result.get(0);
-    assertThat(beaconResult, is(beacon));
-    assertThat(beaconResult.getUses().size(), is(1));
-    assertThat(beaconResult.getUses().get(0), is(beaconUse));
+    assertThat(result.get(0).getUses().size(), is(1));
+    assertThat(result.get(0).getUses().get(0), is(beaconUse));
   }
 
   @Test
@@ -71,10 +84,14 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
     final var accountId = UUID.randomUUID();
     final var beaconId = UUID.randomUUID();
     final var beacon = new Beacon();
+    beacon.setId(beaconId);
     final var owner = new BeaconPerson();
 
     given(beaconGateway.findAllByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
     given(ownerGateway.findByBeaconId(beaconId)).willReturn(owner);
+
+    final var result = getBeaconsByAccountHolderIdService.execute(accountId);
+    assertThat(result.get(0).getOwner(), is(owner));
   }
 }
