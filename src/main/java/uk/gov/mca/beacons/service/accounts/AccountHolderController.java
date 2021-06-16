@@ -70,7 +70,7 @@ public class AccountHolderController {
   }
 
   @GetMapping(value = "/{accountId}/beacons")
-  public WrapperDTO<List<BeaconDTO>> getBeaconsByAccountId(
+  public WrapperDTO<List<BeaconDTO>> getBeaconsByAccountHolderId(
     @PathVariable("accountId") UUID accountId
   ) {
     return null;

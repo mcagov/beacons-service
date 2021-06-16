@@ -15,4 +15,10 @@ public interface BeaconPersonRepository
     value = "SELECT * FROM person WHERE beacon_id = ?1"
   )
   List<BeaconPerson> findAllByBeaconId(UUID beaconId);
+
+  @Query(
+    nativeQuery = true,
+    value = "SELECT * FROM person where beacon_id = ?1 AND person_type = 'OWNER'"
+  )
+  BeaconPerson findOwnerByBeaconId(UUID beaconId);
 }

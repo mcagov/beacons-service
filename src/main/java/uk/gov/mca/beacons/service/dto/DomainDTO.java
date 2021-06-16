@@ -10,9 +10,9 @@ import uk.gov.mca.beacons.service.hateoas.HateoasLink;
 public abstract class DomainDTO {
 
   private UUID id;
-  private final Map<String, Object> attributes = new HashMap<String, Object>();
-  private final List<HateoasLink> links = new ArrayList<HateoasLink>();
-  private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
+  private final Map<String, Object> attributes = new HashMap<>();
+  private final List<HateoasLink> links = new ArrayList<>();
+  private final Map<String, RelationshipDTO> relationships = new HashMap<>();
 
   public abstract String getType();
 
