@@ -176,19 +176,20 @@ class AccountHolderControllerUnitTest {
     verify(getAccountHolderByIdService, times(1)).execute(id);
   }
 
-//  @Test
-//  void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound()
-//          throws Exception {
-//    given(getAccountHolderByAuthIdService.execute(authId))
-//            .willReturn(accountHolder);
-//
-//    mvc
-//            .perform(
-//                    get("/account-holder/auth-id/" + authId)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//            )
-//            .andExpect(status().isOk());
-//  }
+  @Test
+  void requestAccountHolderById_shouldReturn200WhenAccountHolderIdFound()
+          throws Exception {
+    UUID id = UUID.fromString("50405780-591f-46e2-87ea-4dc85d167642");
+    given(getAccountHolderByIdService.execute(id))
+            .willReturn(accountHolder);
+
+    mvc
+            .perform(
+                    get("/account-holder/" + id)
+                            .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isOk());
+  }
 //
 //  @Test
 //  void requestAccountHolderIdByAuthId_shouldReturnTheAccountHolderId()
