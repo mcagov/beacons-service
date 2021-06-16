@@ -48,7 +48,7 @@ class AccountHolderMapperUnitTest {
     var accountHolderMapper = new AccountHolderMapper();
 
     AccountHolderDTO accountHolderDTO = accountHolderMapper.toDTO(
-            accountHolder
+      accountHolder
     );
 
     assertThat(
