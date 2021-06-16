@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.registrations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -13,9 +14,17 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.gateway.CreateEmergencyContactRequest;
+import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
+import uk.gov.mca.beacons.service.gateway.EmergencyContactGateway;
+import uk.gov.mca.beacons.service.gateway.OwnerGateway;
+import uk.gov.mca.beacons.service.mappers.CreateEmergencyContactRequestMapper;
+import uk.gov.mca.beacons.service.mappers.CreateOwnerRequestMapper;
 import uk.gov.mca.beacons.service.model.Beacon;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.BeaconStatus;
@@ -36,16 +45,21 @@ class RegistrationsServiceUnitTest {
   private BeaconRepository beaconRepository;
 
   @Mock
-  private BeaconPersonRepository beaconPersonRepository;
+  private BeaconUseRepository beaconUseRepository;
 
   @Mock
-  private BeaconUseRepository beaconUseRepository;
+  private OwnerGateway ownerGateway;
+
+  @Mock
+  private EmergencyContactGateway emergencyContactGateway;
+
+  @Captor
+  private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
 
   private Registration registration;
   private UUID beaconId;
   private Beacon beacon;
   private BeaconUse beaconUse;
-  private BeaconPerson owner;
   private BeaconPerson emergencyContact;
 
   @BeforeEach
@@ -53,7 +67,7 @@ class RegistrationsServiceUnitTest {
     beaconId = UUID.randomUUID();
     beacon = new Beacon();
     beacon.setId(beaconId);
-    owner = new BeaconPerson();
+    final BeaconPerson owner = new BeaconPerson();
     beaconUse = new BeaconUse();
     emergencyContact = new BeaconPerson();
     beacon.setOwner(owner);
@@ -64,12 +78,6 @@ class RegistrationsServiceUnitTest {
     registration.setBeacons(Collections.singletonList(beacon));
 
     given(beaconRepository.save(beacon)).willReturn(beacon);
-  }
-
-  @Test
-  void shouldReturnTheSameRegistrationObjectProvided() {
-    final Registration expected = registrationsService.register(registration);
-    assertThat(registration, is(expected));
   }
 
   @Test
@@ -85,31 +93,15 @@ class RegistrationsServiceUnitTest {
   }
 
   @Test
-  void shouldSetTheBeaconIdAndPersonTypeOnTheOwner() {
-    registrationsService.register(registration);
-    assertThat(owner.getBeaconId(), is(beaconId));
-    assertThat(owner.getPersonType(), is(PersonType.OWNER));
-  }
-
-  @Test
-  void shouldSetTheBeaconIdAndPersonTypeOnTheEmergencyContact() {
-    registrationsService.register(registration);
-    assertThat(emergencyContact.getBeaconId(), is(beaconId));
-    assertThat(
-      emergencyContact.getPersonType(),
-      is(PersonType.EMERGENCY_CONTACT)
-    );
-  }
-
-  @Test
   void shouldRegisterASingleBeacon() {
     registrationsService.register(registration);
 
     then(beaconRepository).should(times(1)).save(beacon);
     then(beaconUseRepository).should(times(1)).save(beaconUse);
-    then(beaconPersonRepository).should(times(2)).save(isA(BeaconPerson.class));
-    then(beaconPersonRepository).should(times(1)).save(emergencyContact);
-    then(beaconPersonRepository).should(times(1)).save(owner);
+    then(ownerGateway).should(times(1)).save(isA(CreateOwnerRequest.class));
+    then(emergencyContactGateway)
+      .should(times(1))
+      .save(isA(CreateEmergencyContactRequest.class));
   }
 
   @Test
@@ -119,7 +111,10 @@ class RegistrationsServiceUnitTest {
 
     then(beaconRepository).should(times(2)).save(beacon);
     then(beaconUseRepository).should(times(4)).save(beaconUse);
-    then(beaconPersonRepository).should(times(6)).save(isA(BeaconPerson.class));
+    then(emergencyContactGateway)
+      .should(times(4))
+      .save(isA(CreateEmergencyContactRequest.class));
+    then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
   }
 
   private void setupMultipleBeacons() {

@@ -12,7 +12,7 @@ public interface BeaconPersonRepository
   extends JpaRepository<BeaconPerson, UUID> {
   @Query(
     nativeQuery = true,
-    value = "SELECT * FROM beacon_person WHERE beacon_id = ?1"
+    value = "SELECT * FROM person WHERE beacon_id = ?1"
   )
   List<BeaconPerson> findAllByBeaconId(UUID beaconId);
 }
