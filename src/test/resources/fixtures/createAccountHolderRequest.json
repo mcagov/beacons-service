@@ -1,6 +1,10 @@
 {
+  "meta": {},
+  "included": [],
   "data": {
+    "id": "b81c2419-91b7-49de-b273-98206e02b739",
     "type": "accountHolder",
+    "relationships": {},
     "attributes": {
       "authId": "461fc925-dbe0-448b-acf4-18727958393e",
       "email": "testy@mctestface.com",
