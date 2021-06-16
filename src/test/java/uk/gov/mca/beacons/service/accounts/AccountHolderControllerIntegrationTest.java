@@ -14,6 +14,7 @@ import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -36,6 +37,20 @@ class AccountHolderControllerIntegrationTest {
                 Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderResponse.json"))
         );
         AccountHolder accountHolder = new AccountHolder();
+        accountHolder.setId(UUID.fromString("b81c2419-91b7-49de-b273-98206e02b739"));
+        accountHolder.setAuthId("461fc925-dbe0-448b-acf4-18727958393e");
+        accountHolder.setEmail("testy@mctestface.com");
+        accountHolder.setFullName("Tesy McTestface");
+        accountHolder.setTelephoneNumber("01178 657123");
+        accountHolder.setAlternativeTelephoneNumber("");
+        accountHolder.setAddressLine1("Flat 42");
+        accountHolder.setAddressLine2("Testington Towers");
+        accountHolder.setAddressLine3("");
+        accountHolder.setAddressLine4("");
+        accountHolder.setTownOrCity("Testville");
+        accountHolder.setPostcode("TS1 23A");
+        accountHolder.setCounty("Testershire");
+
         given(accountHolderRepository.save(any(AccountHolder.class))).willReturn(accountHolder);
 
         webTestClient.post()
