@@ -12,44 +12,24 @@ public class AccountHolderMapper extends BaseMapper {
     final var accountHolder = new AccountHolder();
     accountHolder.setId(accountHolderDTO.getId());
 
-    accountHolder.setAuthId(
-      (String) accountHolderDTO.getAttributes().get("authId")
-    );
-    accountHolder.setEmail(
-      (String) accountHolderDTO.getAttributes().get("email")
-    );
-    accountHolder.setFullName(
-      (String) accountHolderDTO.getAttributes().get("fullName")
-    );
+    final var attributes = accountHolderDTO.getAttributes();
+
+    accountHolder.setAuthId((String) attributes.get("authId"));
+    accountHolder.setEmail((String) attributes.get("email"));
+    accountHolder.setFullName((String) attributes.get("fullName"));
     accountHolder.setTelephoneNumber(
-      (String) accountHolderDTO.getAttributes().get("telephoneNumber")
+      (String) attributes.get("telephoneNumber")
     );
     accountHolder.setAlternativeTelephoneNumber(
-      (String) accountHolderDTO
-        .getAttributes()
-        .get("alternativeTelephoneNumber")
+      (String) attributes.get("alternativeTelephoneNumber")
     );
-    accountHolder.setAddressLine1(
-      (String) accountHolderDTO.getAttributes().get("addressLine1")
-    );
-    accountHolder.setAddressLine2(
-      (String) accountHolderDTO.getAttributes().get("addressLine2")
-    );
-    accountHolder.setAddressLine3(
-      (String) accountHolderDTO.getAttributes().get("addressLine3")
-    );
-    accountHolder.setAddressLine4(
-      (String) accountHolderDTO.getAttributes().get("addressLine4")
-    );
-    accountHolder.setTownOrCity(
-      (String) accountHolderDTO.getAttributes().get("townOrCity")
-    );
-    accountHolder.setPostcode(
-      (String) accountHolderDTO.getAttributes().get("postcode")
-    );
-    accountHolder.setCounty(
-      (String) accountHolderDTO.getAttributes().get("county")
-    );
+    accountHolder.setAddressLine1((String) attributes.get("addressLine1"));
+    accountHolder.setAddressLine2((String) attributes.get("addressLine2"));
+    accountHolder.setAddressLine3((String) attributes.get("addressLine3"));
+    accountHolder.setAddressLine4((String) attributes.get("addressLine4"));
+    accountHolder.setTownOrCity((String) attributes.get("townOrCity"));
+    accountHolder.setPostcode((String) attributes.get("postcode"));
+    accountHolder.setCounty((String) attributes.get("county"));
 
     return accountHolder;
   }
@@ -76,7 +56,7 @@ public class AccountHolderMapper extends BaseMapper {
     return dto;
   }
 
-  public WrapperDTO<AccountHolderDTO> toWrapperDTO(
+  public final WrapperDTO<AccountHolderDTO> toWrapperDTO(
     AccountHolder accountHolder
   ) {
     WrapperDTO<AccountHolderDTO> wrapperDTO = new WrapperDTO<>();
