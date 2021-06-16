@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 class AccountHolderControllerIntegrationTest {
+
     @Autowired
     private WebTestClient webTestClient;
 
@@ -29,15 +30,24 @@ class AccountHolderControllerIntegrationTest {
     private AccountHolderRepository accountHolderRepository;
 
     @Test
-    void requestCreateAccountHolder_shouldRespondWithTheCreatedResource() throws Exception {
+    void requestCreateAccountHolder_shouldRespondWithTheCreatedResource()
+            throws Exception {
         String newAccountHolderRequest = new String(
-                Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json"))
+                Files.readAllBytes(
+                        Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json")
+                )
         );
         String expectedResponse = new String(
-                Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderResponse.json"))
+                Files.readAllBytes(
+                        Paths.get(
+                                "src/test/resources/fixtures/createAccountHolderResponse.json"
+                        )
+                )
         );
         AccountHolder accountHolder = new AccountHolder();
-        accountHolder.setId(UUID.fromString("b81c2419-91b7-49de-b273-98206e02b739"));
+        accountHolder.setId(
+                UUID.fromString("b81c2419-91b7-49de-b273-98206e02b739")
+        );
         accountHolder.setAuthId("461fc925-dbe0-448b-acf4-18727958393e");
         accountHolder.setEmail("testy@mctestface.com");
         accountHolder.setFullName("Tesy McTestface");
@@ -51,12 +61,16 @@ class AccountHolderControllerIntegrationTest {
         accountHolder.setPostcode("TS1 23A");
         accountHolder.setCounty("Testershire");
 
-        given(accountHolderRepository.save(any(AccountHolder.class))).willReturn(accountHolder);
+        given(accountHolderRepository.save(any(AccountHolder.class)))
+                .willReturn(accountHolder);
 
-        webTestClient.post()
+        webTestClient
+                .post()
                 .uri("/account-holder")
                 .body(BodyInserters.fromValue(newAccountHolderRequest))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange().expectBody().json(expectedResponse);
+                .exchange()
+                .expectBody()
+                .json(expectedResponse);
     }
 }

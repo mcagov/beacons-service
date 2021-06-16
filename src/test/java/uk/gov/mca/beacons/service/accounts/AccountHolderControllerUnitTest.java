@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountHolderControllerUnitTest {
 
   private final UUID accountHolderId = UUID.fromString(
-          "432e083d-7bd8-402b-9520-05da24ad143f"
+    "432e083d-7bd8-402b-9520-05da24ad143f"
   );
   private final String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
   private final AccountHolder accountHolder = new AccountHolder();

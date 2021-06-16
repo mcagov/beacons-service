@@ -31,7 +31,7 @@ class AccountHolderMapperUnitTest {
   void toDTO_shouldSetAllTheFieldsOnTheAccountHolderDTOFromTheDomain() {
     var accountHolder = new AccountHolder();
     accountHolder.setId(
-            UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
+      UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
     );
     accountHolder.setAuthId("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc");
     accountHolder.setEmail("testy@mctestface.com");
@@ -99,8 +99,13 @@ class AccountHolderMapperUnitTest {
   @Test
   void fromDTO_shouldInstantiateADomainObjectFromTheDTO() {
     var accountHolderDTO = new AccountHolderDTO();
-    accountHolderDTO.setId(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"));
-    accountHolderDTO.addAttribute("authId", "a2fb6bb2-f735-41aa-a4a1-19cb951a51bc");
+    accountHolderDTO.setId(
+            UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
+    );
+    accountHolderDTO.addAttribute(
+            "authId",
+            "a2fb6bb2-f735-41aa-a4a1-19cb951a51bc"
+    );
     accountHolderDTO.addAttribute("email", "testy@mctestface.com");
     accountHolderDTO.addAttribute("fullName", "Tesy McTestface");
     accountHolderDTO.addAttribute("telephoneNumber", "01178 657123");
@@ -124,41 +129,17 @@ class AccountHolderMapperUnitTest {
             accountHolder.getAuthId(),
             is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
     );
-    assertThat(
-            accountHolder.getEmail(),
-            is("testy@mctestface.com")
-    );
-    assertThat(
-            accountHolder.getFullName(),
-            is("Tesy McTestface")
-    );
-    assertThat(
-            accountHolder.getTelephoneNumber(),
-            is("01178 657123")
-    );
-    assertThat(
-            accountHolder.getAlternativeTelephoneNumber(),
-            is("")
-    );
-    assertThat(
-            accountHolder.getAddressLine1(),
-            is("Flat 42")
-    );
-    assertThat(
-            accountHolder.getAddressLine2(),
-            is("Testington Towers")
-    );
+    assertThat(accountHolder.getEmail(), is("testy@mctestface.com"));
+    assertThat(accountHolder.getFullName(), is("Tesy McTestface"));
+    assertThat(accountHolder.getTelephoneNumber(), is("01178 657123"));
+    assertThat(accountHolder.getAlternativeTelephoneNumber(), is(""));
+    assertThat(accountHolder.getAddressLine1(), is("Flat 42"));
+    assertThat(accountHolder.getAddressLine2(), is("Testington Towers"));
     assertThat(accountHolder.getAddressLine3(), is(""));
     assertThat(accountHolder.getAddressLine4(), is(""));
-    assertThat(
-            accountHolder.getTownOrCity(),
-            is("Testville")
-    );
+    assertThat(accountHolder.getTownOrCity(), is("Testville"));
     assertThat(accountHolder.getPostcode(), is("TS1 23A"));
-    assertThat(
-            accountHolder.getCounty(),
-            is("Testershire")
-    );
+    assertThat(accountHolder.getCounty(), is("Testershire"));
   }
 
   @Test
@@ -166,7 +147,9 @@ class AccountHolderMapperUnitTest {
     var accountHolder = new AccountHolder();
     var accountHolderMapper = new AccountHolderMapper();
 
-    WrapperDTO<AccountHolderDTO> wrappedAccountHolder = accountHolderMapper.toWrapperDTO(accountHolder);
+    WrapperDTO<AccountHolderDTO> wrappedAccountHolder = accountHolderMapper.toWrapperDTO(
+            accountHolder
+    );
 
     assertNotNull(wrappedAccountHolder.getData());
     assertNotNull(wrappedAccountHolder.getIncluded());

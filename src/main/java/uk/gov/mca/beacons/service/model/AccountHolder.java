@@ -16,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AccountHolder {
+
   @Id
   @GeneratedValue
   private UUID id;
