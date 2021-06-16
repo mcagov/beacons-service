@@ -1,16 +1,6 @@
 package uk.gov.mca.beacons.service.accounts;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +14,23 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
+import java.util.UUID;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(controllers = AccountHolderController.class)
 @AutoConfigureMockMvc
 class AccountHolderControllerUnitTest {
 
   private final UUID accountHolderId = UUID.fromString(
-    "432e083d-7bd8-402b-9520-05da24ad143f"
+          "432e083d-7bd8-402b-9520-05da24ad143f"
   );
   private final String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
   private final AccountHolder accountHolder = new AccountHolder();
@@ -39,6 +40,9 @@ class AccountHolderControllerUnitTest {
 
   @MockBean
   private GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
+
+  @MockBean
+  private GetAccountHolderByIdService getAccountHolderByIdService;
 
   @MockBean
   private CreateAccountHolderService createAccountHolderService;
@@ -146,14 +150,70 @@ class AccountHolderControllerUnitTest {
     String newAccountHolderRequest = new ObjectMapper()
       .writeValueAsString(newAccountHolderDTO);
     given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
-      .willReturn(accountHolder);
+            .willReturn(accountHolder);
 
     mvc.perform(
-      post("/account-holder")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(newAccountHolderRequest)
+            post("/account-holder")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(newAccountHolderRequest)
     );
 
     verify(createAccountHolderService, times(1)).execute(accountHolder);
   }
+
+  @Test
+  void requestAccountHolderById_shouldRequestAccountHolderIdFromServiceByAuthId()
+          throws Exception {
+    UUID id = UUID.fromString("50405780-591f-46e2-87ea-4dc85d167642");
+    given(getAccountHolderByIdService.execute(id))
+            .willReturn(accountHolder);
+
+    mvc.perform(
+            get("/account-holder/" + id)
+                    .contentType(MediaType.APPLICATION_JSON)
+    );
+
+    verify(getAccountHolderByIdService, times(1)).execute(id);
+  }
+
+//  @Test
+//  void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound()
+//          throws Exception {
+//    given(getAccountHolderByAuthIdService.execute(authId))
+//            .willReturn(accountHolder);
+//
+//    mvc
+//            .perform(
+//                    get("/account-holder/auth-id/" + authId)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(status().isOk());
+//  }
+//
+//  @Test
+//  void requestAccountHolderIdByAuthId_shouldReturnTheAccountHolderId()
+//          throws Exception {
+//    given(getAccountHolderByAuthIdService.execute(authId))
+//            .willReturn(accountHolder);
+//
+//    mvc
+//            .perform(
+//                    get("/account-holder/auth-id/" + authId)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(jsonPath("$.id", is(accountHolderId.toString())));
+//  }
+//
+//  @Test
+//  void requestAccountHolderIdByAuthId_shouldReturn404IfAccountHolderNotFound()
+//          throws Exception {
+//    given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+//
+//    mvc
+//            .perform(
+//                    get("/account-holder/auth-id/" + authId)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(status().isNotFound());
+//  }
 }

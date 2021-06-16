@@ -17,6 +17,8 @@ import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/account-holder")
 @Tag(name = "Account Holder")
@@ -24,27 +26,41 @@ public class AccountHolderController {
 
   private final AccountHolderMapper accountHolderMapper;
 
+  private final GetAccountHolderByIdService getAccountHolderByIdService;
+
   private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
   private final CreateAccountHolderService createAccountHolderService;
 
   @Autowired
   public AccountHolderController(
-    AccountHolderMapper accountHolderMapper,
-    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-    CreateAccountHolderService createAccountHolderService
+          AccountHolderMapper accountHolderMapper,
+          GetAccountHolderByIdService getAccountHolderByIdService, GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
+          CreateAccountHolderService createAccountHolderService
   ) {
     this.accountHolderMapper = accountHolderMapper;
+    this.getAccountHolderByIdService = getAccountHolderByIdService;
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
     this.createAccountHolderService = createAccountHolderService;
   }
 
+  @GetMapping(value = "/{id}")
+  public WrapperDTO<AccountHolderDTO> getAccountHolder(
+          @PathVariable("id") String id
+  ) {
+    final AccountHolder accountHolder = getAccountHolderByIdService.execute(UUID.fromString(id));
+
+    if (accountHolder == null) throw new ResourceNotFoundException();
+
+    return accountHolderMapper.toWrapperDTO(accountHolder);
+  }
+
   @GetMapping(value = "/auth-id/{authId}")
   public AccountHolderIdDTO getAccountHolderId(
-    @PathVariable("authId") String authId
+          @PathVariable("authId") String authId
   ) {
     final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
-      authId
+            authId
     );
 
     if (accountHolder == null) throw new ResourceNotFoundException();
