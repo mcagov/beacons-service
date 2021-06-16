@@ -51,16 +51,14 @@ public class AccountHolderController {
   }
 
   @PostMapping
-  public AccountHolderDTO createAccountHolder(
+  public WrapperDTO<AccountHolderDTO> createAccountHolder(
           @RequestBody WrapperDTO<AccountHolderDTO> dto
   ) {
-    final AccountHolderDTO accountHolderDTO = dto.getData();
-
     final AccountHolder newAccountHolder = accountHolderMapper.fromDTO(
-            accountHolderDTO
+            dto.getData()
     );
 
-    return accountHolderMapper.toDTO(
+    return accountHolderMapper.toWrapperDTO(
             createAccountHolderService.execute(newAccountHolder)
     );
   }

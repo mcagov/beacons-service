@@ -14,7 +14,8 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
@@ -163,20 +164,12 @@ class AccountHolderControllerUnitTest {
   @Test
   void requestCreateAccountHolder_shouldRespondWithTheCreatedResourceInTheJsonApiFormat()
           throws Exception {
-    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
-    String newAccountHolderRequest = new ObjectMapper()
-            .writeValueAsString(newAccountHolderDTO);
-    given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
-            .willReturn(accountHolder);
+    String newAccountHolderRequest = new String(
+            Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json"))
+    );
 
     String expectedResponse = new String(
-            Objects
-                    .requireNonNull(
-                            getClass()
-                                    .getClassLoader()
-                                    .getResourceAsStream("fixtures/createAccountHolderResponse.json")
-                    )
-                    .readAllBytes()
+            Files.readAllBytes(Paths.get("src/test/resources/fixtures/createAccountHolderResponse.json"))
     );
 
     mvc
@@ -184,7 +177,6 @@ class AccountHolderControllerUnitTest {
                     post("/account-holder")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(newAccountHolderRequest)
-            )
-            .andExpect(content().string(expectedResponse));
+            ).andExpect(content().string(expectedResponse));
   }
 }
