@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WrapperDTO<T extends DomainDTO> {
+public class WrapperDTO<T> {
 
   private final Map<String, Object> meta = new HashMap<String, Object>();
   private T data = null;
