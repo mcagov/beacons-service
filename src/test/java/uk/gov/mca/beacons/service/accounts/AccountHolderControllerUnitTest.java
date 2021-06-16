@@ -1,6 +1,16 @@
 package uk.gov.mca.beacons.service.accounts;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +23,6 @@ import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
-
-import java.util.UUID;
-
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AccountHolderController.class)
 @AutoConfigureMockMvc
@@ -55,13 +54,13 @@ class AccountHolderControllerUnitTest {
 
   @Test
   void requestAccountHolderIdByAuthId_shouldRequestAccountHolderIdFromServiceByAuthId()
-          throws Exception {
+    throws Exception {
     given(getAccountHolderByAuthIdService.execute(authId))
-            .willReturn(accountHolder);
+      .willReturn(accountHolder);
 
     mvc.perform(
-            get("/account-holder/auth-id/" + authId)
-                    .contentType(MediaType.APPLICATION_JSON)
+      get("/account-holder/auth-id/" + authId)
+        .contentType(MediaType.APPLICATION_JSON)
     );
 
     verify(getAccountHolderByAuthIdService, times(1)).execute(authId);
@@ -110,49 +109,49 @@ class AccountHolderControllerUnitTest {
 
   @Test
   void requestCreateAccountHolder_shouldReturn201IfSuccessful()
-          throws Exception {
+    throws Exception {
     WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
     String newAccountHolderRequest = new ObjectMapper()
-            .writeValueAsString(newAccountHolderDTO);
+      .writeValueAsString(newAccountHolderDTO);
     mvc
-            .perform(
-                    post("/account-holder")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newAccountHolderRequest)
-            )
-            .andExpect(status().isCreated());
+      .perform(
+        post("/account-holder")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newAccountHolderRequest)
+      )
+      .andExpect(status().isCreated());
   }
 
   @Test
   void requestCreateAccountHolder_shouldMapDTOToDomainAccountHolder()
-          throws Exception {
+    throws Exception {
     WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
     String newAccountHolderRequest = new ObjectMapper()
-            .writeValueAsString(newAccountHolderDTO);
+      .writeValueAsString(newAccountHolderDTO);
 
     mvc.perform(
-            post("/account-holder")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(newAccountHolderRequest)
+      post("/account-holder")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(newAccountHolderRequest)
     );
 
     verify(accountHolderMapper, times(1))
-            .fromDTO(newAccountHolderDTO.getData());
+      .fromDTO(newAccountHolderDTO.getData());
   }
 
   @Test
   void requestCreateAccountHolder_shouldCallTheAccountHolderServiceToCreateANewResource()
-          throws Exception {
+    throws Exception {
     WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
     String newAccountHolderRequest = new ObjectMapper()
-            .writeValueAsString(newAccountHolderDTO);
+      .writeValueAsString(newAccountHolderDTO);
     given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
-            .willReturn(accountHolder);
+      .willReturn(accountHolder);
 
     mvc.perform(
-            post("/account-holder")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(newAccountHolderRequest)
+      post("/account-holder")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(newAccountHolderRequest)
     );
 
     verify(createAccountHolderService, times(1)).execute(accountHolder);

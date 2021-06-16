@@ -55,14 +55,14 @@ public class AccountHolderController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<AccountHolderDTO> createAccountHolder(
-          @RequestBody WrapperDTO<AccountHolderDTO> dto
+    @RequestBody WrapperDTO<AccountHolderDTO> dto
   ) {
     final AccountHolder newAccountHolder = accountHolderMapper.fromDTO(
-            dto.getData()
+      dto.getData()
     );
 
     return accountHolderMapper.toWrapperDTO(
-            createAccountHolderService.execute(newAccountHolder)
+      createAccountHolderService.execute(newAccountHolder)
     );
   }
 }

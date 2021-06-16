@@ -1,5 +1,10 @@
 package uk.gov.mca.beacons.service.accounts;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -11,12 +16,6 @@ import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 import uk.gov.mca.beacons.service.model.Beacon;
-
-import java.util.UUID;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class AccountHolderMapperUnitTest {
@@ -52,47 +51,47 @@ class AccountHolderMapperUnitTest {
     );
 
     assertThat(
-            accountHolderDTO.getId(),
-            is(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"))
+      accountHolderDTO.getId(),
+      is(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"))
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("authId"),
-            is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
+      accountHolderDTO.getAttributes().get("authId"),
+      is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("email"),
-            is("testy@mctestface.com")
+      accountHolderDTO.getAttributes().get("email"),
+      is("testy@mctestface.com")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("fullName"),
-            is("Tesy McTestface")
+      accountHolderDTO.getAttributes().get("fullName"),
+      is("Tesy McTestface")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("telephoneNumber"),
-            is("01178 657123")
+      accountHolderDTO.getAttributes().get("telephoneNumber"),
+      is("01178 657123")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("alternativeTelephoneNumber"),
-            is("")
+      accountHolderDTO.getAttributes().get("alternativeTelephoneNumber"),
+      is("")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("addressLine1"),
-            is("Flat 42")
+      accountHolderDTO.getAttributes().get("addressLine1"),
+      is("Flat 42")
     );
     assertThat(
-            accountHolderDTO.getAttributes().get("addressLine2"),
-            is("Testington Towers")
+      accountHolderDTO.getAttributes().get("addressLine2"),
+      is("Testington Towers")
     );
     assertThat(accountHolderDTO.getAttributes().get("addressLine3"), is(""));
     assertThat(accountHolderDTO.getAttributes().get("addressLine4"), is(""));
     assertThat(
-            accountHolderDTO.getAttributes().get("townOrCity"),
-            is("Testville")
+      accountHolderDTO.getAttributes().get("townOrCity"),
+      is("Testville")
     );
     assertThat(accountHolderDTO.getAttributes().get("postcode"), is("TS1 23A"));
     assertThat(
-            accountHolderDTO.getAttributes().get("county"),
-            is("Testershire")
+      accountHolderDTO.getAttributes().get("county"),
+      is("Testershire")
     );
   }
 
@@ -100,11 +99,11 @@ class AccountHolderMapperUnitTest {
   void fromDTO_shouldInstantiateADomainObjectFromTheDTO() {
     var accountHolderDTO = new AccountHolderDTO();
     accountHolderDTO.setId(
-            UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
+      UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
     );
     accountHolderDTO.addAttribute(
-            "authId",
-            "a2fb6bb2-f735-41aa-a4a1-19cb951a51bc"
+      "authId",
+      "a2fb6bb2-f735-41aa-a4a1-19cb951a51bc"
     );
     accountHolderDTO.addAttribute("email", "testy@mctestface.com");
     accountHolderDTO.addAttribute("fullName", "Tesy McTestface");
@@ -122,12 +121,12 @@ class AccountHolderMapperUnitTest {
     AccountHolder accountHolder = accountHolderMapper.fromDTO(accountHolderDTO);
 
     assertThat(
-            accountHolder.getId(),
-            is(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"))
+      accountHolder.getId(),
+      is(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"))
     );
     assertThat(
-            accountHolder.getAuthId(),
-            is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
+      accountHolder.getAuthId(),
+      is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
     );
     assertThat(accountHolder.getEmail(), is("testy@mctestface.com"));
     assertThat(accountHolder.getFullName(), is("Tesy McTestface"));
@@ -148,7 +147,7 @@ class AccountHolderMapperUnitTest {
     var accountHolderMapper = new AccountHolderMapper();
 
     WrapperDTO<AccountHolderDTO> wrappedAccountHolder = accountHolderMapper.toWrapperDTO(
-            accountHolder
+      accountHolder
     );
 
     assertNotNull(wrappedAccountHolder.getData());
