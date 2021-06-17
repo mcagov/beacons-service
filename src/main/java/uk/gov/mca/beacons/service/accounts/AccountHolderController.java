@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.service.beacons.BeaconsResponseFactory;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.AccountHolderIdDTO;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
@@ -33,17 +34,26 @@ public class AccountHolderController {
 
   private final CreateAccountHolderService createAccountHolderService;
 
+  private final GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService;
+
+  private final BeaconsResponseFactory responseFactory;
+
   @Autowired
   public AccountHolderController(
     AccountHolderMapper accountHolderMapper,
     GetAccountHolderByIdService getAccountHolderByIdService,
     GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-    CreateAccountHolderService createAccountHolderService
+    CreateAccountHolderService createAccountHolderService,
+    GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService,
+    BeaconsResponseFactory responseFactory
   ) {
     this.accountHolderMapper = accountHolderMapper;
     this.getAccountHolderByIdService = getAccountHolderByIdService;
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
     this.createAccountHolderService = createAccountHolderService;
+    this.getBeaconsByAccountHolderIdService =
+      getBeaconsByAccountHolderIdService;
+    this.responseFactory = responseFactory;
   }
 
   @GetMapping(value = "/{id}")
@@ -88,6 +98,7 @@ public class AccountHolderController {
   public WrapperDTO<List<BeaconDTO>> getBeaconsByAccountHolderId(
     @PathVariable("accountId") UUID accountId
   ) {
-    return null;
+    final var beacons = getBeaconsByAccountHolderIdService.execute(accountId);
+    return responseFactory.buildDTO(beacons);
   }
 }

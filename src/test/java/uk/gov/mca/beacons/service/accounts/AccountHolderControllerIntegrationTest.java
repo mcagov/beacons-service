@@ -84,6 +84,23 @@ class AccountHolderControllerIntegrationTest {
     response.jsonPath("$.data.id").exists();
   }
 
+  @Test
+  void requestGetBeaconsByAccountHolderId_shouldRespondWithAnEmptyListOfBeacons()
+    throws Exception {
+    final String expectedResponse = readFile(
+      "src/test/resources/fixtures/getBeaconsByAccountHolderEmptyResponse.json"
+    );
+
+    final String accountHolderId = UUID.randomUUID().toString();
+
+    webTestClient
+      .get()
+      .uri("/account-holder/" + accountHolderId + "/beacons")
+      .exchange()
+      .expectBody()
+      .json(expectedResponse);
+  }
+
   private String readFile(String filePath) throws IOException {
     return new String(Files.readAllBytes(Paths.get(filePath)));
   }

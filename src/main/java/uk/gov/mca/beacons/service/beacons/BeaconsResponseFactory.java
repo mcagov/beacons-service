@@ -40,7 +40,7 @@ public class BeaconsResponseFactory {
     this.useRelationshipMapper = useRelationshipMapper;
   }
 
-  private WrapperDTO<List<BeaconDTO>> buildDTO(List<Beacon> beacons) {
+  public WrapperDTO<List<BeaconDTO>> buildDTO(List<Beacon> beacons) {
     final var wrapper = new WrapperDTO<List<BeaconDTO>>();
     final List<BeaconDTO> beaconDTOs = new ArrayList<>();
 
