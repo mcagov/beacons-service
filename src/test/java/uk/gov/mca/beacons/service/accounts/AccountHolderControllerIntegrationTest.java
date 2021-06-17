@@ -74,7 +74,7 @@ class AccountHolderControllerIntegrationTest {
       .readValue(response, ObjectNode.class)
       .get("data")
       .get("id")
-      .toString();
+      .textValue();
 
     String expectedResponse = new String(
       Files.readAllBytes(
@@ -83,7 +83,8 @@ class AccountHolderControllerIntegrationTest {
         )
       )
     )
-      .replace("replace-with-test-id", createdAccountHolderId);
+      .replace("replace-with-test-id", createdAccountHolderId)
+      .replace("replace-with-test-auth-id", testAuthId);
 
     webTestClient
       .get()
