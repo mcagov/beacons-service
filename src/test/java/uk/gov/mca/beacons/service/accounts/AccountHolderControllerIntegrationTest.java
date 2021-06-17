@@ -35,14 +35,16 @@ class AccountHolderControllerIntegrationTest {
     )
       .replace("replace-with-test-auth-id", testAuthId);
 
-    webTestClient
+    var response = webTestClient
       .post()
       .uri("/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
-      .expectBody()
-      .json(expectedResponse);
+      .expectBody();
+
+    response.json(expectedResponse);
+    response.jsonPath("$.data.id").exists();
   }
 
   @Test

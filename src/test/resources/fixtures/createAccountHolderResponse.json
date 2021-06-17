@@ -2,7 +2,6 @@
   "meta": {},
   "data": {
     "type": "accountHolder",
-    "id": "replace-with-test-id",
     "attributes": {
       "authId": "replace-with-test-auth-id",
       "email": "testy@mctestface.com",
@@ -19,5 +18,5 @@
     },
     "relationships": {}
   },
-  "included": {}
+  "included": []
 }
