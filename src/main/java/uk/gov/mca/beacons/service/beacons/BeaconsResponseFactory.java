@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.beacons;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,40 +40,57 @@ public class BeaconsResponseFactory {
     this.useRelationshipMapper = useRelationshipMapper;
   }
 
+  private WrapperDTO<List<BeaconDTO>> buildDTO(List<Beacon> beacons) {
+    final var wrapper = new WrapperDTO<List<BeaconDTO>>();
+    final List<BeaconDTO> beaconsListDTO = new ArrayList<>();
+
+    beacons.forEach(
+      beacon -> {
+        final var beaconDTO = getBeaconDTO(beacon);
+        final var useDTOs = getUseDTOs(beacon);
+        final var ownerDTO = getOwnerDTO(beacon);
+        final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
+
+        useDTOs.forEach(wrapper::addIncluded);
+        wrapper.addIncluded(ownerDTO);
+        emergencyContactDTOs.forEach(wrapper::addIncluded);
+        beaconsListDTO.add(beaconDTO);
+      }
+    );
+
+    wrapper.setData(beaconsListDTO);
+
+    return wrapper;
+  }
+
   public WrapperDTO<BeaconDTO> buildDTO(Beacon beacon) {
+    final var beaconDTO = getBeaconDTO(beacon);
     final var useDTOs = getUseDTOs(beacon);
     final var ownerDTO = getOwnerDTO(beacon);
     final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
 
-    final var beaconDTO = buildBeaconDTO(
-      beacon,
-      useDTOs,
-      ownerDTO,
-      emergencyContactDTOs
-    );
+    return getWrappedDTO(beaconDTO, useDTOs, ownerDTO, emergencyContactDTOs);
+  }
 
-    final var wrapper = getWrappedDTO(
-      beaconDTO,
-      useDTOs,
-      ownerDTO,
-      emergencyContactDTOs
-    );
+  private BeaconDTO getBeaconDTO(Beacon beacon) {
+    final var useDTOs = getUseDTOs(beacon);
+    final var ownerDTO = getOwnerDTO(beacon);
+    final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
 
-    return wrapper;
+    return buildBeaconDTO(beacon, useDTOs, ownerDTO, emergencyContactDTOs);
   }
 
   private List<BeaconUseDTO> getUseDTOs(Beacon beacon) {
     return beacon
       .getUses()
       .stream()
-      .map(beaconUse -> useMapper.toDTO(beaconUse))
+      .map(useMapper::toDTO)
       .collect(Collectors.toList());
   }
 
   private BeaconPersonDTO getOwnerDTO(Beacon beacon) {
     if (beacon.getOwner() != null) {
-      final var ownerDTO = personMapper.toDTO(beacon.getOwner());
-      return ownerDTO;
+      return personMapper.toDTO(beacon.getOwner());
     }
     return null;
   }
@@ -81,7 +99,7 @@ public class BeaconsResponseFactory {
     return beacon
       .getEmergencyContacts()
       .stream()
-      .map(emergencyContact -> personMapper.toDTO(emergencyContact))
+      .map(personMapper::toDTO)
       .collect(Collectors.toList());
   }
 
