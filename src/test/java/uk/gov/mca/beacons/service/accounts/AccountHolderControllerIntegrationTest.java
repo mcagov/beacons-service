@@ -2,6 +2,8 @@ package uk.gov.mca.beacons.service.accounts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -25,20 +27,8 @@ class AccountHolderControllerIntegrationTest {
   void requestCreateAccountHolder_shouldRespondWithTheCreatedResource()
     throws Exception {
     String testAuthId = UUID.randomUUID().toString();
-    String newAccountHolderRequest = new String(
-      Files.readAllBytes(
-        Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json")
-      )
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
-    String expectedResponse = new String(
-      Files.readAllBytes(
-        Paths.get(
-          "src/test/resources/fixtures/createAccountHolderResponse.json"
-        )
-      )
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
+    String newAccountHolderRequest = readFromFile("src/test/resources/fixtures/createAccountHolderRequest.json").replace("replace-with-test-auth-id", testAuthId);
+    String expectedResponse = readFromFile("src/test/resources/fixtures/createAccountHolderResponse.json").replace("replace-with-test-auth-id", testAuthId);
 
     webTestClient
       .post()
@@ -54,12 +44,7 @@ class AccountHolderControllerIntegrationTest {
   void requestGetAccountHolder_shouldRespondWithTheExistingAccountHolder()
     throws Exception {
     String testAuthId = UUID.randomUUID().toString();
-    String newAccountHolderRequest = new String(
-      Files.readAllBytes(
-        Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json")
-      )
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
+    String newAccountHolderRequest = readFromFile("src/test/resources/fixtures/createAccountHolderRequest.json").replace("replace-with-test-auth-id", testAuthId);
     var objectMapper = new ObjectMapper();
     var response = webTestClient
       .post()
@@ -76,13 +61,7 @@ class AccountHolderControllerIntegrationTest {
       .get("id")
       .textValue();
 
-    String expectedResponse = new String(
-      Files.readAllBytes(
-        Paths.get(
-          "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
-        )
-      )
-    )
+    String expectedResponse = readFromFile("src/test/resources/fixtures/getAccountHolderByIdResponse.json")
       .replace("replace-with-test-id", createdAccountHolderId)
       .replace("replace-with-test-auth-id", testAuthId);
 
@@ -92,5 +71,13 @@ class AccountHolderControllerIntegrationTest {
       .exchange()
       .expectBody()
       .json(expectedResponse);
+  }
+
+  private String readFromFile(String filePath) throws IOException {
+    return new String(
+            Files.readAllBytes(
+                    Paths.get(filePath)
+            )
+    );
   }
 }
