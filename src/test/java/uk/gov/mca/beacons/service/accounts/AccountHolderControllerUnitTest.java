@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +26,7 @@ import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
+import uk.gov.mca.beacons.service.model.Beacon;
 
 @WebMvcTest(controllers = AccountHolderController.class)
 @AutoConfigureMockMvc
@@ -222,6 +224,34 @@ class AccountHolderControllerUnitTest {
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isNotFound());
+    }
+  }
+
+  @Nested
+  class RequestGetBeaconsByAccountHolderId {
+
+    @Test
+    void shouldReturn200ForAValidAccountHolderIdUUID() throws Exception {
+      mvc
+        .perform(
+          get("/account-holder/" + accountHolderId + "/beacons")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldMapBeaconsToAWrapperDTO() throws Exception {
+      final var beacons = Collections.singletonList(new Beacon());
+      given(getBeaconsByAccountHolderIdService.execute(accountHolderId))
+        .willReturn(beacons);
+
+      mvc.perform(
+        get("/account-holder/" + accountHolderId + "/beacons")
+          .contentType(MediaType.APPLICATION_JSON)
+      );
+
+      verify(responseFactory, times(1)).buildDTO(beacons);
     }
   }
 }

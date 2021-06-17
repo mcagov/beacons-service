@@ -19,6 +19,6 @@ public class BeaconGatewayImpl implements BeaconGateway {
 
   @Override
   public List<Beacon> findAllByAccountHolderId(UUID accountId) {
-    return beaconRepository.findByAccountHolderId(accountId);
+    return beaconRepository.findAllByAccountHolderId(accountId);
   }
 }
