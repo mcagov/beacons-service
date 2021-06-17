@@ -41,6 +41,9 @@ class AccountHolderControllerUnitTest {
   private GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
   @MockBean
+  private GetAccountHolderByIdService getAccountHolderByIdService;
+
+  @MockBean
   private CreateAccountHolderService createAccountHolderService;
 
   @MockBean
@@ -155,5 +158,60 @@ class AccountHolderControllerUnitTest {
     );
 
     verify(createAccountHolderService, times(1)).execute(accountHolder);
+  }
+
+  @Test
+  void requestGetAccountHolderById_shouldRequestAccountHolderFromServiceByAuthId()
+    throws Exception {
+    given(getAccountHolderByIdService.execute(accountHolderId))
+      .willReturn(accountHolder);
+
+    mvc.perform(
+      get("/account-holder/" + accountHolderId)
+        .contentType(MediaType.APPLICATION_JSON)
+    );
+
+    verify(getAccountHolderByIdService, times(1)).execute(accountHolderId);
+  }
+
+  @Test
+  void requestGetAccountHolderById_shouldReturn200WhenAccountHolderIdFound()
+    throws Exception {
+    given(getAccountHolderByIdService.execute(accountHolderId))
+      .willReturn(accountHolder);
+
+    mvc
+      .perform(
+        get("/account-holder/" + accountHolderId)
+          .contentType(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isOk());
+  }
+
+  @Test
+  void requestGetAccountHolderById_shouldMapAccountHolderToAWrapperDTO()
+    throws Exception {
+    given(getAccountHolderByIdService.execute(accountHolderId))
+      .willReturn(accountHolder);
+
+    mvc.perform(
+      get("/account-holder/" + accountHolderId)
+        .contentType(MediaType.APPLICATION_JSON)
+    );
+
+    verify(accountHolderMapper, times(1)).toWrapperDTO(accountHolder);
+  }
+
+  @Test
+  void requestGetAccountHolderId_shouldReturn404IfAccountHolderNotFound()
+    throws Exception {
+    given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+
+    mvc
+      .perform(
+        get("/account-holder/" + accountHolderId)
+          .contentType(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(status().isNotFound());
   }
 }
