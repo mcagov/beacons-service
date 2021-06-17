@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.service.beacons.BeaconsResponseFactory;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
@@ -49,169 +51,177 @@ class AccountHolderControllerUnitTest {
   @MockBean
   private AccountHolderMapper accountHolderMapper;
 
+  @MockBean
+  private GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService;
+
+  @MockBean
+  private BeaconsResponseFactory responseFactory;
+
   @BeforeEach
   public final void before() {
     accountHolder.setId(accountHolderId);
     accountHolder.setAuthId(authId);
   }
 
-  @Test
-  void requestAccountHolderIdByAuthId_shouldRequestAccountHolderIdFromServiceByAuthId()
-    throws Exception {
-    given(getAccountHolderByAuthIdService.execute(authId))
-      .willReturn(accountHolder);
+  @Nested
+  class RequestAccountHolderByAuthId {
 
-    mvc.perform(
-      get("/account-holder/auth-id/" + authId)
-        .contentType(MediaType.APPLICATION_JSON)
-    );
+    @Test
+    void shouldRequestAccountHolderIdFromServiceByAuthId() throws Exception {
+      given(getAccountHolderByAuthIdService.execute(authId))
+        .willReturn(accountHolder);
 
-    verify(getAccountHolderByAuthIdService, times(1)).execute(authId);
-  }
-
-  @Test
-  void requestAccountHolderIdByAuthId_shouldReturn200WhenAccountHolderIdFound()
-    throws Exception {
-    given(getAccountHolderByAuthIdService.execute(authId))
-      .willReturn(accountHolder);
-
-    mvc
-      .perform(
+      mvc.perform(
         get("/account-holder/auth-id/" + authId)
           .contentType(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(status().isOk());
+      );
+
+      verify(getAccountHolderByAuthIdService, times(1)).execute(authId);
+    }
+
+    @Test
+    void shouldReturn200WhenAccountHolderIdFound() throws Exception {
+      given(getAccountHolderByAuthIdService.execute(authId))
+        .willReturn(accountHolder);
+
+      mvc
+        .perform(
+          get("/account-holder/auth-id/" + authId)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnTheAccountHolderId() throws Exception {
+      given(getAccountHolderByAuthIdService.execute(authId))
+        .willReturn(accountHolder);
+
+      mvc
+        .perform(
+          get("/account-holder/auth-id/" + authId)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(jsonPath("$.id", is(accountHolderId.toString())));
+    }
+
+    @Test
+    void shouldReturn404IfAccountHolderNotFound() throws Exception {
+      given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+
+      mvc
+        .perform(
+          get("/account-holder/auth-id/" + authId)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isNotFound());
+    }
   }
 
-  @Test
-  void requestAccountHolderIdByAuthId_shouldReturnTheAccountHolderId()
-    throws Exception {
-    given(getAccountHolderByAuthIdService.execute(authId))
-      .willReturn(accountHolder);
+  @Nested
+  class RequestCreateAccountHolder {
 
-    mvc
-      .perform(
-        get("/account-holder/auth-id/" + authId)
-          .contentType(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(jsonPath("$.id", is(accountHolderId.toString())));
-  }
+    @Test
+    void shouldReturn201IfSuccessful() throws Exception {
+      WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+      String newAccountHolderRequest = new ObjectMapper()
+        .writeValueAsString(newAccountHolderDTO);
+      mvc
+        .perform(
+          post("/account-holder")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newAccountHolderRequest)
+        )
+        .andExpect(status().isCreated());
+    }
 
-  @Test
-  void requestAccountHolderIdByAuthId_shouldReturn404IfAccountHolderNotFound()
-    throws Exception {
-    given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+    @Test
+    void shouldMapDTOToDomainAccountHolder() throws Exception {
+      WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+      String newAccountHolderRequest = new ObjectMapper()
+        .writeValueAsString(newAccountHolderDTO);
 
-    mvc
-      .perform(
-        get("/account-holder/auth-id/" + authId)
-          .contentType(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(status().isNotFound());
-  }
-
-  @Test
-  void requestCreateAccountHolder_shouldReturn201IfSuccessful()
-    throws Exception {
-    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
-    String newAccountHolderRequest = new ObjectMapper()
-      .writeValueAsString(newAccountHolderDTO);
-    mvc
-      .perform(
+      mvc.perform(
         post("/account-holder")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newAccountHolderRequest)
-      )
-      .andExpect(status().isCreated());
+      );
+
+      verify(accountHolderMapper, times(1))
+        .fromDTO(newAccountHolderDTO.getData());
+    }
+
+    @Test
+    void shouldCallTheAccountHolderServiceToCreateANewResource()
+      throws Exception {
+      WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
+      String newAccountHolderRequest = new ObjectMapper()
+        .writeValueAsString(newAccountHolderDTO);
+      given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
+        .willReturn(accountHolder);
+
+      mvc.perform(
+        post("/account-holder")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newAccountHolderRequest)
+      );
+
+      verify(createAccountHolderService, times(1)).execute(accountHolder);
+    }
   }
 
-  @Test
-  void requestCreateAccountHolder_shouldMapDTOToDomainAccountHolder()
-    throws Exception {
-    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
-    String newAccountHolderRequest = new ObjectMapper()
-      .writeValueAsString(newAccountHolderDTO);
+  @Nested
+  class RequestGetAccountHolderById {
 
-    mvc.perform(
-      post("/account-holder")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(newAccountHolderRequest)
-    );
+    @Test
+    void shouldRequestAccountHolderFromServiceByAuthId() throws Exception {
+      given(getAccountHolderByIdService.execute(accountHolderId))
+        .willReturn(accountHolder);
 
-    verify(accountHolderMapper, times(1))
-      .fromDTO(newAccountHolderDTO.getData());
-  }
-
-  @Test
-  void requestCreateAccountHolder_shouldCallTheAccountHolderServiceToCreateANewResource()
-    throws Exception {
-    WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
-    String newAccountHolderRequest = new ObjectMapper()
-      .writeValueAsString(newAccountHolderDTO);
-    given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
-      .willReturn(accountHolder);
-
-    mvc.perform(
-      post("/account-holder")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(newAccountHolderRequest)
-    );
-
-    verify(createAccountHolderService, times(1)).execute(accountHolder);
-  }
-
-  @Test
-  void requestGetAccountHolderById_shouldRequestAccountHolderFromServiceByAuthId()
-    throws Exception {
-    given(getAccountHolderByIdService.execute(accountHolderId))
-      .willReturn(accountHolder);
-
-    mvc.perform(
-      get("/account-holder/" + accountHolderId)
-        .contentType(MediaType.APPLICATION_JSON)
-    );
-
-    verify(getAccountHolderByIdService, times(1)).execute(accountHolderId);
-  }
-
-  @Test
-  void requestGetAccountHolderById_shouldReturn200WhenAccountHolderIdFound()
-    throws Exception {
-    given(getAccountHolderByIdService.execute(accountHolderId))
-      .willReturn(accountHolder);
-
-    mvc
-      .perform(
+      mvc.perform(
         get("/account-holder/" + accountHolderId)
           .contentType(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(status().isOk());
-  }
+      );
 
-  @Test
-  void requestGetAccountHolderById_shouldMapAccountHolderToAWrapperDTO()
-    throws Exception {
-    given(getAccountHolderByIdService.execute(accountHolderId))
-      .willReturn(accountHolder);
+      verify(getAccountHolderByIdService, times(1)).execute(accountHolderId);
+    }
 
-    mvc.perform(
-      get("/account-holder/" + accountHolderId)
-        .contentType(MediaType.APPLICATION_JSON)
-    );
+    @Test
+    void shouldReturn200WhenAccountHolderIdFound() throws Exception {
+      given(getAccountHolderByIdService.execute(accountHolderId))
+        .willReturn(accountHolder);
 
-    verify(accountHolderMapper, times(1)).toWrapperDTO(accountHolder);
-  }
+      mvc
+        .perform(
+          get("/account-holder/" + accountHolderId)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
+    }
 
-  @Test
-  void requestGetAccountHolderId_shouldReturn404IfAccountHolderNotFound()
-    throws Exception {
-    given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+    @Test
+    void shouldMapAccountHolderToAWrapperDTO() throws Exception {
+      given(getAccountHolderByIdService.execute(accountHolderId))
+        .willReturn(accountHolder);
 
-    mvc
-      .perform(
+      mvc.perform(
         get("/account-holder/" + accountHolderId)
           .contentType(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(status().isNotFound());
+      );
+
+      verify(accountHolderMapper, times(1)).toWrapperDTO(accountHolder);
+    }
+
+    @Test
+    void shouldReturn404IfAccountHolderNotFound() throws Exception {
+      given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+
+      mvc
+        .perform(
+          get("/account-holder/" + accountHolderId)
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isNotFound());
+    }
   }
 }
