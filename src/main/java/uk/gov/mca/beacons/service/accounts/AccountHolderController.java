@@ -23,64 +23,64 @@ import uk.gov.mca.beacons.service.model.AccountHolder;
 @Tag(name = "Account Holder")
 public class AccountHolderController {
 
-  private final AccountHolderMapper accountHolderMapper;
+    private final AccountHolderMapper accountHolderMapper;
 
-  private final GetAccountHolderByIdService getAccountHolderByIdService;
+    private final GetAccountHolderByIdService getAccountHolderByIdService;
 
-  private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
+    private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
-  private final CreateAccountHolderService createAccountHolderService;
+    private final CreateAccountHolderService createAccountHolderService;
 
-  @Autowired
-  public AccountHolderController(
-    AccountHolderMapper accountHolderMapper,
-    GetAccountHolderByIdService getAccountHolderByIdService,
-    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-    CreateAccountHolderService createAccountHolderService
-  ) {
-    this.accountHolderMapper = accountHolderMapper;
-    this.getAccountHolderByIdService = getAccountHolderByIdService;
-    this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
-    this.createAccountHolderService = createAccountHolderService;
-  }
+    @Autowired
+    public AccountHolderController(
+            AccountHolderMapper accountHolderMapper,
+            GetAccountHolderByIdService getAccountHolderByIdService,
+            GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
+            CreateAccountHolderService createAccountHolderService
+    ) {
+        this.accountHolderMapper = accountHolderMapper;
+        this.getAccountHolderByIdService = getAccountHolderByIdService;
+        this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
+        this.createAccountHolderService = createAccountHolderService;
+    }
 
-  @GetMapping(value = "/{id}")
-  public WrapperDTO<AccountHolderDTO> getAccountHolder(
-    @PathVariable("id") String id
-  ) {
-    final AccountHolder accountHolder = getAccountHolderByIdService.execute(
-      UUID.fromString(id)
-    );
+    @GetMapping(value = "/{id}")
+    public WrapperDTO<AccountHolderDTO> getAccountHolder(
+            @PathVariable("id") UUID id
+    ) {
+        final AccountHolder accountHolder = getAccountHolderByIdService.execute(
+                id
+        );
 
-    if (accountHolder == null) throw new ResourceNotFoundException();
+        if (accountHolder == null) throw new ResourceNotFoundException();
 
-    return accountHolderMapper.toWrapperDTO(accountHolder);
-  }
+        return accountHolderMapper.toWrapperDTO(accountHolder);
+    }
 
-  @GetMapping(value = "/auth-id/{authId}")
-  public AccountHolderIdDTO getAccountHolderId(
-    @PathVariable("authId") String authId
-  ) {
-    final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
-      authId
-    );
+    @GetMapping(value = "/auth-id/{authId}")
+    public AccountHolderIdDTO getAccountHolderId(
+            @PathVariable("authId") String authId
+    ) {
+        final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
+                authId
+        );
 
-    if (accountHolder == null) throw new ResourceNotFoundException();
+        if (accountHolder == null) throw new ResourceNotFoundException();
 
-    return new AccountHolderIdDTO(accountHolder.getId());
-  }
+        return new AccountHolderIdDTO(accountHolder.getId());
+    }
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public WrapperDTO<AccountHolderDTO> createAccountHolder(
-    @RequestBody WrapperDTO<AccountHolderDTO> dto
-  ) {
-    final AccountHolder newAccountHolder = accountHolderMapper.fromDTO(
-      dto.getData()
-    );
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public WrapperDTO<AccountHolderDTO> createAccountHolder(
+            @RequestBody WrapperDTO<AccountHolderDTO> dto
+    ) {
+        final AccountHolder newAccountHolder = accountHolderMapper.fromDTO(
+                dto.getData()
+        );
 
-    return accountHolderMapper.toWrapperDTO(
-      createAccountHolderService.execute(newAccountHolder)
-    );
-  }
+        return accountHolderMapper.toWrapperDTO(
+                createAccountHolderService.execute(newAccountHolder)
+        );
+    }
 }
