@@ -34,9 +34,6 @@
           "data": [
             {
               "type": "beaconPerson"
-            },
-            {
-              "type": "beaconPerson"
             }
           ]
         }
@@ -108,15 +105,9 @@
     {
       "type": "beaconPerson",
       "attributes": {
-        "fullName": "Emergency contact 1",
-        "email": "econtact1@beacons.co.uk"
-      }
-    },
-    {
-      "type": "beaconPerson",
-      "attributes": {
-        "fullName": "Emergency contact 2",
-        "email": "econtact1@beacons.co.uk"
+        "fullName": "Lady Hamilton",
+        "telephoneNumber": "02392 856621",
+        "alternativeTelephoneNumber": "02392 856622"
       }
     }
   ]

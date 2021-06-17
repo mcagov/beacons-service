@@ -9,6 +9,7 @@
       "referenceNumber": "ABCDE4",
       "batteryExpiryDate": "2020-02-01",
       "lastServicedDate": "2020-02-01",
+      "accountHolderId": "account-holder-id-placeholder",
       "uses": [
         {
           "environment": "MARITIME",
@@ -67,11 +68,6 @@
         "postcode": "PO1 3DT"
       },
       "emergencyContacts": [
-        {
-          "fullName": "Lady Hamilton",
-          "telephoneNumber": "02392 856621",
-          "alternativeTelephoneNumber": "02392 856622"
-        },
         {
           "fullName": "Lady Hamilton",
           "telephoneNumber": "02392 856621",

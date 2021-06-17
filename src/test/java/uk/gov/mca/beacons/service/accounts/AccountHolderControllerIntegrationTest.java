@@ -56,26 +56,9 @@ class AccountHolderControllerIntegrationTest {
   @Test
   void requestGetAccountHolder_shouldRespondWithTheExistingAccountHolder()
     throws Exception {
-    String testAuthId = UUID.randomUUID().toString();
-    String newAccountHolderRequest = readFile(
-      "src/test/resources/fixtures/createAccountHolderRequest.json"
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
-    var createdAccountResponse = webTestClient
-      .post()
-      .uri("/account-holder")
-      .body(BodyInserters.fromValue(newAccountHolderRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectBody()
-      .returnResult()
-      .getResponseBody();
-    String createdAccountHolderId = new ObjectMapper()
-      .readValue(createdAccountResponse, ObjectNode.class)
-      .get("data")
-      .get("id")
-      .textValue();
-    String expectedResponse = readFile(
+    final String testAuthId = UUID.randomUUID().toString();
+    final String createdAccountHolderId = createAccountHolder(testAuthId);
+    final String expectedResponse = readFile(
       "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
     )
       .replace("replace-with-test-auth-id", testAuthId);
@@ -87,7 +70,7 @@ class AccountHolderControllerIntegrationTest {
       .expectBody();
 
     response.json(expectedResponse);
-    response.jsonPath("$.data.id").exists();
+    response.jsonPath("$.data.id").isNotEmpty();
   }
 
   @Test
@@ -107,18 +90,36 @@ class AccountHolderControllerIntegrationTest {
       .json(expectedResponse);
   }
 
+  /**
+   * 1. Create an account holder - tick
+   * 2. Grab the id of the newly created account holder - tick
+   * 3. Create a beacon registration, setting the account holder id - tick
+   * 4. Hit the endpoint to get the beacons by account holder id and assert the JSON returned is what we expect it to be - let's try
+   */
   @Test
   void requestGetBeaconsByAccountHolderId_shouldRespondWithTheListOfBeaconsForTheAccountHolder()
     throws Exception {
+    final String createdAccountHolderId = createAccountHolder();
+
+    final String createBeaconRequest = readFile(
+      "src/test/resources/fixtures/createBeaconRequest.json"
+    )
+      .replace("account-holder-id-placeholder", createdAccountHolderId);
+    webTestClient
+      .post()
+      .uri("/registrations/register")
+      .bodyValue(createBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated();
+
     final String expectedResponse = readFile(
       "src/test/resources/fixtures/getBeaconsByAccountHolderResponse.json"
     );
-
-    final String accountHolderId = UUID.randomUUID().toString();
-
     webTestClient
       .get()
-      .uri("/account-holder/" + accountHolderId + "/beacons")
+      .uri("/account-holder/" + createdAccountHolderId + "/beacons")
       .exchange()
       .expectBody()
       .json(expectedResponse);
@@ -126,5 +127,31 @@ class AccountHolderControllerIntegrationTest {
 
   private String readFile(String filePath) throws IOException {
     return new String(Files.readAllBytes(Paths.get(filePath)));
+  }
+
+  private String createAccountHolder() throws Exception {
+    return createAccountHolder(UUID.randomUUID().toString());
+  }
+
+  private String createAccountHolder(String testAuthId) throws Exception {
+    final String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+    final var createdAccountResponse = webTestClient
+      .post()
+      .uri("/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody()
+      .returnResult()
+      .getResponseBody();
+
+    return new ObjectMapper()
+      .readValue(createdAccountResponse, ObjectNode.class)
+      .get("data")
+      .get("id")
+      .textValue();
   }
 }

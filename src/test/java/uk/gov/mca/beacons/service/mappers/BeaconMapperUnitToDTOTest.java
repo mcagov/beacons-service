@@ -48,6 +48,7 @@ class BeaconMapperUnitToDTOTest {
     domainBeacon.setChkCode("2");
     domainBeacon.setManufacturerSerialNumber("3");
     domainBeacon.setBeaconStatus(BeaconStatus.NEW);
+    domainBeacon.setReferenceNumber("123456");
     domainBeacon.setCreatedDate(LocalDateTime.of(2020, 2, 1, 0, 0, 0));
     domainBeacon.setBatteryExpiryDate(LocalDate.of(2022, 2, 1));
     domainBeacon.setLastServicedDate(LocalDate.of(2019, 2, 1));
@@ -61,6 +62,7 @@ class BeaconMapperUnitToDTOTest {
     assertThat(dtoAttributes.get("chkCode"), is("2"));
     assertThat(dtoAttributes.get("manufacturerSerialNumber"), is("3"));
     assertThat(dtoAttributes.get("status"), is(BeaconStatus.NEW));
+    assertThat(dtoAttributes.get("referenceNumber"), is("123456"));
     assertThat(
       dtoAttributes.get("createdDate"),
       is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
