@@ -90,12 +90,6 @@ class AccountHolderControllerIntegrationTest {
       .json(expectedResponse);
   }
 
-  /**
-   * 1. Create an account holder - tick
-   * 2. Grab the id of the newly created account holder - tick
-   * 3. Create a beacon registration, setting the account holder id - tick
-   * 4. Hit the endpoint to get the beacons by account holder id and assert the JSON returned is what we expect it to be - let's try
-   */
   @Test
   void requestGetBeaconsByAccountHolderId_shouldRespondWithTheListOfBeaconsForTheAccountHolder()
     throws Exception {
