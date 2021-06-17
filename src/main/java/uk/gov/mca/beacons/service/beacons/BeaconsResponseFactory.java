@@ -59,6 +59,7 @@ public class BeaconsResponseFactory {
     );
 
     wrapper.setData(beaconDTOs);
+    wrapper.addMeta("count", beaconDTOs.size());
 
     return wrapper;
   }

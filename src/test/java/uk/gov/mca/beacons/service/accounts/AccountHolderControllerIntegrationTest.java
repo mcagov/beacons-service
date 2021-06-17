@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.service.model.AccountHolder;
+import uk.gov.mca.beacons.service.model.Beacon;
+import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.model.Environment;
+import uk.gov.mca.beacons.service.registrations.RegistrationsService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -89,6 +95,23 @@ class AccountHolderControllerIntegrationTest {
     throws Exception {
     final String expectedResponse = readFile(
       "src/test/resources/fixtures/getBeaconsByAccountHolderEmptyResponse.json"
+    );
+
+    final String accountHolderId = UUID.randomUUID().toString();
+
+    webTestClient
+      .get()
+      .uri("/account-holder/" + accountHolderId + "/beacons")
+      .exchange()
+      .expectBody()
+      .json(expectedResponse);
+  }
+
+  @Test
+  void requestGetBeaconsByAccountHolderId_shouldRespondWithTheListOfBeaconsForTheAccountHolder()
+    throws Exception {
+    final String expectedResponse = readFile(
+      "src/test/resources/fixtures/getBeaconsByAccountHolderResponse.json"
     );
 
     final String accountHolderId = UUID.randomUUID().toString();
