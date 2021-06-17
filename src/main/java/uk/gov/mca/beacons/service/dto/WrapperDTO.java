@@ -9,7 +9,7 @@ public class WrapperDTO<T> {
 
   private final Map<String, Object> meta = new HashMap<>();
   private T data = null;
-  private final List<DomainDTO> included = new ArrayList<>();
+  private final List<DomainDTO<?>> included = new ArrayList<>();
 
   public Map<String, Object> getMeta() {
     return meta;
@@ -27,11 +27,11 @@ public class WrapperDTO<T> {
     this.data = dataDTO;
   }
 
-  public List<DomainDTO> getIncluded() {
+  public List<DomainDTO<?>> getIncluded() {
     return included;
   }
 
-  public void addIncluded(DomainDTO includedDTO) {
+  public void addIncluded(DomainDTO<?> includedDTO) {
     included.add(includedDTO);
   }
 }
