@@ -42,7 +42,7 @@ public class BeaconsResponseFactory {
 
   private WrapperDTO<List<BeaconDTO>> buildDTO(List<Beacon> beacons) {
     final var wrapper = new WrapperDTO<List<BeaconDTO>>();
-    final List<BeaconDTO> beaconsListDTO = new ArrayList<>();
+    final List<BeaconDTO> beaconDTOs = new ArrayList<>();
 
     beacons.forEach(
       beacon -> {
@@ -54,11 +54,11 @@ public class BeaconsResponseFactory {
         useDTOs.forEach(wrapper::addIncluded);
         wrapper.addIncluded(ownerDTO);
         emergencyContactDTOs.forEach(wrapper::addIncluded);
-        beaconsListDTO.add(beaconDTO);
+        beaconDTOs.add(beaconDTO);
       }
     );
 
-    wrapper.setData(beaconsListDTO);
+    wrapper.setData(beaconDTOs);
 
     return wrapper;
   }

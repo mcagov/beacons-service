@@ -44,7 +44,6 @@ public class GetBeaconsByAccountHolderIdService {
     beacons.forEach(
       beacon -> {
         final UUID beaconId = beacon.getId();
-
         final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
         beacon.setUses(uses);
 
