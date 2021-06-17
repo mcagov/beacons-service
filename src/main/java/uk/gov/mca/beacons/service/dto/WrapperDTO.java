@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WrapperDTO<T extends DomainDTO> {
+public class WrapperDTO<T> {
 
-  private final Map<String, Object> meta = new HashMap<String, Object>();
+  private final Map<String, Object> meta = new HashMap<>();
   private T data = null;
-  private final List<DomainDTO> included = new ArrayList<DomainDTO>();
+  private final List<DomainDTO> included = new ArrayList<>();
 
   public Map<String, Object> getMeta() {
     return meta;
   }
 
-  public void addMeta(String key, String value) {
+  public void addMeta(String key, Object value) {
     meta.put(key, value);
   }
 

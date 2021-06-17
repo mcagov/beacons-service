@@ -17,6 +17,10 @@ public class BeaconPersonMapper {
     attributes.put("fullName", domain.getFullName());
     attributes.put("email", domain.getEmail());
     attributes.put("telephoneNumber", domain.getTelephoneNumber());
+    attributes.put(
+      "alternativeTelephoneNumber",
+      domain.getAlternativeTelephoneNumber()
+    );
     attributes.put("addressLine1", domain.getAddressLine1());
     attributes.put("addressLine2", domain.getAddressLine2());
     attributes.put("addressLine3", domain.getAddressLine3());

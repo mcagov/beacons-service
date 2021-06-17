@@ -84,9 +84,6 @@ class BeaconsControllerIntegrationTest {
     registrationsService.register(registration);
     uuid = beacon.getId();
     useUuid = beacon.getUses().get(0).getId();
-    ownerUuid = beacon.getOwner().getId();
-    firstEmergencyContactUuid = beacon.getEmergencyContacts().get(0).getId();
-    secondEmergencyContactUuid = beacon.getEmergencyContacts().get(1).getId();
   }
 
   @Test
@@ -129,26 +126,20 @@ class BeaconsControllerIntegrationTest {
     request
       .jsonPath("$.data.relationships.uses.data[0].id")
       .isEqualTo(useUuid.toString());
-    request
-      .jsonPath("$.data.relationships.owner.data[0].id")
-      .isEqualTo(ownerUuid.toString());
+    request.jsonPath("$.data.relationships.owner.data[0].id").isNotEmpty();
     request
       .jsonPath("$.data.relationships.emergencyContacts.data[0].id")
-      .isEqualTo(firstEmergencyContactUuid.toString());
+      .isNotEmpty();
     request
       .jsonPath("$.data.relationships.emergencyContacts.data[1].id")
-      .isEqualTo(secondEmergencyContactUuid.toString());
+      .isNotEmpty();
     request.jsonPath("$.included").exists();
     request.jsonPath("$.included[0].type").exists();
     request.jsonPath("$.included[0].id").isEqualTo(useUuid.toString());
     request.jsonPath("$.included[0].links").exists();
-    request.jsonPath("$.included[1].id").isEqualTo(ownerUuid.toString());
-    request
-      .jsonPath("$.included[2].id")
-      .isEqualTo(firstEmergencyContactUuid.toString());
-    request
-      .jsonPath("$.included[3].id")
-      .isEqualTo(secondEmergencyContactUuid.toString());
+    request.jsonPath("$.included[1].id").isNotEmpty();
+    request.jsonPath("$.included[2].id").isNotEmpty();
+    request.jsonPath("$.included[3].id").isNotEmpty();
   }
 
   private WebTestClient.BodyContentSpec makeGetRequest(String url) {

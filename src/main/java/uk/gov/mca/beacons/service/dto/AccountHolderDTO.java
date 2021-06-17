@@ -1,18 +1,12 @@
 package uk.gov.mca.beacons.service.dto;
 
-import javax.validation.constraints.Email;
+import java.util.Map;
 
-public class AccountHolderDTO
-  extends DomainDTO<AccountHolderDTO.AccountHolderAttributes> {
+public class AccountHolderDTO extends DomainDTO<Map<String, Object>> {
 
-  @Override
+  private String type = "accountHolder";
+
   public String getType() {
-    return "accountHolder";
-  }
-
-  static class AccountHolderAttributes {
-
-    @Email
-    private String email;
+    return type;
   }
 }

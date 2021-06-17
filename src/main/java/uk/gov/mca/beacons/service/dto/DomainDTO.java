@@ -11,8 +11,8 @@ public abstract class DomainDTO<T> {
 
   private UUID id;
   protected T attributes;
-  private final List<HateoasLink> links = new ArrayList<HateoasLink>();
-  private final Map<String, RelationshipDTO> relationships = new HashMap<String, RelationshipDTO>();
+  private final List<HateoasLink> links = new ArrayList<>();
+  private final Map<String, RelationshipDTO> relationships = new HashMap<>();
 
   public abstract String getType();
 
