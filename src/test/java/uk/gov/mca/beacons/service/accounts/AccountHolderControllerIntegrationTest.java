@@ -72,15 +72,16 @@ class AccountHolderControllerIntegrationTest {
     String expectedResponse = readFile(
       "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
     )
-      .replace("replace-with-test-id", createdAccountHolderId)
       .replace("replace-with-test-auth-id", testAuthId);
 
-    webTestClient
+    var response = webTestClient
       .get()
       .uri("/account-holder/" + createdAccountHolderId)
       .exchange()
-      .expectBody()
-      .json(expectedResponse);
+      .expectBody();
+
+    response.json(expectedResponse);
+    response.jsonPath("$.data.id").exists();
   }
 
   private String readFile(String filePath) throws IOException {
