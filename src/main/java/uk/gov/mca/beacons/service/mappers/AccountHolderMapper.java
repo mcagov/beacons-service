@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.service.mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import static uk.gov.mca.beacons.service.dto.AccountHolderDTO.Attributes;
+
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
@@ -16,22 +16,20 @@ public class AccountHolderMapper extends BaseMapper {
 
     final var attributes = accountHolderDTO.getAttributes();
 
-    accountHolder.setAuthId((String) attributes.get("authId"));
-    accountHolder.setEmail((String) attributes.get("email"));
-    accountHolder.setFullName((String) attributes.get("fullName"));
-    accountHolder.setTelephoneNumber(
-      (String) attributes.get("telephoneNumber")
-    );
+    accountHolder.setAuthId(attributes.getAuthId());
+    accountHolder.setEmail(attributes.getEmail());
+    accountHolder.setFullName(attributes.getFullName());
+    accountHolder.setTelephoneNumber(attributes.getTelephoneNumber());
     accountHolder.setAlternativeTelephoneNumber(
-      (String) attributes.get("alternativeTelephoneNumber")
+      attributes.getAlternativeTelephoneNumber()
     );
-    accountHolder.setAddressLine1((String) attributes.get("addressLine1"));
-    accountHolder.setAddressLine2((String) attributes.get("addressLine2"));
-    accountHolder.setAddressLine3((String) attributes.get("addressLine3"));
-    accountHolder.setAddressLine4((String) attributes.get("addressLine4"));
-    accountHolder.setTownOrCity((String) attributes.get("townOrCity"));
-    accountHolder.setPostcode((String) attributes.get("postcode"));
-    accountHolder.setCounty((String) attributes.get("county"));
+    accountHolder.setAddressLine1(attributes.getAddressLine1());
+    accountHolder.setAddressLine2(attributes.getAddressLine2());
+    accountHolder.setAddressLine3(attributes.getAddressLine3());
+    accountHolder.setAddressLine4(attributes.getAddressLine4());
+    accountHolder.setTownOrCity(attributes.getTownOrCity());
+    accountHolder.setPostcode(attributes.getPostcode());
+    accountHolder.setCounty(attributes.getCounty());
 
     return accountHolder;
   }
@@ -40,22 +38,21 @@ public class AccountHolderMapper extends BaseMapper {
     final var dto = new AccountHolderDTO();
     dto.setId(accountHolder.getId());
 
-    final Map<String, Object> attributes = new HashMap<>();
-    attributes.put("authId", accountHolder.getAuthId());
-    attributes.put("email", accountHolder.getEmail());
-    attributes.put("fullName", accountHolder.getFullName());
-    attributes.put("telephoneNumber", accountHolder.getTelephoneNumber());
-    attributes.put(
-      "alternativeTelephoneNumber",
-      accountHolder.getAlternativeTelephoneNumber()
-    );
-    attributes.put("addressLine1", accountHolder.getAddressLine1());
-    attributes.put("addressLine2", accountHolder.getAddressLine2());
-    attributes.put("addressLine3", accountHolder.getAddressLine3());
-    attributes.put("addressLine4", accountHolder.getAddressLine4());
-    attributes.put("townOrCity", accountHolder.getTownOrCity());
-    attributes.put("postcode", accountHolder.getPostcode());
-    attributes.put("county", accountHolder.getCounty());
+    final Attributes attributes = Attributes
+      .builder()
+      .authId(accountHolder.getAuthId())
+      .email(accountHolder.getEmail())
+      .fullName(accountHolder.getFullName())
+      .telephoneNumber(accountHolder.getTelephoneNumber())
+      .alternativeTelephoneNumber(accountHolder.getAlternativeTelephoneNumber())
+      .addressLine1(accountHolder.getAddressLine1())
+      .addressLine2(accountHolder.getAddressLine2())
+      .addressLine3(accountHolder.getAddressLine3())
+      .addressLine4(accountHolder.getAddressLine4())
+      .townOrCity(accountHolder.getTownOrCity())
+      .postcode(accountHolder.getPostcode())
+      .county(accountHolder.getCounty())
+      .build();
     dto.setAttributes(attributes);
 
     return dto;

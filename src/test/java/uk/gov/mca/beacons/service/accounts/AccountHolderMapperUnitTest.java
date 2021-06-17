@@ -3,33 +3,23 @@ package uk.gov.mca.beacons.service.accounts;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static uk.gov.mca.beacons.service.dto.AccountHolderDTO.Attributes;
 
-import java.util.HashMap;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.hateoas.BeaconLinkStrategy;
-import uk.gov.mca.beacons.service.hateoas.HateoasLinkManager;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.service.model.AccountHolder;
-import uk.gov.mca.beacons.service.model.Beacon;
 
 @ExtendWith(MockitoExtension.class)
 class AccountHolderMapperUnitTest {
 
-  @Mock
-  private HateoasLinkManager<Beacon> linkManager;
-
-  @Mock
-  private BeaconLinkStrategy linkStrategy;
-
   @Test
   void toDTO_shouldSetAllTheFieldsOnTheAccountHolderDTOFromTheDomain() {
-    var accountHolder = new AccountHolder();
+    final var accountHolder = new AccountHolder();
     accountHolder.setId(
       UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
     );
@@ -47,53 +37,31 @@ class AccountHolderMapperUnitTest {
     accountHolder.setCounty("Testershire");
     var accountHolderMapper = new AccountHolderMapper();
 
-    AccountHolderDTO accountHolderDTO = accountHolderMapper.toDTO(
+    final AccountHolderDTO accountHolderDTO = accountHolderMapper.toDTO(
       accountHolder
     );
+
+    final var attributes = accountHolderDTO.getAttributes();
 
     assertThat(
       accountHolderDTO.getId(),
       is(UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e"))
     );
     assertThat(
-      accountHolderDTO.getAttributes().get("authId"),
+      attributes.getAuthId(),
       is("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
     );
-    assertThat(
-      accountHolderDTO.getAttributes().get("email"),
-      is("testy@mctestface.com")
-    );
-    assertThat(
-      accountHolderDTO.getAttributes().get("fullName"),
-      is("Tesy McTestface")
-    );
-    assertThat(
-      accountHolderDTO.getAttributes().get("telephoneNumber"),
-      is("01178 657123")
-    );
-    assertThat(
-      accountHolderDTO.getAttributes().get("alternativeTelephoneNumber"),
-      is("")
-    );
-    assertThat(
-      accountHolderDTO.getAttributes().get("addressLine1"),
-      is("Flat 42")
-    );
-    assertThat(
-      accountHolderDTO.getAttributes().get("addressLine2"),
-      is("Testington Towers")
-    );
-    assertThat(accountHolderDTO.getAttributes().get("addressLine3"), is(""));
-    assertThat(accountHolderDTO.getAttributes().get("addressLine4"), is(""));
-    assertThat(
-      accountHolderDTO.getAttributes().get("townOrCity"),
-      is("Testville")
-    );
-    assertThat(accountHolderDTO.getAttributes().get("postcode"), is("TS1 23A"));
-    assertThat(
-      accountHolderDTO.getAttributes().get("county"),
-      is("Testershire")
-    );
+    assertThat(attributes.getEmail(), is("testy@mctestface.com"));
+    assertThat(attributes.getFullName(), is("Tesy McTestface"));
+    assertThat(attributes.getTelephoneNumber(), is("01178 657123"));
+    assertThat(attributes.getAlternativeTelephoneNumber(), is(""));
+    assertThat(attributes.getAddressLine1(), is("Flat 42"));
+    assertThat(attributes.getAddressLine2(), is("Testington Towers"));
+    assertThat(attributes.getAddressLine3(), is(""));
+    assertThat(attributes.getAddressLine4(), is(""));
+    assertThat(attributes.getTownOrCity(), is("Testville"));
+    assertThat(attributes.getPostcode(), is("TS1 23A"));
+    assertThat(attributes.getCounty(), is("Testershire"));
   }
 
   @Test
@@ -103,19 +71,22 @@ class AccountHolderMapperUnitTest {
       UUID.fromString("461fc925-dbe0-448b-acf4-18727958393e")
     );
 
-    final var attributes = new HashMap<String, Object>();
-    attributes.put("authId", "a2fb6bb2-f735-41aa-a4a1-19cb951a51bc");
-    attributes.put("email", "testy@mctestface.com");
-    attributes.put("fullName", "Tesy McTestface");
-    attributes.put("telephoneNumber", "01178 657123");
-    attributes.put("alternativeTelephoneNumber", "");
-    attributes.put("addressLine1", "Flat 42");
-    attributes.put("addressLine2", "Testington Towers");
-    attributes.put("addressLine3", "");
-    attributes.put("addressLine4", "");
-    attributes.put("townOrCity", "Testville");
-    attributes.put("postcode", "TS1 23A");
-    attributes.put("county", "Testershire");
+    final var attributes = Attributes
+      .builder()
+      .authId("a2fb6bb2-f735-41aa-a4a1-19cb951a51bc")
+      .email("testy@mctestface.com")
+      .fullName("Tesy McTestface")
+      .telephoneNumber("01178 657123")
+      .alternativeTelephoneNumber("")
+      .addressLine1("Flat 42")
+      .addressLine2("Testington Towers")
+      .addressLine3("")
+      .addressLine4("")
+      .townOrCity("Testville")
+      .postcode("TS1 23A")
+      .county("Testershire")
+      .build();
+
     accountHolderDTO.setAttributes(attributes);
     var accountHolderMapper = new AccountHolderMapper();
 
