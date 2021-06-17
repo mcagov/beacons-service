@@ -19,73 +19,72 @@ import org.springframework.web.reactive.function.BodyInserters;
 @AutoConfigureWebTestClient
 class AccountHolderControllerIntegrationTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+  @Autowired
+  private WebTestClient webTestClient;
 
-    @Test
-    void requestCreateAccountHolder_shouldRespondWithTheCreatedResource()
-            throws Exception {
-        String testAuthId = UUID.randomUUID().toString();
-        String newAccountHolderRequest = readFile(
-                "src/test/resources/fixtures/createAccountHolderRequest.json"
-        )
-                .replace("replace-with-test-auth-id", testAuthId);
-        String expectedResponse = readFile(
-                "src/test/resources/fixtures/createAccountHolderResponse.json"
-        )
-                .replace("replace-with-test-auth-id", testAuthId);
+  @Test
+  void requestCreateAccountHolder_shouldRespondWithTheCreatedResource()
+    throws Exception {
+    String testAuthId = UUID.randomUUID().toString();
+    String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+    String expectedResponse = readFile(
+      "src/test/resources/fixtures/createAccountHolderResponse.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
 
-        var response = webTestClient
-                .post()
-                .uri("/account-holder")
-                .body(BodyInserters.fromValue(newAccountHolderRequest))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectBody();
+    var response = webTestClient
+      .post()
+      .uri("/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody();
 
-        response.json(expectedResponse);
-        response.jsonPath("$.data.id").isNotEmpty();
-    }
+    response.json(expectedResponse);
+    response.jsonPath("$.data.id").isNotEmpty();
+  }
 
-    @Test
-    void requestGetAccountHolder_shouldRespondWithTheExistingAccountHolder()
-            throws Exception {
-        String testAuthId = UUID.randomUUID().toString();
-        String newAccountHolderRequest = readFile(
-                "src/test/resources/fixtures/createAccountHolderRequest.json"
-        )
-                .replace("replace-with-test-auth-id", testAuthId);
-        var createdAccountResponse = webTestClient
-                .post()
-                .uri("/account-holder")
-                .body(BodyInserters.fromValue(newAccountHolderRequest))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectBody()
-                .returnResult()
-                .getResponseBody();
-        String createdAccountHolderId = new ObjectMapper()
-                .readValue(createdAccountResponse, ObjectNode.class)
-                .get("data")
-                .get("id")
-                .textValue();
-        String expectedResponse = readFile(
-                "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
-        )
-                .replace("replace-with-test-auth-id", testAuthId);
+  @Test
+  void requestGetAccountHolder_shouldRespondWithTheExistingAccountHolder()
+    throws Exception {
+    String testAuthId = UUID.randomUUID().toString();
+    String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+    var createdAccountResponse = webTestClient
+      .post()
+      .uri("/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody()
+      .returnResult()
+      .getResponseBody();
+    String createdAccountHolderId = new ObjectMapper()
+      .readValue(createdAccountResponse, ObjectNode.class)
+      .get("data")
+      .get("id")
+      .textValue();
+    String expectedResponse = readFile(
+      "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
 
-        var response = webTestClient
-                .get()
-                .uri("/account-holder/" + createdAccountHolderId)
-                .exchange()
-                .expectBody();
+    var response = webTestClient
+      .get()
+      .uri("/account-holder/" + createdAccountHolderId)
+      .exchange()
+      .expectBody();
 
-        response.json(expectedResponse);
-        response.jsonPath("$.data.id")
-                .exists();
-    }
+    response.json(expectedResponse);
+    response.jsonPath("$.data.id").exists();
+  }
 
-    private String readFile(String filePath) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
-    }
+  private String readFile(String filePath) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(filePath)));
+  }
 }
