@@ -27,6 +27,8 @@ public class AccountHolderController {
 
   private final AccountHolderMapper accountHolderMapper;
 
+  private final GetAccountHolderByIdService getAccountHolderByIdService;
+
   private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
 
   private final CreateAccountHolderService createAccountHolderService;
@@ -34,12 +36,25 @@ public class AccountHolderController {
   @Autowired
   public AccountHolderController(
     AccountHolderMapper accountHolderMapper,
+    GetAccountHolderByIdService getAccountHolderByIdService,
     GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
     CreateAccountHolderService createAccountHolderService
   ) {
     this.accountHolderMapper = accountHolderMapper;
+    this.getAccountHolderByIdService = getAccountHolderByIdService;
     this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
     this.createAccountHolderService = createAccountHolderService;
+  }
+
+  @GetMapping(value = "/{id}")
+  public WrapperDTO<AccountHolderDTO> getAccountHolder(
+    @PathVariable("id") UUID id
+  ) {
+    final AccountHolder accountHolder = getAccountHolderByIdService.execute(id);
+
+    if (accountHolder == null) throw new ResourceNotFoundException();
+
+    return accountHolderMapper.toWrapperDTO(accountHolder);
   }
 
   @GetMapping(value = "/auth-id/{authId}")
