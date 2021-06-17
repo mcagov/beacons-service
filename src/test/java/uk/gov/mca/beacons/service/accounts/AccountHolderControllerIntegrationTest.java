@@ -26,11 +26,11 @@ class AccountHolderControllerIntegrationTest {
   void requestCreateAccountHolder_shouldRespondWithTheCreatedResource()
     throws Exception {
     String testAuthId = UUID.randomUUID().toString();
-    String newAccountHolderRequest = readFromFile(
+    String newAccountHolderRequest = readFile(
       "src/test/resources/fixtures/createAccountHolderRequest.json"
     )
       .replace("replace-with-test-auth-id", testAuthId);
-    String expectedResponse = readFromFile(
+    String expectedResponse = readFile(
       "src/test/resources/fixtures/createAccountHolderResponse.json"
     )
       .replace("replace-with-test-auth-id", testAuthId);
@@ -49,12 +49,11 @@ class AccountHolderControllerIntegrationTest {
   void requestGetAccountHolder_shouldRespondWithTheExistingAccountHolder()
     throws Exception {
     String testAuthId = UUID.randomUUID().toString();
-    String newAccountHolderRequest = readFromFile(
+    String newAccountHolderRequest = readFile(
       "src/test/resources/fixtures/createAccountHolderRequest.json"
     )
       .replace("replace-with-test-auth-id", testAuthId);
-    var objectMapper = new ObjectMapper();
-    var response = webTestClient
+    var createdAccountResponse = webTestClient
       .post()
       .uri("/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
@@ -63,13 +62,12 @@ class AccountHolderControllerIntegrationTest {
       .expectBody()
       .returnResult()
       .getResponseBody();
-    final String createdAccountHolderId = objectMapper
-      .readValue(response, ObjectNode.class)
+    String createdAccountHolderId = new ObjectMapper()
+      .readValue(createdAccountResponse, ObjectNode.class)
       .get("data")
       .get("id")
       .textValue();
-
-    String expectedResponse = readFromFile(
+    String expectedResponse = readFile(
       "src/test/resources/fixtures/getAccountHolderByIdResponse.json"
     )
       .replace("replace-with-test-id", createdAccountHolderId)
@@ -83,7 +81,7 @@ class AccountHolderControllerIntegrationTest {
       .json(expectedResponse);
   }
 
-  private String readFromFile(String filePath) throws IOException {
+  private String readFile(String filePath) throws IOException {
     return new String(Files.readAllBytes(Paths.get(filePath)));
   }
 }
