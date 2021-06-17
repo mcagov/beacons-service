@@ -189,7 +189,8 @@ class AccountHolderControllerUnitTest {
   }
 
   @Test
-  void requestGetAccountHolderById_shouldMapAccountHolderToAWrapperDTO() throws Exception {
+  void requestGetAccountHolderById_shouldMapAccountHolderToAWrapperDTO()
+    throws Exception {
     given(getAccountHolderByIdService.execute(accountHolderId))
       .willReturn(accountHolder);
 
