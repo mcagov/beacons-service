@@ -12,7 +12,7 @@
   "devDependencies": {
     "husky": "^4.3.8",
     "prettier-plugin-java": "1.2.0",
-    "pretty-quick": "^3.1.0"
+    "pretty-quick": "^3.1.1"
   },
   "engines": {
     "node": ">=12.20.x <=14.15.x",
