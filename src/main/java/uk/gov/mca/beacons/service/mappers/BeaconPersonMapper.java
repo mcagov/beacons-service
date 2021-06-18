@@ -75,6 +75,10 @@ public class BeaconPersonMapper {
     dto.addAttribute("fullName", domain.getFullName());
     dto.addAttribute("email", domain.getEmail());
     dto.addAttribute("telephoneNumber", domain.getTelephoneNumber());
+    dto.addAttribute(
+      "alternativeTelephoneNumber",
+      domain.getAlternativeTelephoneNumber()
+    );
     dto.addAttribute("addressLine1", domain.getAddressLine1());
     dto.addAttribute("addressLine2", domain.getAddressLine2());
     dto.addAttribute("addressLine3", domain.getAddressLine3());

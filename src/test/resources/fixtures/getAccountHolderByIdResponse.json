@@ -1,5 +1,4 @@
 {
-  "meta": {},
   "data": {
     "type": "accountHolder",
     "attributes": {
@@ -17,6 +16,5 @@
       "county": "Testershire"
     },
     "relationships": {}
-  },
-  "included": []
+  }
 }
