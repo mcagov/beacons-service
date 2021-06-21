@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconUseDTO;
@@ -28,71 +30,68 @@ public class BeaconUseMapper extends BaseMapper {
   public BeaconUseDTO toDTO(BeaconUse domain) {
     final var dto = new BeaconUseDTO();
     dto.setId(domain.getId());
-    dto.addAttribute("environment", domain.getEnvironment());
-    dto.addAttribute("activity", domain.getActivity());
-    dto.addAttribute("otherActivity", domain.getOtherActivity());
-    dto.addAttribute("moreDetails", domain.getMoreDetails());
-    dto.addAttribute("purpose", domain.getPurpose());
-    dto.addAttribute("callSign", domain.getCallSign());
-    dto.addAttribute("vhfRadio", domain.getVhfRadio());
-    dto.addAttribute("fixedVhfRadio", domain.getFixedVhfRadio());
-    dto.addAttribute("fixedVhfRadioValue", domain.getFixedVhfRadioValue());
-    dto.addAttribute("portableVhfRadio", domain.getPortableVhfRadio());
-    dto.addAttribute(
-      "portableVhfRadioValue",
-      domain.getPortableVhfRadioValue()
-    );
-    dto.addAttribute("satelliteTelephone", domain.getSatelliteTelephone());
-    dto.addAttribute(
+
+    final Map<String, Object> attributes = new HashMap<>();
+    attributes.put("environment", domain.getEnvironment());
+    attributes.put("activity", domain.getActivity());
+    attributes.put("otherActivity", domain.getOtherActivity());
+    attributes.put("moreDetails", domain.getMoreDetails());
+    attributes.put("purpose", domain.getPurpose());
+    attributes.put("callSign", domain.getCallSign());
+    attributes.put("vhfRadio", domain.getVhfRadio());
+    attributes.put("fixedVhfRadio", domain.getFixedVhfRadio());
+    attributes.put("fixedVhfRadioValue", domain.getFixedVhfRadioValue());
+    attributes.put("portableVhfRadio", domain.getPortableVhfRadio());
+    attributes.put("portableVhfRadioValue", domain.getPortableVhfRadioValue());
+    attributes.put("satelliteTelephone", domain.getSatelliteTelephone());
+    attributes.put(
       "satelliteTelephoneValue",
       domain.getSatelliteTelephoneValue()
     );
-    dto.addAttribute("mobileTelephone", domain.getMobileTelephone());
-    dto.addAttribute("mobileTelephone1", domain.getMobileTelephone1());
-    dto.addAttribute("mobileTelephone2", domain.getMobileTelephone2());
-    dto.addAttribute("otherCommunication", domain.getOtherCommunication());
-    dto.addAttribute(
+    attributes.put("mobileTelephone", domain.getMobileTelephone());
+    attributes.put("mobileTelephone1", domain.getMobileTelephone1());
+    attributes.put("mobileTelephone2", domain.getMobileTelephone2());
+    attributes.put("otherCommunication", domain.getOtherCommunication());
+    attributes.put(
       "otherCommunicationValue",
       domain.getOtherCommunicationValue()
     );
-    dto.addAttribute("maxCapacity", domain.getMaxCapacity());
-    dto.addAttribute("vesselName", domain.getVesselName());
-    dto.addAttribute("portLetterNumber", domain.getPortLetterNumber());
-    dto.addAttribute("homeport", domain.getHomeport());
-    dto.addAttribute("areaOfOperation", domain.getAreaOfOperation());
-    dto.addAttribute("beaconLocation", domain.getBeaconLocation());
-    dto.addAttribute("imoNumber", domain.getImoNumber());
-    dto.addAttribute("ssrNumber", domain.getSsrNumber());
-    dto.addAttribute("rssNumber", domain.getRssNumber());
-    dto.addAttribute("officialNumber", domain.getOfficialNumber());
-    dto.addAttribute("rigPlatformLocation", domain.getRigPlatformLocation());
-    dto.addAttribute("mainUse", domain.getMainUse());
-    dto.addAttribute("aircraftManufacturer", domain.getAircraftManufacturer());
-    dto.addAttribute("principalAirport", domain.getPrincipalAirport());
-    dto.addAttribute("secondaryAirport", domain.getSecondaryAirport());
-    dto.addAttribute("registrationMark", domain.getRegistrationMark());
-    dto.addAttribute("hexAddress", domain.getHexAddress());
-    dto.addAttribute("cnOrMsnNumber", domain.getCnOrMsnNumber());
-    dto.addAttribute("dongle", domain.getDongle());
-    dto.addAttribute("beaconPosition", domain.getBeaconPosition());
-    dto.addAttribute(
+    attributes.put("maxCapacity", domain.getMaxCapacity());
+    attributes.put("vesselName", domain.getVesselName());
+    attributes.put("portLetterNumber", domain.getPortLetterNumber());
+    attributes.put("homeport", domain.getHomeport());
+    attributes.put("areaOfOperation", domain.getAreaOfOperation());
+    attributes.put("beaconLocation", domain.getBeaconLocation());
+    attributes.put("imoNumber", domain.getImoNumber());
+    attributes.put("ssrNumber", domain.getSsrNumber());
+    attributes.put("rssNumber", domain.getRssNumber());
+    attributes.put("officialNumber", domain.getOfficialNumber());
+    attributes.put("rigPlatformLocation", domain.getRigPlatformLocation());
+    attributes.put("mainUse", domain.getMainUse());
+    attributes.put("aircraftManufacturer", domain.getAircraftManufacturer());
+    attributes.put("principalAirport", domain.getPrincipalAirport());
+    attributes.put("secondaryAirport", domain.getSecondaryAirport());
+    attributes.put("registrationMark", domain.getRegistrationMark());
+    attributes.put("hexAddress", domain.getHexAddress());
+    attributes.put("cnOrMsnNumber", domain.getCnOrMsnNumber());
+    attributes.put("dongle", domain.getDongle());
+    attributes.put("beaconPosition", domain.getBeaconPosition());
+    attributes.put(
       "workingRemotelyLocation",
       domain.getWorkingRemotelyLocation()
     );
-    dto.addAttribute(
+    attributes.put(
       "workingRemotelyPeopleCount",
       domain.getWorkingRemotelyPeopleCount()
     );
-    dto.addAttribute("windfarmLocation", domain.getWindfarmLocation());
-    dto.addAttribute("windfarmPeopleCount", domain.getWindfarmPeopleCount());
-    dto.addAttribute(
-      "otherActivityLocation",
-      domain.getOtherActivityLocation()
-    );
-    dto.addAttribute(
+    attributes.put("windfarmLocation", domain.getWindfarmLocation());
+    attributes.put("windfarmPeopleCount", domain.getWindfarmPeopleCount());
+    attributes.put("otherActivityLocation", domain.getOtherActivityLocation());
+    attributes.put(
       "otherActivityPeopleCount",
       domain.getOtherActivityPeopleCount()
     );
+    dto.setAttributes(attributes);
 
     dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;

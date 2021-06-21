@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import static uk.gov.mca.beacons.service.dto.AccountHolderDTO.Attributes;
+
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
@@ -14,22 +16,20 @@ public class AccountHolderMapper extends BaseMapper {
 
     final var attributes = accountHolderDTO.getAttributes();
 
-    accountHolder.setAuthId((String) attributes.get("authId"));
-    accountHolder.setEmail((String) attributes.get("email"));
-    accountHolder.setFullName((String) attributes.get("fullName"));
-    accountHolder.setTelephoneNumber(
-      (String) attributes.get("telephoneNumber")
-    );
+    accountHolder.setAuthId(attributes.getAuthId());
+    accountHolder.setEmail(attributes.getEmail());
+    accountHolder.setFullName(attributes.getFullName());
+    accountHolder.setTelephoneNumber(attributes.getTelephoneNumber());
     accountHolder.setAlternativeTelephoneNumber(
-      (String) attributes.get("alternativeTelephoneNumber")
+      attributes.getAlternativeTelephoneNumber()
     );
-    accountHolder.setAddressLine1((String) attributes.get("addressLine1"));
-    accountHolder.setAddressLine2((String) attributes.get("addressLine2"));
-    accountHolder.setAddressLine3((String) attributes.get("addressLine3"));
-    accountHolder.setAddressLine4((String) attributes.get("addressLine4"));
-    accountHolder.setTownOrCity((String) attributes.get("townOrCity"));
-    accountHolder.setPostcode((String) attributes.get("postcode"));
-    accountHolder.setCounty((String) attributes.get("county"));
+    accountHolder.setAddressLine1(attributes.getAddressLine1());
+    accountHolder.setAddressLine2(attributes.getAddressLine2());
+    accountHolder.setAddressLine3(attributes.getAddressLine3());
+    accountHolder.setAddressLine4(attributes.getAddressLine4());
+    accountHolder.setTownOrCity(attributes.getTownOrCity());
+    accountHolder.setPostcode(attributes.getPostcode());
+    accountHolder.setCounty(attributes.getCounty());
 
     return accountHolder;
   }
@@ -37,21 +37,23 @@ public class AccountHolderMapper extends BaseMapper {
   public AccountHolderDTO toDTO(AccountHolder accountHolder) {
     final var dto = new AccountHolderDTO();
     dto.setId(accountHolder.getId());
-    dto.addAttribute("authId", accountHolder.getAuthId());
-    dto.addAttribute("email", accountHolder.getEmail());
-    dto.addAttribute("fullName", accountHolder.getFullName());
-    dto.addAttribute("telephoneNumber", accountHolder.getTelephoneNumber());
-    dto.addAttribute(
-      "alternativeTelephoneNumber",
-      accountHolder.getAlternativeTelephoneNumber()
-    );
-    dto.addAttribute("addressLine1", accountHolder.getAddressLine1());
-    dto.addAttribute("addressLine2", accountHolder.getAddressLine2());
-    dto.addAttribute("addressLine3", accountHolder.getAddressLine3());
-    dto.addAttribute("addressLine4", accountHolder.getAddressLine4());
-    dto.addAttribute("townOrCity", accountHolder.getTownOrCity());
-    dto.addAttribute("postcode", accountHolder.getPostcode());
-    dto.addAttribute("county", accountHolder.getCounty());
+
+    final Attributes attributes = Attributes
+      .builder()
+      .authId(accountHolder.getAuthId())
+      .email(accountHolder.getEmail())
+      .fullName(accountHolder.getFullName())
+      .telephoneNumber(accountHolder.getTelephoneNumber())
+      .alternativeTelephoneNumber(accountHolder.getAlternativeTelephoneNumber())
+      .addressLine1(accountHolder.getAddressLine1())
+      .addressLine2(accountHolder.getAddressLine2())
+      .addressLine3(accountHolder.getAddressLine3())
+      .addressLine4(accountHolder.getAddressLine4())
+      .townOrCity(accountHolder.getTownOrCity())
+      .postcode(accountHolder.getPostcode())
+      .county(accountHolder.getCounty())
+      .build();
+    dto.setAttributes(attributes);
 
     return dto;
   }
@@ -59,7 +61,7 @@ public class AccountHolderMapper extends BaseMapper {
   public final WrapperDTO<AccountHolderDTO> toWrapperDTO(
     AccountHolder accountHolder
   ) {
-    WrapperDTO<AccountHolderDTO> wrapperDTO = new WrapperDTO<>();
+    final WrapperDTO<AccountHolderDTO> wrapperDTO = new WrapperDTO<>();
 
     wrapperDTO.setData(toDTO(accountHolder));
 
