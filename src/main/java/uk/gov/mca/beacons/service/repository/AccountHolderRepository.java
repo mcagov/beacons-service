@@ -8,10 +8,10 @@ import uk.gov.mca.beacons.service.model.AccountHolder;
 
 @Repository
 public interface AccountHolderRepository
-  extends JpaRepository<AccountHolder, UUID> {
-  @Query(
-    nativeQuery = true,
-    value = "SELECT * FROM account_holder WHERE auth_id = ?1"
-  )
-  AccountHolder getByAuthId(String authId);
+        extends JpaRepository<AccountHolder, UUID> {
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM account_holder WHERE auth_id = ?1"
+    )
+    AccountHolder getByAuthId(String authId);
 }

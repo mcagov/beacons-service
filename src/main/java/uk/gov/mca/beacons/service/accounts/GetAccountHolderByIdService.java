@@ -10,15 +10,15 @@ import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
 @Transactional
 public class GetAccountHolderByIdService {
 
-  private final AccountHolderRepository accountHolderRepository;
+    private final AccountHolderRepository accountHolderRepository;
 
-  public GetAccountHolderByIdService(
-    AccountHolderRepository accountHolderRepository
-  ) {
-    this.accountHolderRepository = accountHolderRepository;
-  }
+    public GetAccountHolderByIdService(
+            AccountHolderRepository accountHolderRepository
+    ) {
+        this.accountHolderRepository = accountHolderRepository;
+    }
 
-  public AccountHolder execute(UUID id) {
-    return accountHolderRepository.getById(id);
-  }
+    public AccountHolder execute(UUID id) {
+        return accountHolderRepository.getById(id);
+    }
 }
