@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity(name = "beacon_account_holder")
+@Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter

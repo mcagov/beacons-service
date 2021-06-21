@@ -11,7 +11,7 @@ public interface AccountHolderRepository
   extends JpaRepository<AccountHolder, UUID> {
   @Query(
     nativeQuery = true,
-    value = "SELECT * FROM beacon_account_holder WHERE auth_id = ?1"
+    value = "SELECT * FROM account_holder WHERE auth_id = ?1"
   )
   AccountHolder getByAuthId(String authId);
 }
