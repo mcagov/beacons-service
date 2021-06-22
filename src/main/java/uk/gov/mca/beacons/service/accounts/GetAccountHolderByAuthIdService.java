@@ -9,16 +9,16 @@ import uk.gov.mca.beacons.service.domain.AccountHolder;
 @Transactional
 public class GetAccountHolderByAuthIdService {
 
-    private final AccountHolderGateway accountHolderGateway;
+  private final AccountHolderGateway accountHolderGateway;
 
-    @Autowired
-    public GetAccountHolderByAuthIdService(
-            AccountHolderGateway accountHolderGateway
-    ) {
-        this.accountHolderGateway = accountHolderGateway;
-    }
+  @Autowired
+  public GetAccountHolderByAuthIdService(
+    AccountHolderGateway accountHolderGateway
+  ) {
+    this.accountHolderGateway = accountHolderGateway;
+  }
 
-    public AccountHolder execute(String authId) {
-        return accountHolderGateway.getByAuthId(authId);
-    }
+  public AccountHolder execute(String authId) {
+    return accountHolderGateway.getByAuthId(authId);
+  }
 }
