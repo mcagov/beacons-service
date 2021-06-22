@@ -52,12 +52,12 @@ class OwnerControllerUnitTest {
 
     @Test
     void shouldReturn201IfSuccessful() throws Exception {
-      WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-      String newBeaconPersonRequest = new ObjectMapper()
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
       mvc
         .perform(
-          post("/person")
+          post("/owner")
             .contentType(MediaType.APPLICATION_JSON)
             .content(newBeaconPersonRequest)
         )
@@ -66,12 +66,12 @@ class OwnerControllerUnitTest {
 
     @Test
     void shouldMapDTOToDomainAccountHolder() throws Exception {
-      WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-      String newBeaconPersonRequest = new ObjectMapper()
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
 
       mvc.perform(
-        post("/person")
+        post("/owner")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newBeaconPersonRequest)
       );
@@ -83,14 +83,14 @@ class OwnerControllerUnitTest {
     @Test
     void shouldCallTheAccountHolderServiceToCreateANewResource()
       throws Exception {
-      WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-      String newBeaconPersonRequest = new ObjectMapper()
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
       given(beaconPersonMapper.fromDTO(newBeaconPersonDTO.getData()))
         .willReturn(beaconPerson);
 
       mvc.perform(
-        post("/person")
+        post("/owner")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newBeaconPersonRequest)
       );
