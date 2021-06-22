@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.accounts;
+package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -19,7 +19,6 @@ import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
-import uk.gov.mca.beacons.api.services.GetBeaconsByAccountHolderIdService;
 
 @ExtendWith(MockitoExtension.class)
 class GetBeaconsByAccountHolderIdServiceUnitTest {

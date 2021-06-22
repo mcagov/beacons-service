@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.beacons;
+package uk.gov.mca.beacons.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.controllers.BeaconsController;
 import uk.gov.mca.beacons.api.db.Beacon;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;

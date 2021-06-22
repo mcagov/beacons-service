@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.accounts;
+package uk.gov.mca.beacons.api.mappers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.entities.AccountHolder;
-import uk.gov.mca.beacons.api.mappers.AccountHolderMapper;
 
 @ExtendWith(MockitoExtension.class)
 class AccountHolderMapperUnitTest {

@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.beacons;
+package uk.gov.mca.beacons.api.mappers;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +18,6 @@ import uk.gov.mca.beacons.api.db.BeaconUse;
 import uk.gov.mca.beacons.api.db.Person;
 import uk.gov.mca.beacons.api.entities.Activity;
 import uk.gov.mca.beacons.api.entities.PersonType;
-import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconsRelationshipMapperTest {

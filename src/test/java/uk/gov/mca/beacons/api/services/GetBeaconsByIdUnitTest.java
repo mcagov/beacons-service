@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.beacons;
+package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -25,10 +25,9 @@ import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
-import uk.gov.mca.beacons.api.services.BeaconsService;
 
 @ExtendWith(MockitoExtension.class)
-class BeaconsServiceFindByIdTest {
+class GetBeaconsByIdUnitTest {
 
     @Mock
     private BeaconJpaRepository beaconJpaRepository;

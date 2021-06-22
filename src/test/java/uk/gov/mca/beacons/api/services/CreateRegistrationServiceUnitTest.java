@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.registrations;
+package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -29,7 +29,6 @@ import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
-import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 
 @ExtendWith(MockitoExtension.class)
 class CreateRegistrationServiceUnitTest {

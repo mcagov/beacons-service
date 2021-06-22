@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.beacons;
+package uk.gov.mca.beacons.api.controllers;
 
 import java.time.LocalDate;
 import java.util.List;

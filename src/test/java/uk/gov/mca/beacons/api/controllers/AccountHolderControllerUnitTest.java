@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.accounts;
+package uk.gov.mca.beacons.api.controllers;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.mca.beacons.api.controllers.AccountHolderController;
 import uk.gov.mca.beacons.api.db.Beacon;
 import uk.gov.mca.beacons.api.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
