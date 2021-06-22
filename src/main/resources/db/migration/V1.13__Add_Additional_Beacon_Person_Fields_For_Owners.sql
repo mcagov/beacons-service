@@ -10,4 +10,4 @@ ALTER TABLE person
     ADD COLUMN is_main text,
     ADD COLUMN create_user_id integer,
     ADD COLUMN update_user_id integer,
-    ADD COLUMN versioning interval;
+    ADD COLUMN versioning integer;
