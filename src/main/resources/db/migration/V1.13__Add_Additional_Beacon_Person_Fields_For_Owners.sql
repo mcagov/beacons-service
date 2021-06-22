@@ -1,5 +1,7 @@
 -- Add additional columns required for the data migration
 ALTER TABLE person
+    ADD COLUMN alternative_telephone_number_2 text,
+    ADD COLUMN telephone_number_2 text,
     ADD COLUMN last_modified_date text,
     ADD COLUMN country text,
     ADD COLUMN company_name text,
