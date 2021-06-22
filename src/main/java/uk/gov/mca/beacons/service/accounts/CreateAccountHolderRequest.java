@@ -1,16 +1,11 @@
-package uk.gov.mca.beacons.service.domain;
+package uk.gov.mca.beacons.service.accounts;
 
-import java.util.UUID;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-public class AccountHolder {
-
-  private UUID id;
+public class CreateAccountHolderRequest {
 
   private String authId;
 
