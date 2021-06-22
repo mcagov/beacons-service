@@ -12,8 +12,12 @@ public class CreateOwnerRequestMapper {
     owner.setBeaconId(request.getBeaconId());
     owner.setFullName(request.getFullName());
     owner.setTelephoneNumber(request.getTelephoneNumber());
+    owner.setTelephoneNumber2(request.getTelephoneNumber2());
     owner.setAlternativeTelephoneNumber(
       request.getAlternativeTelephoneNumber()
+    );
+    owner.setAlternativeTelephoneNumber2(
+      request.getAlternativeTelephoneNumber2()
     );
     owner.setEmail(request.getEmail());
     owner.setPersonType(PersonType.OWNER);
@@ -24,6 +28,14 @@ public class CreateOwnerRequestMapper {
     owner.setTownOrCity(request.getTownOrCity());
     owner.setPostcode(request.getPostcode());
     owner.setCounty(request.getCounty());
+    owner.setCountry(request.getCountry());
+    owner.setCompanyName(request.getCompanyName());
+    owner.setCareOf(request.getCareOf());
+    owner.setFax(request.getFax());
+    owner.setIsMain(request.getIsMain());
+    owner.setCreateUserId(request.getCreateUserId());
+    owner.setUpdateUserId(request.getUpdateUserId());
+    owner.setVersioning(request.getVersioning());
 
     return owner;
   }
