@@ -16,7 +16,9 @@ public class CreateOwnerRequest {
   private UUID beaconId;
   private String fullName;
   private String telephoneNumber;
+  private String telephoneNumber2;
   private String alternativeTelephoneNumber;
+  private String alternativeTelephoneNumber2;
   private String email;
   private String addressLine1;
   private String addressLine2;
@@ -25,4 +27,12 @@ public class CreateOwnerRequest {
   private String townOrCity;
   private String postcode;
   private String county;
+  private String country;
+  private String companyName;
+  private String careOf;
+  private String fax;
+  private String isMain;
+  private Integer createUserId;
+  private Integer updateUserId;
+  private Integer versioning;
 }

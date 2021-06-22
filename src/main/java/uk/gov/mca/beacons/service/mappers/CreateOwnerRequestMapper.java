@@ -37,7 +37,9 @@ public class CreateOwnerRequestMapper {
       .beaconId(beaconId)
       .fullName(owner.getFullName())
       .telephoneNumber(owner.getTelephoneNumber())
+      .telephoneNumber2(owner.getTelephoneNumber2())
       .alternativeTelephoneNumber(owner.getAlternativeTelephoneNumber())
+      .alternativeTelephoneNumber2(owner.getAlternativeTelephoneNumber2())
       .email(owner.getEmail())
       .addressLine1(owner.getAddressLine1())
       .addressLine2(owner.getAddressLine2())
@@ -46,6 +48,14 @@ public class CreateOwnerRequestMapper {
       .townOrCity(owner.getTownOrCity())
       .postcode(owner.getPostcode())
       .county(owner.getCounty())
+      .country(owner.getCountry())
+      .companyName(owner.getCompanyName())
+      .careOf(owner.getCareOf())
+      .fax(owner.getFax())
+      .isMain(owner.getIsMain())
+      .createUserId(owner.getCreateUserId())
+      .updateUserId(owner.getUpdateUserId())
+      .versioning(owner.getVersioning())
       .build();
   }
 
