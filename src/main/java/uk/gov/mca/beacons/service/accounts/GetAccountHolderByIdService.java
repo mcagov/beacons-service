@@ -1,24 +1,25 @@
 package uk.gov.mca.beacons.service.accounts;
 
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.mca.beacons.service.model.AccountHolder;
-import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 
 @Service
 @Transactional
 public class GetAccountHolderByIdService {
 
-    private final AccountHolderRepository accountHolderRepository;
+    private final AccountHolderGateway accountHolderGateway;
 
+    @Autowired
     public GetAccountHolderByIdService(
-            AccountHolderRepository accountHolderRepository
+            AccountHolderGateway accountHolderGateway
     ) {
-        this.accountHolderRepository = accountHolderRepository;
+        this.accountHolderGateway = accountHolderGateway;
     }
 
     public AccountHolder execute(UUID id) {
-        return accountHolderRepository.getById(id);
+        return accountHolderGateway.getById(id);
     }
 }

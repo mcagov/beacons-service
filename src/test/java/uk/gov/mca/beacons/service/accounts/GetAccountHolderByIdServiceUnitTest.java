@@ -10,43 +10,42 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.model.AccountHolder;
-import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 
 @ExtendWith(MockitoExtension.class)
 class GetAccountHolderByIdServiceUnitTest {
 
-  @Mock
-  private AccountHolderRepository mockAccountHolderRepository;
+    @Mock
+    private AccountHolderGateway mockAccountHolderGateway;
 
-  @Mock
-  private AccountHolder mockAccountHolder;
+    @Mock
+    private AccountHolder mockAccountHolder;
 
-  @Test
-  void getById_shouldReturnNullIfNotFound() {
-    GetAccountHolderByIdService getAccountHolderByIdService = new GetAccountHolderByIdService(
-      mockAccountHolderRepository
-    );
-    UUID nonExistentAccountHolderId = UUID.randomUUID();
-    given(mockAccountHolderRepository.getById(nonExistentAccountHolderId))
-      .willReturn(null);
+    @Test
+    void getById_shouldReturnNullIfNotFound() {
+        GetAccountHolderByIdService getAccountHolderByIdService = new GetAccountHolderByIdService(
+                mockAccountHolderGateway
+        );
+        UUID nonExistentAccountHolderId = UUID.randomUUID();
+        given(mockAccountHolderGateway.getById(nonExistentAccountHolderId))
+                .willReturn(null);
 
-    assertNull(getAccountHolderByIdService.execute(nonExistentAccountHolderId));
-  }
+        assertNull(getAccountHolderByIdService.execute(nonExistentAccountHolderId));
+    }
 
-  @Test
-  void getById_shouldReturnTheAccountHolder() {
-    GetAccountHolderByIdService getAccountHolderByIdService = new GetAccountHolderByIdService(
-      mockAccountHolderRepository
-    );
-    UUID existingAuthId = UUID.randomUUID();
-    given(mockAccountHolderRepository.getById(existingAuthId))
-      .willReturn(mockAccountHolder);
+    @Test
+    void getById_shouldReturnTheAccountHolder() {
+        GetAccountHolderByIdService getAccountHolderByIdService = new GetAccountHolderByIdService(
+                mockAccountHolderGateway
+        );
+        UUID existingAuthId = UUID.randomUUID();
+        given(mockAccountHolderGateway.getById(existingAuthId))
+                .willReturn(mockAccountHolder);
 
-    AccountHolder foundAccountHolder = getAccountHolderByIdService.execute(
-      existingAuthId
-    );
+        AccountHolder foundAccountHolder = getAccountHolderByIdService.execute(
+                existingAuthId
+        );
 
-    assertThat(foundAccountHolder, is(mockAccountHolder));
-  }
+        assertThat(foundAccountHolder, is(mockAccountHolder));
+    }
 }

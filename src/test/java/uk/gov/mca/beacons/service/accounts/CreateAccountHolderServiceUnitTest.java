@@ -8,29 +8,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.model.AccountHolder;
-import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 
 @ExtendWith(MockitoExtension.class)
 class CreateAccountHolderServiceUnitTest {
 
-  @Mock
-  private AccountHolderRepository accountHolderRepository;
+    @Mock
+    private AccountHolderGateway accountHolderGateway;
 
-  @Test
-  void shouldCreateTheAccountHolder() {
-    final CreateAccountHolderService createAccountHolderService = new CreateAccountHolderService(
-      accountHolderRepository
-    );
-    final AccountHolder accountHolder = new AccountHolder();
-    final AccountHolder createdAccountHolder = new AccountHolder();
+    @Test
+    void shouldCreateTheAccountHolder() {
+        final CreateAccountHolderService createAccountHolderService = new CreateAccountHolderService(
+                accountHolderGateway
+        );
+        final CreateAccountHolderRequest accountHolder = new CreateAccountHolderRequest();
+        final AccountHolder createdAccountHolder = new AccountHolder();
 
-    given(accountHolderRepository.save(accountHolder))
-      .willReturn(createdAccountHolder);
+        given(accountHolderGateway.save(accountHolder))
+                .willReturn(createdAccountHolder);
 
-    assertThat(
-      createAccountHolderService.execute(accountHolder),
-      is(createdAccountHolder)
-    );
-  }
+        assertThat(
+                createAccountHolderService.execute(accountHolder),
+                is(createdAccountHolder)
+        );
+    }
 }
