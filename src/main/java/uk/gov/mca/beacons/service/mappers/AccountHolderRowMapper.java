@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
-import uk.gov.mca.beacons.service.domain.AccountHolder;
+import uk.gov.mca.beacons.service.entities.AccountHolder;
 
 public class AccountHolderRowMapper implements RowMapper<AccountHolder> {
 

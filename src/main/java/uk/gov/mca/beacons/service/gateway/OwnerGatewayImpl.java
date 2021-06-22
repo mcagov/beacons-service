@@ -4,29 +4,29 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import uk.gov.mca.beacons.service.db.Person;
+import uk.gov.mca.beacons.service.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.service.mappers.CreateOwnerRequestMapper;
-import uk.gov.mca.beacons.service.model.BeaconPerson;
-import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
 
 @Repository
 @Transactional
 public class OwnerGatewayImpl implements OwnerGateway {
 
-  private final BeaconPersonRepository beaconPersonRepository;
+    private final BeaconPersonJpaRepository beaconPersonJpaRepository;
 
-  @Autowired
-  public OwnerGatewayImpl(BeaconPersonRepository beaconPersonRepository) {
-    this.beaconPersonRepository = beaconPersonRepository;
-  }
+    @Autowired
+    public OwnerGatewayImpl(BeaconPersonJpaRepository beaconPersonJpaRepository) {
+        this.beaconPersonJpaRepository = beaconPersonJpaRepository;
+    }
 
-  @Override
-  public void save(CreateOwnerRequest request) {
-    final BeaconPerson owner = CreateOwnerRequestMapper.toBeaconPerson(request);
-    beaconPersonRepository.save(owner);
-  }
+    @Override
+    public void save(CreateOwnerRequest request) {
+        final Person owner = CreateOwnerRequestMapper.toBeaconPerson(request);
+        beaconPersonJpaRepository.save(owner);
+    }
 
-  @Override
-  public BeaconPerson findByBeaconId(UUID beaconId) {
-    return beaconPersonRepository.findOwnerByBeaconId(beaconId);
-  }
+    @Override
+    public Person findByBeaconId(UUID beaconId) {
+        return beaconPersonJpaRepository.findOwnerByBeaconId(beaconId);
+    }
 }

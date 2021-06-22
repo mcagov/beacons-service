@@ -15,70 +15,70 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.model.BeaconUse;
+import uk.gov.mca.beacons.service.db.BeaconUse;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconUseLinkStrategyTest {
 
-  @Mock
-  BeaconRolesService beaconRolesService;
+    @Mock
+    BeaconRolesService beaconRolesService;
 
-  BeaconUse beaconUse;
-  List<SupportedPermissions> userRoles;
-  BeaconUseLinkStrategy linkStrategy;
+    BeaconUse beaconUse;
+    List<SupportedPermissions> userRoles;
+    BeaconUseLinkStrategy linkStrategy;
 
-  @BeforeEach
-  void beforeEach() {
-    beaconUse = new BeaconUse();
-    var beaconUseId = UUID.randomUUID();
-    beaconUse.setId(beaconUseId);
+    @BeforeEach
+    void beforeEach() {
+        beaconUse = new BeaconUse();
+        var beaconUseId = UUID.randomUUID();
+        beaconUse.setId(beaconUseId);
 
-    userRoles = new ArrayList<SupportedPermissions>();
+        userRoles = new ArrayList<SupportedPermissions>();
 
-    linkStrategy = new BeaconUseLinkStrategy(beaconRolesService);
-  }
+        linkStrategy = new BeaconUseLinkStrategy(beaconRolesService);
+    }
 
-  @Test
-  void buildGetForBeaconShouldReturnExpectedLink() {
-    assertThrows(
-      NotImplementedException.class,
-      () -> {
-        linkStrategy.getGetPath(beaconUse);
-      }
-    );
-  }
+    @Test
+    void buildGetForBeaconShouldReturnExpectedLink() {
+        assertThrows(
+                NotImplementedException.class,
+                () -> {
+                    linkStrategy.getGetPath(beaconUse);
+                }
+        );
+    }
 
-  @Test
-  void buildPatchForBeaconShouldReturnExpectedLink() {
-    var result = linkStrategy.getPatchPath(beaconUse);
+    @Test
+    void buildPatchForBeaconShouldReturnExpectedLink() {
+        var result = linkStrategy.getPatchPath(beaconUse);
 
-    assertThat(result, is("/beacon-uses/" + beaconUse.getId()));
-  }
+        assertThat(result, is("/beacon-uses/" + beaconUse.getId()));
+    }
 
-  @Test
-  void checkPermissionForGetShouldReturnFalse() {
-    given(beaconRolesService.getUserRoles()).willReturn(userRoles);
+    @Test
+    void checkPermissionForGetShouldReturnFalse() {
+        given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-    var result = linkStrategy.userCanPatchEntity(beaconUse);
+        var result = linkStrategy.userCanPatchEntity(beaconUse);
 
-    assertThat(result, is(false));
-  }
+        assertThat(result, is(false));
+    }
 
-  @Test
-  void checkPermissionForPatchShouldReturnTrueWhenRoleIsPresent() {
-    userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
-    given(beaconRolesService.getUserRoles()).willReturn(userRoles);
+    @Test
+    void checkPermissionForPatchShouldReturnTrueWhenRoleIsPresent() {
+        userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
+        given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-    var result = linkStrategy.userCanPatchEntity(beaconUse);
+        var result = linkStrategy.userCanPatchEntity(beaconUse);
 
-    assertThat(result, is(true));
-  }
+        assertThat(result, is(true));
+    }
 
-  @Test
-  void checkPermissionForPatchShouldReturnFalseWhenRoleNotPresent() {
-    given(beaconRolesService.getUserRoles()).willReturn(userRoles);
-    var result = linkStrategy.userCanPatchEntity(beaconUse);
+    @Test
+    void checkPermissionForPatchShouldReturnFalseWhenRoleNotPresent() {
+        given(beaconRolesService.getUserRoles()).willReturn(userRoles);
+        var result = linkStrategy.userCanPatchEntity(beaconUse);
 
-    assertThat(result, is(false));
-  }
+        assertThat(result, is(false));
+    }
 }

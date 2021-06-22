@@ -1,24 +1,30 @@
-package uk.gov.mca.beacons.service.gateway;
+package uk.gov.mca.beacons.service.entities;
 
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
-public class CreateOwnerRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountHolder {
 
-    private UUID beaconId;
+    private UUID id;
+
+    private String authId;
+
+    private String email;
 
     private String fullName;
 
     private String telephoneNumber;
 
     private String alternativeTelephoneNumber;
-
-    private String email;
 
     private String addressLine1;
 
