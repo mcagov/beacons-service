@@ -32,7 +32,7 @@ public class OwnerController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public WrapperDTO<OwnerDTO> createPerson(
+  public WrapperDTO<OwnerDTO> createOwner(
     @RequestBody WrapperDTO<OwnerDTO> dto
   ) {
     final BeaconPerson beaconPerson = ownerMapper.fromDTO(dto.getData());
