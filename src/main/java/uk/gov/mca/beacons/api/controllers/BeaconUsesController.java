@@ -22,39 +22,39 @@ import uk.gov.mca.beacons.api.services.UpdateBeaconUseService;
 @Tag(name = "Beacon Uses Controller")
 public class BeaconUsesController {
 
-    private final BeaconUseMapper beaconUseMapper;
+  private final BeaconUseMapper beaconUseMapper;
 
-    private final UpdateBeaconUseService updateBeaconUseService;
+  private final UpdateBeaconUseService updateBeaconUseService;
 
-    @Autowired
-    public BeaconUsesController(
-            BeaconUseMapper beaconUseMapper,
-            UpdateBeaconUseService updateBeaconUseService
-    ) {
-        this.beaconUseMapper = beaconUseMapper;
-        this.updateBeaconUseService = updateBeaconUseService;
-    }
+  @Autowired
+  public BeaconUsesController(
+    BeaconUseMapper beaconUseMapper,
+    UpdateBeaconUseService updateBeaconUseService
+  ) {
+    this.beaconUseMapper = beaconUseMapper;
+    this.updateBeaconUseService = updateBeaconUseService;
+  }
 
-    @PatchMapping(value = "/{uuid}")
-    @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
-    public ResponseEntity<Void> update(
-            @PathVariable("uuid") UUID uuid,
-            @RequestBody WrapperDTO<BeaconUseDTO> beaconUseDto
-    ) {
-        if (
-                !idIsEqualToDtoId(uuid, beaconUseDto)
-        ) throw new InvalidPatchException();
+  @PatchMapping(value = "/{uuid}")
+  @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
+  public ResponseEntity<Void> update(
+    @PathVariable("uuid") UUID uuid,
+    @RequestBody WrapperDTO<BeaconUseDTO> beaconUseDto
+  ) {
+    if (
+      !idIsEqualToDtoId(uuid, beaconUseDto)
+    ) throw new InvalidPatchException();
 
-        final var beaconToUpdate = beaconUseMapper.fromDTO(beaconUseDto.getData());
-        updateBeaconUseService.update(uuid, beaconToUpdate);
+    final var beaconToUpdate = beaconUseMapper.fromDTO(beaconUseDto.getData());
+    updateBeaconUseService.update(uuid, beaconToUpdate);
 
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
 
-    private boolean idIsEqualToDtoId(
-            UUID id,
-            WrapperDTO<BeaconUseDTO> beaconUseDto
-    ) {
-        return id.equals(beaconUseDto.getData().getId());
-    }
+  private boolean idIsEqualToDtoId(
+    UUID id,
+    WrapperDTO<BeaconUseDTO> beaconUseDto
+  ) {
+    return id.equals(beaconUseDto.getData().getId());
+  }
 }

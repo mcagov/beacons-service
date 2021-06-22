@@ -19,25 +19,27 @@ import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 @Tag(name = "Registrations Controller")
 public class RegistrationsController {
 
-    private final CreateRegistrationService createRegistrationService;
+  private final CreateRegistrationService createRegistrationService;
 
-    @Autowired
-    public RegistrationsController(CreateRegistrationService createRegistrationService) {
-        this.createRegistrationService = createRegistrationService;
-    }
+  @Autowired
+  public RegistrationsController(
+    CreateRegistrationService createRegistrationService
+  ) {
+    this.createRegistrationService = createRegistrationService;
+  }
 
-    @PostMapping(
-            value = "/register",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @RegisterBeaconDocumentation
-    public ResponseEntity<Registration> register(
-            @Valid @RequestBody Registration registration
-    ) {
-        return new ResponseEntity<>(
-                createRegistrationService.register(registration),
-                HttpStatus.CREATED
-        );
-    }
+  @PostMapping(
+    value = "/register",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @RegisterBeaconDocumentation
+  public ResponseEntity<Registration> register(
+    @Valid @RequestBody Registration registration
+  ) {
+    return new ResponseEntity<>(
+      createRegistrationService.register(registration),
+      HttpStatus.CREATED
+    );
+  }
 }

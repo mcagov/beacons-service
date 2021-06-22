@@ -13,22 +13,22 @@ import uk.gov.mca.beacons.api.serializer.BeaconsSearchResultSerializer;
 @Configuration
 public class JacksonConfiguration {
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(
-                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                true
-        );
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-        final SimpleModule module = new SimpleModule();
-        module.addSerializer(
-                BeaconsSearchResultDTO.class,
-                new BeaconsSearchResultSerializer()
-        );
-        objectMapper.registerModule(module);
+  @Bean
+  public ObjectMapper objectMapper() {
+    final ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(
+      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+      true
+    );
+    objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+    final SimpleModule module = new SimpleModule();
+    module.addSerializer(
+      BeaconsSearchResultDTO.class,
+      new BeaconsSearchResultSerializer()
+    );
+    objectMapper.registerModule(module);
 
-        return objectMapper;
-    }
+    return objectMapper;
+  }
 }

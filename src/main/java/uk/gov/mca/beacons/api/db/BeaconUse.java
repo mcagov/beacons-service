@@ -24,109 +24,109 @@ import uk.gov.mca.beacons.api.entities.Purpose;
 @Setter
 public class BeaconUse {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id
+  @GeneratedValue
+  private UUID id;
 
-    private UUID beaconId;
+  private UUID beaconId;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Environment environment;
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Environment environment;
 
-    @Enumerated(EnumType.STRING)
-    private Purpose purpose;
+  @Enumerated(EnumType.STRING)
+  private Purpose purpose;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Activity activity;
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Activity activity;
 
-    private String otherActivity;
+  private String otherActivity;
 
-    private String callSign;
+  private String callSign;
 
-    private Boolean vhfRadio;
+  private Boolean vhfRadio;
 
-    private Boolean fixedVhfRadio;
+  private Boolean fixedVhfRadio;
 
-    private String fixedVhfRadioValue;
+  private String fixedVhfRadioValue;
 
-    private Boolean portableVhfRadio;
+  private Boolean portableVhfRadio;
 
-    private String portableVhfRadioValue;
+  private String portableVhfRadioValue;
 
-    private Boolean satelliteTelephone;
+  private Boolean satelliteTelephone;
 
-    private String satelliteTelephoneValue;
+  private String satelliteTelephoneValue;
 
-    private Boolean mobileTelephone;
+  private Boolean mobileTelephone;
 
-    @Column(name = "mobile_telephone_1")
-    private String mobileTelephone1;
+  @Column(name = "mobile_telephone_1")
+  private String mobileTelephone1;
 
-    @Column(name = "mobile_telephone_2")
-    private String mobileTelephone2;
+  @Column(name = "mobile_telephone_2")
+  private String mobileTelephone2;
 
-    private Boolean otherCommunication;
+  private Boolean otherCommunication;
 
-    private String otherCommunicationValue;
+  private String otherCommunicationValue;
 
-    private Integer maxCapacity;
+  private Integer maxCapacity;
 
-    private String vesselName;
+  private String vesselName;
 
-    private String portLetterNumber;
+  private String portLetterNumber;
 
-    private String homeport;
+  private String homeport;
 
-    private String areaOfOperation;
+  private String areaOfOperation;
 
-    private String beaconLocation;
+  private String beaconLocation;
 
-    private String imoNumber;
+  private String imoNumber;
 
-    private String ssrNumber;
+  private String ssrNumber;
 
-    private String rssNumber;
+  private String rssNumber;
 
-    private String officialNumber;
+  private String officialNumber;
 
-    private String rigPlatformLocation;
+  private String rigPlatformLocation;
 
-    @NotNull
-    private Boolean mainUse;
+  @NotNull
+  private Boolean mainUse;
 
-    private String aircraftManufacturer;
+  private String aircraftManufacturer;
 
-    private String principalAirport;
+  private String principalAirport;
 
-    private String secondaryAirport;
+  private String secondaryAirport;
 
-    private String registrationMark;
+  private String registrationMark;
 
-    private String hexAddress;
+  private String hexAddress;
 
-    private String cnOrMsnNumber;
+  private String cnOrMsnNumber;
 
-    private Boolean dongle;
+  private Boolean dongle;
 
-    private String beaconPosition;
+  private String beaconPosition;
 
-    private String workingRemotelyLocation;
+  private String workingRemotelyLocation;
 
-    private String workingRemotelyPeopleCount;
+  private String workingRemotelyPeopleCount;
 
-    private String windfarmLocation;
+  private String windfarmLocation;
 
-    private String windfarmPeopleCount;
+  private String windfarmPeopleCount;
 
-    private String otherActivityLocation;
+  private String otherActivityLocation;
 
-    private String otherActivityPeopleCount;
+  private String otherActivityPeopleCount;
 
-    @NotNull
-    private String moreDetails;
+  @NotNull
+  private String moreDetails;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+  @CreatedDate
+  private LocalDateTime createdDate;
 }

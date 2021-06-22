@@ -5,7 +5,7 @@ import uk.gov.mca.beacons.api.db.Person;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
 
 public interface OwnerGateway {
-    void save(CreateOwnerRequest request);
+  void save(CreateOwnerRequest request);
 
-    Person findByBeaconId(UUID beaconId);
+  Person findByBeaconId(UUID beaconId);
 }

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BeaconsApi {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BeaconsApi.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(BeaconsApi.class, args);
+  }
 }

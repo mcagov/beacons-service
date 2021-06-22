@@ -10,20 +10,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfiguration {
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer(
-            @Value("${beacons.cors.allowedOrigins}") String[] allowedOrigins
-    ) {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(@NotNull CorsRegistry registry) {
-                if (allowedOrigins != null && allowedOrigins.length > 0) {
-                    registry
-                            .addMapping("/**")
-                            .allowedMethods("*")
-                            .allowedOrigins(allowedOrigins);
-                }
-            }
-        };
-    }
+  @Bean
+  public WebMvcConfigurer corsConfigurer(
+    @Value("${beacons.cors.allowedOrigins}") String[] allowedOrigins
+  ) {
+    return new WebMvcConfigurer() {
+      @Override
+      public void addCorsMappings(@NotNull CorsRegistry registry) {
+        if (allowedOrigins != null && allowedOrigins.length > 0) {
+          registry
+            .addMapping("/**")
+            .allowedMethods("*")
+            .allowedOrigins(allowedOrigins);
+        }
+      }
+    };
+  }
 }

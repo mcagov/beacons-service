@@ -5,5 +5,5 @@ import java.util.UUID;
 import uk.gov.mca.beacons.api.db.Beacon;
 
 public interface BeaconGateway {
-    List<Beacon> findAllByAccountHolderId(UUID accountId);
+  List<Beacon> findAllByAccountHolderId(UUID accountId);
 }

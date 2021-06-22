@@ -18,54 +18,54 @@ import uk.gov.mca.beacons.api.db.Beacon;
 @ExtendWith(MockitoExtension.class)
 class BeaconLinkStrategyTest {
 
-    @Mock
-    BeaconRolesService beaconRolesService;
+  @Mock
+  BeaconRolesService beaconRolesService;
 
-    Beacon beacon;
-    List<SupportedPermissions> userRoles;
-    BeaconLinkStrategy linkStrategy;
+  Beacon beacon;
+  List<SupportedPermissions> userRoles;
+  BeaconLinkStrategy linkStrategy;
 
-    @BeforeEach
-    void beforeEach() {
-        beacon = new Beacon();
-        var beaconId = UUID.randomUUID();
-        beacon.setId(beaconId);
+  @BeforeEach
+  void beforeEach() {
+    beacon = new Beacon();
+    var beaconId = UUID.randomUUID();
+    beacon.setId(beaconId);
 
-        userRoles = new ArrayList<SupportedPermissions>();
+    userRoles = new ArrayList<SupportedPermissions>();
 
-        linkStrategy = new BeaconLinkStrategy(beaconRolesService);
-    }
+    linkStrategy = new BeaconLinkStrategy(beaconRolesService);
+  }
 
-    @Test
-    void buildGetForBeaconShouldReturnExpectedLink() {
-        var result = linkStrategy.getGetPath(beacon);
+  @Test
+  void buildGetForBeaconShouldReturnExpectedLink() {
+    var result = linkStrategy.getGetPath(beacon);
 
-        assertThat(result, is("/beacons/" + beacon.getId()));
-    }
+    assertThat(result, is("/beacons/" + beacon.getId()));
+  }
 
-    @Test
-    void buildPatchForBeaconShouldReturnExpectedLink() {
-        var result = linkStrategy.getPatchPath(beacon);
+  @Test
+  void buildPatchForBeaconShouldReturnExpectedLink() {
+    var result = linkStrategy.getPatchPath(beacon);
 
-        assertThat(result, is("/beacons/" + beacon.getId()));
-    }
+    assertThat(result, is("/beacons/" + beacon.getId()));
+  }
 
-    @Test
-    void checkPermissionForPatchShouldReturnTrueWhenRoleIsPresent() {
-        userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
-        given(beaconRolesService.getUserRoles()).willReturn(userRoles);
+  @Test
+  void checkPermissionForPatchShouldReturnTrueWhenRoleIsPresent() {
+    userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
+    given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-        var result = linkStrategy.userCanPatchEntity(beacon);
+    var result = linkStrategy.userCanPatchEntity(beacon);
 
-        assertThat(result, is(true));
-    }
+    assertThat(result, is(true));
+  }
 
-    @Test
-    void checkPermissionForPatchShouldReturnFalseWhenRoleNotPresent() {
-        given(beaconRolesService.getUserRoles()).willReturn(userRoles);
+  @Test
+  void checkPermissionForPatchShouldReturnFalseWhenRoleNotPresent() {
+    given(beaconRolesService.getUserRoles()).willReturn(userRoles);
 
-        var result = linkStrategy.userCanPatchEntity(beacon);
+    var result = linkStrategy.userCanPatchEntity(beacon);
 
-        assertThat(result, is(false));
-    }
+    assertThat(result, is(false));
+  }
 }

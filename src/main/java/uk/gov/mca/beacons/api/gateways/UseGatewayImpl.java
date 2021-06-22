@@ -12,15 +12,15 @@ import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 @Transactional
 public class UseGatewayImpl implements UseGateway {
 
-    private final BeaconUseJpaRepository beaconUseJpaRepository;
+  private final BeaconUseJpaRepository beaconUseJpaRepository;
 
-    @Autowired
-    public UseGatewayImpl(BeaconUseJpaRepository beaconUseJpaRepository) {
-        this.beaconUseJpaRepository = beaconUseJpaRepository;
-    }
+  @Autowired
+  public UseGatewayImpl(BeaconUseJpaRepository beaconUseJpaRepository) {
+    this.beaconUseJpaRepository = beaconUseJpaRepository;
+  }
 
-    @Override
-    public List<BeaconUse> findAllByBeaconId(UUID beaconId) {
-        return beaconUseJpaRepository.findAllByBeaconId(beaconId);
-    }
+  @Override
+  public List<BeaconUse> findAllByBeaconId(UUID beaconId) {
+    return beaconUseJpaRepository.findAllByBeaconId(beaconId);
+  }
 }

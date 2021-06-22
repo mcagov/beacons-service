@@ -22,42 +22,42 @@ import uk.gov.mca.beacons.api.entities.PersonType;
 @Setter
 public class Person {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id
+  @GeneratedValue
+  private UUID id;
 
-    private UUID beaconId;
+  private UUID beaconId;
 
-    private String fullName;
+  private String fullName;
 
-    private String telephoneNumber;
+  private String telephoneNumber;
 
-    private String alternativeTelephoneNumber;
+  private String alternativeTelephoneNumber;
 
-    @Email
-    private String email;
+  @Email
+  private String email;
 
-    @Enumerated(EnumType.STRING)
-    private PersonType personType;
+  @Enumerated(EnumType.STRING)
+  private PersonType personType;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+  @CreatedDate
+  private LocalDateTime createdDate;
 
-    @Column(name = "address_line_1")
-    private String addressLine1;
+  @Column(name = "address_line_1")
+  private String addressLine1;
 
-    @Column(name = "address_line_2")
-    private String addressLine2;
+  @Column(name = "address_line_2")
+  private String addressLine2;
 
-    @Column(name = "address_line_3")
-    private String addressLine3;
+  @Column(name = "address_line_3")
+  private String addressLine3;
 
-    @Column(name = "address_line_4")
-    private String addressLine4;
+  @Column(name = "address_line_4")
+  private String addressLine4;
 
-    private String townOrCity;
+  private String townOrCity;
 
-    private String postcode;
+  private String postcode;
 
-    private String county;
+  private String county;
 }

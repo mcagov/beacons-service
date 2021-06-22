@@ -10,27 +10,27 @@ import lombok.Setter;
 @Builder
 public class CreateEmergencyContactRequest {
 
-    private UUID beaconId;
+  private UUID beaconId;
 
-    private String fullName;
+  private String fullName;
 
-    private String telephoneNumber;
+  private String telephoneNumber;
 
-    private String alternativeTelephoneNumber;
+  private String alternativeTelephoneNumber;
 
-    private String email;
+  private String email;
 
-    private String addressLine1;
+  private String addressLine1;
 
-    private String addressLine2;
+  private String addressLine2;
 
-    private String addressLine3;
+  private String addressLine3;
 
-    private String addressLine4;
+  private String addressLine4;
 
-    private String townOrCity;
+  private String townOrCity;
 
-    private String postcode;
+  private String postcode;
 
-    private String county;
+  private String county;
 }
