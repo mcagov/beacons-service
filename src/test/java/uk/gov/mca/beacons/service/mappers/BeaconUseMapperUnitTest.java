@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,33 +31,41 @@ class BeaconUseMapperUnitTest {
   @Mock
   private BeaconUseLinkStrategy linkStrategy;
 
+  private Map<String, Object> attributes;
+
   @BeforeEach
   void init() {
     beaconUseMapper = new BeaconUseMapper(linkManager, linkStrategy);
     beaconUseDto = new BeaconUseDTO();
+    attributes = new HashMap<>();
   }
 
   @Test
   void shouldSetTheMainUseToFalseForAStringWithValueFalse() {
-    beaconUseDto.addAttribute("mainUse", "false");
+    attributes.put("mainUse", "false");
+    beaconUseDto.setAttributes(attributes);
+
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertFalse(beaconUse.getMainUse());
   }
 
   @Test
   void shouldSetStringFields() {
-    beaconUseDto.addAttribute("otherActivity", "sailing");
+    attributes.put("otherActivity", "sailing");
+    beaconUseDto.setAttributes(attributes);
+
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getOtherActivity(), is("sailing"));
   }
 
   @Test
   void shouldSetBooleanValues() {
-    beaconUseDto.addAttribute("mainUse", false);
-    beaconUseDto.addAttribute("vhfRadio", true);
-    beaconUseDto.addAttribute("fixedVhfRadio", "true");
-    beaconUseDto.addAttribute("portableVhfRadio", false);
-    beaconUseDto.addAttribute("satelliteTelephone", "false");
+    attributes.put("mainUse", false);
+    attributes.put("vhfRadio", true);
+    attributes.put("fixedVhfRadio", "true");
+    attributes.put("portableVhfRadio", false);
+    attributes.put("satelliteTelephone", "false");
+    beaconUseDto.setAttributes(attributes);
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertFalse(beaconUse.getMainUse());
     assertTrue(beaconUse.getVhfRadio());
@@ -76,21 +86,24 @@ class BeaconUseMapperUnitTest {
 
   @Test
   void shouldSetNumericalValues() {
-    beaconUseDto.addAttribute("maxCapacity", 1);
+    attributes.put("maxCapacity", 1);
+    beaconUseDto.setAttributes(attributes);
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getMaxCapacity(), is(1));
   }
 
   @Test
   void shouldSetNumericalValuesAsStrings() {
-    beaconUseDto.addAttribute("maxCapacity", "1");
+    attributes.put("maxCapacity", "1");
+    beaconUseDto.setAttributes(attributes);
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getMaxCapacity(), is(1));
   }
 
   @Test
   void shouldThrowAnExceptionIfAnInvalidNumber() {
-    beaconUseDto.addAttribute("maxCapacity", "NaN");
+    attributes.put("maxCapacity", "NaN");
+    beaconUseDto.setAttributes(attributes);
     assertThrows(
       NumberFormatException.class,
       () -> beaconUseMapper.fromDTO(beaconUseDto)
@@ -99,9 +112,10 @@ class BeaconUseMapperUnitTest {
 
   @Test
   void shouldSetNullValuesForDifferentPrimitiveTypesAsNull() {
-    beaconUseDto.addAttribute("callSign", null);
-    beaconUseDto.addAttribute("vhfRadio", null);
-    beaconUseDto.addAttribute("maxCapacity", null);
+    attributes.put("callSign", null);
+    attributes.put("vhfRadio", null);
+    attributes.put("maxCapacity", null);
+    beaconUseDto.setAttributes(attributes);
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
     assertThat(beaconUse.getCallSign(), is(nullValue()));
     assertThat(beaconUse.getVhfRadio(), is(nullValue()));
@@ -118,9 +132,10 @@ class BeaconUseMapperUnitTest {
 
   @Test
   void shouldDeserialiseTheEnumValues() {
-    beaconUseDto.addAttribute("environment", Environment.MARITIME);
-    beaconUseDto.addAttribute("purpose", Purpose.PLEASURE);
-    beaconUseDto.addAttribute("activity", Activity.SAILING);
+    attributes.put("environment", Environment.MARITIME);
+    attributes.put("purpose", Purpose.PLEASURE);
+    attributes.put("activity", Activity.SAILING);
+    beaconUseDto.setAttributes(attributes);
 
     var beaconUse = beaconUseMapper.fromDTO(beaconUseDto);
 
@@ -140,7 +155,8 @@ class BeaconUseMapperUnitTest {
 
   @Test
   void shouldThrowAnExceptionIfTheEnumValuesAreNotValid() {
-    beaconUseDto.addAttribute("environment", "AT_SEA");
+    attributes.put("environment", "AT_SEA");
+    beaconUseDto.setAttributes(attributes);
 
     assertThrows(
       IllegalArgumentException.class,

@@ -1,6 +1,13 @@
 package uk.gov.mca.beacons.service.dto;
 
-public class BeaconUseDTO extends DomainDTO {
+import java.util.HashMap;
+import java.util.Map;
+
+public class BeaconUseDTO extends DomainDTO<Map<String, Object>> {
+
+  public BeaconUseDTO() {
+    this.attributes = new HashMap<>();
+  }
 
   private String type = "beaconUse";
 

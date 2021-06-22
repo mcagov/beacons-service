@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
@@ -26,20 +28,22 @@ public class BeaconMapper extends BaseMapper {
   public BeaconDTO toDTO(Beacon domain) {
     final var dto = new BeaconDTO();
     dto.setId(domain.getId());
-    dto.addAttribute("hexId", domain.getHexId());
-    dto.addAttribute("status", domain.getBeaconStatus());
-    dto.addAttribute("manufacturer", domain.getManufacturer());
-    dto.addAttribute("createdDate", domain.getCreatedDate());
-    dto.addAttribute("model", domain.getModel());
-    dto.addAttribute(
+
+    final Map<String, Object> attributes = new HashMap<>();
+    attributes.put("hexId", domain.getHexId());
+    attributes.put("status", domain.getBeaconStatus());
+    attributes.put("manufacturer", domain.getManufacturer());
+    attributes.put("createdDate", domain.getCreatedDate());
+    attributes.put("model", domain.getModel());
+    attributes.put(
       "manufacturerSerialNumber",
       domain.getManufacturerSerialNumber()
     );
-    dto.addAttribute("chkCode", domain.getChkCode());
-    dto.addAttribute("batteryExpiryDate", domain.getBatteryExpiryDate());
-    dto.addAttribute("lastServicedDate", domain.getLastServicedDate());
-    dto.addAttribute("referenceNumber", domain.getReferenceNumber());
-
+    attributes.put("chkCode", domain.getChkCode());
+    attributes.put("batteryExpiryDate", domain.getBatteryExpiryDate());
+    attributes.put("lastServicedDate", domain.getLastServicedDate());
+    attributes.put("referenceNumber", domain.getReferenceNumber());
+    dto.setAttributes(attributes);
     dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
   }

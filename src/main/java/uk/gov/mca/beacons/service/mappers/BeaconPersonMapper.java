@@ -1,15 +1,13 @@
 package uk.gov.mca.beacons.service.mappers;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.TimeZone;
+import java.util.Map;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.model.AccountHolder;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.PersonType;
 
@@ -78,39 +76,37 @@ public class BeaconPersonMapper {
   public BeaconPersonDTO toDTO(BeaconPerson domain) {
     final var dto = new BeaconPersonDTO();
     dto.setId(domain.getId());
-    dto.addAttribute("fullName", domain.getFullName());
-    dto.addAttribute("email", domain.getEmail());
-    dto.addAttribute("telephoneNumber", domain.getTelephoneNumber());
-    dto.addAttribute(
+
+    final Map<String, Object> attributes = new HashMap<>();
+    attributes.put("fullName", domain.getFullName());
+    attributes.put("email", domain.getEmail());
+    attributes.put("telephoneNumber", domain.getTelephoneNumber());
+    attributes.put(
       "alternativeTelephoneNumber",
       domain.getAlternativeTelephoneNumber()
     );
-    dto.addAttribute("addressLine1", domain.getAddressLine1());
-    dto.addAttribute("addressLine2", domain.getAddressLine2());
-    dto.addAttribute("addressLine3", domain.getAddressLine3());
-    dto.addAttribute("addressLine4", domain.getAddressLine4());
-    dto.addAttribute("townOrCity", domain.getTownOrCity());
-    dto.addAttribute("county", domain.getCounty());
-    dto.addAttribute("postcode", domain.getPostcode());
-    dto.addAttribute("personType", domain.getPersonType());
-    dto.addAttribute(
-      "alternativeTelephoneNumber",
-      domain.getAlternativeTelephoneNumber()
-    );
-    dto.addAttribute("telephoneNumber2", domain.getTelephoneNumber2());
-    dto.addAttribute(
+    attributes.put(
       "alternativeTelephoneNumber2",
       domain.getAlternativeTelephoneNumber2()
     );
-    dto.addAttribute("country", domain.getCountry());
-    dto.addAttribute("fax", domain.getFax());
-    dto.addAttribute("companyName", domain.getCompanyName());
-    dto.addAttribute("careOf", domain.getCareOf());
-    dto.addAttribute("createUserId", domain.getCreateUserId());
-    dto.addAttribute("updateUserId", domain.getUpdateUserId());
-    dto.addAttribute("createdDate", domain.getCreatedDate());
-    dto.addAttribute("lastModifiedDate", domain.getLastModifiedDate());
-    dto.addAttribute("versioning", domain.getVersioning());
+    attributes.put("addressLine1", domain.getAddressLine1());
+    attributes.put("addressLine2", domain.getAddressLine2());
+    attributes.put("addressLine3", domain.getAddressLine3());
+    attributes.put("addressLine4", domain.getAddressLine4());
+    attributes.put("townOrCity", domain.getTownOrCity());
+    attributes.put("county", domain.getCounty());
+    attributes.put("postcode", domain.getPostcode());
+    attributes.put("country", domain.getCountry());
+    attributes.put("companyName", domain.getCompanyName());
+    attributes.put("careOf", domain.getCareOf());
+    attributes.put("fax", domain.getFax());
+    attributes.put("createUserId", domain.getCreateUserId());
+    attributes.put("updateUserId", domain.getUpdateUserId());
+    attributes.put("createdDate", domain.getCreatedDate());
+    attributes.put("lastModifiedDate", domain.getLastModifiedDate());
+    attributes.put("versioning", domain.getVersioning());
+    dto.setAttributes(attributes);
+
     return dto;
   }
 
