@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.service.person;
+package uk.gov.mca.beacons.service.owner;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -18,10 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
+import uk.gov.mca.beacons.service.dto.OwnerDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
+import uk.gov.mca.beacons.service.mappers.OwnerMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
-import uk.gov.mca.beacons.service.owner.CreateOwnerService;
 
 @WebMvcTest(controllers = OwnerControllerUnitTest.class)
 @AutoConfigureMockMvc
@@ -40,7 +40,7 @@ class OwnerControllerUnitTest {
   private CreateOwnerService createOwnerService;
 
   @MockBean
-  private BeaconPersonMapper beaconPersonMapper;
+  private OwnerMapper ownerMapper;
 
   @BeforeEach
   public final void before() {
@@ -66,7 +66,7 @@ class OwnerControllerUnitTest {
 
     @Test
     void shouldMapDTOToDomainAccountHolder() throws Exception {
-      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final WrapperDTO<OwnerDTO> newBeaconPersonDTO = new WrapperDTO<>();
       final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
 
@@ -76,17 +76,16 @@ class OwnerControllerUnitTest {
           .content(newBeaconPersonRequest)
       );
 
-      verify(beaconPersonMapper, times(1))
-        .fromDTO(newBeaconPersonDTO.getData());
+      verify(ownerMapper, times(1)).fromDTO(newBeaconPersonDTO.getData());
     }
 
     @Test
     void shouldCallTheAccountHolderServiceToCreateANewResource()
       throws Exception {
-      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final WrapperDTO<OwnerDTO> newBeaconPersonDTO = new WrapperDTO<>();
       final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
-      given(beaconPersonMapper.fromDTO(newBeaconPersonDTO.getData()))
+      given(ownerMapper.fromDTO(newBeaconPersonDTO.getData()))
         .willReturn(beaconPerson);
 
       mvc.perform(
