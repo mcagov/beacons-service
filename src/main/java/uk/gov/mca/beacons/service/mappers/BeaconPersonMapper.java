@@ -1,15 +1,10 @@
 package uk.gov.mca.beacons.service.mappers;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
-import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
-import uk.gov.mca.beacons.service.model.PersonType;
 
 @Service
 public class BeaconPersonMapper {

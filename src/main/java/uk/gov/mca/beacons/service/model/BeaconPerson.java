@@ -50,7 +50,7 @@ public class BeaconPerson {
   private LocalDateTime createdDate;
 
   @LastModifiedDate
-  private LocalDateTime LastModifiedDate;
+  private LocalDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;
