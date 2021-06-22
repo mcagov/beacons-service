@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
+import uk.gov.mca.beacons.service.dto.OwnerDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
+import uk.gov.mca.beacons.service.entities.Owner;
 import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 
@@ -31,12 +33,10 @@ public class OwnerController {
   public WrapperDTO<BeaconPersonDTO> createPerson(
     @RequestBody WrapperDTO<BeaconPersonDTO> dto
   ) {
-    final BeaconPerson newBeaconPerson = beaconPersonMapper.fromDTO(
-      dto.getData()
-    );
+    final BeaconPerson beaconPerson = beaconPersonMapper.fromDTO(dto.getData());
 
     return beaconPersonMapper.toWrapperDTO(
-      createOwnerService.execute(newBeaconPerson)
+      createOwnerService.execute(beaconPerson)
     );
   }
 }

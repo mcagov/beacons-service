@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.service.gateway.OwnerGateway;
 import uk.gov.mca.beacons.service.mappers.CreateOwnerRequestMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
-import uk.gov.mca.beacons.service.repository.BeaconPersonRepository;
 
 @Service
 @Transactional
