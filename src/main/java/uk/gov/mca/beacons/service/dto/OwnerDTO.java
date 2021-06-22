@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.dto;
 
 import static uk.gov.mca.beacons.service.dto.OwnerDTO.Attributes;
 
+import lombok.Builder;
 import lombok.Data;
 
 public class OwnerDTO extends DomainDTO<Attributes> {
@@ -13,6 +14,7 @@ public class OwnerDTO extends DomainDTO<Attributes> {
   }
 
   @Data
+  @Builder
   public static class Attributes {
 
     private String fullName;
