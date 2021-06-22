@@ -14,3 +14,9 @@ ALTER TABLE account_holder
     --  Create foreign key column with constraint
     ADD COLUMN person_id uuid,
     ADD FOREIGN KEY (person_id) REFERENCES person (id);
+
+
+ALTER TABLE person
+    -- Remove NOT NULL constraint on beacon_id so that an account holder can be created without an associated beacon
+    -- being necessary
+    ALTER COLUMN beacon_id DROP NOT NULL;

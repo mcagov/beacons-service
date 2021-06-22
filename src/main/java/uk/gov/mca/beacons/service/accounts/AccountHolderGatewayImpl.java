@@ -9,168 +9,169 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import uk.gov.mca.beacons.service.domain.AccountHolder;
+import uk.gov.mca.beacons.service.mappers.AccountHolderRowMapper;
 import uk.gov.mca.beacons.service.model.PersonType;
 
 @Repository
 @Transactional
 public class AccountHolderGatewayImpl implements AccountHolderGateway {
 
-  private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  @Autowired
-  public AccountHolderGatewayImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
+    @Autowired
+    public AccountHolderGatewayImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-  @Override
-  public AccountHolder getById(UUID id) {
-    final SqlParameterSource paramMap = new MapSqlParameterSource()
-      .addValue("id", id);
-    return jdbcTemplate.queryForObject(
-      "SELECT " +
-      "account_holder.id, " +
-      "account_holder.auth_id, " +
-      "person.full_name, " +
-      "person.email, " +
-      "person.address_line_1 as address_line1, " +
-      "person.address_line_2 as address_line2, " +
-      "person.address_line_3 as address_line3, " +
-      "person.address_line_4 as address_line4, " +
-      "person.postcode, " +
-      "person.county, " +
-      "person.telephone_number, " +
-      "person.alternative_telephone_number, " +
-      "person.town_or_city " +
-      "FROM account_holder " +
-      "INNER JOIN person ON account_holder.person_id = person.id " +
-      "WHERE account_holder.id = :id",
-      paramMap,
-      AccountHolder.class
-    );
-  }
+    @Override
+    public AccountHolder getById(UUID id) {
+        final SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("id", id);
+        return jdbcTemplate.queryForObject(
+                "SELECT " +
+                        "account_holder.id, " +
+                        "account_holder.auth_id, " +
+                        "person.full_name, " +
+                        "person.email, " +
+                        "person.address_line_1 as address_line1, " +
+                        "person.address_line_2 as address_line2, " +
+                        "person.address_line_3 as address_line3, " +
+                        "person.address_line_4 as address_line4, " +
+                        "person.postcode, " +
+                        "person.county, " +
+                        "person.telephone_number, " +
+                        "person.alternative_telephone_number, " +
+                        "person.town_or_city " +
+                        "FROM account_holder " +
+                        "INNER JOIN person ON account_holder.person_id = person.id " +
+                        "WHERE account_holder.id = :id",
+                paramMap,
+                new AccountHolderRowMapper()
+        );
+    }
 
-  @Override
-  public AccountHolder getByAuthId(String authId) {
-    final SqlParameterSource paramMap = new MapSqlParameterSource()
-      .addValue("authId", authId);
-    return jdbcTemplate.queryForObject(
-      "SELECT " +
-      "account_holder.id, " +
-      "account_holder.auth_id, " +
-      "person.full_name, " +
-      "person.email, " +
-      "person.address_line_1 as address_line1, " +
-      "person.address_line_2 as address_line2, " +
-      "person.address_line_3 as address_line3, " +
-      "person.address_line_4 as address_line4, " +
-      "person.postcode, " +
-      "person.county, " +
-      "person.telephone_number, " +
-      "person.alternative_telephone_number, " +
-      "person.town_or_city " +
-      "FROM account_holder " +
-      "INNER JOIN person ON account_holder.person_id = person.id " +
-      "WHERE account_holder.auth_id = :authId",
-      paramMap,
-      AccountHolder.class
-    );
-  }
+    @Override
+    public AccountHolder getByAuthId(String authId) {
+        final SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("authId", authId);
+        return jdbcTemplate.queryForObject(
+                "SELECT " +
+                        "account_holder.id, " +
+                        "account_holder.auth_id, " +
+                        "person.full_name, " +
+                        "person.email, " +
+                        "person.address_line_1 as address_line1, " +
+                        "person.address_line_2 as address_line2, " +
+                        "person.address_line_3 as address_line3, " +
+                        "person.address_line_4 as address_line4, " +
+                        "person.postcode, " +
+                        "person.county, " +
+                        "person.telephone_number, " +
+                        "person.alternative_telephone_number, " +
+                        "person.town_or_city " +
+                        "FROM account_holder " +
+                        "INNER JOIN person ON account_holder.person_id = person.id " +
+                        "WHERE account_holder.auth_id = :authId",
+                paramMap,
+                new AccountHolderRowMapper()
+        );
+    }
 
-  @Override
-  public AccountHolder save(
-    CreateAccountHolderRequest createAccountHolderRequest
-  ) {
-    final var personId = UUID.randomUUID();
-    final SqlParameterSource personParamMap = new MapSqlParameterSource()
-      .addValue("id", personId)
-      .addValue("fullName", createAccountHolderRequest.getFullName())
-      .addValue(
-        "telephoneNumber",
-        createAccountHolderRequest.getTelephoneNumber()
-      )
-      .addValue(
-        "alternativeTelephoneNumber",
-        createAccountHolderRequest.getAlternativeTelephoneNumber()
-      )
-      .addValue("email", createAccountHolderRequest.getEmail())
-      .addValue("personType", PersonType.OWNER.name())
-      .addValue("createdDate", LocalDateTime.now())
-      .addValue("addressLine1", createAccountHolderRequest.getAddressLine1())
-      .addValue("addressLine2", createAccountHolderRequest.getAddressLine2())
-      .addValue("addressLine3", createAccountHolderRequest.getAddressLine3())
-      .addValue("addressLine4", createAccountHolderRequest.getAddressLine4())
-      .addValue("townOrCity", createAccountHolderRequest.getTownOrCity())
-      .addValue("postcode", createAccountHolderRequest.getPostcode())
-      .addValue("county", createAccountHolderRequest.getCounty());
+    @Override
+    public AccountHolder save(
+            CreateAccountHolderRequest createAccountHolderRequest
+    ) {
+        final var personId = UUID.randomUUID();
+        final SqlParameterSource personParamMap = new MapSqlParameterSource()
+                .addValue("id", personId)
+                .addValue("fullName", createAccountHolderRequest.getFullName())
+                .addValue(
+                        "telephoneNumber",
+                        createAccountHolderRequest.getTelephoneNumber()
+                )
+                .addValue(
+                        "alternativeTelephoneNumber",
+                        createAccountHolderRequest.getAlternativeTelephoneNumber()
+                )
+                .addValue("email", createAccountHolderRequest.getEmail())
+                .addValue("personType", PersonType.OWNER.name())
+                .addValue("createdDate", LocalDateTime.now())
+                .addValue("addressLine1", createAccountHolderRequest.getAddressLine1())
+                .addValue("addressLine2", createAccountHolderRequest.getAddressLine2())
+                .addValue("addressLine3", createAccountHolderRequest.getAddressLine3())
+                .addValue("addressLine4", createAccountHolderRequest.getAddressLine4())
+                .addValue("townOrCity", createAccountHolderRequest.getTownOrCity())
+                .addValue("postcode", createAccountHolderRequest.getPostcode())
+                .addValue("county", createAccountHolderRequest.getCounty());
 
-    jdbcTemplate.update(
-      "INSERT INTO person " +
-      "(id, " +
-      "full_name, " +
-      "telephone_number, " +
-      "alternative_telephone_number, " +
-      "email, " +
-      "person_type, " +
-      "created_date, " +
-      "address_line_1, " +
-      "address_line_2, " +
-      "address_line_3, " +
-      "address_line_4, " +
-      "town_or_city, " +
-      "postcode, " +
-      "county) " +
-      "VALUES " +
-      "(:id, " +
-      ":fullName, " +
-      ":telephoneNumber, " +
-      ":alternativeTelephoneNumber, " +
-      ":email, " +
-      ":personType, " +
-      ":createdDate, " +
-      ":addressLine1, " +
-      ":addressLine2, " +
-      ":addressLine3, " +
-      ":addressLine4, " +
-      ":townOrCity, " +
-      ":postcode, " +
-      ":county)",
-      personParamMap
-    );
+        jdbcTemplate.update(
+                "INSERT INTO person " +
+                        "(id, " +
+                        "full_name, " +
+                        "telephone_number, " +
+                        "alternative_telephone_number, " +
+                        "email, " +
+                        "person_type, " +
+                        "created_date, " +
+                        "address_line_1, " +
+                        "address_line_2, " +
+                        "address_line_3, " +
+                        "address_line_4, " +
+                        "town_or_city, " +
+                        "postcode, " +
+                        "county) " +
+                        "VALUES " +
+                        "(:id, " +
+                        ":fullName, " +
+                        ":telephoneNumber, " +
+                        ":alternativeTelephoneNumber, " +
+                        ":email, " +
+                        ":personType, " +
+                        ":createdDate, " +
+                        ":addressLine1, " +
+                        ":addressLine2, " +
+                        ":addressLine3, " +
+                        ":addressLine4, " +
+                        ":townOrCity, " +
+                        ":postcode, " +
+                        ":county)",
+                personParamMap
+        );
 
-    final var accountHolderId = UUID.randomUUID();
-    final SqlParameterSource accountHolderParamMap = new MapSqlParameterSource()
-      .addValue("accountHolderId", accountHolderId)
-      .addValue("authId", createAccountHolderRequest.getAuthId())
-      .addValue("personId", personId);
-    jdbcTemplate.update(
-      "INSERT INTO account_holder " +
-      "(id, " +
-      "auth_id, " +
-      "person_id) " +
-      "VALUES " +
-      "(:accountHolderId " +
-      ":authId, " +
-      ":personId)",
-      accountHolderParamMap
-    );
+        final var accountHolderId = UUID.randomUUID();
+        final SqlParameterSource accountHolderParamMap = new MapSqlParameterSource()
+                .addValue("accountHolderId", accountHolderId)
+                .addValue("authId", createAccountHolderRequest.getAuthId())
+                .addValue("personId", personId);
+        jdbcTemplate.update(
+                "INSERT INTO account_holder " +
+                        "(id, " +
+                        "auth_id, " +
+                        "person_id) " +
+                        "VALUES " +
+                        "(:accountHolderId, " +
+                        ":authId, " +
+                        ":personId)",
+                accountHolderParamMap
+        );
 
-    return AccountHolder
-      .builder()
-      .id(accountHolderId)
-      .authId(createAccountHolderRequest.getAuthId())
-      .email(createAccountHolderRequest.getEmail())
-      .fullName(createAccountHolderRequest.getFullName())
-      .telephoneNumber(createAccountHolderRequest.getTelephoneNumber())
-      .alternativeTelephoneNumber(
-        createAccountHolderRequest.getAlternativeTelephoneNumber()
-      )
-      .addressLine1(createAccountHolderRequest.getAddressLine1())
-      .addressLine2(createAccountHolderRequest.getAddressLine2())
-      .addressLine3(createAccountHolderRequest.getAddressLine3())
-      .addressLine4(createAccountHolderRequest.getAddressLine4())
-      .townOrCity(createAccountHolderRequest.getTownOrCity())
-      .postcode(createAccountHolderRequest.getPostcode())
-      .county(createAccountHolderRequest.getCounty())
-      .build();
-  }
+        return AccountHolder
+                .builder()
+                .id(accountHolderId)
+                .authId(createAccountHolderRequest.getAuthId())
+                .email(createAccountHolderRequest.getEmail())
+                .fullName(createAccountHolderRequest.getFullName())
+                .telephoneNumber(createAccountHolderRequest.getTelephoneNumber())
+                .alternativeTelephoneNumber(
+                        createAccountHolderRequest.getAlternativeTelephoneNumber()
+                )
+                .addressLine1(createAccountHolderRequest.getAddressLine1())
+                .addressLine2(createAccountHolderRequest.getAddressLine2())
+                .addressLine3(createAccountHolderRequest.getAddressLine3())
+                .addressLine4(createAccountHolderRequest.getAddressLine4())
+                .townOrCity(createAccountHolderRequest.getTownOrCity())
+                .postcode(createAccountHolderRequest.getPostcode())
+                .county(createAccountHolderRequest.getCounty())
+                .build();
+    }
 }
