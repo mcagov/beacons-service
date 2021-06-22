@@ -20,9 +20,9 @@ public class OwnerGatewayImpl implements OwnerGateway {
   }
 
   @Override
-  public void save(CreateOwnerRequest request) {
+  public BeaconPerson save(CreateOwnerRequest request) {
     final BeaconPerson owner = CreateOwnerRequestMapper.toBeaconPerson(request);
-    beaconPersonRepository.save(owner);
+    return beaconPersonRepository.save(owner);
   }
 
   @Override

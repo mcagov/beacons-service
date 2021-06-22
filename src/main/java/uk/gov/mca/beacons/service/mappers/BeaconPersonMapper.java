@@ -1,5 +1,10 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.TimeZone;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
@@ -7,12 +12,6 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.model.AccountHolder;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 import uk.gov.mca.beacons.service.model.PersonType;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.TimeZone;
 
 @Service
 public class BeaconPersonMapper {
@@ -24,17 +23,15 @@ public class BeaconPersonMapper {
 
     beaconPerson.setEmail((String) attributes.get("email"));
     beaconPerson.setFullName((String) attributes.get("fullName"));
-    beaconPerson.setTelephoneNumber(
-            (String) attributes.get("telephoneNumber")
-    );
+    beaconPerson.setTelephoneNumber((String) attributes.get("telephoneNumber"));
     beaconPerson.setAlternativeTelephoneNumber(
-            (String) attributes.get("alternativeTelephoneNumber")
+      (String) attributes.get("alternativeTelephoneNumber")
     );
     beaconPerson.setTelephoneNumber2(
-            (String) attributes.get("telephoneNumber2")
+      (String) attributes.get("telephoneNumber2")
     );
     beaconPerson.setAlternativeTelephoneNumber2(
-            (String) attributes.get("alternativeTelephoneNumber2")
+      (String) attributes.get("alternativeTelephoneNumber2")
     );
     beaconPerson.setAddressLine1((String) attributes.get("addressLine1"));
     beaconPerson.setAddressLine2((String) attributes.get("addressLine2"));
@@ -53,17 +50,26 @@ public class BeaconPersonMapper {
     beaconPerson.setUpdateUserId((Integer) attributes.get("updateUserId"));
     beaconPerson.setVersioning((Integer) attributes.get("versioning"));
 
-    beaconPerson.setPersonType(PersonType.valueOf((String)attributes.get("personType")));
+    beaconPerson.setPersonType(
+      PersonType.valueOf((String) attributes.get("personType"))
+    );
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+      "yyyy-MM-dd HH:mm:ss",
+      Locale.ENGLISH
+    );
     Object createdDate = attributes.get("createdDate");
     if (createdDate != null) {
-      beaconPerson.setCreatedDate(LocalDateTime.parse((String) createdDate, formatter));
+      beaconPerson.setCreatedDate(
+        LocalDateTime.parse((String) createdDate, formatter)
+      );
     }
 
     Object lastModifiedDate = attributes.get("lastModifiedDate");
     if (lastModifiedDate != null) {
-      beaconPerson.setLastModifiedDate(LocalDateTime.parse((String) lastModifiedDate, formatter));
+      beaconPerson.setLastModifiedDate(
+        LocalDateTime.parse((String) lastModifiedDate, formatter)
+      );
     }
 
     return beaconPerson;
@@ -87,9 +93,15 @@ public class BeaconPersonMapper {
     dto.addAttribute("county", domain.getCounty());
     dto.addAttribute("postcode", domain.getPostcode());
     dto.addAttribute("personType", domain.getPersonType());
-    dto.addAttribute("alternativeTelephoneNumber", domain.getAlternativeTelephoneNumber());
+    dto.addAttribute(
+      "alternativeTelephoneNumber",
+      domain.getAlternativeTelephoneNumber()
+    );
     dto.addAttribute("telephoneNumber2", domain.getTelephoneNumber2());
-    dto.addAttribute("alternativeTelephoneNumber2", domain.getAlternativeTelephoneNumber2());
+    dto.addAttribute(
+      "alternativeTelephoneNumber2",
+      domain.getAlternativeTelephoneNumber2()
+    );
     dto.addAttribute("country", domain.getCountry());
     dto.addAttribute("fax", domain.getFax());
     dto.addAttribute("companyName", domain.getCompanyName());
@@ -103,7 +115,7 @@ public class BeaconPersonMapper {
   }
 
   public final WrapperDTO<BeaconPersonDTO> toWrapperDTO(
-          BeaconPerson beaconPerson
+    BeaconPerson beaconPerson
   ) {
     WrapperDTO<BeaconPersonDTO> wrapperDTO = new WrapperDTO<>();
 
@@ -111,7 +123,4 @@ public class BeaconPersonMapper {
 
     return wrapperDTO;
   }
-
 }
-
-

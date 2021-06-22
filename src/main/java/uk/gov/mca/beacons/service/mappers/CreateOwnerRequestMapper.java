@@ -48,4 +48,8 @@ public class CreateOwnerRequestMapper {
       .county(owner.getCounty())
       .build();
   }
+
+  public static CreateOwnerRequest fromBeaconPerson(BeaconPerson owner) {
+    return fromBeaconPerson(owner, null);
+  }
 }
