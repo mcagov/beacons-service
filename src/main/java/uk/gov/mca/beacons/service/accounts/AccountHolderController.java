@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.service.beacons.BeaconsResponseFactory;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.AccountHolderIdDTO;
 import uk.gov.mca.beacons.service.dto.BeaconDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
-import uk.gov.mca.beacons.service.model.AccountHolder;
 
 @RestController
 @RequestMapping("/account-holder")
@@ -86,12 +86,12 @@ public class AccountHolderController {
   public WrapperDTO<AccountHolderDTO> createAccountHolder(
     @RequestBody WrapperDTO<AccountHolderDTO> dto
   ) {
-    final AccountHolder newAccountHolder = accountHolderMapper.fromDTO(
+    final CreateAccountHolderRequest newAccountHolderRequest = accountHolderMapper.toCreateAccountHolderRequest(
       dto.getData()
     );
 
     return accountHolderMapper.toWrapperDTO(
-      createAccountHolderService.execute(newAccountHolder)
+      createAccountHolderService.execute(newAccountHolderRequest)
     );
   }
 

@@ -22,10 +22,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.service.beacons.BeaconsResponseFactory;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
-import uk.gov.mca.beacons.service.model.AccountHolder;
 import uk.gov.mca.beacons.service.model.Beacon;
 
 @WebMvcTest(controllers = AccountHolderController.class)
@@ -37,6 +37,7 @@ class AccountHolderControllerUnitTest {
   );
   private final String authId = "04c4dbf3-ca7c-4df9-98b6-fb2ccf422526";
   private final AccountHolder accountHolder = new AccountHolder();
+  private final CreateAccountHolderRequest createAccountHolderRequest = new CreateAccountHolderRequest();
 
   @Autowired
   private MockMvc mvc;
@@ -138,7 +139,7 @@ class AccountHolderControllerUnitTest {
     }
 
     @Test
-    void shouldMapDTOToDomainAccountHolder() throws Exception {
+    void shouldMapDTOToCreateAccountHolderRequest() throws Exception {
       WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
       String newAccountHolderRequest = new ObjectMapper()
         .writeValueAsString(newAccountHolderDTO);
@@ -150,25 +151,30 @@ class AccountHolderControllerUnitTest {
       );
 
       verify(accountHolderMapper, times(1))
-        .fromDTO(newAccountHolderDTO.getData());
+        .toCreateAccountHolderRequest(newAccountHolderDTO.getData());
     }
 
     @Test
     void shouldCallTheAccountHolderServiceToCreateANewResource()
       throws Exception {
       WrapperDTO<AccountHolderDTO> newAccountHolderDTO = new WrapperDTO<>();
-      String newAccountHolderRequest = new ObjectMapper()
+      String newAccountHolderHttpRequestBody = new ObjectMapper()
         .writeValueAsString(newAccountHolderDTO);
-      given(accountHolderMapper.fromDTO(newAccountHolderDTO.getData()))
-        .willReturn(accountHolder);
+      given(
+        accountHolderMapper.toCreateAccountHolderRequest(
+          newAccountHolderDTO.getData()
+        )
+      )
+        .willReturn(createAccountHolderRequest);
 
       mvc.perform(
         post("/account-holder")
           .contentType(MediaType.APPLICATION_JSON)
-          .content(newAccountHolderRequest)
+          .content(newAccountHolderHttpRequestBody)
       );
 
-      verify(createAccountHolderService, times(1)).execute(accountHolder);
+      verify(createAccountHolderService, times(1))
+        .execute(createAccountHolderRequest);
     }
   }
 

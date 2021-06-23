@@ -9,10 +9,10 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.AccountHolderMapper;
-import uk.gov.mca.beacons.service.model.AccountHolder;
 
 @ExtendWith(MockitoExtension.class)
 class AccountHolderMapperUnitTest {
