@@ -23,7 +23,7 @@ import uk.gov.mca.beacons.service.dto.WrapperDTO;
 import uk.gov.mca.beacons.service.mappers.OwnerMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 
-@WebMvcTest(controllers = OwnerControllerUnitTest.class)
+@WebMvcTest(controllers = OwnerController.class)
 @AutoConfigureMockMvc
 class OwnerControllerUnitTest {
 
@@ -48,7 +48,7 @@ class OwnerControllerUnitTest {
   }
 
   @Nested
-  class RequestCreateBeaconPerson {
+  class RequestCreateOwner {
 
     @Test
     void shouldReturn201IfSuccessful() throws Exception {
