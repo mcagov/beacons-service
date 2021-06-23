@@ -39,6 +39,8 @@ class OwnerControllerIntegrationTest {
       .expectStatus()
       .isCreated()
       .expectBody()
-      .json(createOwnerResponse);
+      .json(createOwnerResponse)
+      .jsonPath("$.data.id")
+      .isNotEmpty();
   }
 }
