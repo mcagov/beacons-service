@@ -11,6 +11,8 @@ public class CreateOwnerRequestMapper {
     final BeaconPerson owner = new BeaconPerson();
     owner.setBeaconId(request.getBeaconId());
     owner.setFullName(request.getFullName());
+    owner.setCreatedDate(request.getCreatedDate());
+    owner.setLastModifiedDate(request.getLastModifiedDate());
     owner.setTelephoneNumber(request.getTelephoneNumber());
     owner.setTelephoneNumber2(request.getTelephoneNumber2());
     owner.setAlternativeTelephoneNumber(
@@ -48,6 +50,8 @@ public class CreateOwnerRequestMapper {
       .builder()
       .beaconId(beaconId)
       .fullName(owner.getFullName())
+      .createdDate(owner.getCreatedDate())
+      .lastModifiedDate(owner.getLastModifiedDate())
       .telephoneNumber(owner.getTelephoneNumber())
       .telephoneNumber2(owner.getTelephoneNumber2())
       .alternativeTelephoneNumber(owner.getAlternativeTelephoneNumber())

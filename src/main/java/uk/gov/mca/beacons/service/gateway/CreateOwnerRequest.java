@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.gateway;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,8 @@ public class CreateOwnerRequest {
 
   private UUID beaconId;
   private String fullName;
+  private LocalDateTime createdDate;
+  private LocalDateTime lastModifiedDate;
   private String telephoneNumber;
   private String telephoneNumber2;
   private String alternativeTelephoneNumber;

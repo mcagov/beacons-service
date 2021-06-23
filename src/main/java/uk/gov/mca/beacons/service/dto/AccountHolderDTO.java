@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.service.dto;
 
 import static uk.gov.mca.beacons.service.dto.AccountHolderDTO.Attributes;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

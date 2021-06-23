@@ -41,6 +41,42 @@ class OwnerControllerIntegrationTest {
       .expectBody()
       .json(createOwnerResponse)
       .jsonPath("$.data.id")
+      .isNotEmpty()
+      .jsonPath("$.data.createdDate")
+      .isNotEmpty()
+      .jsonPath("$.data.lastModifiedDate")
+      .isNotEmpty();
+  }
+
+  @Test
+  void shouldCreateTheOwnerWithCreatedDatesAndLastModifiedDates()
+    throws Exception {
+    final String createOwnerRequest = new String(
+      Files.readAllBytes(
+        Paths.get(
+          "src/test/resources/fixtures/createOwnerRequestWithDates.json"
+        )
+      )
+    );
+    final String createOwnerResponse = new String(
+      Files.readAllBytes(
+        Paths.get(
+          "src/test/resources/fixtures/createOwnerResponseWithDates.json"
+        )
+      )
+    );
+
+    webTestClient
+      .post()
+      .uri("/owner")
+      .bodyValue(createOwnerRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectBody()
+      .json(createOwnerResponse)
+      .jsonPath("$.data.id")
       .isNotEmpty();
   }
 }

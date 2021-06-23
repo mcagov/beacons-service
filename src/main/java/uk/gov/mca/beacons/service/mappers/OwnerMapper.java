@@ -16,6 +16,8 @@ public class OwnerMapper {
 
     beaconPerson.setEmail(attributes.getEmail());
     beaconPerson.setFullName(attributes.getFullName());
+    beaconPerson.setCreatedDate(attributes.getCreatedDate());
+    beaconPerson.setLastModifiedDate(attributes.getLastModifiedDate());
     beaconPerson.setTelephoneNumber(attributes.getTelephoneNumber());
     beaconPerson.setTelephoneNumber2(attributes.getTelephoneNumber2());
     beaconPerson.setAlternativeTelephoneNumber(
@@ -40,7 +42,6 @@ public class OwnerMapper {
     beaconPerson.setUpdateUserId(attributes.getUpdateUserId());
     beaconPerson.setVersioning(attributes.getVersioning());
 
-    // TODO: should we allow consumers to set the created date/last modified?
     return beaconPerson;
   }
 
@@ -52,6 +53,8 @@ public class OwnerMapper {
       .builder()
       .fullName(domain.getFullName())
       .email(domain.getEmail())
+      .createdDate(domain.getCreatedDate())
+      .lastModifiedDate(domain.getLastModifiedDate())
       .telephoneNumber(domain.getTelephoneNumber())
       .telephoneNumber2(domain.getTelephoneNumber2())
       .alternativeTelephoneNumber(domain.getAlternativeTelephoneNumber())
