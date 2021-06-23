@@ -15,7 +15,7 @@ import uk.gov.mca.beacons.service.model.BeaconPerson;
 
 @RestController
 @RequestMapping("/owner")
-@Tag(name = "Beacon Person")
+@Tag(name = "Owner Controller")
 public class OwnerController {
 
   private final OwnerMapper ownerMapper;
