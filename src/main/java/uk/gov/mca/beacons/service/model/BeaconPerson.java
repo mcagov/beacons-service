@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,7 +18,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "person")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class BeaconPerson {
@@ -46,10 +46,8 @@ public class BeaconPerson {
   @Enumerated(EnumType.STRING)
   private PersonType personType;
 
-  @CreatedDate
   private LocalDateTime createdDate;
 
-  @LastModifiedDate
   private LocalDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")

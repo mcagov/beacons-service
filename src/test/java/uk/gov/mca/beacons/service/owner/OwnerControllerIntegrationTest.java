@@ -42,9 +42,9 @@ class OwnerControllerIntegrationTest {
       .json(createOwnerResponse)
       .jsonPath("$.data.id")
       .isNotEmpty()
-      .jsonPath("$.data.createdDate")
+      .jsonPath("$.data.attributes.createdDate")
       .isNotEmpty()
-      .jsonPath("$.data.lastModifiedDate")
+      .jsonPath("$.data.attributes.lastModifiedDate")
       .isNotEmpty();
   }
 

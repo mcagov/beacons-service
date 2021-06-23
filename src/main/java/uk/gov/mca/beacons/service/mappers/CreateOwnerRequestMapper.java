@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import uk.gov.mca.beacons.service.gateway.CreateOwnerRequest;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -8,11 +9,18 @@ import uk.gov.mca.beacons.service.model.PersonType;
 public class CreateOwnerRequestMapper {
 
   public static BeaconPerson toBeaconPerson(CreateOwnerRequest request) {
+    final var now = LocalDateTime.now();
     final BeaconPerson owner = new BeaconPerson();
     owner.setBeaconId(request.getBeaconId());
     owner.setFullName(request.getFullName());
-    owner.setCreatedDate(request.getCreatedDate());
-    owner.setLastModifiedDate(request.getLastModifiedDate());
+    owner.setCreatedDate(
+      request.getCreatedDate() != null ? request.getCreatedDate() : now
+    );
+    owner.setLastModifiedDate(
+      request.getLastModifiedDate() != null
+        ? request.getLastModifiedDate()
+        : now
+    );
     owner.setTelephoneNumber(request.getTelephoneNumber());
     owner.setTelephoneNumber2(request.getTelephoneNumber2());
     owner.setAlternativeTelephoneNumber(
