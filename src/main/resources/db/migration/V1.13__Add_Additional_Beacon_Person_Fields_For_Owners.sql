@@ -12,5 +12,6 @@ ALTER TABLE person
     ADD COLUMN update_user_id integer,
     ADD COLUMN versioning integer;
 
+-- TODO: Remove once Zack's PR has gone in
 ALTER TABLE person
     ALTER COLUMN beacon_id DROP NOT NULL;
