@@ -9,18 +9,11 @@ import uk.gov.mca.beacons.service.model.PersonType;
 public class CreateOwnerRequestMapper {
 
   public static BeaconPerson toBeaconPerson(CreateOwnerRequest request) {
-    final var now = LocalDateTime.now();
     final BeaconPerson owner = new BeaconPerson();
     owner.setBeaconId(request.getBeaconId());
     owner.setFullName(request.getFullName());
-    owner.setCreatedDate(
-      request.getCreatedDate() != null ? request.getCreatedDate() : now
-    );
-    owner.setLastModifiedDate(
-      request.getLastModifiedDate() != null
-        ? request.getLastModifiedDate()
-        : now
-    );
+    owner.setCreatedDate(request.getCreatedDate());
+    owner.setLastModifiedDate(request.getLastModifiedDate());
     owner.setTelephoneNumber(request.getTelephoneNumber());
     owner.setTelephoneNumber2(request.getTelephoneNumber2());
     owner.setAlternativeTelephoneNumber(
@@ -54,12 +47,17 @@ public class CreateOwnerRequestMapper {
     BeaconPerson owner,
     UUID beaconId
   ) {
+    final var now = LocalDateTime.now();
     return CreateOwnerRequest
       .builder()
       .beaconId(beaconId)
       .fullName(owner.getFullName())
-      .createdDate(owner.getCreatedDate())
-      .lastModifiedDate(owner.getLastModifiedDate())
+      .createdDate(
+        owner.getCreatedDate() != null ? owner.getCreatedDate() : now
+      )
+      .lastModifiedDate(
+        owner.getLastModifiedDate() != null ? owner.getLastModifiedDate() : now
+      )
       .telephoneNumber(owner.getTelephoneNumber())
       .telephoneNumber2(owner.getTelephoneNumber2())
       .alternativeTelephoneNumber(owner.getAlternativeTelephoneNumber())
