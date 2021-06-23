@@ -2,8 +2,10 @@ package uk.gov.mca.beacons.service.beacons;
 
 import static java.util.Collections.emptyMap;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,7 +54,7 @@ public class BeaconsRelationshipMapper {
     final Map<UUID, BeaconPerson> ownersGroupedByBeaconId,
     final Map<UUID, List<BeaconPerson>> emergencyContactsGroupedByBeaconId
   ) {
-    final var mappedBeacons = allBeacons
+    return allBeacons
       .stream()
       .map(
         beacon -> {
@@ -63,17 +65,12 @@ public class BeaconsRelationshipMapper {
         }
       )
       .collect(Collectors.toList());
-
-    return mappedBeacons;
   }
 
   private Map<UUID, List<BeaconUse>> getAllUsesGroupedByBeaconId(
     List<BeaconUse> uses
   ) {
-    final var usesGroupedByBeaconId = uses
-      .stream()
-      .collect(Collectors.groupingBy(BeaconUse::getBeaconId));
-    return usesGroupedByBeaconId;
+    return uses.stream().collect(Collectors.groupingBy(BeaconUse::getBeaconId));
   }
 
   private Map<UUID, List<BeaconPerson>> getAllContactsGroupedByBeaconId(
@@ -84,10 +81,9 @@ public class BeaconsRelationshipMapper {
     );
     if (emergencyContacts == null) return emptyMap();
 
-    final var emergencyContactsGroupedByBeaconId = emergencyContacts
+    return emergencyContacts
       .stream()
       .collect(Collectors.groupingBy(BeaconPerson::getBeaconId));
-    return emergencyContactsGroupedByBeaconId;
   }
 
   private Map<UUID, BeaconPerson> getAllOwnersGroupedByBeaconId(
@@ -96,21 +92,20 @@ public class BeaconsRelationshipMapper {
     final var owners = personsGroupedByType.get(PersonType.OWNER);
     if (owners == null) return emptyMap();
 
-    final var ownersGroupedByBeaconId = owners
+    return owners
       .stream()
+      .filter(person -> Objects.nonNull(person.getBeaconId()))
       .collect(
         Collectors.toMap(BeaconPerson::getBeaconId, Function.identity())
       );
-    return ownersGroupedByBeaconId;
   }
 
   private Map<PersonType, List<BeaconPerson>> getAllPersonsGroupedByType(
     List<BeaconPerson> persons
   ) {
-    final var personsGroupedByType = persons
+    return persons
       .stream()
       .collect(Collectors.groupingBy(BeaconPerson::getPersonType));
-    return personsGroupedByType;
   }
 
   private void setUsesOnBeacon(
@@ -118,11 +113,9 @@ public class BeaconsRelationshipMapper {
     Beacon beacon
   ) {
     final var beaconUses = usesGroupedByBeaconId.get(beacon.getId());
-    if (beaconUses == null) {
-      beacon.setUses(java.util.Collections.emptyList());
-    } else {
-      beacon.setUses(beaconUses);
-    }
+    beacon.setUses(
+      Objects.requireNonNullElse(beaconUses, Collections.emptyList())
+    );
   }
 
   private void setOwnerOnBeacon(
@@ -140,10 +133,8 @@ public class BeaconsRelationshipMapper {
     final var beaconContacts = emergencyContactsGroupedByBeaconId.get(
       beacon.getId()
     );
-    if (beaconContacts == null) {
-      beacon.setEmergencyContacts(java.util.Collections.emptyList());
-    } else {
-      beacon.setEmergencyContacts(beaconContacts);
-    }
+    beacon.setEmergencyContacts(
+      Objects.requireNonNullElse(beaconContacts, Collections.emptyList())
+    );
   }
 }

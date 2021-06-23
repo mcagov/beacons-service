@@ -3,9 +3,10 @@ package uk.gov.mca.beacons.service.mappers;
 import static uk.gov.mca.beacons.service.dto.AccountHolderDTO.Attributes;
 
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.service.accounts.CreateAccountHolderRequest;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 import uk.gov.mca.beacons.service.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.model.AccountHolder;
 
 @Service
 public class AccountHolderMapper extends BaseMapper {
@@ -32,6 +33,28 @@ public class AccountHolderMapper extends BaseMapper {
     accountHolder.setCounty(attributes.getCounty());
 
     return accountHolder;
+  }
+
+  public CreateAccountHolderRequest toCreateAccountHolderRequest(
+    AccountHolderDTO accountHolderDTO
+  ) {
+    final var attributes = accountHolderDTO.getAttributes();
+
+    return CreateAccountHolderRequest
+      .builder()
+      .authId(attributes.getAuthId())
+      .email(attributes.getEmail())
+      .fullName(attributes.getFullName())
+      .telephoneNumber(attributes.getTelephoneNumber())
+      .alternativeTelephoneNumber(attributes.getAlternativeTelephoneNumber())
+      .addressLine1(attributes.getAddressLine1())
+      .addressLine2(attributes.getAddressLine2())
+      .addressLine3(attributes.getAddressLine3())
+      .addressLine4(attributes.getAddressLine4())
+      .townOrCity(attributes.getTownOrCity())
+      .postcode(attributes.getPostcode())
+      .county(attributes.getCounty())
+      .build();
   }
 
   public AccountHolderDTO toDTO(AccountHolder accountHolder) {

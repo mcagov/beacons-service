@@ -10,14 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.service.model.AccountHolder;
-import uk.gov.mca.beacons.service.repository.AccountHolderRepository;
+import uk.gov.mca.beacons.service.domain.AccountHolder;
 
 @ExtendWith(MockitoExtension.class)
 class GetAccountHolderByAuthIdServiceUnitTest {
 
   @Mock
-  private AccountHolderRepository mockAccountHolderRepository;
+  private AccountHolderGateway mockAccountHolderGateway;
 
   @Mock
   private AccountHolder mockAccountHolder;
@@ -25,10 +24,10 @@ class GetAccountHolderByAuthIdServiceUnitTest {
   @Test
   void getByAuthId_shouldReturnNullResultsIfNotFound() {
     GetAccountHolderByAuthIdService getAccountHolderByAuthIdService = new GetAccountHolderByAuthIdService(
-      mockAccountHolderRepository
+      mockAccountHolderGateway
     );
     String nonExistentAuthId = UUID.randomUUID().toString();
-    given(mockAccountHolderRepository.getByAuthId(nonExistentAuthId))
+    given(mockAccountHolderGateway.getByAuthId(nonExistentAuthId))
       .willReturn(null);
 
     assertNull(getAccountHolderByAuthIdService.execute(nonExistentAuthId));
@@ -37,10 +36,10 @@ class GetAccountHolderByAuthIdServiceUnitTest {
   @Test
   void getByAuthId_shouldReturnTheAccountHolderByAuthId() {
     GetAccountHolderByAuthIdService getAccountHolderByAuthIdService = new GetAccountHolderByAuthIdService(
-      mockAccountHolderRepository
+      mockAccountHolderGateway
     );
     String existingAuthId = UUID.randomUUID().toString();
-    given(mockAccountHolderRepository.getByAuthId(existingAuthId))
+    given(mockAccountHolderGateway.getByAuthId(existingAuthId))
       .willReturn(mockAccountHolder);
 
     AccountHolder foundAccountHolder = getAccountHolderByAuthIdService.execute(
