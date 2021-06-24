@@ -2,7 +2,7 @@
   "meta": {},
   "included": [],
   "data": {
-    "type": "owner",
+    "type": "beaconPerson",
     "relationships": {},
     "attributes": {
       "email": "testy@mctestface.com",

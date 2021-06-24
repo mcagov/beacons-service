@@ -18,9 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
-import uk.gov.mca.beacons.service.dto.OwnerDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.mappers.OwnerMapper;
+import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 
 @WebMvcTest(controllers = OwnerController.class)
@@ -40,7 +39,7 @@ class OwnerControllerUnitTest {
   private CreateOwnerService createOwnerService;
 
   @MockBean
-  private OwnerMapper ownerMapper;
+  private BeaconPersonMapper beaconPersonMapper;
 
   @BeforeEach
   public final void before() {
@@ -66,7 +65,7 @@ class OwnerControllerUnitTest {
 
     @Test
     void shouldMapDTOToDomainAccountHolder() throws Exception {
-      final WrapperDTO<OwnerDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
       final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
 
@@ -76,16 +75,17 @@ class OwnerControllerUnitTest {
           .content(newBeaconPersonRequest)
       );
 
-      verify(ownerMapper, times(1)).fromDTO(newBeaconPersonDTO.getData());
+      verify(beaconPersonMapper, times(1))
+        .fromDTO(newBeaconPersonDTO.getData());
     }
 
     @Test
     void shouldCallTheAccountHolderServiceToCreateANewResource()
       throws Exception {
-      final WrapperDTO<OwnerDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
       final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
-      given(ownerMapper.fromDTO(newBeaconPersonDTO.getData()))
+      given(beaconPersonMapper.fromDTO(newBeaconPersonDTO.getData()))
         .willReturn(owner);
 
       mvc.perform(

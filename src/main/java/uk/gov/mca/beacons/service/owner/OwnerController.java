@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.mca.beacons.service.dto.OwnerDTO;
+import uk.gov.mca.beacons.service.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.service.dto.WrapperDTO;
-import uk.gov.mca.beacons.service.mappers.OwnerMapper;
+import uk.gov.mca.beacons.service.mappers.BeaconPersonMapper;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
 
 @RestController
@@ -18,25 +18,27 @@ import uk.gov.mca.beacons.service.model.BeaconPerson;
 @Tag(name = "Owner Controller")
 public class OwnerController {
 
-  private final OwnerMapper ownerMapper;
+  private final BeaconPersonMapper beaconPersonMapper;
   private final CreateOwnerService createOwnerService;
 
   @Autowired
   public OwnerController(
-    OwnerMapper ownerMapper,
+    BeaconPersonMapper beaconPersonMapper,
     CreateOwnerService createOwnerService
   ) {
-    this.ownerMapper = ownerMapper;
+    this.beaconPersonMapper = beaconPersonMapper;
     this.createOwnerService = createOwnerService;
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public WrapperDTO<OwnerDTO> createOwner(
-    @RequestBody WrapperDTO<OwnerDTO> dto
+  public WrapperDTO<BeaconPersonDTO> createOwner(
+    @RequestBody WrapperDTO<BeaconPersonDTO> dto
   ) {
-    final BeaconPerson beaconPerson = ownerMapper.fromDTO(dto.getData());
+    final BeaconPerson beaconPerson = beaconPersonMapper.fromDTO(dto.getData());
 
-    return ownerMapper.toWrapperDTO(createOwnerService.execute(beaconPerson));
+    return beaconPersonMapper.toWrapperDTO(
+      createOwnerService.execute(beaconPerson)
+    );
   }
 }

@@ -1,7 +1,7 @@
 {
   "meta": {},
   "data": {
-    "type": "owner",
+    "type": "beaconPerson",
     "attributes": {
       "email": "testy@mctestface.com",
       "fullName": "Tesy McTestface",
