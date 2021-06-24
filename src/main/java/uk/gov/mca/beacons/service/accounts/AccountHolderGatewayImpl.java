@@ -3,7 +3,9 @@ package uk.gov.mca.beacons.service.accounts;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -14,6 +16,7 @@ import uk.gov.mca.beacons.service.model.PersonType;
 
 @Repository
 @Transactional
+@Slf4j
 public class AccountHolderGatewayImpl implements AccountHolderGateway {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -27,54 +30,65 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   public AccountHolder getById(UUID id) {
     final SqlParameterSource paramMap = new MapSqlParameterSource()
       .addValue("id", id);
-    return jdbcTemplate.queryForObject(
-      "SELECT " +
-      "account_holder.id, " +
-      "account_holder.auth_id, " +
-      "person.full_name, " +
-      "person.email, " +
-      "person.address_line_1 as address_line1, " +
-      "person.address_line_2 as address_line2, " +
-      "person.address_line_3 as address_line3, " +
-      "person.address_line_4 as address_line4, " +
-      "person.postcode, " +
-      "person.county, " +
-      "person.telephone_number, " +
-      "person.alternative_telephone_number, " +
-      "person.town_or_city " +
-      "FROM account_holder " +
-      "INNER JOIN person ON account_holder.person_id = person.id " +
-      "WHERE account_holder.id = :id",
-      paramMap,
-      new AccountHolderRowMapper()
-    );
+
+    try {
+      return jdbcTemplate.queryForObject(
+        "SELECT " +
+        "account_holder.id, " +
+        "account_holder.auth_id, " +
+        "person.full_name, " +
+        "person.email, " +
+        "person.address_line_1 as address_line1, " +
+        "person.address_line_2 as address_line2, " +
+        "person.address_line_3 as address_line3, " +
+        "person.address_line_4 as address_line4, " +
+        "person.postcode, " +
+        "person.county, " +
+        "person.telephone_number, " +
+        "person.alternative_telephone_number, " +
+        "person.town_or_city " +
+        "FROM account_holder " +
+        "INNER JOIN person ON account_holder.person_id = person.id " +
+        "WHERE account_holder.id = :id",
+        paramMap,
+        new AccountHolderRowMapper()
+      );
+    } catch (EmptyResultDataAccessException e) {
+      log.info("Unable to find account holder with id {}", id);
+      return null;
+    }
   }
 
   @Override
   public AccountHolder getByAuthId(String authId) {
     final SqlParameterSource paramMap = new MapSqlParameterSource()
       .addValue("authId", authId);
-    return jdbcTemplate.queryForObject(
-      "SELECT " +
-      "account_holder.id, " +
-      "account_holder.auth_id, " +
-      "person.full_name, " +
-      "person.email, " +
-      "person.address_line_1 as address_line1, " +
-      "person.address_line_2 as address_line2, " +
-      "person.address_line_3 as address_line3, " +
-      "person.address_line_4 as address_line4, " +
-      "person.postcode, " +
-      "person.county, " +
-      "person.telephone_number, " +
-      "person.alternative_telephone_number, " +
-      "person.town_or_city " +
-      "FROM account_holder " +
-      "INNER JOIN person ON account_holder.person_id = person.id " +
-      "WHERE account_holder.auth_id = :authId",
-      paramMap,
-      new AccountHolderRowMapper()
-    );
+    try {
+      return jdbcTemplate.queryForObject(
+        "SELECT " +
+        "account_holder.id, " +
+        "account_holder.auth_id, " +
+        "person.full_name, " +
+        "person.email, " +
+        "person.address_line_1 as address_line1, " +
+        "person.address_line_2 as address_line2, " +
+        "person.address_line_3 as address_line3, " +
+        "person.address_line_4 as address_line4, " +
+        "person.postcode, " +
+        "person.county, " +
+        "person.telephone_number, " +
+        "person.alternative_telephone_number, " +
+        "person.town_or_city " +
+        "FROM account_holder " +
+        "INNER JOIN person ON account_holder.person_id = person.id " +
+        "WHERE account_holder.auth_id = :authId",
+        paramMap,
+        new AccountHolderRowMapper()
+      );
+    } catch (EmptyResultDataAccessException e) {
+      log.info("Unable to find account holder with auth id {}", authId);
+      return null;
+    }
   }
 
   @Override
