@@ -4,6 +4,7 @@ import static uk.gov.mca.beacons.service.dto.BeaconPersonDTO.Attributes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,10 @@ public class BeaconPersonDTO extends DomainDTO<Attributes> {
   @Builder
   public static class Attributes {
 
+    @NotNull(message = "Full name must not be null")
     private String fullName;
+
+    @NotNull(message = "Email must not be null")
     private String email;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

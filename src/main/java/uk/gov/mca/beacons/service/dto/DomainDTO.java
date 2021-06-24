@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.validation.Valid;
 import uk.gov.mca.beacons.service.hateoas.HateoasLink;
 
 public abstract class DomainDTO<T> {
 
   private UUID id;
+
+  @Valid
   protected T attributes;
+
   private final List<HateoasLink> links = new ArrayList<>();
   private final Map<String, RelationshipDTO> relationships = new HashMap<>();
 
