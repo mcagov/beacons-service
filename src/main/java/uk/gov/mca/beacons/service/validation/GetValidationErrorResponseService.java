@@ -9,7 +9,7 @@ public class GetValidationErrorResponseService {
 
   public ValidationErrorResponse fromBindingErrors(Errors errors) {
     final var errorResponse = new ValidationErrorResponse(
-      "Controller validation failed. " + errors.getErrorCount() + " error(s)"
+      "Validation failed. " + errors.getErrorCount() + " error(s)"
     );
     for (FieldError fieldError : errors.getFieldErrors()) {
       final var validationError = ValidationError
