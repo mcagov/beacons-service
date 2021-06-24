@@ -11,8 +11,11 @@ public class CreateEmergencyContactRequestMapper {
   public static BeaconPerson toBeaconPerson(
     CreateEmergencyContactRequest request
   ) {
+    final var now = LocalDateTime.now();
     final BeaconPerson emergencyContact = new BeaconPerson();
     emergencyContact.setBeaconId(request.getBeaconId());
+    emergencyContact.setCreatedDate(now);
+    emergencyContact.setLastModifiedDate(now);
     emergencyContact.setFullName(request.getFullName());
     emergencyContact.setTelephoneNumber(request.getTelephoneNumber());
     emergencyContact.setAlternativeTelephoneNumber(
@@ -35,13 +38,10 @@ public class CreateEmergencyContactRequestMapper {
     BeaconPerson emergencyContact,
     UUID beaconId
   ) {
-    final var now = LocalDateTime.now();
     return CreateEmergencyContactRequest
       .builder()
       .beaconId(beaconId)
       .fullName(emergencyContact.getFullName())
-      .createdDate(now)
-      .lastModifiedDate(now)
       .telephoneNumber(emergencyContact.getTelephoneNumber())
       .alternativeTelephoneNumber(
         emergencyContact.getAlternativeTelephoneNumber()
