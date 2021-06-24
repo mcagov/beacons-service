@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.service.beacons;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +31,6 @@ class BeaconsControllerIntegrationTest {
 
   private UUID uuid;
   private UUID useUuid;
-  private UUID ownerUuid;
-  private UUID firstEmergencyContactUuid;
-  private UUID secondEmergencyContactUuid;
 
   @BeforeEach
   public final void before() {

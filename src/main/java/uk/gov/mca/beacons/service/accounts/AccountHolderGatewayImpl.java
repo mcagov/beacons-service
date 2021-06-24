@@ -81,6 +81,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   public AccountHolder save(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
+    final var now = LocalDateTime.now();
     final var personId = UUID.randomUUID();
     final SqlParameterSource personParamMap = new MapSqlParameterSource()
       .addValue("id", personId)
@@ -95,8 +96,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       )
       .addValue("email", createAccountHolderRequest.getEmail())
       .addValue("personType", PersonType.OWNER.name())
-      .addValue("createdDate", LocalDateTime.now())
-      .addValue("lastModifiedDate", LocalDateTime.now())
+      .addValue("createdDate", now)
+      .addValue("lastModifiedDate", now)
       .addValue("addressLine1", createAccountHolderRequest.getAddressLine1())
       .addValue("addressLine2", createAccountHolderRequest.getAddressLine2())
       .addValue("addressLine3", createAccountHolderRequest.getAddressLine3())

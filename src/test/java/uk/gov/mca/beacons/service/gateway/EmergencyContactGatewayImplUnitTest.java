@@ -88,10 +88,10 @@ class EmergencyContactGatewayImplUnitTest {
 
   @Test
   void shouldOverrideTheCreatedDateToNow() {
-    final var now = LocalDateTime.now();
+    final var dateInThePast = LocalDateTime.now();
     final var createEmergencyContactRequest = CreateEmergencyContactRequest
       .builder()
-      .createdDate(now)
+      .createdDate(dateInThePast)
       .build();
 
     emergencyContactGateway.save(createEmergencyContactRequest);
@@ -99,15 +99,15 @@ class EmergencyContactGatewayImplUnitTest {
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final BeaconPerson emergencyContact = emergencyContactCaptor.getValue();
 
-    assertThat(emergencyContact.getCreatedDate(), is(not(now)));
+    assertThat(emergencyContact.getCreatedDate(), is(not(dateInThePast)));
   }
 
   @Test
   void shouldOverrideTheLastModifiedDateToNow() {
-    final var now = LocalDateTime.now();
+    final var dateInThePast = LocalDateTime.now();
     final var createEmergencyContactRequest = CreateEmergencyContactRequest
       .builder()
-      .lastModifiedDate(now)
+      .lastModifiedDate(dateInThePast)
       .build();
 
     emergencyContactGateway.save(createEmergencyContactRequest);
@@ -115,6 +115,6 @@ class EmergencyContactGatewayImplUnitTest {
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final BeaconPerson emergencyContact = emergencyContactCaptor.getValue();
 
-    assertThat(emergencyContact.getLastModifiedDate(), is(not(now)));
+    assertThat(emergencyContact.getLastModifiedDate(), is(not(dateInThePast)));
   }
 }

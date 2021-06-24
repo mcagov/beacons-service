@@ -54,14 +54,14 @@ class OwnerControllerIntegrationTest {
     final String createOwnerRequest = new String(
       Files.readAllBytes(
         Paths.get(
-          "src/test/resources/fixtures/createOwnerRequestWithDates.json"
+          "src/test/resources/fixtures/createOwnerRequestWithDatesSpecified.json"
         )
       )
     );
     final String createOwnerResponse = new String(
       Files.readAllBytes(
         Paths.get(
-          "src/test/resources/fixtures/createOwnerResponseWithDates.json"
+          "src/test/resources/fixtures/createOwnerResponseWithDatesSpecified.json"
         )
       )
     );

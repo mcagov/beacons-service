@@ -31,7 +31,7 @@ class OwnerControllerUnitTest {
     "432e083d-7bd8-402b-9520-05da24ad143f"
   );
 
-  private final BeaconPerson beaconPerson = new BeaconPerson();
+  private final BeaconPerson owner = new BeaconPerson();
 
   @Autowired
   private MockMvc mvc;
@@ -44,7 +44,7 @@ class OwnerControllerUnitTest {
 
   @BeforeEach
   public final void before() {
-    beaconPerson.setId(beaconPersonId);
+    owner.setId(beaconPersonId);
   }
 
   @Nested
@@ -86,7 +86,7 @@ class OwnerControllerUnitTest {
       final String newBeaconPersonRequest = new ObjectMapper()
         .writeValueAsString(newBeaconPersonDTO);
       given(ownerMapper.fromDTO(newBeaconPersonDTO.getData()))
-        .willReturn(beaconPerson);
+        .willReturn(owner);
 
       mvc.perform(
         post("/owner")
@@ -94,7 +94,7 @@ class OwnerControllerUnitTest {
           .content(newBeaconPersonRequest)
       );
 
-      verify(createOwnerService, times(1)).execute(beaconPerson);
+      verify(createOwnerService, times(1)).execute(owner);
     }
   }
 }
