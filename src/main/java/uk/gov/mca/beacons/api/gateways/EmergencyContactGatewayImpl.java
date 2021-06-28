@@ -14,25 +14,25 @@ import uk.gov.mca.beacons.api.mappers.CreateEmergencyContactRequestMapper;
 @Transactional
 public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
 
-    private final BeaconPersonJpaRepository beaconPersonJpaRepository;
+  private final BeaconPersonJpaRepository beaconPersonJpaRepository;
 
-    @Autowired
-    public EmergencyContactGatewayImpl(
-            BeaconPersonJpaRepository beaconPersonJpaRepository
-    ) {
-        this.beaconPersonJpaRepository = beaconPersonJpaRepository;
-    }
+  @Autowired
+  public EmergencyContactGatewayImpl(
+    BeaconPersonJpaRepository beaconPersonJpaRepository
+  ) {
+    this.beaconPersonJpaRepository = beaconPersonJpaRepository;
+  }
 
-    @Override
-    public void save(CreateEmergencyContactRequest request) {
-        final Person emergencyContact = CreateEmergencyContactRequestMapper.toBeaconPerson(
-                request
-        );
-        beaconPersonJpaRepository.save(emergencyContact);
-    }
+  @Override
+  public void save(CreateEmergencyContactRequest request) {
+    final Person emergencyContact = CreateEmergencyContactRequestMapper.toBeaconPerson(
+      request
+    );
+    beaconPersonJpaRepository.save(emergencyContact);
+  }
 
-    @Override
-    public List<Person> findAllByBeaconId(UUID beaconId) {
-        return beaconPersonJpaRepository.findEmergencyContactsByBeaconId(beaconId);
-    }
+  @Override
+  public List<Person> findAllByBeaconId(UUID beaconId) {
+    return beaconPersonJpaRepository.findEmergencyContactsByBeaconId(beaconId);
+  }
 }

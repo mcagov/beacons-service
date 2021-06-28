@@ -11,16 +11,16 @@ import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 @Transactional
 public class CreateAccountHolderService {
 
-    private final AccountHolderGateway accountHolderGateway;
+  private final AccountHolderGateway accountHolderGateway;
 
-    @Autowired
-    public CreateAccountHolderService(AccountHolderGateway accountHolderGateway) {
-        this.accountHolderGateway = accountHolderGateway;
-    }
+  @Autowired
+  public CreateAccountHolderService(AccountHolderGateway accountHolderGateway) {
+    this.accountHolderGateway = accountHolderGateway;
+  }
 
-    public AccountHolder execute(
-            CreateAccountHolderRequest accountHolderRequest
-    ) {
-        return accountHolderGateway.save(accountHolderRequest);
-    }
+  public AccountHolder execute(
+    CreateAccountHolderRequest accountHolderRequest
+  ) {
+    return accountHolderGateway.save(accountHolderRequest);
+  }
 }

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 
 public interface BeaconUseJpaRepository extends JpaRepository<BeaconUse, UUID> {
-    @Query(
-            nativeQuery = true,
-            value = "SELECT * FROM beacon_use WHERE beacon_id = ?1"
-    )
-    List<BeaconUse> findAllByBeaconId(UUID beaconId);
+  @Query(
+    nativeQuery = true,
+    value = "SELECT * FROM beacon_use WHERE beacon_id = ?1"
+  )
+  List<BeaconUse> findAllByBeaconId(UUID beaconId);
 }

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class Registration {
 
-    @Valid
-    private List<Beacon> beacons;
+  @Valid
+  private List<Beacon> beacons;
 }

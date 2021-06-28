@@ -11,17 +11,17 @@ import uk.gov.mca.beacons.api.mappers.CreateOwnerRequestMapper;
 @Transactional
 public class CreateOwnerService {
 
-    private final OwnerGateway ownerGateway;
+  private final OwnerGateway ownerGateway;
 
-    @Autowired
-    public CreateOwnerService(OwnerGateway ownerGateway) {
-        this.ownerGateway = ownerGateway;
-    }
+  @Autowired
+  public CreateOwnerService(OwnerGateway ownerGateway) {
+    this.ownerGateway = ownerGateway;
+  }
 
-    public Person execute(Person person) {
-        final var createOwnerRequest = CreateOwnerRequestMapper.fromBeaconPerson(
-                person
-        );
-        return ownerGateway.save(createOwnerRequest);
-    }
+  public Person execute(Person person) {
+    final var createOwnerRequest = CreateOwnerRequestMapper.fromBeaconPerson(
+      person
+    );
+    return ownerGateway.save(createOwnerRequest);
+  }
 }

@@ -26,49 +26,49 @@ import uk.gov.mca.beacons.api.domain.BeaconStatus;
 @Setter
 public class Beacon {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id
+  @GeneratedValue
+  private UUID id;
 
-    @NotNull
-    private String hexId;
+  @NotNull
+  private String hexId;
 
-    @NotNull
-    private String manufacturer;
+  @NotNull
+  private String manufacturer;
 
-    @NotNull
-    private String model;
+  @NotNull
+  private String model;
 
-    @NotNull
-    private String manufacturerSerialNumber;
+  @NotNull
+  private String manufacturerSerialNumber;
 
-    private String referenceNumber;
+  private String referenceNumber;
 
-    private String chkCode;
+  private String chkCode;
 
-    private LocalDate batteryExpiryDate;
+  private LocalDate batteryExpiryDate;
 
-    private LocalDate lastServicedDate;
+  private LocalDate lastServicedDate;
 
-    @Enumerated(EnumType.STRING)
-    private BeaconStatus beaconStatus;
+  @Enumerated(EnumType.STRING)
+  private BeaconStatus beaconStatus;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+  @CreatedDate
+  private LocalDateTime createdDate;
 
-    @Transient
-    @NotEmpty
-    @Valid
-    private List<BeaconUse> uses;
+  @Transient
+  @NotEmpty
+  @Valid
+  private List<BeaconUse> uses;
 
-    private UUID accountHolderId;
+  private UUID accountHolderId;
 
-    @Transient
-    @Valid
-    private Person owner;
+  @Transient
+  @Valid
+  private Person owner;
 
-    @Transient
-    @NotEmpty
-    @Valid
-    private List<Person> emergencyContacts;
+  @Transient
+  @NotEmpty
+  @Valid
+  private List<Person> emergencyContacts;
 }

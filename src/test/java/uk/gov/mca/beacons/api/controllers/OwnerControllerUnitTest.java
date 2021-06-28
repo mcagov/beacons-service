@@ -27,75 +27,75 @@ import uk.gov.mca.beacons.api.services.CreateOwnerService;
 @AutoConfigureMockMvc
 class OwnerControllerUnitTest {
 
-    private final UUID beaconPersonId = UUID.fromString(
-            "432e083d-7bd8-402b-9520-05da24ad143f"
-    );
+  private final UUID beaconPersonId = UUID.fromString(
+    "432e083d-7bd8-402b-9520-05da24ad143f"
+  );
 
-    private final Person owner = new Person();
+  private final Person owner = new Person();
 
-    @Autowired
-    private MockMvc mvc;
+  @Autowired
+  private MockMvc mvc;
 
-    @MockBean
-    private CreateOwnerService createOwnerService;
+  @MockBean
+  private CreateOwnerService createOwnerService;
 
-    @MockBean
-    private BeaconPersonMapper beaconPersonMapper;
+  @MockBean
+  private BeaconPersonMapper beaconPersonMapper;
 
-    @BeforeEach
-    public final void before() {
-        owner.setId(beaconPersonId);
+  @BeforeEach
+  public final void before() {
+    owner.setId(beaconPersonId);
+  }
+
+  @Nested
+  class RequestCreateOwner {
+
+    @Test
+    void shouldReturn201IfSuccessful() throws Exception {
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
+        .writeValueAsString(newBeaconPersonDTO);
+      mvc
+        .perform(
+          post("/owner")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newBeaconPersonRequest)
+        )
+        .andExpect(status().isCreated());
     }
 
-    @Nested
-    class RequestCreateOwner {
+    @Test
+    void shouldMapDTOToDomainAccountHolder() throws Exception {
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
+        .writeValueAsString(newBeaconPersonDTO);
 
-        @Test
-        void shouldReturn201IfSuccessful() throws Exception {
-            final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-            final String newBeaconPersonRequest = new ObjectMapper()
-                    .writeValueAsString(newBeaconPersonDTO);
-            mvc
-                    .perform(
-                            post("/owner")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(newBeaconPersonRequest)
-                    )
-                    .andExpect(status().isCreated());
-        }
+      mvc.perform(
+        post("/owner")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newBeaconPersonRequest)
+      );
 
-        @Test
-        void shouldMapDTOToDomainAccountHolder() throws Exception {
-            final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-            final String newBeaconPersonRequest = new ObjectMapper()
-                    .writeValueAsString(newBeaconPersonDTO);
-
-            mvc.perform(
-                    post("/owner")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newBeaconPersonRequest)
-            );
-
-            verify(beaconPersonMapper, times(1))
-                    .fromDTO(newBeaconPersonDTO.getData());
-        }
-
-        @Test
-        void shouldCallTheAccountHolderServiceToCreateANewResource()
-                throws Exception {
-            final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
-            final String newBeaconPersonRequest = new ObjectMapper()
-                    .writeValueAsString(newBeaconPersonDTO);
-            given(beaconPersonMapper.fromDTO(newBeaconPersonDTO.getData()))
-                    .willReturn(owner);
-
-            mvc.perform(
-                    post("/owner")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newBeaconPersonRequest)
-            );
-
-            verify(createOwnerService, times(1)).execute(owner);
-        }
+      verify(beaconPersonMapper, times(1))
+        .fromDTO(newBeaconPersonDTO.getData());
     }
+
+    @Test
+    void shouldCallTheAccountHolderServiceToCreateANewResource()
+      throws Exception {
+      final WrapperDTO<BeaconPersonDTO> newBeaconPersonDTO = new WrapperDTO<>();
+      final String newBeaconPersonRequest = new ObjectMapper()
+        .writeValueAsString(newBeaconPersonDTO);
+      given(beaconPersonMapper.fromDTO(newBeaconPersonDTO.getData()))
+        .willReturn(owner);
+
+      mvc.perform(
+        post("/owner")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newBeaconPersonRequest)
+      );
+
+      verify(createOwnerService, times(1)).execute(owner);
+    }
+  }
 }

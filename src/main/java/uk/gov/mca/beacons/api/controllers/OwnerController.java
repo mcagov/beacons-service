@@ -19,27 +19,25 @@ import uk.gov.mca.beacons.api.services.CreateOwnerService;
 @Tag(name = "Owner Controller")
 public class OwnerController {
 
-    private final BeaconPersonMapper beaconPersonMapper;
-    private final CreateOwnerService createOwnerService;
+  private final BeaconPersonMapper beaconPersonMapper;
+  private final CreateOwnerService createOwnerService;
 
-    @Autowired
-    public OwnerController(
-            BeaconPersonMapper beaconPersonMapper,
-            CreateOwnerService createOwnerService
-    ) {
-        this.beaconPersonMapper = beaconPersonMapper;
-        this.createOwnerService = createOwnerService;
-    }
+  @Autowired
+  public OwnerController(
+    BeaconPersonMapper beaconPersonMapper,
+    CreateOwnerService createOwnerService
+  ) {
+    this.beaconPersonMapper = beaconPersonMapper;
+    this.createOwnerService = createOwnerService;
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public WrapperDTO<BeaconPersonDTO> createOwner(
-            @RequestBody WrapperDTO<BeaconPersonDTO> dto
-    ) {
-        final Person person = beaconPersonMapper.fromDTO(dto.getData());
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public WrapperDTO<BeaconPersonDTO> createOwner(
+    @RequestBody WrapperDTO<BeaconPersonDTO> dto
+  ) {
+    final Person person = beaconPersonMapper.fromDTO(dto.getData());
 
-        return beaconPersonMapper.toWrapperDTO(
-                createOwnerService.execute(person)
-        );
-    }
+    return beaconPersonMapper.toWrapperDTO(createOwnerService.execute(person));
+  }
 }

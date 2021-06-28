@@ -6,7 +6,7 @@ import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 public interface EmergencyContactGateway {
-    void save(CreateEmergencyContactRequest request);
+  void save(CreateEmergencyContactRequest request);
 
-    List<Person> findAllByBeaconId(UUID beaconId);
+  List<Person> findAllByBeaconId(UUID beaconId);
 }

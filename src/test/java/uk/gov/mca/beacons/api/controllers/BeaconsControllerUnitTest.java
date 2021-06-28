@@ -23,52 +23,52 @@ import uk.gov.mca.beacons.api.services.BeaconsService;
 @ExtendWith(MockitoExtension.class)
 class BeaconsControllerUnitTest {
 
-    @InjectMocks
-    private BeaconsController beaconsController;
+  @InjectMocks
+  private BeaconsController beaconsController;
 
-    @Mock
-    private BeaconsService beaconsService;
+  @Mock
+  private BeaconsService beaconsService;
 
-    @Mock
-    private BeaconMapper beaconMapper;
+  @Mock
+  private BeaconMapper beaconMapper;
 
-    @Nested
-    class BeaconPatchUpdate {
+  @Nested
+  class BeaconPatchUpdate {
 
-        private WrapperDTO<BeaconDTO> dto;
-        private BeaconDTO beaconDTO;
-        private UUID beaconId;
+    private WrapperDTO<BeaconDTO> dto;
+    private BeaconDTO beaconDTO;
+    private UUID beaconId;
 
-        @BeforeEach
-        void init() {
-            dto = new WrapperDTO<>();
-            beaconDTO = new BeaconDTO();
-            dto.setData(beaconDTO);
-            beaconId = UUID.randomUUID();
-            beaconDTO.setId(beaconId);
-        }
-
-        @Test
-        void shouldCallThroughToTheBeaconsServiceIfAValidPatchRequest() {
-            final var beaconToUpdate = new Beacon();
-            given(beaconMapper.fromDTO(beaconDTO)).willReturn(beaconToUpdate);
-
-            beaconsController.update(beaconId, dto);
-
-            then(beaconsService).should(times(1)).update(beaconId, beaconToUpdate);
-        }
-
-        @Test
-        void shouldThrowAnErrorIfTheIdWithinTheJsonDoesNotMatchThePathVariable() {
-            final WrapperDTO<BeaconDTO> dto = new WrapperDTO<>();
-            final BeaconDTO beaconDTO = new BeaconDTO();
-            dto.setData(beaconDTO);
-            beaconDTO.setId(UUID.randomUUID());
-
-            assertThrows(
-                    InvalidPatchException.class,
-                    () -> beaconsController.update(UUID.randomUUID(), dto)
-            );
-        }
+    @BeforeEach
+    void init() {
+      dto = new WrapperDTO<>();
+      beaconDTO = new BeaconDTO();
+      dto.setData(beaconDTO);
+      beaconId = UUID.randomUUID();
+      beaconDTO.setId(beaconId);
     }
+
+    @Test
+    void shouldCallThroughToTheBeaconsServiceIfAValidPatchRequest() {
+      final var beaconToUpdate = new Beacon();
+      given(beaconMapper.fromDTO(beaconDTO)).willReturn(beaconToUpdate);
+
+      beaconsController.update(beaconId, dto);
+
+      then(beaconsService).should(times(1)).update(beaconId, beaconToUpdate);
+    }
+
+    @Test
+    void shouldThrowAnErrorIfTheIdWithinTheJsonDoesNotMatchThePathVariable() {
+      final WrapperDTO<BeaconDTO> dto = new WrapperDTO<>();
+      final BeaconDTO beaconDTO = new BeaconDTO();
+      dto.setData(beaconDTO);
+      beaconDTO.setId(UUID.randomUUID());
+
+      assertThrows(
+        InvalidPatchException.class,
+        () -> beaconsController.update(UUID.randomUUID(), dto)
+      );
+    }
+  }
 }
