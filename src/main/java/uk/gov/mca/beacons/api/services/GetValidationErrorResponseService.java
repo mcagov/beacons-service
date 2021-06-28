@@ -8,8 +8,10 @@ import org.springframework.validation.FieldError;
 import uk.gov.mca.beacons.api.dto.ErrorResponseDTO;
 
 @Service
-public class GetValidationErrorResponseService {
+public class GetValidationErrorResponseService
+  implements GetValidationErrorResponse {
 
+  @Override
   public ErrorResponseDTO fromBindingErrors(Errors errors) {
     final var errorResponse = new ErrorResponseDTO();
 

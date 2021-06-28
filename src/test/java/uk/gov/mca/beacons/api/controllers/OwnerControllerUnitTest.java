@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
 import uk.gov.mca.beacons.api.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
@@ -25,6 +27,7 @@ import uk.gov.mca.beacons.api.services.CreateOwnerService;
 
 @WebMvcTest(controllers = OwnerController.class)
 @AutoConfigureMockMvc
+@Import(WebMvcTestConfiguration.class)
 class OwnerControllerUnitTest {
 
   private final UUID beaconPersonId = UUID.fromString(
