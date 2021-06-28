@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.dto;
 
-import static uk.gov.mca.beacons.service.dto.BeaconPersonDTO.Attributes;
+import static uk.gov.mca.beacons.api.dto.BeaconPersonDTO.Attributes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
@@ -12,46 +12,46 @@ import lombok.Setter;
 
 public class BeaconPersonDTO extends DomainDTO<Attributes> {
 
-  private String type = "beaconPerson";
+    private String type = "beaconPerson";
 
-  public String getType() {
-    return type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  @Getter
-  @Setter
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Builder
-  public static class Attributes {
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Attributes {
 
-    private String fullName;
-    private String email;
+        private String fullName;
+        private String email;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createdDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastModifiedDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime lastModifiedDate;
 
-    private String telephoneNumber;
-    private String telephoneNumber2;
-    private String alternativeTelephoneNumber;
-    private String alternativeTelephoneNumber2;
-    private String addressLine1;
-    private String addressLine2;
-    private String addressLine3;
-    private String addressLine4;
-    private String townOrCity;
-    private String postcode;
-    private String county;
-    private String country;
-    private String companyName;
-    private String careOf;
-    private String fax;
-    private String isMain;
-    private Integer createUserId;
-    private Integer updateUserId;
-    private Integer versioning;
-  }
+        private String telephoneNumber;
+        private String telephoneNumber2;
+        private String alternativeTelephoneNumber;
+        private String alternativeTelephoneNumber2;
+        private String addressLine1;
+        private String addressLine2;
+        private String addressLine3;
+        private String addressLine4;
+        private String townOrCity;
+        private String postcode;
+        private String county;
+        private String country;
+        private String companyName;
+        private String careOf;
+        private String fax;
+        private String isMain;
+        private Integer createUserId;
+        private Integer updateUserId;
+        private Integer versioning;
+    }
 }
