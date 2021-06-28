@@ -10,13 +10,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "person")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class BeaconPerson {
@@ -33,14 +34,21 @@ public class BeaconPerson {
 
   private String alternativeTelephoneNumber;
 
+  @Column(name = "telephone_number_2")
+  private String telephoneNumber2;
+
+  @Column(name = "alternative_telephone_number_2")
+  private String alternativeTelephoneNumber2;
+
   @Email
   private String email;
 
   @Enumerated(EnumType.STRING)
   private PersonType personType;
 
-  @CreatedDate
   private LocalDateTime createdDate;
+
+  private LocalDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;
@@ -59,4 +67,20 @@ public class BeaconPerson {
   private String postcode;
 
   private String county;
+
+  private String country;
+
+  private String companyName;
+
+  private String careOf;
+
+  private String fax;
+
+  private String isMain;
+
+  private Integer createUserId;
+
+  private Integer updateUserId;
+
+  private Integer versioning;
 }

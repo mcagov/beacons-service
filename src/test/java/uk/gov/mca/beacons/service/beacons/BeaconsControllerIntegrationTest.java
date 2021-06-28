@@ -31,9 +31,6 @@ class BeaconsControllerIntegrationTest {
 
   private UUID uuid;
   private UUID useUuid;
-  private UUID ownerUuid;
-  private UUID firstEmergencyContactUuid;
-  private UUID secondEmergencyContactUuid;
 
   @BeforeEach
   public final void before() {

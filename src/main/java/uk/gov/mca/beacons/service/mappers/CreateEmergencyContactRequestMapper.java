@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.service.mappers;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import uk.gov.mca.beacons.service.gateway.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.service.model.BeaconPerson;
@@ -10,8 +11,11 @@ public class CreateEmergencyContactRequestMapper {
   public static BeaconPerson toBeaconPerson(
     CreateEmergencyContactRequest request
   ) {
+    final var now = LocalDateTime.now();
     final BeaconPerson emergencyContact = new BeaconPerson();
     emergencyContact.setBeaconId(request.getBeaconId());
+    emergencyContact.setCreatedDate(now);
+    emergencyContact.setLastModifiedDate(now);
     emergencyContact.setFullName(request.getFullName());
     emergencyContact.setTelephoneNumber(request.getTelephoneNumber());
     emergencyContact.setAlternativeTelephoneNumber(
