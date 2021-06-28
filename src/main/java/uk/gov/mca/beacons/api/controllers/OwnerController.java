@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class OwnerController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<BeaconPersonDTO> createOwner(
-    @RequestBody WrapperDTO<BeaconPersonDTO> dto
+    @RequestBody @Valid WrapperDTO<BeaconPersonDTO> dto
   ) {
     final Person person = beaconPersonMapper.fromDTO(dto.getData());
 
