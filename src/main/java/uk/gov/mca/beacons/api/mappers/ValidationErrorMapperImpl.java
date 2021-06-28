@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.services;
+package uk.gov.mca.beacons.api.mappers;
 
 import static uk.gov.mca.beacons.api.dto.ErrorResponseDTO.ValidationError;
 
@@ -8,8 +8,7 @@ import org.springframework.validation.FieldError;
 import uk.gov.mca.beacons.api.dto.ErrorResponseDTO;
 
 @Service
-public class GetValidationErrorResponseService
-  implements GetValidationErrorResponse {
+public class ValidationErrorMapperImpl implements ValidationErrorMapper {
 
   @Override
   public ErrorResponseDTO fromBindingErrors(Errors errors) {

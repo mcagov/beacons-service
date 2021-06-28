@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.services;
+package uk.gov.mca.beacons.api.mappers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -13,7 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 @ExtendWith(MockitoExtension.class)
-class GetValidationErrorResponseServiceUnitTest {
+class ValidationErrorMapperImplUnitTest {
 
   @Mock
   private Errors errors;
@@ -35,15 +35,13 @@ class GetValidationErrorResponseServiceUnitTest {
           )
         )
       );
-
-    final var getValidationErrorResponseService = new GetValidationErrorResponseService();
+    final var getValidationErrorResponseService = new ValidationErrorMapperImpl();
 
     final var result = getValidationErrorResponseService.fromBindingErrors(
       errors
     );
 
     assertThat(result.getErrors().size(), is(2));
-
     final var hexIdError = result.getErrors().get(0);
     assertThat(hexIdError.getField(), is("data.attributes.hexId"));
     assertThat(hexIdError.getDescription(), is("Hex ID must not be null"));

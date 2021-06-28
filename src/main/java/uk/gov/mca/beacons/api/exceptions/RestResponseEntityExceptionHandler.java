@@ -8,17 +8,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uk.gov.mca.beacons.api.services.GetValidationErrorResponse;
+import uk.gov.mca.beacons.api.mappers.ValidationErrorMapper;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
   extends ResponseEntityExceptionHandler {
 
-  private final GetValidationErrorResponse errorResponseService;
+  private final ValidationErrorMapper errorResponseService;
 
   @Autowired
   public RestResponseEntityExceptionHandler(
-    GetValidationErrorResponse errorResponseService
+    ValidationErrorMapper errorResponseService
   ) {
     this.errorResponseService = errorResponseService;
   }
