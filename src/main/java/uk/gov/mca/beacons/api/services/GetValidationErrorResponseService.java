@@ -1,10 +1,11 @@
 package uk.gov.mca.beacons.api.services;
 
+import static uk.gov.mca.beacons.api.dto.ErrorResponseDTO.ValidationError;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import uk.gov.mca.beacons.api.dto.ErrorResponseDTO;
-import uk.gov.mca.beacons.api.validation.ValidationError;
 
 @Service
 public class GetValidationErrorResponseService {

@@ -11,12 +11,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import uk.gov.mca.beacons.api.services.GetValidationErrorResponseService;
 
 @ControllerAdvice
-public class ValidationHandler extends ResponseEntityExceptionHandler {
+public class BeaconsRestResponseEntityExceptionHandler
+  extends ResponseEntityExceptionHandler {
 
   private final GetValidationErrorResponseService validationService;
 
   @Autowired
-  public ValidationHandler(
+  public BeaconsRestResponseEntityExceptionHandler(
     GetValidationErrorResponseService validationService
   ) {
     this.validationService = validationService;
@@ -29,12 +30,12 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     HttpStatus status,
     WebRequest request
   ) {
-    final var errorResponse = validationService.fromBindingErrors(
+    final var errorResponseDTO = validationService.fromBindingErrors(
       ex.getBindingResult()
     );
     return super.handleExceptionInternal(
       ex,
-      errorResponse,
+      errorResponseDTO,
       headers,
       status,
       request
