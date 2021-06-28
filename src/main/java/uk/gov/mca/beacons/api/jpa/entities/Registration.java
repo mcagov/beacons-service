@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.db;
+package uk.gov.mca.beacons.api.jpa.entities;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class Registration {
 
-  @Valid
-  private List<Beacon> beacons;
+    @Valid
+    private List<Beacon> beacons;
 }

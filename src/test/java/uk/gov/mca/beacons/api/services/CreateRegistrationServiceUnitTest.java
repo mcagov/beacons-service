@@ -18,105 +18,105 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
-import uk.gov.mca.beacons.api.db.Registration;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
-import uk.gov.mca.beacons.api.entities.BeaconStatus;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.jpa.entities.Registration;
 
 @ExtendWith(MockitoExtension.class)
 class CreateRegistrationServiceUnitTest {
 
-  @InjectMocks
-  private CreateRegistrationService createRegistrationService;
+    @InjectMocks
+    private CreateRegistrationService createRegistrationService;
 
-  @Mock
-  private BeaconJpaRepository beaconJpaRepository;
+    @Mock
+    private BeaconJpaRepository beaconJpaRepository;
 
-  @Mock
-  private BeaconUseJpaRepository beaconUseJpaRepository;
+    @Mock
+    private BeaconUseJpaRepository beaconUseJpaRepository;
 
-  @Mock
-  private OwnerGateway ownerGateway;
+    @Mock
+    private OwnerGateway ownerGateway;
 
-  @Mock
-  private EmergencyContactGateway emergencyContactGateway;
+    @Mock
+    private EmergencyContactGateway emergencyContactGateway;
 
-  @Captor
-  private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
+    @Captor
+    private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
 
-  private Registration registration;
-  private UUID beaconId;
-  private Beacon beacon;
-  private BeaconUse beaconUse;
-  private Person emergencyContact;
+    private Registration registration;
+    private UUID beaconId;
+    private Beacon beacon;
+    private BeaconUse beaconUse;
+    private Person emergencyContact;
 
-  @BeforeEach
-  void init() {
-    beaconId = UUID.randomUUID();
-    beacon = new Beacon();
-    beacon.setId(beaconId);
-    final Person owner = new Person();
-    beaconUse = new BeaconUse();
-    emergencyContact = new Person();
-    beacon.setOwner(owner);
-    beacon.setUses(Collections.singletonList(beaconUse));
-    beacon.setEmergencyContacts(Collections.singletonList(emergencyContact));
+    @BeforeEach
+    void init() {
+        beaconId = UUID.randomUUID();
+        beacon = new Beacon();
+        beacon.setId(beaconId);
+        final Person owner = new Person();
+        beaconUse = new BeaconUse();
+        emergencyContact = new Person();
+        beacon.setOwner(owner);
+        beacon.setUses(Collections.singletonList(beaconUse));
+        beacon.setEmergencyContacts(Collections.singletonList(emergencyContact));
 
-    registration = new Registration();
-    registration.setBeacons(Collections.singletonList(beacon));
+        registration = new Registration();
+        registration.setBeacons(Collections.singletonList(beacon));
 
-    given(beaconJpaRepository.save(beacon)).willReturn(beacon);
-  }
+        given(beaconJpaRepository.save(beacon)).willReturn(beacon);
+    }
 
-  @Test
-  void shouldSetTheBeaconStatusToNew() {
-    createRegistrationService.register(registration);
-    assertThat(beacon.getBeaconStatus(), is(BeaconStatus.NEW));
-  }
+    @Test
+    void shouldSetTheBeaconStatusToNew() {
+        createRegistrationService.register(registration);
+        assertThat(beacon.getBeaconStatus(), is(BeaconStatus.NEW));
+    }
 
-  @Test
-  void shouldSetTheBeaconIdOnTheUse() {
-    createRegistrationService.register(registration);
-    assertThat(beaconUse.getBeaconId(), is(beaconId));
-  }
+    @Test
+    void shouldSetTheBeaconIdOnTheUse() {
+        createRegistrationService.register(registration);
+        assertThat(beaconUse.getBeaconId(), is(beaconId));
+    }
 
-  @Test
-  void shouldRegisterASingleBeacon() {
-    createRegistrationService.register(registration);
+    @Test
+    void shouldRegisterASingleBeacon() {
+        createRegistrationService.register(registration);
 
-    then(beaconJpaRepository).should(times(1)).save(beacon);
-    then(beaconUseJpaRepository).should(times(1)).save(beaconUse);
-    then(ownerGateway).should(times(1)).save(isA(CreateOwnerRequest.class));
-    then(emergencyContactGateway)
-      .should(times(1))
-      .save(isA(CreateEmergencyContactRequest.class));
-  }
+        then(beaconJpaRepository).should(times(1)).save(beacon);
+        then(beaconUseJpaRepository).should(times(1)).save(beaconUse);
+        then(ownerGateway).should(times(1)).save(isA(CreateOwnerRequest.class));
+        then(emergencyContactGateway)
+                .should(times(1))
+                .save(isA(CreateEmergencyContactRequest.class));
+    }
 
-  @Test
-  void shouldRegisterAMultipleBeaconsUsesAndEmergencyContacts() {
-    setupMultipleBeacons();
-    createRegistrationService.register(registration);
+    @Test
+    void shouldRegisterAMultipleBeaconsUsesAndEmergencyContacts() {
+        setupMultipleBeacons();
+        createRegistrationService.register(registration);
 
-    then(beaconJpaRepository).should(times(2)).save(beacon);
-    then(beaconUseJpaRepository).should(times(4)).save(beaconUse);
-    then(emergencyContactGateway)
-      .should(times(4))
-      .save(isA(CreateEmergencyContactRequest.class));
-    then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
-  }
+        then(beaconJpaRepository).should(times(2)).save(beacon);
+        then(beaconUseJpaRepository).should(times(4)).save(beaconUse);
+        then(emergencyContactGateway)
+                .should(times(4))
+                .save(isA(CreateEmergencyContactRequest.class));
+        then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
+    }
 
-  private void setupMultipleBeacons() {
-    beacon.setUses(Arrays.asList(beaconUse, beaconUse));
-    beacon.setEmergencyContacts(
-      Arrays.asList(emergencyContact, emergencyContact)
-    );
-    registration.setBeacons(Arrays.asList(beacon, beacon));
-  }
+    private void setupMultipleBeacons() {
+        beacon.setUses(Arrays.asList(beaconUse, beaconUse));
+        beacon.setEmergencyContacts(
+                Arrays.asList(emergencyContact, emergencyContact)
+        );
+        registration.setBeacons(Arrays.asList(beacon, beacon));
+    }
 }
