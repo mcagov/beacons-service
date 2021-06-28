@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.validation;
+package uk.gov.mca.beacons.api.exceptions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,16 +11,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import uk.gov.mca.beacons.api.services.GetValidationErrorResponseService;
 
 @ControllerAdvice
-public class BeaconsRestResponseEntityExceptionHandler
+public class RestResponseEntityExceptionHandler
   extends ResponseEntityExceptionHandler {
 
-  private final GetValidationErrorResponseService validationService;
+  private final GetValidationErrorResponseService errorResponseService;
 
   @Autowired
-  public BeaconsRestResponseEntityExceptionHandler(
-    GetValidationErrorResponseService validationService
+  public RestResponseEntityExceptionHandler(
+    GetValidationErrorResponseService errorResponseService
   ) {
-    this.validationService = validationService;
+    this.errorResponseService = errorResponseService;
   }
 
   @Override
@@ -30,7 +30,7 @@ public class BeaconsRestResponseEntityExceptionHandler
     HttpStatus status,
     WebRequest request
   ) {
-    final var errorResponseDTO = validationService.fromBindingErrors(
+    final var errorResponseDTO = errorResponseService.fromBindingErrors(
       ex.getBindingResult()
     );
     return super.handleExceptionInternal(
