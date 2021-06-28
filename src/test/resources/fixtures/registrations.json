@@ -2,6 +2,7 @@
   "SINGLE_BEACON": {
     "beacons": [
       {
+        "accountHolderId": "replace-with-test-account-holder-id",
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
@@ -85,6 +86,7 @@
   "MULTIPLE_BEACONS": {
     "beacons": [
       {
+        "accountHolderId": "replace-with-test-account-holder-id",
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
@@ -189,6 +191,7 @@
   "NO_HEX_ID": {
     "beacons": [
       {
+        "accountHolderId": "replace-with-test-account-holder-id",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
         "manufacturerSerialNumber": "1407312904",
@@ -235,6 +238,7 @@
   "NO_USES": {
     "beacons": [
       {
+        "accountHolderId": "replace-with-test-account-holder-id",
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
@@ -271,6 +275,7 @@
   "NO_EMERGENCY_CONTACTS": {
     "beacons": [
       {
+        "accountHolderId": "replace-with-test-account-holder-id",
         "hexId": "1D0EA08C52FFBFF",
         "manufacturer": "Ocean Signal",
         "model": "EPIRB1",
