@@ -18,65 +18,67 @@ import uk.gov.mca.beacons.api.domain.PersonType;
 @Setter
 public class Person {
 
-  @Id
-  @GeneratedValue
-  private UUID id;
+    @Id
+    @GeneratedValue
+    private UUID id;
 
-  private UUID beaconId;
+    private UUID beaconId;
 
-  private String fullName;
+    private UUID accountHolderId;
 
-  private String telephoneNumber;
+    private String fullName;
 
-  private String alternativeTelephoneNumber;
+    private String telephoneNumber;
 
-  @Column(name = "telephone_number_2")
-  private String telephoneNumber2;
+    private String alternativeTelephoneNumber;
 
-  @Column(name = "alternative_telephone_number_2")
-  private String alternativeTelephoneNumber2;
+    @Column(name = "telephone_number_2")
+    private String telephoneNumber2;
 
-  @Email
-  private String email;
+    @Column(name = "alternative_telephone_number_2")
+    private String alternativeTelephoneNumber2;
 
-  @Enumerated(EnumType.STRING)
-  private PersonType personType;
+    @Email
+    private String email;
 
-  private LocalDateTime createdDate;
+    @Enumerated(EnumType.STRING)
+    private PersonType personType;
 
-  private LocalDateTime lastModifiedDate;
+    private LocalDateTime createdDate;
 
-  @Column(name = "address_line_1")
-  private String addressLine1;
+    private LocalDateTime lastModifiedDate;
 
-  @Column(name = "address_line_2")
-  private String addressLine2;
+    @Column(name = "address_line_1")
+    private String addressLine1;
 
-  @Column(name = "address_line_3")
-  private String addressLine3;
+    @Column(name = "address_line_2")
+    private String addressLine2;
 
-  @Column(name = "address_line_4")
-  private String addressLine4;
+    @Column(name = "address_line_3")
+    private String addressLine3;
 
-  private String townOrCity;
+    @Column(name = "address_line_4")
+    private String addressLine4;
 
-  private String postcode;
+    private String townOrCity;
 
-  private String county;
+    private String postcode;
 
-  private String country;
+    private String county;
 
-  private String companyName;
+    private String country;
 
-  private String careOf;
+    private String companyName;
 
-  private String fax;
+    private String careOf;
 
-  private String isMain;
+    private String fax;
 
-  private Integer createUserId;
+    private String isMain;
 
-  private Integer updateUserId;
+    private Integer createUserId;
 
-  private Integer versioning;
+    private Integer updateUserId;
+
+    private Integer versioning;
 }
