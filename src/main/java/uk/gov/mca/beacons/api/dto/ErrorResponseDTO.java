@@ -1,18 +1,14 @@
-package uk.gov.mca.beacons.api.validation;
+package uk.gov.mca.beacons.api.dto;
 
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import uk.gov.mca.beacons.api.validation.ValidationError;
 
 @Getter
-public class ValidationErrorResponse {
+public class ErrorResponseDTO {
 
   private final List<ValidationError> errors = new ArrayList<>();
-  private final String errorSummary;
-
-  public ValidationErrorResponse(String errorSummary) {
-    this.errorSummary = errorSummary;
-  }
 
   public void addValidationError(ValidationError error) {
     errors.add(error);
