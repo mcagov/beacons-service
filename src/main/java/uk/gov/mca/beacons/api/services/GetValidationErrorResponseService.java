@@ -11,6 +11,7 @@ public class GetValidationErrorResponseService {
 
   public ErrorResponseDTO fromBindingErrors(Errors errors) {
     final var errorResponse = new ErrorResponseDTO();
+
     for (FieldError fieldError : errors.getFieldErrors()) {
       final var validationError = ValidationError
         .builder()
