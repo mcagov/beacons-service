@@ -73,7 +73,7 @@ class OwnerControllerUnitTest {
     }
 
     @Test
-    void shouldReturn400IfInvalidJsonRequest() throws Exception {
+    void shouldReturn400IfInvalidJsonSent() throws Exception {
       final String createOwnerInvalidRequest = new String(
         Files.readAllBytes(
           Paths.get(
