@@ -42,8 +42,8 @@ class RegistrationsControllerIntegrationTest {
   void givenNewValidRegistration_whenPosted_thenStatus201(
     RegistrationUseCase registrationUseCase
   ) throws IOException {
-    UUID testAccountHolderId = createTestAccountHolder();
-    var requestBody = toJson(
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = toJson(
       readFile(REGISTRATION_JSON_RESOURCE)
         .replace(
           "replace-with-test-account-holder-id",
@@ -67,8 +67,8 @@ class RegistrationsControllerIntegrationTest {
   void givenInvalidRegistration_whenPosted_thenStatus400(
     RegistrationUseCase registrationUseCase
   ) throws IOException {
-    UUID testAccountHolderId = createTestAccountHolder();
-    var requestBody = toJson(
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = toJson(
       readFile(REGISTRATION_JSON_RESOURCE)
         .replace(
           "replace-with-test-account-holder-id",
