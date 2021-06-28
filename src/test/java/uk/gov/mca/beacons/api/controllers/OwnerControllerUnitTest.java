@@ -1,12 +1,17 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -65,6 +70,38 @@ class OwnerControllerUnitTest {
             .content(newBeaconPersonRequest)
         )
         .andExpect(status().isCreated());
+    }
+
+    @Test
+    void shouldReturn400IfInvalidJsonRequest() throws Exception {
+      final String createOwnerInvalidRequest = new String(
+        Files.readAllBytes(
+          Paths.get(
+            "src/test/resources/fixtures/createOwnerInvalidRequest.json"
+          )
+        )
+      );
+
+      mvc
+        .perform(
+          post("/owner")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(createOwnerInvalidRequest)
+        )
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errors.length()", is(3)))
+        .andExpect(
+          jsonPath(
+            "$.errors[*].field",
+            hasItems(
+              "data.attributes.fullName",
+              "data.attributes.telephoneNumber",
+              "data.attributes.email"
+            )
+          )
+        );
+
+      verify(createOwnerService, times(0)).execute(owner);
     }
 
     @Test
