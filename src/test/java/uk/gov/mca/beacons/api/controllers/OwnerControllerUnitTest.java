@@ -71,7 +71,7 @@ class OwnerControllerUnitTest {
                     .writeValueAsString(newBeaconPersonDTO);
             mvc
                     .perform(
-                            post("/owner")
+                            post("/owners")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(newBeaconPersonRequest)
                     )
@@ -90,7 +90,7 @@ class OwnerControllerUnitTest {
 
             mvc
                     .perform(
-                            post("/owner")
+                            post("/owners")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(createOwnerInvalidRequest)
                     )
@@ -117,7 +117,7 @@ class OwnerControllerUnitTest {
                     .writeValueAsString(newBeaconPersonDTO);
 
             mvc.perform(
-                    post("/owner")
+                    post("/owners")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(newBeaconPersonRequest)
             );
@@ -136,7 +136,7 @@ class OwnerControllerUnitTest {
                     .willReturn(owner);
 
             mvc.perform(
-                    post("/owner")
+                    post("/owners")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(newBeaconPersonRequest)
             );
