@@ -2,6 +2,8 @@ package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -87,14 +89,17 @@ class OwnerControllerIntegrationTest {
                         Paths.get("src/test/resources/fixtures/createOwnerRequest.json")
                 )
         );
-        final String createdOwnerId = webTestClient
+        final var createdOwnerId = new JSONObject(new String(Objects.requireNonNull(webTestClient
                 .post()
-                .uri("/owner")
+                .uri("/owners")
                 .bodyValue(createOwnerRequest)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .exchange()
                 .expectBody()
-                .jsonPath("$.data.id").toString();
+                .returnResult()
+                .getResponseBody())))
+                .getJSONObject("data")
+                .getString("id");
         final String existingOwnerResponse = new String(
                 Files.readAllBytes(
                         Paths.get("src/test/resources/fixtures/createOwnerResponse.json")
@@ -103,7 +108,7 @@ class OwnerControllerIntegrationTest {
 
         webTestClient
                 .get()
-                .uri("/owner/" + createdOwnerId)
+                .uri("/owners/" + createdOwnerId)
                 .exchange()
                 .expectStatus()
                 .isOk()

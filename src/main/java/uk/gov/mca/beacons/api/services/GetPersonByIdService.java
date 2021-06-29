@@ -17,7 +17,11 @@ public class GetPersonByIdService {
     }
 
     public Person execute(UUID id, PersonType personType) {
-        return null;
+        Person foundPerson = personGateway.getById(id);
+
+        if (foundPerson == null || foundPerson.getPersonType() != personType) return null;
+
+        return foundPerson;
     }
 
     public Person execute(UUID id) {
