@@ -27,6 +27,11 @@ public class PersonGatewayImpl implements PersonGateway {
     }
 
     @Override
+    public Person getById(UUID id) {
+        return null;
+    }
+
+    @Override
     public Person findByBeaconId(UUID beaconId) {
         return beaconPersonRepository.findOwnerByBeaconId(beaconId);
     }
