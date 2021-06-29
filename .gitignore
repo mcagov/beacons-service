@@ -40,3 +40,4 @@ out/
 /node_modules/
 
 .DS_Store
+schemacrawler/beacons-schema.html
