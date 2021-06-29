@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.services;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
@@ -30,19 +32,19 @@ class GetPersonByIdServiceUnitTest {
         assertNull(getPersonByIdService.execute(nonExistentPersonId));
     }
 
-//    @Test
-//    void getById_shouldReturnTheAccountHolder() {
-//        GetAccountHolderByIdService getAccountHolderByIdService = new GetAccountHolderByIdService(
-//                mockAccountHolderGateway
-//        );
-//        UUID existingAuthId = UUID.randomUUID();
-//        given(mockAccountHolderGateway.getById(existingAuthId))
-//                .willReturn(mockAccountHolder);
-//
-//        AccountHolder foundAccountHolder = getAccountHolderByIdService.execute(
-//                existingAuthId
-//        );
-//
-//        assertThat(foundAccountHolder, is(mockAccountHolder));
-//    }
+    @Test
+    void getById_shouldReturnThePerson() {
+        GetPersonByIdService getPersonByIdService = new GetPersonByIdService(
+                mockPersonGateway
+        );
+        UUID existingPersonId = UUID.randomUUID();
+        given(mockPersonGateway.getById(existingPersonId))
+                .willReturn(mockPerson);
+
+        Person foundPerson = getPersonByIdService.execute(
+                existingPersonId
+        );
+
+        assertThat(foundPerson, is(mockPerson));
+    }
 }
