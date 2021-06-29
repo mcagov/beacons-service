@@ -1,7 +1,7 @@
 -- Tag Owners and Emergency Contacts with an account_holder_id
 
 ALTER TABLE person
-    ADD COLUMN account_holder_id UUID REFERENCES person (id);
+    ADD COLUMN account_holder_id UUID REFERENCES account_holder (id);
 
 UPDATE person
 SET account_holder_id = account_holder.id
