@@ -26,38 +26,37 @@ import uk.gov.mca.beacons.api.services.GetPersonByIdService;
 @Tag(name = "Owner Controller")
 public class OwnerController {
 
-    private final BeaconPersonMapper beaconPersonMapper;
-    private final CreateOwnerService createOwnerService;
-    private final GetPersonByIdService getPersonByIdService;
+  private final BeaconPersonMapper beaconPersonMapper;
+  private final CreateOwnerService createOwnerService;
+  private final GetPersonByIdService getPersonByIdService;
 
-    @Autowired
-    public OwnerController(
-            BeaconPersonMapper beaconPersonMapper,
-            CreateOwnerService createOwnerService,
-            GetPersonByIdService getPersonByIdService) {
-        this.beaconPersonMapper = beaconPersonMapper;
-        this.createOwnerService = createOwnerService;
-        this.getPersonByIdService = getPersonByIdService;
-    }
+  @Autowired
+  public OwnerController(
+    BeaconPersonMapper beaconPersonMapper,
+    CreateOwnerService createOwnerService,
+    GetPersonByIdService getPersonByIdService
+  ) {
+    this.beaconPersonMapper = beaconPersonMapper;
+    this.createOwnerService = createOwnerService;
+    this.getPersonByIdService = getPersonByIdService;
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public WrapperDTO<BeaconPersonDTO> createOwner(
-            @RequestBody @Valid WrapperDTO<BeaconPersonDTO> dto
-    ) {
-        final Person person = beaconPersonMapper.fromDTO(dto.getData());
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public WrapperDTO<BeaconPersonDTO> createOwner(
+    @RequestBody @Valid WrapperDTO<BeaconPersonDTO> dto
+  ) {
+    final Person person = beaconPersonMapper.fromDTO(dto.getData());
 
-        return beaconPersonMapper.toWrapperDTO(createOwnerService.execute(person));
-    }
+    return beaconPersonMapper.toWrapperDTO(createOwnerService.execute(person));
+  }
 
-    @GetMapping(value = "/{id}")
-    public WrapperDTO<BeaconPersonDTO> getOwner(
-            @PathVariable("id") UUID id
-    ) {
-        final Person owner = getPersonByIdService.execute(id, PersonType.OWNER);
+  @GetMapping(value = "/{id}")
+  public WrapperDTO<BeaconPersonDTO> getOwner(@PathVariable("id") UUID id) {
+    final Person owner = getPersonByIdService.execute(id, PersonType.OWNER);
 
-        if (owner == null) throw new ResourceNotFoundException();
+    if (owner == null) throw new ResourceNotFoundException();
 
-        return beaconPersonMapper.toWrapperDTO(owner);
-    }
+    return beaconPersonMapper.toWrapperDTO(owner);
+  }
 }

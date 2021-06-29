@@ -16,35 +16,33 @@ import uk.gov.mca.beacons.api.jpa.entities.Person;
 @ExtendWith(MockitoExtension.class)
 class GetPersonByIdServiceUnitTest {
 
-    @Mock
-    private PersonGateway mockPersonGateway;
+  @Mock
+  private PersonGateway mockPersonGateway;
 
-    @Mock
-    private Person mockPerson;
+  @Mock
+  private Person mockPerson;
 
-    @Test
-    void getById_shouldReturnNullIfNotFound() {
-        GetPersonByIdService getPersonByIdService = new GetPersonByIdService(mockPersonGateway);
-        UUID nonExistentPersonId = UUID.randomUUID();
-        given(mockPersonGateway.getById(nonExistentPersonId))
-                .willReturn(null);
+  @Test
+  void getById_shouldReturnNullIfNotFound() {
+    GetPersonByIdService getPersonByIdService = new GetPersonByIdService(
+      mockPersonGateway
+    );
+    UUID nonExistentPersonId = UUID.randomUUID();
+    given(mockPersonGateway.getById(nonExistentPersonId)).willReturn(null);
 
-        assertNull(getPersonByIdService.execute(nonExistentPersonId));
-    }
+    assertNull(getPersonByIdService.execute(nonExistentPersonId));
+  }
 
-    @Test
-    void getById_shouldReturnThePerson() {
-        GetPersonByIdService getPersonByIdService = new GetPersonByIdService(
-                mockPersonGateway
-        );
-        UUID existingPersonId = UUID.randomUUID();
-        given(mockPersonGateway.getById(existingPersonId))
-                .willReturn(mockPerson);
+  @Test
+  void getById_shouldReturnThePerson() {
+    GetPersonByIdService getPersonByIdService = new GetPersonByIdService(
+      mockPersonGateway
+    );
+    UUID existingPersonId = UUID.randomUUID();
+    given(mockPersonGateway.getById(existingPersonId)).willReturn(mockPerson);
 
-        Person foundPerson = getPersonByIdService.execute(
-                existingPersonId
-        );
+    Person foundPerson = getPersonByIdService.execute(existingPersonId);
 
-        assertThat(foundPerson, is(mockPerson));
-    }
+    assertThat(foundPerson, is(mockPerson));
+  }
 }

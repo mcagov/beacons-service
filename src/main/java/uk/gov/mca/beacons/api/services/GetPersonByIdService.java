@@ -10,21 +10,24 @@ import uk.gov.mca.beacons.api.jpa.entities.Person;
 @Service
 @Transactional
 public class GetPersonByIdService {
-    private final PersonGateway personGateway;
 
-    public GetPersonByIdService(PersonGateway personGateway) {
-        this.personGateway = personGateway;
-    }
+  private final PersonGateway personGateway;
 
-    public Person execute(UUID id, PersonType personType) {
-        Person foundPerson = personGateway.getById(id);
+  public GetPersonByIdService(PersonGateway personGateway) {
+    this.personGateway = personGateway;
+  }
 
-        if (foundPerson == null || foundPerson.getPersonType() != personType) return null;
+  public Person execute(UUID id, PersonType personType) {
+    Person foundPerson = personGateway.getById(id);
 
-        return foundPerson;
-    }
+    if (
+      foundPerson == null || foundPerson.getPersonType() != personType
+    ) return null;
 
-    public Person execute(UUID id) {
-        return personGateway.getById(id);
-    }
+    return foundPerson;
+  }
+
+  public Person execute(UUID id) {
+    return personGateway.getById(id);
+  }
 }

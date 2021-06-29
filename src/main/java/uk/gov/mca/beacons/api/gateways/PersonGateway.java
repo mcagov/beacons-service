@@ -5,9 +5,9 @@ import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 public interface PersonGateway {
-    Person save(CreateOwnerRequest request);
+  Person save(CreateOwnerRequest request);
 
-    Person getById(UUID id);
+  Person getById(UUID id);
 
-    Person findByBeaconId(UUID beaconId);
+  Person findByBeaconId(UUID beaconId);
 }

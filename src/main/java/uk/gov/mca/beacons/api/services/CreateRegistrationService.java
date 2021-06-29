@@ -25,77 +25,77 @@ import uk.gov.mca.beacons.api.mappers.CreateOwnerRequestMapper;
 @Slf4j
 public class CreateRegistrationService {
 
-    private final BeaconJpaRepository beaconJpaRepository;
-    private final BeaconUseJpaRepository beaconUseJpaRepository;
-    private final PersonGateway personGateway;
-    private final EmergencyContactGateway emergencyContactGateway;
+  private final BeaconJpaRepository beaconJpaRepository;
+  private final BeaconUseJpaRepository beaconUseJpaRepository;
+  private final PersonGateway personGateway;
+  private final EmergencyContactGateway emergencyContactGateway;
 
-    @Autowired
-    public CreateRegistrationService(
-            BeaconJpaRepository beaconJpaRepository,
-            BeaconUseJpaRepository beaconUseJpaRepository,
-            PersonGateway personGateway,
-            EmergencyContactGateway emergencyContactGateway
-    ) {
-        this.beaconJpaRepository = beaconJpaRepository;
-        this.beaconUseJpaRepository = beaconUseJpaRepository;
-        this.personGateway = personGateway;
-        this.emergencyContactGateway = emergencyContactGateway;
-    }
+  @Autowired
+  public CreateRegistrationService(
+    BeaconJpaRepository beaconJpaRepository,
+    BeaconUseJpaRepository beaconUseJpaRepository,
+    PersonGateway personGateway,
+    EmergencyContactGateway emergencyContactGateway
+  ) {
+    this.beaconJpaRepository = beaconJpaRepository;
+    this.beaconUseJpaRepository = beaconUseJpaRepository;
+    this.personGateway = personGateway;
+    this.emergencyContactGateway = emergencyContactGateway;
+  }
 
-    public Registration register(Registration registration) {
-        log.info("Attempting to persist registration {}", registration);
+  public Registration register(Registration registration) {
+    log.info("Attempting to persist registration {}", registration);
 
-        final List<Beacon> beacons = registration.getBeacons();
-        beacons.forEach(this::registerBeacon);
+    final List<Beacon> beacons = registration.getBeacons();
+    beacons.forEach(this::registerBeacon);
 
-        return registration;
-    }
+    return registration;
+  }
 
-    private void registerBeacon(Beacon beacon) {
-        beacon.setBeaconStatus(BeaconStatus.NEW);
-        final Beacon persistedBeacon = beaconJpaRepository.save(beacon);
-        final UUID beaconId = persistedBeacon.getId();
+  private void registerBeacon(Beacon beacon) {
+    beacon.setBeaconStatus(BeaconStatus.NEW);
+    final Beacon persistedBeacon = beaconJpaRepository.save(beacon);
+    final UUID beaconId = persistedBeacon.getId();
 
-        registerBeaconUses(persistedBeacon.getUses(), beaconId);
-        registerOwner(persistedBeacon.getOwner(), beaconId);
-        registerEmergencyContacts(persistedBeacon.getEmergencyContacts(), beaconId);
-    }
+    registerBeaconUses(persistedBeacon.getUses(), beaconId);
+    registerOwner(persistedBeacon.getOwner(), beaconId);
+    registerEmergencyContacts(persistedBeacon.getEmergencyContacts(), beaconId);
+  }
 
-    private void registerBeaconUses(List<BeaconUse> uses, UUID beaconId) {
-        uses.forEach(
-                use -> {
-                    use.setBeaconId(beaconId);
-                    beaconUseJpaRepository.save(use);
-                }
-        );
-    }
+  private void registerBeaconUses(List<BeaconUse> uses, UUID beaconId) {
+    uses.forEach(
+      use -> {
+        use.setBeaconId(beaconId);
+        beaconUseJpaRepository.save(use);
+      }
+    );
+  }
 
-    private void registerOwner(Person owner, UUID beaconId) {
-        final CreateOwnerRequest request = CreateOwnerRequestMapper.fromBeaconPerson(
-                owner,
-                beaconId
-        );
-        personGateway.save(request);
-    }
+  private void registerOwner(Person owner, UUID beaconId) {
+    final CreateOwnerRequest request = CreateOwnerRequestMapper.fromBeaconPerson(
+      owner,
+      beaconId
+    );
+    personGateway.save(request);
+  }
 
-    private void registerEmergencyContacts(
-            List<Person> emergencyContacts,
-            UUID beaconId
-    ) {
-        emergencyContacts.forEach(
-                emergencyContact -> registerEmergencyContact(emergencyContact, beaconId)
-        );
-    }
+  private void registerEmergencyContacts(
+    List<Person> emergencyContacts,
+    UUID beaconId
+  ) {
+    emergencyContacts.forEach(
+      emergencyContact -> registerEmergencyContact(emergencyContact, beaconId)
+    );
+  }
 
-    private void registerEmergencyContact(
-            Person emergencyContact,
-            UUID beaconId
-    ) {
-        final CreateEmergencyContactRequest request = CreateEmergencyContactRequestMapper.fromBeaconPerson(
-                emergencyContact,
-                beaconId
-        );
-        emergencyContactGateway.save(request);
-    }
+  private void registerEmergencyContact(
+    Person emergencyContact,
+    UUID beaconId
+  ) {
+    final CreateEmergencyContactRequest request = CreateEmergencyContactRequestMapper.fromBeaconPerson(
+      emergencyContact,
+      beaconId
+    );
+    emergencyContactGateway.save(request);
+  }
 }

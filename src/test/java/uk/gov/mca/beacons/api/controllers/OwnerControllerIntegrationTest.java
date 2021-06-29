@@ -19,87 +19,106 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient
 class OwnerControllerIntegrationTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+  @Autowired
+  private WebTestClient webTestClient;
 
-    @Test
-    void aNewValidOwnerPostRequest_ShouldCreateTheOwner() throws Exception {
-        final String createOwnerRequest = readFile("src/test/resources/fixtures/createOwnerRequest.json");
-        final String createOwnerResponse = readFile("src/test/resources/fixtures/createOwnerResponse.json");
+  @Test
+  void aNewValidOwnerPostRequest_ShouldCreateTheOwner() throws Exception {
+    final String createOwnerRequest = readFile(
+      "src/test/resources/fixtures/createOwnerRequest.json"
+    );
+    final String createOwnerResponse = readFile(
+      "src/test/resources/fixtures/createOwnerResponse.json"
+    );
 
-        webTestClient
-                .post()
-                .uri("/owners")
-                .bodyValue(createOwnerRequest)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBody()
-                .json(createOwnerResponse)
-                .jsonPath("$.data.id")
-                .isNotEmpty()
-                .jsonPath("$.data.attributes.createdDate")
-                .isNotEmpty()
-                .jsonPath("$.data.attributes.lastModifiedDate")
-                .isNotEmpty();
-    }
+    webTestClient
+      .post()
+      .uri("/owners")
+      .bodyValue(createOwnerRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectBody()
+      .json(createOwnerResponse)
+      .jsonPath("$.data.id")
+      .isNotEmpty()
+      .jsonPath("$.data.attributes.createdDate")
+      .isNotEmpty()
+      .jsonPath("$.data.attributes.lastModifiedDate")
+      .isNotEmpty();
+  }
 
-    @Test
-    void aNewValidOwnerPostRequest_shouldCreateTheOwnerWithCreatedDatesAndLastModifiedDates()
-            throws Exception {
-        final String createOwnerRequest = readFile("src/test/resources/fixtures/createOwnerRequestWithDatesSpecified.json");
-        final String createOwnerResponse = readFile("src/test/resources/fixtures/createOwnerResponseWithDatesSpecified.json");
+  @Test
+  void aNewValidOwnerPostRequest_shouldCreateTheOwnerWithCreatedDatesAndLastModifiedDates()
+    throws Exception {
+    final String createOwnerRequest = readFile(
+      "src/test/resources/fixtures/createOwnerRequestWithDatesSpecified.json"
+    );
+    final String createOwnerResponse = readFile(
+      "src/test/resources/fixtures/createOwnerResponseWithDatesSpecified.json"
+    );
 
-        webTestClient
-                .post()
-                .uri("/owners")
-                .bodyValue(createOwnerRequest)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBody()
-                .json(createOwnerResponse)
-                .jsonPath("$.data.id")
-                .isNotEmpty();
-    }
+    webTestClient
+      .post()
+      .uri("/owners")
+      .bodyValue(createOwnerRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectBody()
+      .json(createOwnerResponse)
+      .jsonPath("$.data.id")
+      .isNotEmpty();
+  }
 
-    @Test
-    void aGetRequestWithExistingId_shouldRespondWithExistingOwner() throws Exception {
+  @Test
+  void aGetRequestWithExistingId_shouldRespondWithExistingOwner()
+    throws Exception {
+    final var createdOwnerId = createNewOwner(
+      readFile("src/test/resources/fixtures/createOwnerRequest.json")
+    );
+    final String existingOwnerResponse = readFile(
+      "src/test/resources/fixtures/createOwnerResponse.json"
+    );
 
-        final var createdOwnerId = createNewOwner(readFile("src/test/resources/fixtures/createOwnerRequest.json"));
-        final String existingOwnerResponse = readFile("src/test/resources/fixtures/createOwnerResponse.json");
+    webTestClient
+      .get()
+      .uri("/owners/" + createdOwnerId)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(existingOwnerResponse);
+  }
 
-        webTestClient
-                .get()
-                .uri("/owners/" + createdOwnerId)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody()
-                .json(existingOwnerResponse);
-    }
+  private UUID createNewOwner(String request) throws JSONException {
+    return UUID.fromString(
+      new JSONObject(
+        new String(
+          Objects.requireNonNull(
+            webTestClient
+              .post()
+              .uri("/owners")
+              .bodyValue(request)
+              .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_JSON_VALUE
+              )
+              .exchange()
+              .expectBody()
+              .returnResult()
+              .getResponseBody()
+          )
+        )
+      )
+        .getJSONObject("data")
+        .getString("id")
+    );
+  }
 
-    private UUID createNewOwner(String request) throws JSONException {
-        return UUID.fromString(new JSONObject(new String(Objects.requireNonNull(webTestClient
-                .post()
-                .uri("/owners")
-                .bodyValue(request)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectBody()
-                .returnResult()
-                .getResponseBody())))
-                .getJSONObject("data")
-                .getString("id"));
-    }
-
-    private String readFile(String path) throws IOException {
-        return new String(
-                Files.readAllBytes(
-                        Paths.get(path)
-                )
-        );
-    }
+  private String readFile(String path) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(path)));
+  }
 }

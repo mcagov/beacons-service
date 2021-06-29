@@ -13,26 +13,26 @@ import uk.gov.mca.beacons.api.mappers.CreateOwnerRequestMapper;
 @Transactional
 public class PersonGatewayImpl implements PersonGateway {
 
-    private final BeaconPersonJpaRepository beaconPersonRepository;
+  private final BeaconPersonJpaRepository beaconPersonRepository;
 
-    @Autowired
-    public PersonGatewayImpl(BeaconPersonJpaRepository beaconPersonRepository) {
-        this.beaconPersonRepository = beaconPersonRepository;
-    }
+  @Autowired
+  public PersonGatewayImpl(BeaconPersonJpaRepository beaconPersonRepository) {
+    this.beaconPersonRepository = beaconPersonRepository;
+  }
 
-    @Override
-    public Person save(CreateOwnerRequest request) {
-        final Person owner = CreateOwnerRequestMapper.toBeaconPerson(request);
-        return beaconPersonRepository.save(owner);
-    }
+  @Override
+  public Person save(CreateOwnerRequest request) {
+    final Person owner = CreateOwnerRequestMapper.toBeaconPerson(request);
+    return beaconPersonRepository.save(owner);
+  }
 
-    @Override
-    public Person getById(UUID id) {
-        return this.beaconPersonRepository.getById(id);
-    }
+  @Override
+  public Person getById(UUID id) {
+    return this.beaconPersonRepository.getById(id);
+  }
 
-    @Override
-    public Person findByBeaconId(UUID beaconId) {
-        return beaconPersonRepository.findOwnerByBeaconId(beaconId);
-    }
+  @Override
+  public Person findByBeaconId(UUID beaconId) {
+    return beaconPersonRepository.findOwnerByBeaconId(beaconId);
+  }
 }

@@ -16,20 +16,20 @@ import uk.gov.mca.beacons.api.jpa.entities.Person;
 @ExtendWith(MockitoExtension.class)
 class CreateOwnerServiceUnitTest {
 
-    @Mock
-    private PersonGateway personGateway;
+  @Mock
+  private PersonGateway personGateway;
 
-    @Test
-    void shouldCreateTheAccountHolder() {
-        final CreateOwnerService createOwnerService = new CreateOwnerService(
-                personGateway
-        );
-        final Person person = new Person();
-        final Person createdPerson = new Person();
+  @Test
+  void shouldCreateTheAccountHolder() {
+    final CreateOwnerService createOwnerService = new CreateOwnerService(
+      personGateway
+    );
+    final Person person = new Person();
+    final Person createdPerson = new Person();
 
-        given(personGateway.save(isA(CreateOwnerRequest.class)))
-                .willReturn(createdPerson);
+    given(personGateway.save(isA(CreateOwnerRequest.class)))
+      .willReturn(createdPerson);
 
-        assertThat(createOwnerService.execute(person), is(createdPerson));
-    }
+    assertThat(createOwnerService.execute(person), is(createdPerson));
+  }
 }

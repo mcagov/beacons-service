@@ -17,46 +17,46 @@ import uk.gov.mca.beacons.api.jpa.entities.Person;
 @Service
 public class GetBeaconsByAccountHolderIdService {
 
-    private final BeaconGateway beaconGateway;
-    private final UseGateway useGateway;
-    private final PersonGateway personGateway;
-    private final EmergencyContactGateway emergencyContactGateway;
+  private final BeaconGateway beaconGateway;
+  private final UseGateway useGateway;
+  private final PersonGateway personGateway;
+  private final EmergencyContactGateway emergencyContactGateway;
 
-    @Autowired
-    public GetBeaconsByAccountHolderIdService(
-            BeaconGateway beaconGateway,
-            UseGateway useGateway,
-            PersonGateway personGateway,
-            EmergencyContactGateway emergencyContactGateway
-    ) {
-        this.beaconGateway = beaconGateway;
-        this.useGateway = useGateway;
-        this.personGateway = personGateway;
-        this.emergencyContactGateway = emergencyContactGateway;
-    }
+  @Autowired
+  public GetBeaconsByAccountHolderIdService(
+    BeaconGateway beaconGateway,
+    UseGateway useGateway,
+    PersonGateway personGateway,
+    EmergencyContactGateway emergencyContactGateway
+  ) {
+    this.beaconGateway = beaconGateway;
+    this.useGateway = useGateway;
+    this.personGateway = personGateway;
+    this.emergencyContactGateway = emergencyContactGateway;
+  }
 
-    public List<Beacon> execute(UUID accountId) {
-        final List<Beacon> beacons = beaconGateway.findAllByAccountHolderId(
-                accountId
+  public List<Beacon> execute(UUID accountId) {
+    final List<Beacon> beacons = beaconGateway.findAllByAccountHolderId(
+      accountId
+    );
+    if (beacons.isEmpty()) return emptyList();
+
+    beacons.forEach(
+      beacon -> {
+        final UUID beaconId = beacon.getId();
+        final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
+        beacon.setUses(uses);
+
+        final Person owner = personGateway.findByBeaconId(beaconId);
+        beacon.setOwner(owner);
+
+        final List<Person> emergencyContacts = emergencyContactGateway.findAllByBeaconId(
+          beaconId
         );
-        if (beacons.isEmpty()) return emptyList();
+        beacon.setEmergencyContacts(emergencyContacts);
+      }
+    );
 
-        beacons.forEach(
-                beacon -> {
-                    final UUID beaconId = beacon.getId();
-                    final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
-                    beacon.setUses(uses);
-
-                    final Person owner = personGateway.findByBeaconId(beaconId);
-                    beacon.setOwner(owner);
-
-                    final List<Person> emergencyContacts = emergencyContactGateway.findAllByBeaconId(
-                            beaconId
-                    );
-                    beacon.setEmergencyContacts(emergencyContacts);
-                }
-        );
-
-        return beacons;
-    }
+    return beacons;
+  }
 }
