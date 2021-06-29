@@ -9,74 +9,80 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.mca.beacons.api.domain.PersonType;
 
 @Entity(name = "person")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Person {
 
-  @Id
-  @GeneratedValue
-  private UUID id;
+    @Id
+    @GeneratedValue
+    private UUID id;
 
-  private UUID beaconId;
+    private UUID beaconId;
 
-  private String fullName;
+    private String fullName;
 
-  private String telephoneNumber;
+    private String telephoneNumber;
 
-  private String alternativeTelephoneNumber;
+    private String alternativeTelephoneNumber;
 
-  @Column(name = "telephone_number_2")
-  private String telephoneNumber2;
+    @Column(name = "telephone_number_2")
+    private String telephoneNumber2;
 
-  @Column(name = "alternative_telephone_number_2")
-  private String alternativeTelephoneNumber2;
+    @Column(name = "alternative_telephone_number_2")
+    private String alternativeTelephoneNumber2;
 
-  @Email
-  private String email;
+    @Email
+    private String email;
 
-  @Enumerated(EnumType.STRING)
-  private PersonType personType;
+    @Enumerated(EnumType.STRING)
+    private PersonType personType;
 
-  private LocalDateTime createdDate;
+    private LocalDateTime createdDate;
 
-  private LocalDateTime lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
-  @Column(name = "address_line_1")
-  private String addressLine1;
+    @Column(name = "address_line_1")
+    private String addressLine1;
 
-  @Column(name = "address_line_2")
-  private String addressLine2;
+    @Column(name = "address_line_2")
+    private String addressLine2;
 
-  @Column(name = "address_line_3")
-  private String addressLine3;
+    @Column(name = "address_line_3")
+    private String addressLine3;
 
-  @Column(name = "address_line_4")
-  private String addressLine4;
+    @Column(name = "address_line_4")
+    private String addressLine4;
 
-  private String townOrCity;
+    private String townOrCity;
 
-  private String postcode;
+    private String postcode;
 
-  private String county;
+    private String county;
 
-  private String country;
+    private String country;
 
-  private String companyName;
+    private String companyName;
 
-  private String careOf;
+    private String careOf;
 
-  private String fax;
+    private String fax;
 
-  private String isMain;
+    private String isMain;
 
-  private Integer createUserId;
+    private Integer createUserId;
 
-  private Integer updateUserId;
+    private Integer updateUserId;
 
-  private Integer versioning;
+    private Integer versioning;
 }
