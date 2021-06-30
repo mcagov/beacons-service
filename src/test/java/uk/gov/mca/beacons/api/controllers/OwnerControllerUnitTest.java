@@ -164,42 +164,40 @@ class OwnerControllerUnitTest {
 
       verify(getPersonByIdService, times(1)).execute(ownerId, PersonType.OWNER);
     }
-    //        @Test
-    //        void shouldReturn200WhenOwnerIdFound() throws Exception {
-    //            given(getPersonByIdService.execute(ownerId, PersonType.OWNER))
-    //                    .willReturn(owner);
-    //
-    //            mvc
-    //                    .perform(
-    //                            get("/account-holder/" + ownerId)
-    //                                    .contentType(MediaType.APPLICATION_JSON)
-    //                    )
-    //                    .andExpect(status().isOk());
-    //        }
-    //
-    //        @Test
-    //        void shouldMapOwnerToAWrapperDTO() throws Exception {
-    //            given(getPersonByIdService.execute(ownerId, PersonType.OWNER))
-    //                    .willReturn(owner);
-    //
-    //            mvc.perform(
-    //                    get("/account-holder/" + ownerId)
-    //                            .contentType(MediaType.APPLICATION_JSON)
-    //            );
-    //
-    //            verify(ownerMapper, times(1)).toWrapperDTO(owner);
-    //        }
-    //
-    //        @Test
-    //        void shouldReturn404IfOwnerNotFound() throws Exception {
-    //            given(getOwnerByAuthIdService.execute(authId)).willReturn(null);
-    //
-    //            mvc
-    //                    .perform(
-    //                            get("/account-holder/" + ownerId)
-    //                                    .contentType(MediaType.APPLICATION_JSON)
-    //                    )
-    //                    .andExpect(status().isNotFound());
-    //        }
+
+    @Test
+    void shouldReturn200WhenPersonIdFound() throws Exception {
+      given(getPersonByIdService.execute(ownerId, PersonType.OWNER))
+        .willReturn(owner);
+
+      mvc
+        .perform(
+          get("/owners/" + ownerId).contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldMapOwnerToAWrapperDTO() throws Exception {
+      given(getPersonByIdService.execute(ownerId, PersonType.OWNER))
+        .willReturn(owner);
+
+      mvc.perform(
+        get("/owners/" + ownerId).contentType(MediaType.APPLICATION_JSON)
+      );
+
+      verify(beaconPersonMapper, times(1)).toWrapperDTO(owner);
+    }
+
+    @Test
+    void shouldReturn404IfOwnerNotFound() throws Exception {
+      given(getPersonByIdService.execute(ownerId)).willReturn(null);
+
+      mvc
+        .perform(
+          get("/owners/" + ownerId).contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isNotFound());
+    }
   }
 }
