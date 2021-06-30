@@ -90,7 +90,8 @@ class OwnerControllerIntegrationTest {
       .expectStatus()
       .isOk()
       .expectBody()
-      .json(existingOwnerResponse);
+      .json(existingOwnerResponse)
+      .jsonPath("$.data.id", createdOwnerId);
   }
 
   private UUID createNewOwner(String request) throws JSONException {
