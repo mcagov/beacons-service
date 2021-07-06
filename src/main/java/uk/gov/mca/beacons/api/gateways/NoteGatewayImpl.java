@@ -1,8 +1,8 @@
 package uk.gov.mca.beacons.api.gateways;
 
-import uk.gov.mca.beacons.api.dto.CreateNoteRequest;
+import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.jpa.NoteJpaRepository;
-import uk.gov.mca.beacons.api.jpa.entities.Note;
+import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 
 public class NoteGatewayImpl implements NoteGateway {
@@ -14,8 +14,8 @@ public class NoteGatewayImpl implements NoteGateway {
   }
 
   @Override
-  public void save(CreateNoteRequest request) {
-    final Note note = NoteMapper.toNote(request);
-    this.noteJpaRepository.save(note);
+  public void save(Note note) {
+    final NoteEntity noteEntity = NoteMapper.toNoteEntity(note);
+    this.noteJpaRepository.save(noteEntity);
   }
 }

@@ -1,16 +1,15 @@
-package uk.gov.mca.beacons.api.dto;
+package uk.gov.mca.beacons.api.domain;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.mca.beacons.api.domain.NoteType;
 
 @Getter
 @Setter
 @Builder
-public class CreateNoteRequest {
+public class Note {
 
   private UUID beaconId;
   private String note;

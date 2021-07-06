@@ -13,10 +13,10 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
-import uk.gov.mca.beacons.api.dto.CreateNoteRequest;
 import uk.gov.mca.beacons.api.jpa.NoteJpaRepository;
-import uk.gov.mca.beacons.api.jpa.entities.Note;
+import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
 
 @ExtendWith(MockitoExtension.class)
 class NoteGatewayImplTest {
@@ -28,7 +28,7 @@ class NoteGatewayImplTest {
   private NoteJpaRepository noteRepository;
 
   @Captor
-  private ArgumentCaptor<Note> noteCaptor;
+  private ArgumentCaptor<NoteEntity> noteCaptor;
 
   @Test
   void shouldCreateANoteFromARequestObject() {
@@ -40,7 +40,7 @@ class NoteGatewayImplTest {
     final String fullName = "Alfred the cat";
     final String email = "alfred@cute.cat.com";
 
-    final CreateNoteRequest createNoteRequest = CreateNoteRequest
+    final Note newNote = Note
       .builder()
       .beaconId(beaconId)
       .note(note)
@@ -51,10 +51,10 @@ class NoteGatewayImplTest {
       .email(email)
       .build();
 
-    noteGateway.save(createNoteRequest);
+    noteGateway.save(newNote);
 
     verify(noteRepository).save(noteCaptor.capture());
-    final Note createdNote = noteCaptor.getValue();
+    final NoteEntity createdNote = noteCaptor.getValue();
 
     assertThat(createdNote.getBeaconId(), is(beaconId));
     assertThat(createdNote.getNote(), is(note));
