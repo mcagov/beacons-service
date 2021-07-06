@@ -34,6 +34,5 @@ public class Note {
 
   private String fullName;
 
-  @Email
   private String email;
 }
