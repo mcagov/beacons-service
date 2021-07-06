@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.gov.mca.beacons.api.domain.NoteType;
 
-@Entity
+@Entity(name = "note")
 @Getter
 @Setter
 public class NoteEntity {
