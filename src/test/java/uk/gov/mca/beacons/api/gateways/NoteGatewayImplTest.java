@@ -31,7 +31,7 @@ class NoteGatewayImplTest {
   private ArgumentCaptor<NoteEntity> noteCaptor;
 
   @Test
-  void shouldCreateANoteFromARequestObject() {
+  void shouldCreateANoteEntityFromANote() {
     final UUID beaconId = UUID.randomUUID();
     final String text = "This beacon belongs to a cat.";
     final NoteType type = NoteType.GENERAL;
