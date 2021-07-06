@@ -15,7 +15,7 @@ import uk.gov.mca.beacons.api.domain.NoteType;
 @Entity
 @Getter
 @Setter
-public class BeaconNote {
+public class Note {
 
   @Id
   @GeneratedValue

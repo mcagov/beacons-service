@@ -1,5 +1,5 @@
--- Add beacon_note table to store notes against beacon records
-CREATE TABLE IF NOT EXISTS beacon_note (
+-- Add note table to store notes against beacon records
+CREATE TABLE IF NOT EXISTS note (
     id uuid PRIMARY KEY,
     beacon_id uuid REFERENCES beacon (id),
     note text,
