@@ -25,8 +25,6 @@ public class BeaconNote {
 
   private String note;
 
-  //  Should be noteType (like personType)
-  //  But note.type would maybe be nicer than note.noteType?
   @Enumerated(EnumType.STRING)
   private NoteType type;
 
