@@ -86,7 +86,7 @@ public class AccountHolderController {
     );
 
     return accountHolderMapper.toWrapperDTO(
-      accountHolderService.save(newAccountHolderRequest)
+      accountHolderService.create(newAccountHolderRequest)
     );
   }
 

@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.api.services;
 
 import java.util.UUID;
-
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +19,14 @@ public class AccountHolderService {
     this.accountHolderGateway = accountHolderGateway;
   }
 
-  public AccountHolder save(
-    CreateAccountHolderRequest accountHolderRequest
-  ) {
+  public AccountHolder create(CreateAccountHolderRequest accountHolderRequest) {
     return accountHolderGateway.save(accountHolderRequest);
   }
 
   public AccountHolder getByAuthId(String authId) {
     return accountHolderGateway.getByAuthId(authId);
-  }  
-  
+  }
+
   public AccountHolder getById(UUID id) {
     return accountHolderGateway.getById(id);
   }

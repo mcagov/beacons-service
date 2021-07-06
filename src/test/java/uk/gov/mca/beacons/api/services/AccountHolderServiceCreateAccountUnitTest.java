@@ -13,14 +13,14 @@ import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 
 @ExtendWith(MockitoExtension.class)
-class CreateAccountHolderServiceUnitTest {
+class AccountHolderServiceCreateAccountUnitTest {
 
   @Mock
   private AccountHolderGateway accountHolderGateway;
 
   @Test
   void shouldCreateTheAccountHolder() {
-    final CreateAccountHolderService createAccountHolderService = new CreateAccountHolderService(
+    final AccountHolderService accountHolderService = new AccountHolderService(
       accountHolderGateway
     );
     final CreateAccountHolderRequest accountHolder = new CreateAccountHolderRequest();
@@ -30,7 +30,7 @@ class CreateAccountHolderServiceUnitTest {
       .willReturn(createdAccountHolder);
 
     assertThat(
-      createAccountHolderService.execute(accountHolder),
+      accountHolderService.create(accountHolder),
       is(createdAccountHolder)
     );
   }
