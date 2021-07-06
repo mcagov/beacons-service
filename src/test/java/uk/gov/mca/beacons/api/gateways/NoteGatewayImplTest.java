@@ -33,17 +33,17 @@ class NoteGatewayImplTest {
   @Test
   void shouldCreateANoteFromARequestObject() {
     final UUID beaconId = UUID.randomUUID();
-    final String note = "This beacon belongs to a cat.";
+    final String text = "This beacon belongs to a cat.";
     final NoteType type = NoteType.GENERAL;
     final LocalDateTime createdDate = LocalDateTime.now();
     final UUID personId = UUID.randomUUID();
     final String fullName = "Alfred the cat";
     final String email = "alfred@cute.cat.com";
 
-    final Note newNote = Note
+    final Note note = Note
       .builder()
       .beaconId(beaconId)
-      .note(note)
+      .text(text)
       .type(type)
       .createdDate(createdDate)
       .personId(personId)
@@ -51,13 +51,13 @@ class NoteGatewayImplTest {
       .email(email)
       .build();
 
-    noteGateway.save(newNote);
+    noteGateway.save(note);
 
     verify(noteRepository).save(noteCaptor.capture());
     final NoteEntity createdNote = noteCaptor.getValue();
 
     assertThat(createdNote.getBeaconId(), is(beaconId));
-    assertThat(createdNote.getNote(), is(note));
+    assertThat(createdNote.getText(), is(text));
     assertThat(createdNote.getType(), is(type));
     assertThat(createdNote.getCreatedDate(), is(createdDate));
     assertThat(createdNote.getPersonId(), is(personId));

@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Note {
 
   private UUID beaconId;
-  private String note;
+  private String text;
   private NoteType type;
   private LocalDateTime createdDate;
   private UUID personId;

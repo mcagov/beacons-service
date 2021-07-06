@@ -22,7 +22,7 @@ public class NoteEntity {
 
   private UUID beaconId;
 
-  private String note;
+  private String text;
 
   @Enumerated(EnumType.STRING)
   private NoteType type;
