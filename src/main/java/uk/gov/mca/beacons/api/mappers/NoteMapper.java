@@ -7,6 +7,7 @@ public class NoteMapper {
 
   public static NoteEntity toNoteEntity(Note note) {
     NoteEntity noteEntity = new NoteEntity();
+    noteEntity.setId(note.getId());
     noteEntity.setBeaconId(note.getBeaconId());
     noteEntity.setText(note.getText());
     noteEntity.setType(note.getType());

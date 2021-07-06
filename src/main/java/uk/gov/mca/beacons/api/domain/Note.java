@@ -11,6 +11,7 @@ import lombok.Setter;
 @Builder
 public class Note {
 
+  private UUID id;
   private UUID beaconId;
   private String text;
   private NoteType type;
