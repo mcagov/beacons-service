@@ -22,9 +22,7 @@ import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
-import uk.gov.mca.beacons.api.services.CreateAccountHolderService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByAuthIdService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByIdService;
+import uk.gov.mca.beacons.api.services.AccountHolderService;
 import uk.gov.mca.beacons.api.services.GetBeaconsByAccountHolderIdService;
 
 @RestController
@@ -34,11 +32,7 @@ public class AccountHolderController {
 
   private final AccountHolderMapper accountHolderMapper;
 
-  private final GetAccountHolderByIdService getAccountHolderByIdService;
-
-  private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
-
-  private final CreateAccountHolderService createAccountHolderService;
+  private final AccountHolderService accountHolderService;
 
   private final GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService;
 
@@ -47,16 +41,12 @@ public class AccountHolderController {
   @Autowired
   public AccountHolderController(
     AccountHolderMapper accountHolderMapper,
-    GetAccountHolderByIdService getAccountHolderByIdService,
-    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-    CreateAccountHolderService createAccountHolderService,
+    AccountHolderService accountHolderService,
     GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService,
     BeaconsResponseFactory responseFactory
   ) {
     this.accountHolderMapper = accountHolderMapper;
-    this.getAccountHolderByIdService = getAccountHolderByIdService;
-    this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
-    this.createAccountHolderService = createAccountHolderService;
+    this.accountHolderService = accountHolderService;
     this.getBeaconsByAccountHolderIdService =
       getBeaconsByAccountHolderIdService;
     this.responseFactory = responseFactory;
@@ -66,7 +56,7 @@ public class AccountHolderController {
   public WrapperDTO<AccountHolderDTO> getAccountHolder(
     @PathVariable("id") UUID id
   ) {
-    final AccountHolder accountHolder = getAccountHolderByIdService.execute(id);
+    final AccountHolder accountHolder = accountHolderService.getById(id);
 
     if (accountHolder == null) throw new ResourceNotFoundException();
 
@@ -77,7 +67,7 @@ public class AccountHolderController {
   public AccountHolderIdDTO getAccountHolderId(
     @PathVariable("authId") String authId
   ) {
-    final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
+    final AccountHolder accountHolder = accountHolderService.getByAuthId(
       authId
     );
 
@@ -96,7 +86,7 @@ public class AccountHolderController {
     );
 
     return accountHolderMapper.toWrapperDTO(
-      createAccountHolderService.execute(newAccountHolderRequest)
+      accountHolderService.save(newAccountHolderRequest)
     );
   }
 
