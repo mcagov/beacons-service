@@ -7,9 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import uk.gov.mca.beacons.api.jpa.entities.Note;
 
 public interface NoteJpaRepository extends JpaRepository<Note, UUID> {
-  @Query(
-    nativeQuery = true,
-    value = "SELECT * FROM beacon_note WHERE beacon_id = ?1"
-  )
+  @Query(nativeQuery = true, value = "SELECT * FROM note WHERE beacon_id = ?1")
   List<Note> findAllByBeaconId(UUID beaconId);
 }
