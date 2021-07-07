@@ -36,7 +36,6 @@ public class Person {
   @Column(name = "alternative_telephone_number_2")
   private String alternativeTelephoneNumber2;
 
-  @Email
   private String email;
 
   @Enumerated(EnumType.STRING)
