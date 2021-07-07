@@ -30,9 +30,7 @@ import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
-import uk.gov.mca.beacons.api.services.CreateAccountHolderService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByAuthIdService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByIdService;
+import uk.gov.mca.beacons.api.services.AccountHolderService;
 import uk.gov.mca.beacons.api.services.GetBeaconsByAccountHolderIdService;
 
 @WebMvcTest(controllers = AccountHolderController.class)
@@ -51,13 +49,7 @@ class AccountHolderControllerUnitTest {
   private MockMvc mvc;
 
   @MockBean
-  private GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
-
-  @MockBean
-  private GetAccountHolderByIdService getAccountHolderByIdService;
-
-  @MockBean
-  private CreateAccountHolderService createAccountHolderService;
+  private AccountHolderService accountHolderService;
 
   @MockBean
   private AccountHolderMapper accountHolderMapper;
@@ -79,21 +71,19 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldRequestAccountHolderIdFromServiceByAuthId() throws Exception {
-      given(getAccountHolderByAuthIdService.execute(authId))
-        .willReturn(accountHolder);
+      given(accountHolderService.getByAuthId(authId)).willReturn(accountHolder);
 
       mvc.perform(
         get("/account-holder/auth-id/" + authId)
           .contentType(MediaType.APPLICATION_JSON)
       );
 
-      verify(getAccountHolderByAuthIdService, times(1)).execute(authId);
+      verify(accountHolderService, times(1)).getByAuthId(authId);
     }
 
     @Test
     void shouldReturn200WhenAccountHolderIdFound() throws Exception {
-      given(getAccountHolderByAuthIdService.execute(authId))
-        .willReturn(accountHolder);
+      given(accountHolderService.getByAuthId(authId)).willReturn(accountHolder);
 
       mvc
         .perform(
@@ -105,8 +95,7 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldReturnTheAccountHolderId() throws Exception {
-      given(getAccountHolderByAuthIdService.execute(authId))
-        .willReturn(accountHolder);
+      given(accountHolderService.getByAuthId(authId)).willReturn(accountHolder);
 
       mvc
         .perform(
@@ -118,7 +107,7 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldReturn404IfAccountHolderNotFound() throws Exception {
-      given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+      given(accountHolderService.getByAuthId(authId)).willReturn(null);
 
       mvc
         .perform(
@@ -181,8 +170,7 @@ class AccountHolderControllerUnitTest {
           .content(newAccountHolderHttpRequestBody)
       );
 
-      verify(createAccountHolderService, times(1))
-        .execute(createAccountHolderRequest);
+      verify(accountHolderService, times(1)).create(createAccountHolderRequest);
     }
   }
 
@@ -191,7 +179,7 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldRequestAccountHolderFromServiceByAuthId() throws Exception {
-      given(getAccountHolderByIdService.execute(accountHolderId))
+      given(accountHolderService.getById(accountHolderId))
         .willReturn(accountHolder);
 
       mvc.perform(
@@ -199,12 +187,12 @@ class AccountHolderControllerUnitTest {
           .contentType(MediaType.APPLICATION_JSON)
       );
 
-      verify(getAccountHolderByIdService, times(1)).execute(accountHolderId);
+      verify(accountHolderService, times(1)).getById(accountHolderId);
     }
 
     @Test
     void shouldReturn200WhenAccountHolderIdFound() throws Exception {
-      given(getAccountHolderByIdService.execute(accountHolderId))
+      given(accountHolderService.getById(accountHolderId))
         .willReturn(accountHolder);
 
       mvc
@@ -217,7 +205,7 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldMapAccountHolderToAWrapperDTO() throws Exception {
-      given(getAccountHolderByIdService.execute(accountHolderId))
+      given(accountHolderService.getById(accountHolderId))
         .willReturn(accountHolder);
 
       mvc.perform(
@@ -230,7 +218,7 @@ class AccountHolderControllerUnitTest {
 
     @Test
     void shouldReturn404IfAccountHolderNotFound() throws Exception {
-      given(getAccountHolderByAuthIdService.execute(authId)).willReturn(null);
+      given(accountHolderService.getByAuthId(authId)).willReturn(null);
 
       mvc
         .perform(

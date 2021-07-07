@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
-import uk.gov.mca.beacons.api.services.CreateAccountHolderService;
+import uk.gov.mca.beacons.api.services.AccountHolderService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -32,7 +32,7 @@ class RegistrationsControllerIntegrationTest {
   private WebTestClient webTestClient;
 
   @Autowired
-  private CreateAccountHolderService createAccountHolderService;
+  private AccountHolderService accountHolderService;
 
   @ParameterizedTest
   @EnumSource(
@@ -116,9 +116,7 @@ class RegistrationsControllerIntegrationTest {
       .county("Testershire")
       .build();
 
-    return createAccountHolderService
-      .execute(createAccountHolderRequest)
-      .getId();
+    return accountHolderService.create(createAccountHolderRequest).getId();
   }
 
   private String readFile(String filePath) throws IOException {
