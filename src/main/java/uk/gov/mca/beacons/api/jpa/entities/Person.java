@@ -79,4 +79,6 @@ public class Person {
   private Integer updateUserId;
 
   private Integer versioning;
+
+  private Boolean migrated;
 }
