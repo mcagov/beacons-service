@@ -24,7 +24,7 @@ class AccountHolderServiceTest {
   private AccountHolder mockAccountHolder;
 
   @Test
-  void shouldCreateTheAccountHolder() {
+  void create_shouldCreateTheAccountHolder() {
     final AccountHolderService accountHolderService = new AccountHolderService(
       mockAccountHolderGateway
     );
