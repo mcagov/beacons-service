@@ -76,7 +76,7 @@ public class CreateRegistrationService {
       owner,
       beaconId
     );
-    ownerGateway.save(request);
+    ownerGateway.create(request);
   }
 
   private void registerEmergencyContacts(
@@ -96,6 +96,6 @@ public class CreateRegistrationService {
       emergencyContact,
       beaconId
     );
-    emergencyContactGateway.save(request);
+    emergencyContactGateway.create(request);
   }
 }

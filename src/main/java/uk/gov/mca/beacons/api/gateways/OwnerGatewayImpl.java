@@ -21,7 +21,7 @@ public class OwnerGatewayImpl implements OwnerGateway {
   }
 
   @Override
-  public Person save(CreateOwnerRequest request) {
+  public Person create(CreateOwnerRequest request) {
     final Person owner = CreateOwnerRequestMapper.toBeaconPerson(request);
     return beaconPersonRepository.save(owner);
   }

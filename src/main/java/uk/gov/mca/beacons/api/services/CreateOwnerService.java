@@ -22,6 +22,6 @@ public class CreateOwnerService {
     final var createOwnerRequest = CreateOwnerRequestMapper.fromBeaconPerson(
       person
     );
-    return ownerGateway.save(createOwnerRequest);
+    return ownerGateway.create(createOwnerRequest);
   }
 }

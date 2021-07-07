@@ -24,11 +24,13 @@ public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
   }
 
   @Override
-  public void save(CreateEmergencyContactRequest request) {
+  public Person create(CreateEmergencyContactRequest request) {
     final Person emergencyContact = CreateEmergencyContactRequestMapper.toBeaconPerson(
       request
     );
     beaconPersonJpaRepository.save(emergencyContact);
+
+    return null; //TODO: needs a PERSON domain object?
   }
 
   @Override

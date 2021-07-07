@@ -93,7 +93,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   }
 
   @Override
-  public AccountHolder save(
+  public AccountHolder create(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
     final var now = LocalDateTime.now();
