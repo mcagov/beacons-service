@@ -27,7 +27,7 @@ class CreateOwnerServiceUnitTest {
     final Person person = new Person();
     final Person createdPerson = new Person();
 
-    given(ownerGateway.save(isA(CreateOwnerRequest.class)))
+    given(ownerGateway.create(isA(CreateOwnerRequest.class)))
       .willReturn(createdPerson);
 
     assertThat(createOwnerService.execute(person), is(createdPerson));

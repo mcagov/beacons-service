@@ -61,7 +61,7 @@ class OwnerGatewayImplUnitTest {
       .county(county)
       .build();
 
-    ownerGateway.save(createOwnerRequest);
+    ownerGateway.create(createOwnerRequest);
 
     verify(beaconPersonRepository).save(ownerCaptor.capture());
     final Person owner = ownerCaptor.getValue();
@@ -94,7 +94,7 @@ class OwnerGatewayImplUnitTest {
       .createdDate(now)
       .build();
 
-    ownerGateway.save(createOwnerRequest);
+    ownerGateway.create(createOwnerRequest);
     verify(beaconPersonRepository).save(ownerCaptor.capture());
     final Person owner = ownerCaptor.getValue();
     assertThat(owner.getCreatedDate(), is(now));
@@ -108,7 +108,7 @@ class OwnerGatewayImplUnitTest {
       .lastModifiedDate(now)
       .build();
 
-    ownerGateway.save(createOwnerRequest);
+    ownerGateway.create(createOwnerRequest);
     verify(beaconPersonRepository).save(ownerCaptor.capture());
     final Person owner = ownerCaptor.getValue();
     assertThat(owner.getLastModifiedDate(), is(now));

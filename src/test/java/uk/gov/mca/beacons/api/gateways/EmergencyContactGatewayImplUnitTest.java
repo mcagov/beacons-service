@@ -61,7 +61,7 @@ class EmergencyContactGatewayImplUnitTest {
       .county(county)
       .build();
 
-    emergencyContactGateway.save(createEmergencyContactRequest);
+    emergencyContactGateway.create(createEmergencyContactRequest);
 
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final Person emergencyContact = emergencyContactCaptor.getValue();
@@ -95,7 +95,7 @@ class EmergencyContactGatewayImplUnitTest {
       .createdDate(dateInThePast)
       .build();
 
-    emergencyContactGateway.save(createEmergencyContactRequest);
+    emergencyContactGateway.create(createEmergencyContactRequest);
 
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final Person emergencyContact = emergencyContactCaptor.getValue();
@@ -111,7 +111,7 @@ class EmergencyContactGatewayImplUnitTest {
       .lastModifiedDate(dateInThePast)
       .build();
 
-    emergencyContactGateway.save(createEmergencyContactRequest);
+    emergencyContactGateway.create(createEmergencyContactRequest);
 
     verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final Person emergencyContact = emergencyContactCaptor.getValue();

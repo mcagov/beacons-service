@@ -93,10 +93,10 @@ class CreateRegistrationServiceUnitTest {
 
     then(beaconJpaRepository).should(times(1)).save(beacon);
     then(beaconUseJpaRepository).should(times(1)).save(beaconUse);
-    then(ownerGateway).should(times(1)).save(isA(CreateOwnerRequest.class));
+    then(ownerGateway).should(times(1)).create(isA(CreateOwnerRequest.class));
     then(emergencyContactGateway)
       .should(times(1))
-      .save(isA(CreateEmergencyContactRequest.class));
+      .create(isA(CreateEmergencyContactRequest.class));
   }
 
   @Test
@@ -108,8 +108,8 @@ class CreateRegistrationServiceUnitTest {
     then(beaconUseJpaRepository).should(times(4)).save(beaconUse);
     then(emergencyContactGateway)
       .should(times(4))
-      .save(isA(CreateEmergencyContactRequest.class));
-    then(ownerGateway).should(times(2)).save(isA(CreateOwnerRequest.class));
+      .create(isA(CreateEmergencyContactRequest.class));
+    then(ownerGateway).should(times(2)).create(isA(CreateOwnerRequest.class));
   }
 
   private void setupMultipleBeacons() {
