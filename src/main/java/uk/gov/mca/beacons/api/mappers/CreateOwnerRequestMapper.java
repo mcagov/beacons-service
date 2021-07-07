@@ -46,6 +46,7 @@ public class CreateOwnerRequestMapper {
     owner.setCreateUserId(request.getCreateUserId());
     owner.setUpdateUserId(request.getUpdateUserId());
     owner.setVersioning(request.getVersioning());
+    owner.setMigrated(request.getMigrated());
 
     return owner;
   }
@@ -80,6 +81,7 @@ public class CreateOwnerRequestMapper {
       .createUserId(owner.getCreateUserId())
       .updateUserId(owner.getUpdateUserId())
       .versioning(owner.getVersioning())
+      .migrated(owner.getMigrated())
       .build();
   }
 
