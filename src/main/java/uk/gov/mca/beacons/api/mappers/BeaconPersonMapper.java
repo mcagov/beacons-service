@@ -39,6 +39,7 @@ public class BeaconPersonMapper {
       .createUserId(domain.getCreateUserId())
       .updateUserId(domain.getUpdateUserId())
       .versioning(domain.getVersioning())
+      .migrated(domain.getMigrated())
       .build();
     dto.setAttributes(attributes);
 
@@ -76,6 +77,7 @@ public class BeaconPersonMapper {
     beaconPerson.setCreateUserId(attributes.getCreateUserId());
     beaconPerson.setUpdateUserId(attributes.getUpdateUserId());
     beaconPerson.setVersioning(attributes.getVersioning());
+    beaconPerson.setMigrated(attributes.getMigrated());
 
     return beaconPerson;
   }
