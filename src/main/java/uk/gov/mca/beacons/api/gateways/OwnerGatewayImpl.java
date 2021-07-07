@@ -30,4 +30,19 @@ public class OwnerGatewayImpl implements OwnerGateway {
   public Person findByBeaconId(UUID beaconId) {
     return beaconPersonRepository.findOwnerByBeaconId(beaconId);
   }
+
+  @Override
+  public Person read(Person request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public Person update(Person request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public Person delete(Person request) {
+    throw new RuntimeException();
+  }
 }

@@ -193,4 +193,19 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .county(createAccountHolderRequest.getCounty())
       .build();
   }
+
+  @Override
+  public AccountHolder read(AccountHolder request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public AccountHolder update(AccountHolder request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public AccountHolder delete(AccountHolder request) {
+    throw new RuntimeException();
+  }
 }

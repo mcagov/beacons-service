@@ -37,4 +37,19 @@ public class EmergencyContactGatewayImpl implements EmergencyContactGateway {
   public List<Person> findAllByBeaconId(UUID beaconId) {
     return beaconPersonJpaRepository.findEmergencyContactsByBeaconId(beaconId);
   }
+
+  @Override
+  public Person read(Person request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public Person update(Person request) {
+    throw new RuntimeException();
+  }
+
+  @Override
+  public Person delete(Person request) {
+    throw new RuntimeException();
+  }
 }
