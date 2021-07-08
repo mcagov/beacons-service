@@ -23,6 +23,10 @@ public class AccountHolderService {
     return accountHolderGateway.create(accountHolderRequest);
   }
 
+  public AccountHolder update(UUID id, AccountHolder accountHolderRequest) {
+    return accountHolderGateway.update(id, accountHolderRequest);
+  }
+
   public AccountHolder getByAuthId(String authId) {
     return accountHolderGateway.getByAuthId(authId);
   }
