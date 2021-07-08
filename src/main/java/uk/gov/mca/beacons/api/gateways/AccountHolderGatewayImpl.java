@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.PersonType;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
+import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.mappers.AccountHolderRowMapper;
+import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
 @Repository
 @Transactional
@@ -21,10 +23,12 @@ import uk.gov.mca.beacons.api.mappers.AccountHolderRowMapper;
 public class AccountHolderGatewayImpl implements AccountHolderGateway {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory;
 
   @Autowired
-  public AccountHolderGatewayImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+  public AccountHolderGatewayImpl(NamedParameterJdbcTemplate jdbcTemplate, ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory) {
     this.jdbcTemplate = jdbcTemplate;
+    this.accountHolderPatcherFactory = accountHolderPatcherFactory;
   }
 
   @Override
@@ -93,7 +97,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   }
 
   @Override
-  public AccountHolder save(
+  public AccountHolder create(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
     final var now = LocalDateTime.now();
@@ -192,5 +196,82 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .postcode(createAccountHolderRequest.getPostcode())
       .county(createAccountHolderRequest.getCounty())
       .build();
+  }
+
+  @Override
+  public AccountHolder update(UUID id, AccountHolder accountHolderUpdate) {
+    final AccountHolder accountHolder = this.getById(id);
+    if (accountHolder == null) throw new ResourceNotFoundException();
+
+    final var patcher = accountHolderPatcherFactory
+      .getModelPatcher()
+      .withMapping(AccountHolder::getFullName, AccountHolder::setFullName)
+      .withMapping(
+        AccountHolder::getTelephoneNumber,
+        AccountHolder::setTelephoneNumber
+      )
+      .withMapping(
+        AccountHolder::getAlternativeTelephoneNumber,
+        AccountHolder::setAlternativeTelephoneNumber
+      )
+      .withMapping(
+        AccountHolder::getAddressLine1,
+        AccountHolder::setAddressLine1
+      )
+      .withMapping(
+        AccountHolder::getAddressLine2,
+        AccountHolder::setAddressLine2
+      )
+      .withMapping(
+        AccountHolder::getAddressLine3,
+        AccountHolder::setAddressLine3
+      )
+      .withMapping(
+        AccountHolder::getAddressLine4,
+        AccountHolder::setAddressLine4
+      )
+      .withMapping(AccountHolder::getTownOrCity, AccountHolder::setTownOrCity)
+      .withMapping(AccountHolder::getPostcode, AccountHolder::setPostcode)
+      .withMapping(AccountHolder::getCounty, AccountHolder::setCounty);
+
+    var updatedModel = patcher.patchModel(accountHolder, accountHolderUpdate);
+
+    var personParamMap = new MapSqlParameterSource()
+      .addValue("accountId", id)
+      .addValue("fullName", updatedModel.getFullName())
+      .addValue("telephoneNumber", updatedModel.getTelephoneNumber())
+      .addValue(
+        "alternativeTelephoneNumber",
+        updatedModel.getAlternativeTelephoneNumber()
+      )
+      .addValue("lastModifiedDate", LocalDateTime.now())
+      .addValue("addressLine1", updatedModel.getAddressLine1())
+      .addValue("addressLine2", updatedModel.getAddressLine2())
+      .addValue("addressLine3", updatedModel.getAddressLine3())
+      .addValue("addressLine4", updatedModel.getAddressLine4())
+      .addValue("townOrCity", updatedModel.getTownOrCity())
+      .addValue("postcode", updatedModel.getPostcode())
+      .addValue("county", updatedModel.getCounty());
+
+    jdbcTemplate.update(
+      "UPDATE person SET " +
+      "full_name = :fullName , " +
+      "telephone_number = :telephoneNumber , " +
+      "alternative_telephone_number = :alternative_telephone_number , " +
+      "last_modified_date = :lastModifiedDate , " +
+      "address_line_1 = :addressLine1 , " +
+      "address_line_2 = :addressLine2 , " +
+      "address_line_3 = :addressLine3 , " +
+      "address_line_4 = :addressLine4 , " +
+      "town_or_city = :townOrCity , " +
+      "postcode = :postcode , " +
+      "county = :county " +
+      "FROM account_holder " +
+      "WHERE person.id = account_holder.person_id " +
+      "and account_holder.id = :accountId",
+      personParamMap
+    );
+
+    return updatedModel;
   }
 }

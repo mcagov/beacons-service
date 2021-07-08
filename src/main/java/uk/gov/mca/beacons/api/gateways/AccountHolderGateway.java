@@ -9,5 +9,7 @@ public interface AccountHolderGateway {
 
   AccountHolder getByAuthId(String authId);
 
-  AccountHolder save(CreateAccountHolderRequest createAccountHolderRequest);
+  AccountHolder create(CreateAccountHolderRequest createAccountHolderRequest);
+
+  AccountHolder update(UUID id, AccountHolder createAccountHolderRequest);
 }

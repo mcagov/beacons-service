@@ -20,7 +20,7 @@ public class AccountHolderService {
   }
 
   public AccountHolder create(CreateAccountHolderRequest accountHolderRequest) {
-    return accountHolderGateway.save(accountHolderRequest);
+    return accountHolderGateway.create(accountHolderRequest);
   }
 
   public AccountHolder getByAuthId(String authId) {
