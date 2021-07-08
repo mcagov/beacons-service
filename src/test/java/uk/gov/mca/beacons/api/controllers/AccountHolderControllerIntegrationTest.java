@@ -170,7 +170,7 @@ class AccountHolderControllerIntegrationTest {
   class UpdateAccountHolderIdByAuthId {
 
     @Test
-    void shouldReturnTheIdForTheAccountHolderByAuthId() throws Exception {
+    void shouldReturnTheUpdatedAccountHolderByAuthId() throws Exception {
       final var authId = UUID.randomUUID().toString();
       final var accountHolderId = createAccountHolder(authId);
 

@@ -4,7 +4,6 @@
     "id": "replace-with-test-account-id",
     "type": "accountHolder",
     "attributes": {
-      "authId": "replace-with-test-auth-id",
       "email": "testy@mctestface.com",
       "fullName": "Updatey McUpdateface",
       "telephoneNumber": "01178 919191",

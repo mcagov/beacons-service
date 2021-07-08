@@ -263,7 +263,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       "UPDATE person SET " +
       "full_name = :fullName , " +
       "telephone_number = :telephoneNumber , " +
-      "alternative_telephone_number = :alternative_telephone_number , " +
+      "alternative_telephone_number = :alternativeTelephoneNumber , " +
       "last_modified_date = :lastModifiedDate , " +
       "address_line_1 = :addressLine1 , " +
       "address_line_2 = :addressLine2 , " +
