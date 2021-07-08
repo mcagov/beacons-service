@@ -23,4 +23,18 @@ public class NoteMapper {
 
     return noteEntity;
   }
+
+  public static Note fromNoteEntity(NoteEntity noteEntity) {
+    return Note
+      .builder()
+      .id(noteEntity.getId())
+      .beaconId(noteEntity.getBeaconId())
+      .text(noteEntity.getText())
+      .type(noteEntity.getType())
+      .createdDate(noteEntity.getCreatedDate())
+      .personId(noteEntity.getPersonId())
+      .fullName(noteEntity.getFullName())
+      .email(noteEntity.getEmail())
+      .build();
+  }
 }
