@@ -33,7 +33,7 @@ class BeaconGatewayImplUnitTest {
   private ArgumentCaptor<Beacon> beaconArgumentCapture;
 
   @Test
-  void shouldUpdateTheBeaconForAGivenId() {
+  void shouldDeleteTheBeaconForAGivenId() {
     final var beaconId = UUID.randomUUID();
     final var beacon = new Beacon();
     given(beaconRepository.findById(beaconId)).willReturn(Optional.of(beacon));
