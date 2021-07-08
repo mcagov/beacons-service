@@ -58,7 +58,10 @@ public class AccountHolderGatewayImplTest {
     )
       .willReturn(accountHolder);
 
-    var gateway = new AccountHolderGatewayImpl(jdbcMock, new ModelPatcherFactory<AccountHolder>());
+    var gateway = new AccountHolderGatewayImpl(
+      jdbcMock,
+      new ModelPatcherFactory<AccountHolder>()
+    );
     gateway.update(accountId, accountHolderUpdate);
 
     verify(jdbcMock).update(any(String.class), sqlParamsCaptor.capture());
@@ -112,7 +115,10 @@ public class AccountHolderGatewayImplTest {
     )
       .willReturn(accountHolder);
 
-    var gateway = new AccountHolderGatewayImpl(jdbcMock, new ModelPatcherFactory<AccountHolder>());
+    var gateway = new AccountHolderGatewayImpl(
+      jdbcMock,
+      new ModelPatcherFactory<AccountHolder>()
+    );
     var updatedModel = gateway.update(accountId, accountHolderUpdate);
 
     assertThat(updatedModel.getFullName(), is("Bob Marley"));

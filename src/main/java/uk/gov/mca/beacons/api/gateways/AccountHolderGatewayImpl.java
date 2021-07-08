@@ -26,7 +26,10 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   private final ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory;
 
   @Autowired
-  public AccountHolderGatewayImpl(NamedParameterJdbcTemplate jdbcTemplate, ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory) {
+  public AccountHolderGatewayImpl(
+    NamedParameterJdbcTemplate jdbcTemplate,
+    ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory
+  ) {
     this.jdbcTemplate = jdbcTemplate;
     this.accountHolderPatcherFactory = accountHolderPatcherFactory;
   }
