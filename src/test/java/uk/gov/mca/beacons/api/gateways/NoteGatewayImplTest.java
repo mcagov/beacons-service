@@ -51,7 +51,7 @@ class NoteGatewayImplTest {
       .email(email)
       .build();
 
-    noteGateway.save(note);
+    noteGateway.create(note);
 
     verify(noteRepository).save(noteCaptor.capture());
     final NoteEntity createdNote = noteCaptor.getValue();
