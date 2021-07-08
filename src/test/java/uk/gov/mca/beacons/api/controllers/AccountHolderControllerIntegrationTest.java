@@ -166,6 +166,36 @@ class AccountHolderControllerIntegrationTest {
     }
   }
 
+  @Nested
+  class UpdateAccountHolderIdByAuthId {
+
+    @Test
+    void shouldReturnTheIdForTheAccountHolderByAuthId() throws Exception {
+      final var authId = UUID.randomUUID().toString();
+      final var accountHolderId = createAccountHolder(authId);
+
+      String updateRequest = readFile(
+        "src/test/resources/fixtures/updateAccountHolderRequest.json"
+      )
+        .replace("replace-with-test-account-id", accountHolderId);
+      String expectedResponse = readFile(
+        "src/test/resources/fixtures/updateAccountHolderResponse.json"
+      )
+        .replace("replace-with-test-account-id", accountHolderId);
+
+      var response = webTestClient
+        .patch()
+        .uri("/account-holder/" + accountHolderId)
+        .body(BodyInserters.fromValue(updateRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectBody();
+
+      response.json(expectedResponse);
+      response.jsonPath("$.data.id").isNotEmpty();
+    }
+  }
+
   private String readFile(String filePath) throws IOException {
     return new String(Files.readAllBytes(Paths.get(filePath)));
   }
