@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS note (
     id uuid PRIMARY KEY,
     beacon_id uuid REFERENCES beacon (id),
-    note text,
+    text text,
     type text,
     created_date timestamp,
     person_id uuid,
