@@ -25,16 +25,27 @@ public class NoteMapper {
   }
 
   public static Note fromNoteEntity(NoteEntity noteEntity) {
-    return Note
-      .builder()
-      .id(noteEntity.getId())
-      .beaconId(noteEntity.getBeaconId())
-      .text(noteEntity.getText())
-      .type(noteEntity.getType())
-      .createdDate(noteEntity.getCreatedDate())
-      .personId(noteEntity.getPersonId())
-      .fullName(noteEntity.getFullName())
-      .email(noteEntity.getEmail())
-      .build();
+    Note note = new Note();
+
+    note.setId(noteEntity.getId());
+    note.setBeaconId(noteEntity.getBeaconId());
+    note.setText(noteEntity.getText());
+    note.setType(noteEntity.getType());
+    note.setCreatedDate(noteEntity.getCreatedDate());
+    note.setPersonId(noteEntity.getPersonId());
+    note.setFullName(noteEntity.getFullName());
+    note.setEmail(noteEntity.getEmail());
+
+    return note;
+    //      .builder()
+    //      .id(noteEntity.getId())
+    //      .beaconId(noteEntity.getBeaconId())
+    //      .text(noteEntity.getText())
+    //      .type(noteEntity.getType())
+    //      .createdDate(noteEntity.getCreatedDate())
+    //      .personId(noteEntity.getPersonId())
+    //      .fullName(noteEntity.getFullName())
+    //      .email(noteEntity.getEmail())
+    //      .build();
   }
 }
