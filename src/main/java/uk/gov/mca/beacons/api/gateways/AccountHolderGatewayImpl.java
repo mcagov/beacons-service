@@ -237,9 +237,12 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .withMapping(AccountHolder::getPostcode, AccountHolder::setPostcode)
       .withMapping(AccountHolder::getCounty, AccountHolder::setCounty);
 
-    var updatedModel = patcher.patchModel(accountHolder, accountHolderUpdate);
+    final var updatedModel = patcher.patchModel(
+      accountHolder,
+      accountHolderUpdate
+    );
 
-    var personParamMap = new MapSqlParameterSource()
+    final var personParamMap = new MapSqlParameterSource()
       .addValue("accountId", id)
       .addValue("fullName", updatedModel.getFullName())
       .addValue("telephoneNumber", updatedModel.getTelephoneNumber())
