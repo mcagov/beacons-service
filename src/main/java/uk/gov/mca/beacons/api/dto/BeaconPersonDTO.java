@@ -60,5 +60,6 @@ public class BeaconPersonDTO extends DomainDTO<Attributes> {
     private Integer createUserId;
     private Integer updateUserId;
     private Integer versioning;
+    private Boolean migrated;
   }
 }
