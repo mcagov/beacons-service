@@ -93,7 +93,8 @@ public class AccountHolderController {
 
   @PatchMapping(value = "/{id}")
   @ResponseStatus(HttpStatus.CREATED)
-  public WrapperDTO<AccountHolderDTO> updateAccountHolder(@PathVariable("id") UUID id,
+  public WrapperDTO<AccountHolderDTO> updateAccountHolder(
+    @PathVariable("id") UUID id,
     @RequestBody WrapperDTO<AccountHolderDTO> dto
   ) {
     final AccountHolder newAccountHolderRequest = accountHolderMapper.fromDTO(
