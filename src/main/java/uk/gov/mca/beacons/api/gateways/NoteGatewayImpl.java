@@ -20,7 +20,7 @@ public class NoteGatewayImpl implements NoteGateway {
   @Override
   public Note create(Note note) {
     final NoteEntity noteEntity = NoteMapper.toNoteEntity(note);
-    final NoteEntity createdNote = noteJpaRepository.save(noteEntity);
-    return NoteMapper.fromNoteEntity(createdNote);
+    final NoteEntity createdEntity = noteJpaRepository.save(noteEntity);
+    return NoteMapper.fromNoteEntity(createdEntity);
   }
 }

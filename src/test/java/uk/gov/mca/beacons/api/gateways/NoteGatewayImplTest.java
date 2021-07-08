@@ -83,15 +83,15 @@ class NoteGatewayImplTest {
   @Test
   void shouldSetCreatedDateIfNotProvided() {
     final Note note = new Note();
-    final NoteEntity createdNote = new NoteEntity();
+    final NoteEntity createdEntity = new NoteEntity();
 
-    when(noteRepository.save(noteCaptor.capture())).thenReturn(createdNote);
+    when(noteRepository.save(noteCaptor.capture())).thenReturn(createdEntity);
 
     noteGateway.create(note);
 
-    final NoteEntity createdEntity = noteCaptor.getValue();
+    final NoteEntity entity = noteCaptor.getValue();
     assertThat(
-      createdEntity.getCreatedDate().getDayOfYear(),
+      entity.getCreatedDate().getDayOfYear(),
       is(equalTo(LocalDateTime.now().getDayOfYear()))
     );
   }
