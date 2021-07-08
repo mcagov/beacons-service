@@ -1,11 +1,14 @@
 package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -63,5 +66,19 @@ class NoteGatewayImplTest {
     assertThat(createdNote.getPersonId(), is(personId));
     assertThat(createdNote.getFullName(), is(fullName));
     assertThat(createdNote.getEmail(), is(email));
+  }
+
+  @Test
+  void shouldSetCreatedDateIfNotProvided() {
+    final Note note = Note.builder().build();
+
+    noteGateway.create(note);
+
+    verify(noteRepository).save(noteCaptor.capture());
+    final NoteEntity createdNote = noteCaptor.getValue();
+    assertThat(
+      createdNote.getCreatedDate().getDayOfYear(),
+      is(equalTo(LocalDateTime.now().getDayOfYear()))
+    );
   }
 }
