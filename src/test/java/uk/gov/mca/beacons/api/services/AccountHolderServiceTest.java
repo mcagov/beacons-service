@@ -31,7 +31,7 @@ class AccountHolderServiceTest {
     final CreateAccountHolderRequest accountHolder = new CreateAccountHolderRequest();
     final AccountHolder createdAccountHolder = new AccountHolder();
 
-    given(mockAccountHolderGateway.save(accountHolder))
+    given(mockAccountHolderGateway.create(accountHolder))
       .willReturn(createdAccountHolder);
 
     assertThat(
