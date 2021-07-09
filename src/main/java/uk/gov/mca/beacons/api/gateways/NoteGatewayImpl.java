@@ -11,15 +11,20 @@ import uk.gov.mca.beacons.api.mappers.NoteMapper;
 @Transactional
 public class NoteGatewayImpl implements NoteGateway {
 
+  private NoteMapper noteMapper;
   private NoteJpaRepository noteJpaRepository;
 
-  public NoteGatewayImpl(NoteJpaRepository noteRepository) {
+  public NoteGatewayImpl(
+    NoteMapper noteMapper,
+    NoteJpaRepository noteRepository
+  ) {
+    this.noteMapper = noteMapper;
     this.noteJpaRepository = noteRepository;
   }
 
   @Override
   public Note create(Note note) {
-    final NoteEntity noteEntity = NoteMapper.toNoteEntity(note);
+    final NoteEntity noteEntity = noteMapper.toNoteEntity(note);
     final NoteEntity createdEntity = noteJpaRepository.save(noteEntity);
     return NoteMapper.fromNoteEntity(createdEntity);
   }

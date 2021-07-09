@@ -6,28 +6,33 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.jpa.NoteJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
+import uk.gov.mca.beacons.api.mappers.NoteMapper;
 
 @ExtendWith(MockitoExtension.class)
 class NoteGatewayImplTest {
 
-  @InjectMocks
-  private NoteGatewayImpl noteGateway;
-
   @Mock
   private NoteJpaRepository noteRepository;
+
+  private Clock fixedClock = Clock.fixed(
+    Instant.parse("2021-01-01T00:00:00Z"),
+    ZoneId.of("UTC")
+  );
 
   @Captor
   private ArgumentCaptor<NoteEntity> noteCaptor;
@@ -66,6 +71,11 @@ class NoteGatewayImplTest {
       .email(email)
       .build();
 
+    final NoteMapper noteMapper = new NoteMapper(fixedClock);
+    final NoteGateway noteGateway = new NoteGatewayImpl(
+      noteMapper,
+      noteRepository
+    );
     when(noteRepository.save(any(NoteEntity.class))).thenReturn(createdEntity);
 
     final Note createdNote = noteGateway.create(note);
@@ -85,14 +95,20 @@ class NoteGatewayImplTest {
     final Note note = new Note();
     final NoteEntity createdEntity = new NoteEntity();
 
+    final NoteMapper noteMapper = new NoteMapper(fixedClock);
+    final NoteGateway noteGateway = new NoteGatewayImpl(
+      noteMapper,
+      noteRepository
+    );
+
     when(noteRepository.save(noteCaptor.capture())).thenReturn(createdEntity);
 
     noteGateway.create(note);
 
     final NoteEntity entity = noteCaptor.getValue();
     assertThat(
-      entity.getCreatedDate().getDayOfYear(),
-      is(equalTo(LocalDateTime.now().getDayOfYear()))
+      entity.getCreatedDate(),
+      is(equalTo(LocalDateTime.now(fixedClock)))
     );
   }
 }
