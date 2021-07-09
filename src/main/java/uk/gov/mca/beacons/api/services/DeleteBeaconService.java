@@ -5,6 +5,7 @@ import static java.time.LocalDateTime.now;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequest;
@@ -33,10 +34,10 @@ public class DeleteBeaconService {
 
   public void delete(DeleteBeaconRequest request) {
     beaconGateway.delete(request.getBeaconId());
-    final var accountHolder = accountHolderGateway.getById(
+    final AccountHolder accountHolder = accountHolderGateway.getById(
       request.getAccountHolderId()
     );
-    final var note = Note
+    final Note note = Note
       .builder()
       .beaconId(request.getBeaconId())
       .email(accountHolder.getEmail())
