@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DeleteBeaconRequest {
+public class DeleteBeaconRequestDTO {
 
   private UUID beaconId;
   private UUID accountHolderId;

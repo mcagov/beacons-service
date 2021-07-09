@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
-import uk.gov.mca.beacons.api.dto.DeleteBeaconRequest;
+import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
@@ -32,7 +32,7 @@ public class DeleteBeaconService {
     this.noteGateway = noteGateway;
   }
 
-  public void delete(DeleteBeaconRequest request) {
+  public void delete(DeleteBeaconRequestDTO request) {
     beaconGateway.delete(request.getBeaconId());
     final AccountHolder accountHolder = accountHolderGateway.getById(
       request.getAccountHolderId()
