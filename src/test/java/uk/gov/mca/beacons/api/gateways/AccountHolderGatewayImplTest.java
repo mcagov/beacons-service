@@ -9,10 +9,13 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import java.time.ZoneId;
+import java.time.Instant;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -28,6 +31,8 @@ public class AccountHolderGatewayImplTest {
 
   @Mock
   private NamedParameterJdbcTemplate jdbcMock;
+
+  private final Clock fixedClock = Clock.fixed(Instant.parse("1983-03-13T13:03:00Z"), ZoneId.of("UTC"));
 
   @Captor
   ArgumentCaptor<MapSqlParameterSource> sqlParamsCaptor;
@@ -60,7 +65,8 @@ public class AccountHolderGatewayImplTest {
 
     var gateway = new AccountHolderGatewayImpl(
       jdbcMock,
-      new ModelPatcherFactory<AccountHolder>()
+      new ModelPatcherFactory<AccountHolder>(),
+      fixedClock
     );
     gateway.update(accountId, accountHolderUpdate);
 
@@ -84,8 +90,8 @@ public class AccountHolderGatewayImplTest {
     assertThat(sqlParams.get("county"), is("England"));
     var modifiedDate = (LocalDateTime) sqlParams.get("lastModifiedDate");
     assertThat(
-      modifiedDate.getDayOfYear(),
-      is(equalTo(LocalDateTime.now().getDayOfYear()))
+      modifiedDate,
+      is(equalTo(LocalDateTime.now(fixedClock)))
     );
   }
 
@@ -117,7 +123,8 @@ public class AccountHolderGatewayImplTest {
 
     var gateway = new AccountHolderGatewayImpl(
       jdbcMock,
-      new ModelPatcherFactory<AccountHolder>()
+      new ModelPatcherFactory<AccountHolder>(),
+      fixedClock
     );
     var updatedModel = gateway.update(accountId, accountHolderUpdate);
 
