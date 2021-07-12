@@ -3,7 +3,7 @@ package uk.gov.mca.beacons.api.hateoas;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
-import static uk.gov.mca.beacons.api.hateoas.BeaconRolesService.SupportedPermissions;
+import static uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ class BeaconLinkStrategyTest {
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
 
-    userRoles = new ArrayList<SupportedPermissions>();
+    userRoles = new ArrayList<>();
 
     linkStrategy = new BeaconLinkStrategy(beaconRolesService);
   }

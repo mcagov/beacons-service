@@ -1,40 +1,22 @@
 package uk.gov.mca.beacons.api.hateoas;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.gateways.AuthGateway;
+import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 
 @Service
 public class BeaconRolesService {
 
+  private AuthGateway authGateway;
+
+  @Autowired
+  public BeaconRolesService(AuthGateway authGateway) {
+    this.authGateway = authGateway;
+  }
+
   public List<SupportedPermissions> getUserRoles() {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null) return new ArrayList<>();
-
-    return authentication
-      .getAuthorities()
-      .stream()
-      .map(this::SupportedPermissionsFromString)
-      .filter(Objects::nonNull)
-      .collect(Collectors.toList());
-  }
-
-  private SupportedPermissions SupportedPermissionsFromString(
-    GrantedAuthority role
-  ) {
-    try {
-      return SupportedPermissions.valueOf(role.toString());
-    } catch (IllegalArgumentException e) {
-      return null;
-    }
-  }
-
-  public enum SupportedPermissions {
-    APPROLE_UPDATE_RECORDS,
+    return authGateway.getUserRoles();
   }
 }
