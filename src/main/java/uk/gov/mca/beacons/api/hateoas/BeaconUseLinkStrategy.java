@@ -10,6 +10,7 @@ import uk.gov.mca.beacons.api.controllers.BeaconUsesController;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @Service
 public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {

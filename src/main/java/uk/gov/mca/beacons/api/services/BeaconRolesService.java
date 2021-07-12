@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.hateoas;
+package uk.gov.mca.beacons.api.services;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

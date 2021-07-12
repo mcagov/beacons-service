@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.gateways.AuthGateway;
 import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
+import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconRolesServiceTest {
