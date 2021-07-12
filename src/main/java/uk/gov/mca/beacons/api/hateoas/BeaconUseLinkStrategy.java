@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.controllers.BeaconUsesController;
-import uk.gov.mca.beacons.api.dto.BeaconUseDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
