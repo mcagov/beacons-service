@@ -37,7 +37,7 @@ public class NoteMapper {
       .build();
   }
 
-  public static Note fromNoteEntity(NoteEntity noteEntity) {
+  public Note fromNoteEntity(NoteEntity noteEntity) {
     return Note
       .builder()
       .id(noteEntity.getId())
@@ -51,7 +51,7 @@ public class NoteMapper {
       .build();
   }
 
-  public static Note fromDTO(NoteDTO noteDTO) {
+  public Note fromDTO(NoteDTO noteDTO) {
     return Note
       .builder()
       .id(noteDTO.getId())
@@ -65,7 +65,7 @@ public class NoteMapper {
       .build();
   }
 
-  public static NoteDTO toDTO(Note note) {
+  public NoteDTO toDTO(Note note) {
     final NoteDTO noteDTO = new NoteDTO();
     noteDTO.setId(note.getId());
 
@@ -84,7 +84,7 @@ public class NoteMapper {
     return noteDTO;
   }
 
-  public static WrapperDTO<NoteDTO> toWrapperDTO(Note note) {
+  public WrapperDTO<NoteDTO> toWrapperDTO(Note note) {
     final WrapperDTO<NoteDTO> wrapperDTO = new WrapperDTO<>();
     wrapperDTO.setData(toDTO(note));
     return wrapperDTO;

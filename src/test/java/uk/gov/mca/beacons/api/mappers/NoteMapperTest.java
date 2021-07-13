@@ -4,12 +4,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
@@ -19,12 +22,20 @@ import uk.gov.mca.beacons.api.dto.WrapperDTO;
 @TestInstance(Lifecycle.PER_CLASS)
 class NoteMapperTest {
 
+  @InjectMocks
+  private NoteMapper noteMapper;
+
+  @Mock
+  private Clock clock;
+
   private Note note;
   private NoteDTO noteDTO;
   private Attributes DTOAttributes;
 
   @BeforeAll
   public void setup() {
+    noteMapper = new NoteMapper(clock);
+
     final UUID id = UUID.randomUUID();
     final UUID beaconId = UUID.randomUUID();
     final String text = "Beacon pancakes, making beacon pancakes";
@@ -66,7 +77,7 @@ class NoteMapperTest {
 
   @Test
   void fromDTO_shouldSetAllTheFieldsOnTheNoteDTOFromTheNote() {
-    final Note mappedNote = NoteMapper.fromDTO(noteDTO);
+    final Note mappedNote = noteMapper.fromDTO(noteDTO);
 
     assertThat(mappedNote.getId(), is(noteDTO.getId()));
     assertThat(mappedNote.getBeaconId(), is(DTOAttributes.getBeaconId()));
@@ -80,7 +91,7 @@ class NoteMapperTest {
 
   @Test
   void toDTO_shouldInstantiateANoteFromTheNoteDTO() {
-    final NoteDTO mappedDTO = NoteMapper.toDTO(note);
+    final NoteDTO mappedDTO = noteMapper.toDTO(note);
     final Attributes mappedAttributes = mappedDTO.getAttributes();
 
     assertThat(mappedDTO.getId(), is(note.getId()));
@@ -95,7 +106,7 @@ class NoteMapperTest {
 
   @Test
   void toWrapperDTO_shouldConvertANoteToAWrappedDTO() {
-    final WrapperDTO<NoteDTO> wrappedNote = NoteMapper.toWrapperDTO(note);
+    final WrapperDTO<NoteDTO> wrappedNote = noteMapper.toWrapperDTO(note);
 
     assertNotNull(wrappedNote.getMeta());
     assertNotNull(wrappedNote.getData());
