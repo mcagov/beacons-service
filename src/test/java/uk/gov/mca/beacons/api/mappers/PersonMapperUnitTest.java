@@ -15,7 +15,6 @@ class PersonMapperUnitTest {
     final var beaconPersonMapper = new BeaconPersonMapper();
     final Person person = new Person();
     final UUID personId = UUID.randomUUID();
-    final UUID beaconId = UUID.randomUUID();
     final String fullName = "Phoebe Buffay";
     final String telephoneNumber = "07777777777";
     final String telephoneNumber2 = "07888888888";

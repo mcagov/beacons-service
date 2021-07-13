@@ -116,6 +116,7 @@ public class BeaconsResponseFactory {
       .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("rawtypes")
   private BeaconDTO buildBeaconDTO(
     Beacon beacon,
     List<BeaconUseDTO> useDTOs,

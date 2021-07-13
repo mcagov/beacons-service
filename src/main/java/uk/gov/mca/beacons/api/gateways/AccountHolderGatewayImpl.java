@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -24,14 +25,17 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory;
+  private final Clock clock;
 
   @Autowired
   public AccountHolderGatewayImpl(
     NamedParameterJdbcTemplate jdbcTemplate,
-    ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory
+    ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory,
+    Clock clock
   ) {
     this.jdbcTemplate = jdbcTemplate;
     this.accountHolderPatcherFactory = accountHolderPatcherFactory;
+    this.clock = clock;
   }
 
   @Override
@@ -103,7 +107,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   public AccountHolder create(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
-    final var now = LocalDateTime.now();
+    final var now = LocalDateTime.now(clock);
     final var personId = UUID.randomUUID();
     final SqlParameterSource personParamMap = new MapSqlParameterSource()
       .addValue("id", personId)
@@ -250,7 +254,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
         "alternativeTelephoneNumber",
         updatedModel.getAlternativeTelephoneNumber()
       )
-      .addValue("lastModifiedDate", LocalDateTime.now())
+      .addValue("lastModifiedDate", LocalDateTime.now(clock))
       .addValue("addressLine1", updatedModel.getAddressLine1())
       .addValue("addressLine2", updatedModel.getAddressLine2())
       .addValue("addressLine3", updatedModel.getAddressLine3())
@@ -263,7 +267,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       "UPDATE person SET " +
       "full_name = :fullName , " +
       "telephone_number = :telephoneNumber , " +
-      "alternative_telephone_number = :alternative_telephone_number , " +
+      "alternative_telephone_number = :alternativeTelephoneNumber , " +
       "last_modified_date = :lastModifiedDate , " +
       "address_line_1 = :addressLine1 , " +
       "address_line_2 = :addressLine2 , " +
