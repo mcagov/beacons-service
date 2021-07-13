@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.services;
 
+import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import uk.gov.mca.beacons.api.gateways.NoteGateway;
 @Service
 @Transactional
 public class DeleteBeaconService {
+
+  private static final String TEMPLATE_REASON_TEXT =
+    "The account holder deleted the record with reason: '%s'";
 
   private final BeaconGateway beaconGateway;
   private final AccountHolderGateway accountHolderGateway;
@@ -46,7 +50,7 @@ public class DeleteBeaconService {
       .fullName(accountHolder.getFullName())
       .personId(request.getAccountHolderId())
       .type(NoteType.RECORD_HISTORY)
-      .text(request.getReason())
+      .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
       .createdDate(now())
       .build();
     noteGateway.create(note);
