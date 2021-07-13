@@ -9,6 +9,7 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
+import uk.gov.mca.beacons.api.exceptions.AccountHolderNotFoundException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
@@ -33,10 +34,11 @@ public class DeleteBeaconService {
   }
 
   public void delete(DeleteBeaconRequestDTO request) {
-    beaconGateway.delete(request.getBeaconId());
     final AccountHolder accountHolder = accountHolderGateway.getById(
       request.getAccountHolderId()
     );
+    if (accountHolder == null) throw new AccountHolderNotFoundException();
+
     final Note note = Note
       .builder()
       .beaconId(request.getBeaconId())
@@ -48,5 +50,7 @@ public class DeleteBeaconService {
       .createdDate(now())
       .build();
     noteGateway.create(note);
+
+    beaconGateway.delete(request.getBeaconId());
   }
 }
