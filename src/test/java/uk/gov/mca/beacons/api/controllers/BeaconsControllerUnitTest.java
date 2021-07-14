@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -132,7 +134,20 @@ class BeaconsControllerUnitTest {
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
         .andExpect(status().isOk());
-      then(deleteBeaconService).should(times(1)).delete(deleteBeaconRequest);
+
+      final var deleteBeaconRequestCaptor = ArgumentCaptor.forClass(
+        DeleteBeaconRequestDTO.class
+      );
+      then(deleteBeaconService)
+        .should(times(1))
+        .delete(deleteBeaconRequestCaptor.capture());
+      final var deleteBeaconRequestValue = deleteBeaconRequestCaptor.getValue();
+      assertThat(deleteBeaconRequestValue.getBeaconId(), is(beaconId));
+      assertThat(
+        deleteBeaconRequestValue.getReason(),
+        is("Unused on my boat anymore")
+      );
+      assertThat(deleteBeaconRequestValue.getActorId(), is(actorId));
     }
 
     @Test
