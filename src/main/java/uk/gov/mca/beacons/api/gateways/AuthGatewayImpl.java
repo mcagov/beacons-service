@@ -4,12 +4,12 @@ import com.azure.spring.aad.webapi.AADOAuth2AuthenticatedPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.User;
 
 @Component
@@ -22,11 +22,16 @@ public class AuthGatewayImpl implements AuthGateway {
     final var userAttributes = user.getAttributes();
 
     //    TODO: how to handle "Beacon Registry" notes
-    UUID authId = UUID.fromString((String) userAttributes.get("oid"));
-    String name = (String) userAttributes.get("name");
-    String email = (String) userAttributes.get("email");
+    final String authId = (String) userAttributes.get("oid");
+    final String name = (String) userAttributes.get("name");
+    final String email = (String) userAttributes.get("email");
 
-    return User.builder().authId(authId).fullName(name).email(email).build();
+    return BackOfficeUser
+      .builder()
+      .authId(authId)
+      .fullName(name)
+      .email(email)
+      .build();
   }
 
   @Override
