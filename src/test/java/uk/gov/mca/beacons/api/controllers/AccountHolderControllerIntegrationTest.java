@@ -143,19 +143,7 @@ class AccountHolderControllerIntegrationTest {
     void shouldRespondWithTheListOfBeaconsForTheAccountHolder()
       throws Exception {
       final String createdAccountHolderId = createAccountHolder();
-
-      final String createBeaconRequest = readFile(
-        "src/test/resources/fixtures/createBeaconRequest.json"
-      )
-        .replace("account-holder-id-placeholder", createdAccountHolderId);
-      webTestClient
-        .post()
-        .uri("/registrations/register")
-        .bodyValue(createBeaconRequest)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .exchange()
-        .expectStatus()
-        .isCreated();
+      createBeacon(createdAccountHolderId);
 
       final String expectedResponse = readFile(
         "src/test/resources/fixtures/getBeaconsByAccountHolderResponse.json"
