@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -181,7 +182,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .method(HttpMethod.DELETE)
-        .uri("/beacons" + beaconId)
+        .uri("/beacons/" + beaconId)
         .body(BodyInserters.fromValue(deleteBeaconRequest))
         .exchange()
         .expectStatus()
@@ -279,7 +280,8 @@ class AccountHolderControllerIntegrationTest {
 
     return new ObjectMapper()
       .readValue(responseBody, ObjectNode.class)
-      .get("beacons[0]")
+      .get("beacons")
+      .get(0)
       .get("id")
       .textValue();
   }
