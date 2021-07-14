@@ -62,7 +62,7 @@ class DeleteBeaconServiceUnitTest {
   }
 
   @Test
-  void shouldNotDeleteTheBeaconOrCreateTheNoteIfTheAccountHolderCannotBeFound() {
+  void shouldNotDeleteTheBeaconOrCreateTheNoteIfAUserCannotBeFound() {
     final var accountHolderId = UUID.randomUUID();
     final var request = DeleteBeaconRequestDTO
       .builder()

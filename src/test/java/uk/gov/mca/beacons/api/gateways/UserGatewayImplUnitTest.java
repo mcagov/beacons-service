@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 import java.util.UUID;
@@ -12,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
-import uk.gov.mca.beacons.api.domain.AzureAdUser;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 
 @ExtendWith(MockitoExtension.class)
 class UserGatewayImplUnitTest {
@@ -51,7 +50,7 @@ class UserGatewayImplUnitTest {
     given(accountHolderGateway.getById(id)).willReturn(null);
     given(authGateway.getUser())
       .willReturn(
-        AzureAdUser
+        BackOfficeUser
           .builder()
           .authId("0fd158e9-d648-4b11-88d9-7bc57080aa5d")
           .fullName("Back Office Crew")

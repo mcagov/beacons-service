@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AzureAdUser implements User {
+public class BackOfficeUser implements User {
 
   private String authId;
   private String fullName;
