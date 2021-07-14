@@ -22,6 +22,13 @@ public class UserGatewayImpl implements UserGateway {
     this.authGateway = authGateway;
   }
 
+  /**
+   * A user performing an action within beacons could be either an account holder or a backoffice user.
+   * This gateway encapsulates the logic for retrieving a either user and returns a {@link User} domain object.
+   *
+   * @param id The id of the user
+   * @return The user domain object
+   */
   @Override
   public User getUserById(UUID id) {
     final var accountHolderUser = accountHolderGateway.getById(id);
