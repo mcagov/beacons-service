@@ -91,13 +91,11 @@ class NoteControllerUnitTest {
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
       given(getUserService.getUser()).willReturn(user);
 
-      mvc
-        .perform(
-          post("/note")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(newNoteRequest)
-        )
-        .andExpect(status().isCreated());
+      mvc.perform(
+        post("/note")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newNoteRequest)
+      );
 
       verify(getUserService, times(1)).getUser();
     }
@@ -112,15 +110,31 @@ class NoteControllerUnitTest {
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
 
-      mvc
-        .perform(
-          post("/note")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(newNoteRequest)
-        )
-        .andExpect(status().isCreated());
+      mvc.perform(
+        post("/note")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newNoteRequest)
+      );
 
       verify(getUserService, times(0)).getUser();
+    }
+
+    @Test
+    void shouldCallTheNoteServiceToCreateANewNote() throws Exception {
+      final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
+      final String newNoteRequest = new ObjectMapper()
+        .writeValueAsString(newNoteDTO);
+      note.setUser(user);
+
+      given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
+
+      mvc.perform(
+        post("/note")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(newNoteRequest)
+      );
+
+      verify(noteService, times(1)).create(note);
     }
   }
 }
