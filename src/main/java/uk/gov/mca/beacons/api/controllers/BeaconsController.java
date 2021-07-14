@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +32,19 @@ public class BeaconsController {
   private final BeaconsService beaconsService;
   private final BeaconsResponseFactory responseFactory;
   private final BeaconMapper beaconMapper;
+  private final DeleteBeaconService deleteBeaconService;
 
   @Autowired
   public BeaconsController(
     BeaconsService beaconsService,
     BeaconsResponseFactory responseFactory,
-    BeaconMapper beaconMapper
+    BeaconMapper beaconMapper,
+    DeleteBeaconService deleteBeaconService
   ) {
     this.beaconsService = beaconsService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
+    this.deleteBeaconService = deleteBeaconService;
   }
 
   @GetMapping
@@ -68,6 +70,19 @@ public class BeaconsController {
     if (!uuid.equals(dto.getData().getId())) throw new InvalidPatchException();
 
     beaconsService.update(uuid, update);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping(value = "/{uuid}")
+  public ResponseEntity<Void> delete(
+    @PathVariable("uuid") UUID id,
+    @RequestBody DeleteBeaconRequestDTO requestDTO
+  ) {
+    if (
+      !id.equals(requestDTO.getBeaconId())
+    ) throw new InvalidBeaconDeleteException();
+
+    deleteBeaconService.delete(requestDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

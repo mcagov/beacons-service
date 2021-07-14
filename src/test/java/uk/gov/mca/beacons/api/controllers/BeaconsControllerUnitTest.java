@@ -1,11 +1,15 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,11 +26,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
+import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.mappers.BeaconMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.services.BeaconsService;
+import uk.gov.mca.beacons.api.services.DeleteBeaconService;
 
 @WebMvcTest(controllers = BeaconsController.class)
 @AutoConfigureMockMvc
@@ -44,6 +50,9 @@ class BeaconsControllerUnitTest {
 
   @MockBean
   private BeaconsResponseFactory beaconsResponseFactory;
+
+  @MockBean
+  private DeleteBeaconService deleteBeaconService;
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -99,6 +108,79 @@ class BeaconsControllerUnitTest {
         .andExpect(status().isConflict());
 
       then(beaconsService).should(never()).update(beaconId, beaconToUpdate);
+    }
+  }
+
+  @Nested
+  class DeleteBeacon {
+
+    @Test
+    void shouldDeleteTheBeacon() throws Exception {
+      final var beaconId = UUID.randomUUID();
+      final var actorId = UUID.randomUUID();
+      final var deleteBeaconRequest = DeleteBeaconRequestDTO
+        .builder()
+        .beaconId(beaconId)
+        .reason("Unused on my boat anymore")
+        .actorId(actorId)
+        .build();
+
+      mockMvc
+        .perform(
+          delete("/beacons/" + beaconId)
+            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+        )
+        .andExpect(status().isOk());
+      then(deleteBeaconService).should(times(1)).delete(deleteBeaconRequest);
+    }
+
+    @Test
+    void shouldNotAcceptTheJsonPayloadIfTheReasonIsNull() throws Exception {
+      final var beaconId = UUID.randomUUID();
+      final var actorId = UUID.randomUUID();
+      final var deleteBeaconRequest = DeleteBeaconRequestDTO
+        .builder()
+        .beaconId(beaconId)
+        .actorId(actorId)
+        .build();
+
+      mockMvc
+        .perform(
+          delete("/beacons/" + beaconId)
+            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+        )
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.errors.length()", is(1)))
+        .andExpect(jsonPath("$.errors[0].field", is("reason")))
+        .andExpect(
+          jsonPath(
+            "$.errors[0].description",
+            is("Reason for deleting a beacon must be defined")
+          )
+        );
+      then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
+    }
+
+    @Test
+    void shouldNotDeleteTheBeaconIfTheIdInThePathDoesNotMatchTheRequestBody()
+      throws Exception {
+      final var beaconId = UUID.randomUUID();
+      final var differentBeaconId = UUID.randomUUID();
+      final var actorId = UUID.randomUUID();
+      final var deleteBeaconRequest = DeleteBeaconRequestDTO
+        .builder()
+        .beaconId(beaconId)
+        .reason("Unused on my boat anymore")
+        .actorId(actorId)
+        .build();
+
+      mockMvc
+        .perform(
+          delete("/beacons/" + differentBeaconId)
+            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+        )
+        .andExpect(status().isOk());
+      then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
     }
   }
 }
