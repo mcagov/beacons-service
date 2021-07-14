@@ -58,7 +58,7 @@ class AuthGatewayImplTest {
 
     @Test
     void getsUserAttributesAndCreatesUser() {
-      final UUID authId = UUID.randomUUID();
+      final String authId = "0fd158e9-d648-4b11-88d9-7bc57080aa5e";
       final String fullName = "Marie Antoinette";
       final String email = "let.them.eat@cake.fr";
 

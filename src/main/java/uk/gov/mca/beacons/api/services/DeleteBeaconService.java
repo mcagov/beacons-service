@@ -3,17 +3,18 @@ package uk.gov.mca.beacons.api.services;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
-import uk.gov.mca.beacons.api.exceptions.AccountHolderNotFoundException;
-import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
+import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
+import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @Service
 @Transactional
@@ -23,32 +24,30 @@ public class DeleteBeaconService {
     "The account holder deleted the record with reason: '%s'";
 
   private final BeaconGateway beaconGateway;
-  private final AccountHolderGateway accountHolderGateway;
+  private final UserGateway userGateway;
   private final NoteGateway noteGateway;
 
   @Autowired
   public DeleteBeaconService(
     BeaconGateway beaconGateway,
-    AccountHolderGateway accountHolderGateway,
+    UserGateway userGateway,
     NoteGateway noteGateway
   ) {
     this.beaconGateway = beaconGateway;
-    this.accountHolderGateway = accountHolderGateway;
+    this.userGateway = userGateway;
     this.noteGateway = noteGateway;
   }
 
   public void delete(DeleteBeaconRequestDTO request) {
-    final AccountHolder accountHolder = accountHolderGateway.getById(
-      request.getAccountHolderId()
-    );
-    if (accountHolder == null) throw new AccountHolderNotFoundException();
+    final User user = userGateway.getUserById(request.getActorId());
+    if (user == null) throw new UserNotFoundException();
 
     final Note note = Note
       .builder()
       .beaconId(request.getBeaconId())
-      .email(accountHolder.getEmail())
-      .fullName(accountHolder.getFullName())
-      .personId(request.getAccountHolderId())
+      .email(user.getEmail())
+      .fullName(user.getFullName())
+      .personId(request.getActorId())
       .type(NoteType.RECORD_HISTORY)
       .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
       .createdDate(now())

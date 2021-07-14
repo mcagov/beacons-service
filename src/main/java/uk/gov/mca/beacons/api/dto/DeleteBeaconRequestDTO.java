@@ -15,6 +15,6 @@ import lombok.Setter;
 public class DeleteBeaconRequestDTO {
 
   private UUID beaconId;
-  private UUID accountHolderId;
+  private UUID actorId;
   private String reason;
 }

@@ -21,10 +21,10 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
-import uk.gov.mca.beacons.api.exceptions.AccountHolderNotFoundException;
-import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
+import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
+import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteBeaconServiceUnitTest {
@@ -36,7 +36,7 @@ class DeleteBeaconServiceUnitTest {
   private BeaconGateway beaconGateway;
 
   @Mock
-  private AccountHolderGateway accountHolderGateway;
+  private UserGateway userGateway;
 
   @Mock
   private NoteGateway noteGateway;
@@ -50,10 +50,10 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(UUID.randomUUID())
-      .accountHolderId(accountHolderId)
+      .actorId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
-    given(accountHolderGateway.getById(accountHolderId))
+    given(userGateway.getUserById(accountHolderId))
       .willReturn(new AccountHolder());
 
     deleteBeaconService.delete(request);
@@ -67,13 +67,13 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(UUID.randomUUID())
-      .accountHolderId(accountHolderId)
+      .actorId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
-    given(accountHolderGateway.getById(accountHolderId)).willReturn(null);
+    given(userGateway.getUserById(accountHolderId)).willReturn(null);
 
     assertThrows(
-      AccountHolderNotFoundException.class,
+      UserNotFoundException.class,
       () -> {
         deleteBeaconService.delete(request);
       }
@@ -89,7 +89,7 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(beaconId)
-      .accountHolderId(accountHolderId)
+      .actorId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
     final var accountHolder = AccountHolder
@@ -97,8 +97,7 @@ class DeleteBeaconServiceUnitTest {
       .email("beacons@beacons.com")
       .fullName("Beacons R Us")
       .build();
-    given(accountHolderGateway.getById(accountHolderId))
-      .willReturn(accountHolder);
+    given(userGateway.getUserById(accountHolderId)).willReturn(accountHolder);
 
     deleteBeaconService.delete(request);
 

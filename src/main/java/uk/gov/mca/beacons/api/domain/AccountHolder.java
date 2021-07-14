@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountHolder {
+public class AccountHolder implements User {
 
   private UUID id;
 
