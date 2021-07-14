@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +77,7 @@ public class BeaconsController {
   @DeleteMapping(value = "/{uuid}")
   public ResponseEntity<Void> delete(
     @PathVariable("uuid") UUID id,
-    @RequestBody DeleteBeaconRequestDTO requestDTO
+    @RequestBody @Valid DeleteBeaconRequestDTO requestDTO
   ) {
     if (
       !id.equals(requestDTO.getBeaconId())
