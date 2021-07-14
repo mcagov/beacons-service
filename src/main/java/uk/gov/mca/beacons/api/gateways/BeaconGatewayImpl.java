@@ -27,6 +27,11 @@ public class BeaconGatewayImpl implements BeaconGateway {
   }
 
   @Override
+  public List<Beacon> findAllActiveBeaconsByAccountHolderId(UUID accountId) {
+    return beaconJpaRepository.findAllActiveBeaconsByAccountHolderId(accountId);
+  }
+
+  @Override
   public void delete(UUID beaconId) {
     final Beacon beacon = beaconJpaRepository
       .findById(beaconId)

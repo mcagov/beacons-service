@@ -12,4 +12,10 @@ public interface BeaconJpaRepository extends JpaRepository<Beacon, UUID> {
     value = "SELECT * FROM beacon WHERE account_holder_id = ?1"
   )
   List<Beacon> findAllByAccountHolderId(UUID accountId);
+
+  @Query(
+    nativeQuery = true,
+    value = "SELECT * FROM beacon WHERE account_holder_id = ?1 AND status = 'ACTIVE'"
+  )
+  List<Beacon> findAllActiveBeaconsByAccountHolderId(UUID accountId);
 }
