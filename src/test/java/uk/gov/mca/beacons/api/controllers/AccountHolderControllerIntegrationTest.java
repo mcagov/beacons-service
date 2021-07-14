@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -164,6 +166,37 @@ class AccountHolderControllerIntegrationTest {
         .expectBody()
         .json(expectedResponse);
     }
+
+    @Test
+    void shouldResponseWithTheListOfActiveBeaconsForTheAccountHolder()
+      throws Exception {
+      final String createdAccountHolderId = createAccountHolder();
+      final String beaconId = createBeacon(createdAccountHolderId);
+      final var deleteBeaconRequest = DeleteBeaconRequestDTO
+        .builder()
+        .beaconId(UUID.fromString(beaconId))
+        .actorId(UUID.fromString(createdAccountHolderId))
+        .reason("Not used on my boat")
+        .build();
+
+      webTestClient
+        .method(HttpMethod.DELETE)
+        .uri("/beacons" + beaconId)
+        .body(BodyInserters.fromValue(deleteBeaconRequest))
+        .exchange()
+        .expectStatus()
+        .isOk();
+
+      final String expectedResponse = readFile(
+        "src/test/resources/fixtures/getBeaconsByAccountHolderEmptyResponse.json"
+      );
+      webTestClient
+        .get()
+        .uri("/account-holder/" + createdAccountHolderId + "/beacons")
+        .exchange()
+        .expectBody()
+        .json(expectedResponse);
+    }
   }
 
   @Nested
@@ -222,6 +255,31 @@ class AccountHolderControllerIntegrationTest {
     return new ObjectMapper()
       .readValue(createdAccountResponse, ObjectNode.class)
       .get("data")
+      .get("id")
+      .textValue();
+  }
+
+  private String createBeacon(String accountHolderId) throws Exception {
+    final String createBeaconRequest = readFile(
+      "src/test/resources/fixtures/createBeaconRequest.json"
+    )
+      .replace("account-holder-id-placeholder", accountHolderId);
+
+    final var responseBody = webTestClient
+      .post()
+      .uri("/registrations/register")
+      .bodyValue(createBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectBody()
+      .returnResult()
+      .getResponseBody();
+
+    return new ObjectMapper()
+      .readValue(responseBody, ObjectNode.class)
+      .get("beacons[0]")
       .get("id")
       .textValue();
   }
