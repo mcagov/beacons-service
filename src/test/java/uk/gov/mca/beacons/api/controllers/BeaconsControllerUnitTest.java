@@ -116,10 +116,17 @@ class BeaconsControllerUnitTest {
   @Nested
   class DeleteBeacon {
 
+    private UUID beaconId;
+    private UUID actorId;
+
+    @BeforeEach
+    public void init() {
+      beaconId = UUID.randomUUID();
+      actorId = UUID.randomUUID();
+    }
+
     @Test
     void shouldDeleteTheBeacon() throws Exception {
-      final var beaconId = UUID.randomUUID();
-      final var actorId = UUID.randomUUID();
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(beaconId)
@@ -152,8 +159,6 @@ class BeaconsControllerUnitTest {
 
     @Test
     void shouldNotAcceptTheJsonPayloadIfTheReasonIsNull() throws Exception {
-      final var beaconId = UUID.randomUUID();
-      final var actorId = UUID.randomUUID();
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(beaconId)
@@ -181,9 +186,7 @@ class BeaconsControllerUnitTest {
     @Test
     void shouldNotDeleteTheBeaconIfTheIdInThePathDoesNotMatchTheRequestBody()
       throws Exception {
-      final var beaconId = UUID.randomUUID();
       final var differentBeaconId = UUID.randomUUID();
-      final var actorId = UUID.randomUUID();
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(beaconId)
