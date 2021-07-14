@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.api.domain.Note;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
+import uk.gov.mca.beacons.api.services.GetUserService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController
@@ -22,11 +24,17 @@ public class NoteController {
 
   private final NoteMapper noteMapper;
   private final NoteService noteService;
+  private final GetUserService getUserService;
 
   @Autowired
-  public NoteController(NoteMapper noteMapper, NoteService noteService) {
+  public NoteController(
+    NoteMapper noteMapper,
+    NoteService noteService,
+    GetUserService getUserService
+  ) {
     this.noteMapper = noteMapper;
     this.noteService = noteService;
+    this.getUserService = getUserService;
   }
 
   @PostMapping
@@ -35,7 +43,16 @@ public class NoteController {
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-
+    if (
+      note.getPersonId() == null &&
+      note.getFullName() == null &&
+      note.getEmail() == null
+    ) {
+      final User user = getUserService.getUser();
+      note.setPersonId(user.getAuthId());
+      note.setFullName(user.getFullName());
+      note.setEmail(user.getEmail());
+    }
     return noteMapper.toWrapperDTO(noteService.create(note));
   }
 }
