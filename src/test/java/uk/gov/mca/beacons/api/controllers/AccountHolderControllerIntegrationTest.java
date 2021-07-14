@@ -168,7 +168,7 @@ class AccountHolderControllerIntegrationTest {
     }
 
     @Test
-    void shouldResponseWithTheListOfActiveBeaconsForTheAccountHolder()
+    void shouldRespondWithAnEmptyListIfAllBeaconsHaveBeenDeletedFromTheAccount()
       throws Exception {
       final String createdAccountHolderId = createAccountHolder();
       final String beaconId = createBeacon(createdAccountHolderId);
