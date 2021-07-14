@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Setter
@@ -16,5 +17,7 @@ public class DeleteBeaconRequestDTO {
 
   private UUID beaconId;
   private UUID actorId;
+
+  @NotNull
   private String reason;
 }
