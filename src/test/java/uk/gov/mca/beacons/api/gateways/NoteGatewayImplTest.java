@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.jpa.NoteJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
@@ -48,15 +49,20 @@ class NoteGatewayImplTest {
     final String fullName = "Alfred the cat";
     final String email = "alfred@cute.cat.com";
 
+    final User user = User
+      .builder()
+      .authId(personId)
+      .fullName(fullName)
+      .email(email)
+      .build();
+
     final Note note = Note
       .builder()
       .beaconId(beaconId)
       .text(text)
       .type(type)
       .createdDate(createdDate)
-      .personId(personId)
-      .fullName(fullName)
-      .email(email)
+      .user(user)
       .build();
 
     final NoteEntity createdEntity = NoteEntity
@@ -76,18 +82,20 @@ class NoteGatewayImplTest {
       noteMapper,
       noteRepository
     );
+
     when(noteRepository.save(any(NoteEntity.class))).thenReturn(createdEntity);
 
     final Note createdNote = noteGateway.create(note);
+    final User noteUser = createdNote.getUser();
 
     assertThat(createdNote.getId(), is(id));
     assertThat(createdNote.getBeaconId(), is(beaconId));
     assertThat(createdNote.getText(), is(text));
     assertThat(createdNote.getType(), is(type));
     assertThat(createdNote.getCreatedDate(), is(createdDate));
-    assertThat(createdNote.getPersonId(), is(personId));
-    assertThat(createdNote.getFullName(), is(fullName));
-    assertThat(createdNote.getEmail(), is(email));
+    assertThat(noteUser.getAuthId(), is(personId));
+    assertThat(noteUser.getFullName(), is(fullName));
+    assertThat(noteUser.getEmail(), is(email));
   }
 
   @Test

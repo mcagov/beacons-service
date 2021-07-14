@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
@@ -28,6 +29,7 @@ class NoteMapperTest {
   @Mock
   private Clock clock;
 
+  private User user;
   private Note note;
   private NoteDTO noteDTO;
   private Attributes DTOAttributes;
@@ -45,6 +47,9 @@ class NoteMapperTest {
     final String fullName = "Jake The Dog";
     final String email = "i.love.lady@rainicorn.com";
 
+    user =
+      User.builder().authId(personId).fullName(fullName).email(email).build();
+
     note =
       Note
         .builder()
@@ -53,9 +58,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .personId(personId)
-        .fullName(fullName)
-        .email(email)
+        .user(user)
         .build();
 
     DTOAttributes =
@@ -78,30 +81,32 @@ class NoteMapperTest {
   @Test
   void fromDTO_shouldSetAllTheFieldsOnTheNoteDTOFromTheNote() {
     final Note mappedNote = noteMapper.fromDTO(noteDTO);
+    final User user = mappedNote.getUser();
 
     assertThat(mappedNote.getId(), is(noteDTO.getId()));
     assertThat(mappedNote.getBeaconId(), is(DTOAttributes.getBeaconId()));
     assertThat(mappedNote.getText(), is(DTOAttributes.getText()));
     assertThat(mappedNote.getType(), is(DTOAttributes.getType()));
     assertThat(mappedNote.getCreatedDate(), is(DTOAttributes.getCreatedDate()));
-    assertThat(mappedNote.getPersonId(), is(DTOAttributes.getPersonId()));
-    assertThat(mappedNote.getFullName(), is(DTOAttributes.getFullName()));
-    assertThat(mappedNote.getEmail(), is(DTOAttributes.getEmail()));
+    assertThat(user.getAuthId(), is(DTOAttributes.getPersonId()));
+    assertThat(user.getFullName(), is(DTOAttributes.getFullName()));
+    assertThat(user.getEmail(), is(DTOAttributes.getEmail()));
   }
 
   @Test
   void toDTO_shouldInstantiateANoteFromTheNoteDTO() {
     final NoteDTO mappedDTO = noteMapper.toDTO(note);
     final Attributes mappedAttributes = mappedDTO.getAttributes();
+    final User user = note.getUser();
 
     assertThat(mappedDTO.getId(), is(note.getId()));
     assertThat(mappedAttributes.getBeaconId(), is(note.getBeaconId()));
     assertThat(mappedAttributes.getText(), is(note.getText()));
     assertThat(mappedAttributes.getType(), is(note.getType()));
     assertThat(mappedAttributes.getCreatedDate(), is(note.getCreatedDate()));
-    assertThat(mappedAttributes.getPersonId(), is(note.getPersonId()));
-    assertThat(mappedAttributes.getFullName(), is(note.getFullName()));
-    assertThat(mappedAttributes.getEmail(), is(note.getEmail()));
+    assertThat(mappedAttributes.getPersonId(), is(user.getAuthId()));
+    assertThat(mappedAttributes.getFullName(), is(user.getFullName()));
+    assertThat(mappedAttributes.getEmail(), is(user.getEmail()));
   }
 
   @Test

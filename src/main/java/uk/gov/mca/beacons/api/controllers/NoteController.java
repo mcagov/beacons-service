@@ -43,15 +43,9 @@ public class NoteController {
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-    if (
-      note.getPersonId() == null &&
-      note.getFullName() == null &&
-      note.getEmail() == null
-    ) {
+    if (note.getUser() == null) {
       final User user = getUserService.getUser();
-      note.setPersonId(user.getAuthId());
-      note.setFullName(user.getFullName());
-      note.setEmail(user.getEmail());
+      note.setUser(user);
     }
     return noteMapper.toWrapperDTO(noteService.create(note));
   }

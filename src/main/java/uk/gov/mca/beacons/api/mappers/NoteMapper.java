@@ -7,12 +7,13 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.Note;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
 
 @Service
-public class NoteMapper {
+public class NoteMapper extends BaseMapper {
 
   private Clock clock;
 
@@ -23,6 +24,7 @@ public class NoteMapper {
 
   public NoteEntity toNoteEntity(Note note) {
     final LocalDateTime now = LocalDateTime.now(clock);
+    final User user = note.getUser();
 
     return NoteEntity
       .builder()
@@ -31,37 +33,46 @@ public class NoteMapper {
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate() == null ? now : note.getCreatedDate())
-      .personId(note.getPersonId())
-      .fullName(note.getFullName())
-      .email(note.getEmail())
+      .personId(user.getAuthId())
+      .fullName(user.getFullName())
+      .email(user.getEmail())
       .build();
   }
 
   public Note fromNoteEntity(NoteEntity noteEntity) {
-    return Note
+    User user = User
+      .builder()
+      .authId(noteEntity.getPersonId())
+      .fullName(noteEntity.getFullName())
+      .email(noteEntity.getEmail())
+      .build();
+
+    Note note = Note
       .builder()
       .id(noteEntity.getId())
       .beaconId(noteEntity.getBeaconId())
       .text(noteEntity.getText())
       .type(noteEntity.getType())
       .createdDate(noteEntity.getCreatedDate())
-      .personId(noteEntity.getPersonId())
-      .fullName(noteEntity.getFullName())
-      .email(noteEntity.getEmail())
       .build();
+
+    note.setUser(user);
+
+    return note;
   }
 
   public Note fromDTO(NoteDTO noteDTO) {
+    Attributes attributes = noteDTO.getAttributes();
+    User user = getUserFromAttributes(attributes);
+
     return Note
       .builder()
       .id(noteDTO.getId())
-      .beaconId(noteDTO.getAttributes().getBeaconId())
-      .text(noteDTO.getAttributes().getText())
-      .type(noteDTO.getAttributes().getType())
-      .createdDate(noteDTO.getAttributes().getCreatedDate())
-      .personId(noteDTO.getAttributes().getPersonId())
-      .fullName(noteDTO.getAttributes().getFullName())
-      .email(noteDTO.getAttributes().getEmail())
+      .beaconId(attributes.getBeaconId())
+      .text(attributes.getText())
+      .type(attributes.getType())
+      .createdDate(attributes.getCreatedDate())
+      .user(user)
       .build();
   }
 
@@ -69,15 +80,17 @@ public class NoteMapper {
     final NoteDTO noteDTO = new NoteDTO();
     noteDTO.setId(note.getId());
 
+    final User user = note.getUser();
+
     final Attributes attributes = Attributes
       .builder()
       .beaconId(note.getBeaconId())
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate())
-      .personId(note.getPersonId())
-      .fullName(note.getFullName())
-      .email(note.getEmail())
+      .personId(user.getAuthId())
+      .fullName(user.getFullName())
+      .email(user.getEmail())
       .build();
 
     noteDTO.setAttributes(attributes);
@@ -88,5 +101,20 @@ public class NoteMapper {
     final WrapperDTO<NoteDTO> wrapperDTO = new WrapperDTO<>();
     wrapperDTO.setData(toDTO(note));
     return wrapperDTO;
+  }
+
+  private User getUserFromAttributes(Attributes attributes) {
+    if (
+      attributes.getPersonId() == null &&
+      attributes.getFullName() == null &&
+      attributes.getEmail() == null
+    ) return null;
+
+    return User
+      .builder()
+      .authId(attributes.getPersonId())
+      .fullName(attributes.getFullName())
+      .email(attributes.getEmail())
+      .build();
   }
 }

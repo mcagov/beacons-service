@@ -20,7 +20,5 @@ public class Note {
   private String text;
   private NoteType type;
   private LocalDateTime createdDate;
-  private UUID personId;
-  private String fullName;
-  private String email;
+  private User user;
 }

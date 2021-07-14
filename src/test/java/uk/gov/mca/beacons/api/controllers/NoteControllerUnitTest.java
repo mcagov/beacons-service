@@ -57,7 +57,7 @@ class NoteControllerUnitTest {
         .builder()
         .authId(UUID.randomUUID())
         .fullName("Joanna Castille")
-        .email("hello@something.com")
+        .email("my.son.sux@gmail.com")
         .build();
   }
 
@@ -69,11 +69,10 @@ class NoteControllerUnitTest {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-      note.setPersonId(user.getAuthId());
-      note.setFullName(user.getFullName());
-      note.setEmail(user.getEmail());
+      note.setUser(user);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
+
       mvc
         .perform(
           post("/note")
@@ -109,9 +108,7 @@ class NoteControllerUnitTest {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-      note.setPersonId(user.getAuthId());
-      note.setFullName(user.getFullName());
-      note.setEmail(user.getEmail());
+      note.setUser(user);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
 
