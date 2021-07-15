@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.domain.Activity;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.Environment;
 import uk.gov.mca.beacons.api.domain.Purpose;
 import uk.gov.mca.beacons.api.domain.User;
@@ -88,19 +89,17 @@ class NoteControllerIntegrationTest {
     )
       .replace("replace-with-test-beacon-id", createdBeacon.getId().toString());
 
-    final UUID personId = UUID.fromString(
-      "344848b9-8a5d-4818-a57d-1815528d543e"
-    );
+    final String personId = "344848b9-8a5d-4818-a57d-1815528d543e";
     final String fullName = "Jean ValJean";
     final String email = "24601@jail.fr";
-    final User user = User
+    final User user = BackOfficeUser
       .builder()
       .authId(personId)
       .fullName(fullName)
       .email(email)
       .build();
 
-    given(getUserService.getUser()).willReturn(user);
+    given(getUserService.getUser(null)).willReturn(user);
 
     var response = webTestClient
       .post()

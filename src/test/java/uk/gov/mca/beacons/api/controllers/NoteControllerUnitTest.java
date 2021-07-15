@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
@@ -50,14 +51,25 @@ class NoteControllerUnitTest {
   @BeforeEach
   public final void before() {
     final UUID noteId = UUID.randomUUID();
-    note = Note.builder().id(noteId).build();
+    final UUID personId = UUID.randomUUID();
+    final String fullName = "Joanna Castille";
+    final String email = "my.son.sux@gmail.com";
+
+    note =
+      Note
+        .builder()
+        .id(noteId)
+        .personId(personId)
+        .fullName(fullName)
+        .email(email)
+        .build();
 
     user =
-      User
+      BackOfficeUser
         .builder()
-        .authId(UUID.randomUUID())
-        .fullName("Joanna Castille")
-        .email("my.son.sux@gmail.com")
+        .authId(personId.toString())
+        .fullName(fullName)
+        .email(email)
         .build();
   }
 
@@ -69,7 +81,6 @@ class NoteControllerUnitTest {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-      note.setUser(user);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
 
@@ -88,8 +99,12 @@ class NoteControllerUnitTest {
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
 
+      note.setPersonId(null);
+      note.setFullName(null);
+      note.setEmail(null);
+
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
-      given(getUserService.getUser()).willReturn(user);
+      given(getUserService.getUser(null)).willReturn(user);
 
       mvc.perform(
         post("/note")
@@ -97,16 +112,15 @@ class NoteControllerUnitTest {
           .content(newNoteRequest)
       );
 
-      verify(getUserService, times(1)).getUser();
+      verify(getUserService, times(1)).getUser(null);
     }
 
     @Test
-    void shouldNotCallTheGetUserServiceIfNoteHasNoUserAttached()
+    void shouldNotCallTheGetUserServiceIfNoteHasAUserAttached()
       throws Exception {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-      note.setUser(user);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
 
@@ -116,7 +130,7 @@ class NoteControllerUnitTest {
           .content(newNoteRequest)
       );
 
-      verify(getUserService, times(0)).getUser();
+      verify(getUserService, times(0)).getUser(null);
     }
 
     @Test
@@ -124,7 +138,6 @@ class NoteControllerUnitTest {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-      note.setUser(user);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
 

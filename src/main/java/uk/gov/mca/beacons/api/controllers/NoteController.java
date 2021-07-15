@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,10 +44,22 @@ public class NoteController {
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-    if (note.getUser() == null) {
-      final User user = getUserService.getUser();
-      note.setUser(user);
+    if (userDoesNotExist(note)) {
+      // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
+      final User user = getUserService.getUser(null);
+
+      note.setPersonId(UUID.fromString(user.getAuthId()));
+      note.setFullName(user.getFullName());
+      note.setEmail(user.getEmail());
     }
     return noteMapper.toWrapperDTO(noteService.create(note));
+  }
+
+  private boolean userDoesNotExist(Note note) {
+    return (
+      note.getPersonId() == null &&
+      note.getFullName() == null &&
+      note.getEmail() == null
+    );
   }
 }
