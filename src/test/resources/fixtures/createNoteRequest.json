@@ -5,9 +5,9 @@
     "type": "note",
     "relationships": {},
     "attributes": {
-      "beaconId": "1234",
+      "beaconId": "replace-with-test-beacon-id",
       "text": "That's a great beacon right there",
-      "type": "General"
+      "type": "GENERAL"
     }
   }
 }
