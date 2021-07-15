@@ -44,7 +44,7 @@ class NoteGatewayImplTest {
     final String text = "This beacon belongs to a cat.";
     final NoteType type = NoteType.GENERAL;
     final LocalDateTime createdDate = LocalDateTime.now();
-    final UUID personId = UUID.randomUUID();
+    final UUID userAuthId = UUID.randomUUID();
     final String fullName = "Alfred the cat";
     final String email = "alfred@cute.cat.com";
 
@@ -54,7 +54,7 @@ class NoteGatewayImplTest {
       .text(text)
       .type(type)
       .createdDate(createdDate)
-      .personId(personId)
+      .userAuthId(userAuthId)
       .fullName(fullName)
       .email(email)
       .build();
@@ -66,7 +66,7 @@ class NoteGatewayImplTest {
       .text(text)
       .type(type)
       .createdDate(createdDate)
-      .personId(personId)
+      .userAuthId(userAuthId)
       .fullName(fullName)
       .email(email)
       .build();
@@ -86,7 +86,7 @@ class NoteGatewayImplTest {
     assertThat(createdNote.getText(), is(text));
     assertThat(createdNote.getType(), is(type));
     assertThat(createdNote.getCreatedDate(), is(createdDate));
-    assertThat(createdNote.getPersonId(), is(personId));
+    assertThat(createdNote.getUserAuthId(), is(userAuthId));
     assertThat(createdNote.getFullName(), is(fullName));
     assertThat(createdNote.getEmail(), is(email));
   }

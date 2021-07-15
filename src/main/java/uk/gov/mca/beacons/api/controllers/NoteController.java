@@ -48,7 +48,7 @@ public class NoteController {
       // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
       final User user = getUserService.getUser(null);
 
-      note.setPersonId(UUID.fromString(user.getAuthId()));
+      note.setUserAuthId(UUID.fromString(user.getAuthId()));
       note.setFullName(user.getFullName());
       note.setEmail(user.getEmail());
     }
@@ -57,7 +57,7 @@ public class NoteController {
 
   private boolean userDoesNotExist(Note note) {
     return (
-      note.getPersonId() == null &&
+      note.getUserAuthId() == null &&
       note.getFullName() == null &&
       note.getEmail() == null
     );

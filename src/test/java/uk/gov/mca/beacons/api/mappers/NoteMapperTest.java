@@ -42,7 +42,7 @@ class NoteMapperTest {
     final String text = "Beacon pancakes, making beacon pancakes";
     final NoteType type = NoteType.INCIDENT;
     final LocalDateTime createdDate = LocalDateTime.now();
-    final UUID personId = UUID.randomUUID();
+    final UUID userAuthId = UUID.randomUUID();
     final String fullName = "Jake The Dog";
     final String email = "i.love.lady@rainicorn.com";
 
@@ -54,7 +54,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .personId(personId)
+        .userAuthId(userAuthId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -66,7 +66,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .personId(personId)
+        .userAuthId(userAuthId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -85,7 +85,7 @@ class NoteMapperTest {
     assertThat(mappedNote.getText(), is(DTOAttributes.getText()));
     assertThat(mappedNote.getType(), is(DTOAttributes.getType()));
     assertThat(mappedNote.getCreatedDate(), is(DTOAttributes.getCreatedDate()));
-    assertThat(mappedNote.getPersonId(), is(DTOAttributes.getPersonId()));
+    assertThat(mappedNote.getUserAuthId(), is(DTOAttributes.getUserAuthId()));
     assertThat(mappedNote.getFullName(), is(DTOAttributes.getFullName()));
     assertThat(mappedNote.getEmail(), is(DTOAttributes.getEmail()));
   }
@@ -100,7 +100,7 @@ class NoteMapperTest {
     assertThat(mappedAttributes.getText(), is(note.getText()));
     assertThat(mappedAttributes.getType(), is(note.getType()));
     assertThat(mappedAttributes.getCreatedDate(), is(note.getCreatedDate()));
-    assertThat(mappedAttributes.getPersonId(), is(note.getPersonId()));
+    assertThat(mappedAttributes.getUserAuthId(), is(note.getUserAuthId()));
     assertThat(mappedAttributes.getFullName(), is(note.getFullName()));
     assertThat(mappedAttributes.getEmail(), is(note.getEmail()));
   }

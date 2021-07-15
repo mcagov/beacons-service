@@ -59,7 +59,7 @@ class NoteControllerUnitTest {
       Note
         .builder()
         .id(noteId)
-        .personId(personId)
+        .userAuthId(personId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -99,7 +99,7 @@ class NoteControllerUnitTest {
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
 
-      note.setPersonId(null);
+      note.setUserAuthId(null);
       note.setFullName(null);
       note.setEmail(null);
 
