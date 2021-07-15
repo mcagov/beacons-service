@@ -93,17 +93,7 @@ class NoteGatewayImplTest {
 
   @Test
   void shouldSetCreatedDateIfNotProvided() {
-    final UUID personId = UUID.randomUUID();
-    final String fullName = "Loki the cat";
-    final String email = "loki@cute.cat.com";
-
-    final Note note = Note
-      .builder()
-      .personId(personId)
-      .fullName(fullName)
-      .email(email)
-      .build();
-
+    final Note note = new Note();
     final NoteEntity createdEntity = new NoteEntity();
     final NoteMapper noteMapper = new NoteMapper(fixedClock);
     final NoteGateway noteGateway = new NoteGatewayImpl(
