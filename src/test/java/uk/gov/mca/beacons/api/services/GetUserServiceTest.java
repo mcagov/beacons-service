@@ -10,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.domain.User;
-import uk.gov.mca.beacons.api.gateways.AuthGateway;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
+import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @ExtendWith(MockitoExtension.class)
 class GetUserServiceTest {
@@ -20,22 +20,22 @@ class GetUserServiceTest {
   private GetUserService getUserService;
 
   @Mock
-  private AuthGateway mockAuthGateway;
+  private UserGateway userGateway;
 
   @Test
   void shouldReturnTheCurrentUser() {
-    final UUID authId = UUID.randomUUID();
+    final String authId = UUID.randomUUID().toString();
     final String name = "Cher Horowitz";
     final String email = "this.is@an.alaia";
-    final User user = User
+    final BackOfficeUser user = BackOfficeUser
       .builder()
       .authId(authId)
       .fullName(name)
       .email(email)
       .build();
 
-    given(mockAuthGateway.getUser()).willReturn(user);
+    given(userGateway.getUserById(null)).willReturn(user);
 
-    assertThat(getUserService.getUser(), is(user));
+    assertThat(getUserService.getUser(null), is(user));
   }
 }
