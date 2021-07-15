@@ -21,7 +21,6 @@ public class AuthGatewayImpl implements AuthGateway {
     final var user = (AADOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
     final var userAttributes = user.getAttributes();
 
-    //    TODO: how to handle "Beacon Registry" notes
     final String authId = (String) userAttributes.get("oid");
     final String name = (String) userAttributes.get("name");
     final String email = (String) userAttributes.get("email");
