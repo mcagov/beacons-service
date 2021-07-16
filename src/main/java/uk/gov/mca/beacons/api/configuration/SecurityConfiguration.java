@@ -9,16 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration
-  extends AADResourceServerWebSecurityConfigurerAdapter {
+        extends AADResourceServerWebSecurityConfigurerAdapter {
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    super.configure(http);
-    http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
+        http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
+    }
 
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/owner", "/actuator/health", "/actuator/info");
-  }
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/owner", "/actuator/health", "/actuator/info", "/swagger-ui**", "/v3/api-docs/**");
+    }
 }
