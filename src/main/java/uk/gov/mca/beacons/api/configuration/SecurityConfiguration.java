@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.configuration;
 import com.azure.spring.aad.webapi.AADResourceServerWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Profile("default")
 public class SecurityConfiguration {
 
   /**
@@ -32,7 +34,7 @@ public class SecurityConfiguration {
     private String password;
 
     /**
-     * Creates a HTTP basic auth security filter for the migration endpoint.
+     * Creates a HTTP basic auth security filter for the migration endpoints.
      *
      * NOTE: The HTTP session has to be stateless for the basic auth security filter.
      * Otherwise Spring allows access to Azure authenticated endpoints if a user
