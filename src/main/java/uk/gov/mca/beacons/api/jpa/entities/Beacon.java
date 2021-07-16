@@ -57,7 +57,6 @@ public class Beacon {
   private LocalDateTime createdDate;
 
   @Transient
-  @NotEmpty
   @Valid
   private List<BeaconUse> uses;
 
@@ -68,7 +67,6 @@ public class Beacon {
   private Person owner;
 
   @Transient
-  @NotEmpty
   @Valid
   private List<Person> emergencyContacts;
 }

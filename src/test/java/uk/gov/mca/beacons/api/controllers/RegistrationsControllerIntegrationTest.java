@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,9 @@ class RegistrationsControllerIntegrationTest {
   @EnumSource(
     value = RegistrationUseCase.class,
     names = { "NO_HEX_ID", "NO_USES", "NO_EMERGENCY_CONTACTS" }
+  )
+  @Disabled(
+    "Disabled until registration dtos/mappers/validation defined for registrations endpoint"
   )
   void givenInvalidRegistration_whenPosted_thenStatus400(
     RegistrationUseCase registrationUseCase
