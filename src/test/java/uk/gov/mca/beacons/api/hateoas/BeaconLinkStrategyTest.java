@@ -3,7 +3,7 @@ package uk.gov.mca.beacons.api.hateoas;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
-import static uk.gov.mca.beacons.api.hateoas.BeaconRolesService.SupportedPermissions;
+import static uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconLinkStrategyTest {
@@ -31,7 +32,7 @@ class BeaconLinkStrategyTest {
     var beaconId = UUID.randomUUID();
     beacon.setId(beaconId);
 
-    userRoles = new ArrayList<SupportedPermissions>();
+    userRoles = new ArrayList<>();
 
     linkStrategy = new BeaconLinkStrategy(beaconRolesService);
   }

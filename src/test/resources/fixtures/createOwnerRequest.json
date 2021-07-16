@@ -25,7 +25,8 @@
       "isMain": "yes",
       "createUserId": 0,
       "updateUserId": 1,
-      "versioning": 2
+      "versioning": 2,
+      "migrated": true
     }
   }
 }

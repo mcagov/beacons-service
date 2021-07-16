@@ -4,7 +4,6 @@ import static uk.gov.mca.beacons.api.dto.BeaconPersonDTO.Attributes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,5 +59,6 @@ public class BeaconPersonDTO extends DomainDTO<Attributes> {
     private Integer createUserId;
     private Integer updateUserId;
     private Integer versioning;
+    private Boolean migrated;
   }
 }
