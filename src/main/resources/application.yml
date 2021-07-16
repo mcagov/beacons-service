@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: default
+    active: default,migration
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/beacons}
     username: ${SPRING_DATASOURCE_USER:beacons_service}
