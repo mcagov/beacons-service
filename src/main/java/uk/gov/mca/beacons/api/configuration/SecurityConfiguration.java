@@ -16,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Profile("default")
 public class SecurityConfiguration {
 
   /**
@@ -24,6 +23,7 @@ public class SecurityConfiguration {
    */
   @Order(1)
   @Configuration
+  @Profile("default")
   public static class BasicAuthConfiguration
     extends WebSecurityConfigurerAdapter {
 
@@ -69,6 +69,7 @@ public class SecurityConfiguration {
 
   @Order(2)
   @Configuration
+  @Profile("default")
   public static class AzureAdSecurityConfiguration
     extends AADResourceServerWebSecurityConfigurerAdapter {
 
