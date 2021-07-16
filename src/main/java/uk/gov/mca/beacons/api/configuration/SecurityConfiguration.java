@@ -19,6 +19,14 @@ public class SecurityConfiguration
 
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/owner", "/actuator/health", "/actuator/info");
+    web
+      .ignoring()
+      .antMatchers(
+        "/owner",
+        "/actuator/health",
+        "/actuator/info",
+        "/swagger-ui**",
+        "/v3/api-docs/**"
+      );
   }
 }

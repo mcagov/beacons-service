@@ -9,7 +9,7 @@ import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 public interface BeaconJpaRepository extends JpaRepository<Beacon, UUID> {
   @Query(
     nativeQuery = true,
-    value = "SELECT * FROM beacon WHERE account_holder_id = ?1"
+    value = "SELECT * FROM beacon WHERE account_holder_id = ?1 AND beacon_status = 'NEW'"
   )
-  List<Beacon> findAllByAccountHolderId(UUID accountId);
+  List<Beacon> findAllActiveBeaconsByAccountHolderId(UUID accountId);
 }
