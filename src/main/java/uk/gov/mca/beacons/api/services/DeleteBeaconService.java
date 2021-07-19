@@ -47,7 +47,7 @@ public class DeleteBeaconService {
       .beaconId(request.getBeaconId())
       .email(user.getEmail())
       .fullName(user.getFullName())
-      .personId(request.getActorId())
+      .userAuthId(request.getActorId())
       .type(NoteType.RECORD_HISTORY)
       .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
       .createdDate(now())

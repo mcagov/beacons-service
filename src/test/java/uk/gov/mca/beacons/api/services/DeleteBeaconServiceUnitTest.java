@@ -106,7 +106,7 @@ class DeleteBeaconServiceUnitTest {
     assertThat(note.getBeaconId(), is(beaconId));
     assertThat(note.getEmail(), is("beacons@beacons.com"));
     assertThat(note.getFullName(), is("Beacons R Us"));
-    assertThat(note.getPersonId(), is(accountHolderId));
+    assertThat(note.getUserAuthId(), is(accountHolderId));
     assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
     assertThat(
       note.getText(),
