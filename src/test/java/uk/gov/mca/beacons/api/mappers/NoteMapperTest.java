@@ -39,7 +39,7 @@ class NoteMapperTest {
     final String text = "Beacon pancakes, making beacon pancakes";
     final NoteType type = NoteType.INCIDENT;
     final LocalDateTime createdDate = LocalDateTime.now();
-    final UUID userAuthId = UUID.randomUUID();
+    final UUID userId = UUID.randomUUID();
     final String fullName = "Jake The Dog";
     final String email = "i.love.lady@rainicorn.com";
 
@@ -51,7 +51,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .userId(userAuthId)
+        .userId(userId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -63,7 +63,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .userId(userAuthId)
+        .userId(userId)
         .fullName(fullName)
         .email(email)
         .build();
