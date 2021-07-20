@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
-import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
@@ -54,7 +53,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .userAuthId(userAuthId)
+        .userId(userAuthId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -66,7 +65,7 @@ class NoteMapperTest {
         .text(text)
         .type(type)
         .createdDate(createdDate)
-        .userAuthId(userAuthId)
+        .userId(userAuthId)
         .fullName(fullName)
         .email(email)
         .build();
@@ -85,7 +84,7 @@ class NoteMapperTest {
     assertThat(mappedNote.getText(), is(DTOAttributes.getText()));
     assertThat(mappedNote.getType(), is(DTOAttributes.getType()));
     assertThat(mappedNote.getCreatedDate(), is(DTOAttributes.getCreatedDate()));
-    assertThat(mappedNote.getUserAuthId(), is(DTOAttributes.getUserAuthId()));
+    assertThat(mappedNote.getUserId(), is(DTOAttributes.getUserId()));
     assertThat(mappedNote.getFullName(), is(DTOAttributes.getFullName()));
     assertThat(mappedNote.getEmail(), is(DTOAttributes.getEmail()));
   }
@@ -100,7 +99,7 @@ class NoteMapperTest {
     assertThat(mappedAttributes.getText(), is(note.getText()));
     assertThat(mappedAttributes.getType(), is(note.getType()));
     assertThat(mappedAttributes.getCreatedDate(), is(note.getCreatedDate()));
-    assertThat(mappedAttributes.getUserAuthId(), is(note.getUserAuthId()));
+    assertThat(mappedAttributes.getUserId(), is(note.getUserId()));
     assertThat(mappedAttributes.getFullName(), is(note.getFullName()));
     assertThat(mappedAttributes.getEmail(), is(note.getEmail()));
   }

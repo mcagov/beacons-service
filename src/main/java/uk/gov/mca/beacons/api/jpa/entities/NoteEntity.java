@@ -35,7 +35,7 @@ public class NoteEntity {
 
   private LocalDateTime createdDate;
 
-  private UUID userAuthId;
+  private UUID userId;
 
   private String fullName;
 

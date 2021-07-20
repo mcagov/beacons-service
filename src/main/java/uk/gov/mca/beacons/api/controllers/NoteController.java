@@ -47,7 +47,7 @@ public class NoteController {
     // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
     final User user = getUserService.getUser(null);
 
-    note.setUserAuthId(UUID.fromString(user.getAuthId()));
+    note.setUserId(UUID.fromString(user.getAuthId()));
     note.setFullName(user.getFullName());
     note.setEmail(user.getEmail());
 

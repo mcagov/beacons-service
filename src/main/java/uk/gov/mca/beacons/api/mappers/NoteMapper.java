@@ -31,7 +31,7 @@ public class NoteMapper extends BaseMapper {
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate() == null ? now : note.getCreatedDate())
-      .userAuthId(note.getUserAuthId())
+      .userId(note.getUserId())
       .fullName(note.getFullName())
       .email(note.getEmail())
       .build();
@@ -42,7 +42,7 @@ public class NoteMapper extends BaseMapper {
       .builder()
       .id(noteEntity.getId())
       .beaconId(noteEntity.getBeaconId())
-      .userAuthId(noteEntity.getUserAuthId())
+      .userId(noteEntity.getUserId())
       .fullName(noteEntity.getFullName())
       .email(noteEntity.getEmail())
       .text(noteEntity.getText())
@@ -61,7 +61,7 @@ public class NoteMapper extends BaseMapper {
       .text(attributes.getText())
       .type(attributes.getType())
       .createdDate(attributes.getCreatedDate())
-      .userAuthId(attributes.getUserAuthId())
+      .userId(attributes.getUserId())
       .fullName(attributes.getFullName())
       .email(attributes.getEmail())
       .build();
@@ -77,7 +77,7 @@ public class NoteMapper extends BaseMapper {
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate())
-      .userAuthId(note.getUserAuthId())
+      .userId(note.getUserId())
       .fullName(note.getFullName())
       .email(note.getEmail())
       .build();

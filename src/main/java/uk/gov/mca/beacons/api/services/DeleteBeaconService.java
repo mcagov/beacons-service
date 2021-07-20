@@ -3,7 +3,6 @@ package uk.gov.mca.beacons.api.services;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class DeleteBeaconService {
   }
 
   public void delete(DeleteBeaconRequestDTO request) {
-    final User user = userGateway.getUserById(request.getActorId());
+    final User user = userGateway.getUserById(request.getUserId());
     if (user == null) throw new UserNotFoundException();
 
     final Note note = Note
@@ -47,7 +46,7 @@ public class DeleteBeaconService {
       .beaconId(request.getBeaconId())
       .email(user.getEmail())
       .fullName(user.getFullName())
-      .userAuthId(request.getActorId())
+      .userId(request.getUserId())
       .type(NoteType.RECORD_HISTORY)
       .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
       .createdDate(now())
