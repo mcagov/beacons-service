@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 
-@TestInstance(Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class NoteMapperTest {
 
   @InjectMocks
@@ -32,10 +32,8 @@ class NoteMapperTest {
   private NoteDTO noteDTO;
   private Attributes DTOAttributes;
 
-  @BeforeAll
+  @BeforeEach
   public void setup() {
-    noteMapper = new NoteMapper(clock);
-
     final UUID id = UUID.randomUUID();
     final UUID beaconId = UUID.randomUUID();
     final String text = "Beacon pancakes, making beacon pancakes";
