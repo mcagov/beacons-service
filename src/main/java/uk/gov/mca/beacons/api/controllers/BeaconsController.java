@@ -74,7 +74,7 @@ public class BeaconsController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @DeleteMapping(value = "/{uuid}")
+  @PatchMapping(value = "{uuid}/delete")
   public ResponseEntity<Void> delete(
     @PathVariable("uuid") UUID id,
     @RequestBody @Valid DeleteBeaconRequestDTO requestDTO
