@@ -51,7 +51,7 @@ class NoteControllerUnitTest {
   @BeforeEach
   public final void before() {
     final UUID noteId = UUID.randomUUID();
-    final UUID personId = UUID.randomUUID();
+    final UUID userId = UUID.randomUUID();
     final String fullName = "Joanna Castille";
     final String email = "my.son.sux@gmail.com";
 
@@ -60,7 +60,7 @@ class NoteControllerUnitTest {
     user =
       BackOfficeUser
         .builder()
-        .authId(personId.toString())
+        .id(userId)
         .fullName(fullName)
         .email(email)
         .build();

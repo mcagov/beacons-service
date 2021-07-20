@@ -32,14 +32,14 @@ class UserGatewayImplUnitTest {
       .willReturn(
         AccountHolder
           .builder()
-          .authId("0fd158e9-d648-4b11-88d9-7bc57080aa5e")
+          .id(id)
           .fullName("Account Holder")
           .email("account.holder@beaconsstore.gov.uk")
           .build()
       );
 
     final var user = userGateway.getUserById(id);
-    assertThat(user.getAuthId(), is("0fd158e9-d648-4b11-88d9-7bc57080aa5e"));
+    assertThat(user.getId(), is(id));
     assertThat(user.getFullName(), is("Account Holder"));
     assertThat(user.getEmail(), is("account.holder@beaconsstore.gov.uk"));
   }
@@ -52,14 +52,14 @@ class UserGatewayImplUnitTest {
       .willReturn(
         BackOfficeUser
           .builder()
-          .authId("0fd158e9-d648-4b11-88d9-7bc57080aa5d")
+          .id(id)
           .fullName("Back Office Crew")
           .email("backoffice@mcgca.gov.uk")
           .build()
       );
 
     final var user = userGateway.getUserById(id);
-    assertThat(user.getAuthId(), is("0fd158e9-d648-4b11-88d9-7bc57080aa5d"));
+    assertThat(user.getId(), is(id));
     assertThat(user.getFullName(), is("Back Office Crew"));
     assertThat(user.getEmail(), is("backoffice@mcgca.gov.uk"));
   }

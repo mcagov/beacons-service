@@ -24,12 +24,12 @@ class GetUserServiceTest {
 
   @Test
   void shouldReturnTheCurrentUser() {
-    final String authId = UUID.randomUUID().toString();
+    final UUID userId = UUID.randomUUID();
     final String name = "Cher Horowitz";
     final String email = "this.is@an.alaia";
     final BackOfficeUser user = BackOfficeUser
       .builder()
-      .authId(authId)
+      .id(userId)
       .fullName(name)
       .email(email)
       .build();
