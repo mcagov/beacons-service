@@ -50,7 +50,7 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(UUID.randomUUID())
-      .actorId(accountHolderId)
+      .userId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
     given(userGateway.getUserById(accountHolderId))
@@ -67,7 +67,7 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(UUID.randomUUID())
-      .actorId(accountHolderId)
+      .userId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
     given(userGateway.getUserById(accountHolderId)).willReturn(null);
@@ -89,7 +89,7 @@ class DeleteBeaconServiceUnitTest {
     final var request = DeleteBeaconRequestDTO
       .builder()
       .beaconId(beaconId)
-      .actorId(accountHolderId)
+      .userId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
     final var accountHolder = AccountHolder
@@ -106,7 +106,7 @@ class DeleteBeaconServiceUnitTest {
     assertThat(note.getBeaconId(), is(beaconId));
     assertThat(note.getEmail(), is("beacons@beacons.com"));
     assertThat(note.getFullName(), is("Beacons R Us"));
-    assertThat(note.getPersonId(), is(accountHolderId));
+    assertThat(note.getUserId(), is(accountHolderId));
     assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
     assertThat(
       note.getText(),

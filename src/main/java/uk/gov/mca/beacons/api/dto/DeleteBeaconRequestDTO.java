@@ -16,7 +16,7 @@ import lombok.Setter;
 public class DeleteBeaconRequestDTO {
 
   private UUID beaconId;
-  private UUID actorId;
+  private UUID userId;
 
   @NotNull(message = "Reason for deleting a beacon must be defined")
   private String reason;

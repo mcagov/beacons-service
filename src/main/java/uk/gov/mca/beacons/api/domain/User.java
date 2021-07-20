@@ -1,7 +1,9 @@
 package uk.gov.mca.beacons.api.domain;
 
+import java.util.UUID;
+
 public interface User {
-  String getAuthId();
+  UUID getId();
   String getFullName();
   String getEmail();
 }

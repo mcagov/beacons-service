@@ -164,7 +164,7 @@ class AccountHolderControllerIntegrationTest {
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(UUID.fromString(beaconId))
-        .actorId(UUID.fromString(createdAccountHolderId))
+        .userId(UUID.fromString(createdAccountHolderId))
         .reason("Not used on my boat")
         .build();
 

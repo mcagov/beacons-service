@@ -117,12 +117,12 @@ class BeaconsControllerUnitTest {
   class DeleteBeacon {
 
     private UUID beaconId;
-    private UUID actorId;
+    private UUID userId;
 
     @BeforeEach
     public void init() {
       beaconId = UUID.randomUUID();
-      actorId = UUID.randomUUID();
+      userId = UUID.randomUUID();
     }
 
     @Test
@@ -131,7 +131,7 @@ class BeaconsControllerUnitTest {
         .builder()
         .beaconId(beaconId)
         .reason("Unused on my boat anymore")
-        .actorId(actorId)
+        .userId(userId)
         .build();
 
       mockMvc
@@ -154,7 +154,7 @@ class BeaconsControllerUnitTest {
         deleteBeaconRequestValue.getReason(),
         is("Unused on my boat anymore")
       );
-      assertThat(deleteBeaconRequestValue.getActorId(), is(actorId));
+      assertThat(deleteBeaconRequestValue.getUserId(), is(userId));
     }
 
     @Test
@@ -162,7 +162,7 @@ class BeaconsControllerUnitTest {
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(beaconId)
-        .actorId(actorId)
+        .userId(userId)
         .build();
 
       mockMvc
@@ -191,7 +191,7 @@ class BeaconsControllerUnitTest {
         .builder()
         .beaconId(beaconId)
         .reason("Unused on my boat anymore")
-        .actorId(actorId)
+        .userId(userId)
         .build();
 
       mockMvc

@@ -28,6 +28,6 @@ public class NoteGatewayImpl implements NoteGateway {
   public Note create(Note note) {
     final NoteEntity noteEntity = noteMapper.toNoteEntity(note);
     final NoteEntity createdEntity = noteJpaRepository.save(noteEntity);
-    return NoteMapper.fromNoteEntity(createdEntity);
+    return noteMapper.fromNoteEntity(createdEntity);
   }
 }
