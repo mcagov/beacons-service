@@ -1,10 +1,10 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,11 +40,12 @@ public class NoteController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasAuthority('APPROLE_ADD_BEACON_NOTES')")
   public WrapperDTO<NoteDTO> createNote(
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-    // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
+    // TODO: how to handle an Account Holder creating a note?
     final User user = getUserService.getUser(null);
 
     note.setUserId(user.getId());
