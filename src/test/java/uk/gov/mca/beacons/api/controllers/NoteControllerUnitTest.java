@@ -55,14 +55,7 @@ class NoteControllerUnitTest {
     final String fullName = "Joanna Castille";
     final String email = "my.son.sux@gmail.com";
 
-    note =
-      Note
-        .builder()
-        .id(noteId)
-        .userAuthId(personId)
-        .fullName(fullName)
-        .email(email)
-        .build();
+    note = Note.builder().id(noteId).build();
 
     user =
       BackOfficeUser
@@ -83,6 +76,7 @@ class NoteControllerUnitTest {
         .writeValueAsString(newNoteDTO);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
+      given(getUserService.getUser(null)).willReturn(user);
 
       mvc
         .perform(
@@ -94,14 +88,10 @@ class NoteControllerUnitTest {
     }
 
     @Test
-    void shouldCallTheGetUserServiceIfNoteHasNoUserAttached() throws Exception {
+    void shouldCallTheGetUserService() throws Exception {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
-
-      note.setUserAuthId(null);
-      note.setFullName(null);
-      note.setEmail(null);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
       given(getUserService.getUser(null)).willReturn(user);
@@ -116,30 +106,13 @@ class NoteControllerUnitTest {
     }
 
     @Test
-    void shouldNotCallTheGetUserServiceIfNoteHasAUserAttached()
-      throws Exception {
-      final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
-      final String newNoteRequest = new ObjectMapper()
-        .writeValueAsString(newNoteDTO);
-
-      given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
-
-      mvc.perform(
-        post("/note")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(newNoteRequest)
-      );
-
-      verify(getUserService, times(0)).getUser(null);
-    }
-
-    @Test
     void shouldCallTheNoteServiceToCreateANewNote() throws Exception {
       final WrapperDTO<NoteDTO> newNoteDTO = new WrapperDTO<>();
       final String newNoteRequest = new ObjectMapper()
         .writeValueAsString(newNoteDTO);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
+      given(getUserService.getUser(null)).willReturn(user);
 
       mvc.perform(
         post("/note")

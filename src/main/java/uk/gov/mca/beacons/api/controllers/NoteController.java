@@ -44,22 +44,13 @@ public class NoteController {
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-    if (userDoesNotExist(note)) {
-      // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
-      final User user = getUserService.getUser(null);
+    // TODO: make the id passed in (B2C auth Id) not just null once we're getting that!
+    final User user = getUserService.getUser(null);
 
-      note.setUserAuthId(UUID.fromString(user.getAuthId()));
-      note.setFullName(user.getFullName());
-      note.setEmail(user.getEmail());
-    }
+    note.setUserAuthId(UUID.fromString(user.getAuthId()));
+    note.setFullName(user.getFullName());
+    note.setEmail(user.getEmail());
+
     return noteMapper.toWrapperDTO(noteService.create(note));
-  }
-
-  private boolean userDoesNotExist(Note note) {
-    return (
-      note.getUserAuthId() == null &&
-      note.getFullName() == null &&
-      note.getEmail() == null
-    );
   }
 }
