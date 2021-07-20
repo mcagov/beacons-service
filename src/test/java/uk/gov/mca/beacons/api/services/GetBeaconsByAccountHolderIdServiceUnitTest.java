@@ -41,7 +41,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
   @Test
   void shouldReturnAnEmptyListIfThereAreNoBeaconsFound() {
     final var accountId = UUID.randomUUID();
-    given(beaconGateway.findAllByAccountHolderId(accountId))
+    given(beaconGateway.findAllActiveBeaconsByAccountHolderId(accountId))
       .willReturn(Collections.emptyList());
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
@@ -53,7 +53,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
     final var accountId = UUID.randomUUID();
     final var beacon = new Beacon();
 
-    given(beaconGateway.findAllByAccountHolderId(accountId))
+    given(beaconGateway.findAllActiveBeaconsByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
 
     final var result = getBeaconsByAccountHolderIdService.execute(accountId);
@@ -69,7 +69,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
     beacon.setId(beaconId);
     final var beaconUse = new BeaconUse();
 
-    given(beaconGateway.findAllByAccountHolderId(accountId))
+    given(beaconGateway.findAllActiveBeaconsByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
     given(useGateway.findAllByBeaconId(beaconId))
       .willReturn(Collections.singletonList(beaconUse));
@@ -87,7 +87,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
     beacon.setId(beaconId);
     final var owner = new Person();
 
-    given(beaconGateway.findAllByAccountHolderId(accountId))
+    given(beaconGateway.findAllActiveBeaconsByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
     given(ownerGateway.findByBeaconId(beaconId)).willReturn(owner);
 
@@ -103,7 +103,7 @@ class GetBeaconsByAccountHolderIdServiceUnitTest {
     beacon.setId(beaconId);
     final var emergencyContact = new Person();
 
-    given(beaconGateway.findAllByAccountHolderId(accountId))
+    given(beaconGateway.findAllActiveBeaconsByAccountHolderId(accountId))
       .willReturn(Collections.singletonList(beacon));
     given(emergencyContactGateway.findAllByBeaconId(beaconId))
       .willReturn(Collections.singletonList(emergencyContact));

@@ -23,3 +23,8 @@ beacons:
       url: https://github.com/mcagov/beacons-service
   cors:
     allowedOrigins: ${BEACONS_CORS_ALLOWED_ORIGINS:*}
+  security:
+    basic:
+      user:
+        name: user
+        password: password
