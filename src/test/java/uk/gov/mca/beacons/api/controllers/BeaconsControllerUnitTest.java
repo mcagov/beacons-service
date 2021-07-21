@@ -136,7 +136,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          delete("/beacons/" + beaconId)
+          patch("/beacons/" + beaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
@@ -167,7 +167,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          delete("/beacons/" + beaconId)
+          patch("/beacons/" + beaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
@@ -196,7 +196,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          delete("/beacons/" + differentBeaconId)
+          patch("/beacons/" + differentBeaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )

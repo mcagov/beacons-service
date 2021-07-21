@@ -169,8 +169,8 @@ class AccountHolderControllerIntegrationTest {
         .build();
 
       webTestClient
-        .method(HttpMethod.DELETE)
-        .uri("/beacons/" + beaconId)
+        .patch()
+        .uri("/beacons/" + beaconId + "/delete")
         .body(BodyInserters.fromValue(deleteBeaconRequest))
         .exchange()
         .expectStatus()
