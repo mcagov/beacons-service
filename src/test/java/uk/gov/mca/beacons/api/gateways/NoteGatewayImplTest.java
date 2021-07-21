@@ -1,8 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +10,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -154,23 +154,11 @@ class NoteGatewayImplTest {
     }
 
     @Test
-    void shouldNotDieIfBeaconsAreNotFound() {
+    void shouldReturnAnEmptyListIfNoNotesAreFound() {
       final UUID beaconId = UUID.randomUUID();
-      final NoteEntity firstNoteEntity = NoteEntity
-        .builder()
-        .beaconId(beaconId)
-        .build();
-      final NoteEntity secondNoteEntity = NoteEntity
-        .builder()
-        .beaconId(beaconId)
-        .build();
-
-      final List<NoteEntity> foundNoteEntities = new ArrayList<>();
-      foundNoteEntities.add(firstNoteEntity);
-      foundNoteEntities.add(secondNoteEntity);
 
       when(noteRepository.findAllByBeaconId(beaconId))
-        .thenReturn(foundNoteEntities);
+        .thenReturn(Collections.emptyList());
 
       final NoteMapper noteMapper = new NoteMapper(fixedClock);
       final NoteGateway noteGateway = new NoteGatewayImpl(
@@ -178,9 +166,7 @@ class NoteGatewayImplTest {
         noteRepository
       );
 
-      List<Note> foundNotes = noteGateway.findAllByBeaconId(beaconId);
-
-      foundNotes.forEach(note -> assertThat(note.getBeaconId(), is(beaconId)));
+      assertThat(noteGateway.findAllByBeaconId(beaconId), is(empty()));
     }
   }
 }
