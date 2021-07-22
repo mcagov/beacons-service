@@ -3,13 +3,10 @@ package uk.gov.mca.beacons.api.controllers;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -67,60 +64,6 @@ class NoteControllerUnitTest {
         .fullName(fullName)
         .email(email)
         .build();
-  }
-
-  @Nested
-  class GetNotes {
-
-    @Test
-    void shouldRequestNotesFromNoteServiceByBeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-      final Note firstNote = Note.builder().beaconId(beaconId).build();
-      final Note secondNote = Note.builder().beaconId(beaconId).build();
-
-      final List<Note> foundNotes = List.of(firstNote, secondNote);
-
-      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
-
-      mvc.perform(
-        get("/note/beacon/" + beaconId).contentType(MediaType.APPLICATION_JSON)
-      );
-
-      verify(noteService, times(1)).findAllByBeaconId(beaconId);
-    }
-
-    @Test
-    void shouldReturn200WhenThereAreNotesForABeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-      final Note firstNote = Note.builder().beaconId(beaconId).build();
-      final Note secondNote = Note.builder().beaconId(beaconId).build();
-
-      final List<Note> foundNotes = List.of(firstNote, secondNote);
-
-      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
-
-      mvc
-        .perform(
-          get("/note/beacon/" + beaconId)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldReturn200WhenThereAreNoNotesForABeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-
-      given(noteService.findAllByBeaconId(beaconId))
-        .willReturn(Collections.emptyList());
-
-      mvc
-        .perform(
-          get("/note/beacon/" + beaconId)
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().isOk());
-    }
   }
 
   @Nested

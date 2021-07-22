@@ -2,13 +2,12 @@ package uk.gov.mca.beacons.api.controllers;
 
 import static org.mockito.BDDMockito.given;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.domain.Activity;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
@@ -35,6 +33,9 @@ import uk.gov.mca.beacons.api.services.GetUserService;
 @AutoConfigureWebTestClient
 class NoteControllerIntegrationTest {
 
+  private String beaconId;
+  private Registration createdRegistration;
+
   @Autowired
   private WebTestClient webTestClient;
 
@@ -44,46 +45,8 @@ class NoteControllerIntegrationTest {
   @MockBean
   private GetUserService getUserService;
 
-  @Test
-  void shouldCreateAndReturnTheCreatedNote() throws Exception {
-    final var beaconId = createBeacon();
-    final var createNoteResponse = createNote(beaconId);
-    final var noteId = getNoteId(createNoteResponse);
-    final String expectedResponse = readFile(
-      "src/test/resources/fixtures/createNoteResponse.json"
-    )
-      .replace("replace-with-test-note-id", noteId)
-      .replace("replace-with-test-beacon-id", beaconId);
-
-    createNoteResponse.json(expectedResponse);
-  }
-
-  @Test
-  void shouldReturnTheNotesForABeaconId() throws Exception {
-    final String beaconId = createBeacon();
-    final String firstNoteId = getNoteId(createNote(beaconId));
-    final String secondNoteId = getNoteId(createNote(beaconId));
-    final String expectedResponse = readFile(
-      "src/test/resources/fixtures/getNotesByBeaconIdResponse.json"
-    )
-      .replace("replace-with-first-test-note-id", firstNoteId)
-      .replace("replace-with-second-test-note-id", secondNoteId)
-      .replace("replace-with-test-beacon-id", beaconId);
-
-    final var response = webTestClient
-      .get()
-      .uri("/note/beacon/" + beaconId)
-      .exchange()
-      .expectBody();
-
-    response.json(expectedResponse);
-  }
-
-  private String readFile(String filePath) throws IOException {
-    return new String(Files.readAllBytes(Paths.get(filePath)));
-  }
-
-  private String createBeacon() {
+  @BeforeEach
+  void init() {
     BeaconUse beaconUse = new BeaconUse();
     beaconUse.setEnvironment(Environment.LAND);
     beaconUse.setPurpose(Purpose.PLEASURE);
@@ -98,7 +61,7 @@ class NoteControllerIntegrationTest {
     String manufacturer = "French";
     String model = "Revolution";
     String manufacturerSerialNumber = "2460124601";
-    Beacon beacon = new Beacon();
+    final Beacon beacon = new Beacon();
     beacon.setHexId(hexId);
     beacon.setManufacturer(manufacturer);
     beacon.setModel(model);
@@ -109,16 +72,20 @@ class NoteControllerIntegrationTest {
 
     Registration registration = new Registration();
     registration.setBeacons(List.of(beacon));
-    Registration createdRegistration = createRegistrationService.register(
-      registration
-    );
-    Beacon createdBeacon = createdRegistration.getBeacons().get(0);
-    return createdBeacon.getId().toString();
+    createdRegistration = createRegistrationService.register(registration);
+    final Beacon createdBeacon = createdRegistration.getBeacons().get(0);
+    beaconId = createdBeacon.getId().toString();
   }
 
-  private BodyContentSpec createNote(String beaconId) throws Exception {
+  @Test
+  void shouldCreateAndReturnTheCreatedNote() throws Exception {
     final String createNoteRequest = readFile(
       "src/test/resources/fixtures/createNoteRequest.json"
+    )
+      .replace("replace-with-test-beacon-id", beaconId);
+
+    final String createNoteResponse = readFile(
+      "src/test/resources/fixtures/createNoteResponse.json"
     )
       .replace("replace-with-test-beacon-id", beaconId);
 
@@ -134,24 +101,18 @@ class NoteControllerIntegrationTest {
 
     given(getUserService.getUser(null)).willReturn(user);
 
-    return webTestClient
+    var response = webTestClient
       .post()
       .uri("/note")
       .body(BodyInserters.fromValue(createNoteRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
       .expectBody();
+
+    response.json(createNoteResponse);
   }
 
-  private String getNoteId(BodyContentSpec createNoteResponse)
-    throws Exception {
-    return new ObjectMapper()
-      .readValue(
-        createNoteResponse.returnResult().getResponseBody(),
-        ObjectNode.class
-      )
-      .get("data")
-      .get("id")
-      .textValue();
+  private String readFile(String filePath) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(filePath)));
   }
 }

@@ -42,15 +42,6 @@ public class NoteController {
     this.getUserService = getUserService;
   }
 
-  @GetMapping(value = "/beacon/{beaconId}")
-  public WrapperDTO<List<NoteDTO>> getNotesByBeaconId(
-    @PathVariable("beaconId") UUID beaconId
-  ) {
-    final List<Note> foundNotes = noteService.findAllByBeaconId(beaconId);
-
-    return noteMapper.toOrderedWrapperDTO(foundNotes);
-  }
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('APPROLE_ADD_BEACON_NOTES')")
