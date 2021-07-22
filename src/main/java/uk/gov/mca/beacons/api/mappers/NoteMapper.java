@@ -4,6 +4,8 @@ import static uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.Note;
@@ -89,6 +91,17 @@ public class NoteMapper extends BaseMapper {
   public WrapperDTO<NoteDTO> toWrapperDTO(Note note) {
     final WrapperDTO<NoteDTO> wrapperDTO = new WrapperDTO<>();
     wrapperDTO.setData(toDTO(note));
+    return wrapperDTO;
+  }
+
+  public WrapperDTO<List<NoteDTO>> toWrapperDTO(List<Note> notes) {
+    final WrapperDTO<List<NoteDTO>> wrapperDTO = new WrapperDTO<>();
+    final var noteDTOs = notes
+      .stream()
+      .map(this::toDTO)
+      .collect(Collectors.toList());
+    wrapperDTO.setData(noteDTOs);
+    wrapperDTO.addMeta("count", noteDTOs.size());
     return wrapperDTO;
   }
 }

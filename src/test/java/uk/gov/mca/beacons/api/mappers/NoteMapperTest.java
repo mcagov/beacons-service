@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,5 +110,16 @@ class NoteMapperTest {
     assertNotNull(wrappedNote.getMeta());
     assertNotNull(wrappedNote.getData());
     assertNotNull(wrappedNote.getIncluded());
+  }
+
+  @Test
+  void toWrapperDTO_shouldConvertAListOfNotesToAWrappedDTO() {
+    final WrapperDTO<List<NoteDTO>> wrappedNotes = noteMapper.toWrapperDTO(
+      List.of(note)
+    );
+
+    assertThat(wrappedNotes.getMeta().get("count"), is(1));
+    assertNotNull(wrappedNotes.getData());
+    assertNotNull(wrappedNotes.getIncluded());
   }
 }
