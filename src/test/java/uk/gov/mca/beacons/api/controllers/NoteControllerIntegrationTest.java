@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.domain.Activity;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
@@ -45,46 +46,23 @@ class NoteControllerIntegrationTest {
 
   @Test
   void shouldCreateAndReturnTheCreatedNote() throws Exception {
-    final String beaconId = createBeacon();
-    final String createNoteRequest = readFile(
-      "src/test/resources/fixtures/createNoteRequest.json"
-    )
-      .replace("replace-with-test-beacon-id", beaconId);
-
-    final String createNoteResponse = readFile(
+    final var beaconId = createBeacon();
+    final var createNoteResponse = createNote(beaconId);
+    final var noteId = getNoteId(createNoteResponse);
+    final String expectedResponse = readFile(
       "src/test/resources/fixtures/createNoteResponse.json"
     )
+      .replace("replace-with-test-note-id", noteId)
       .replace("replace-with-test-beacon-id", beaconId);
 
-    final UUID userId = UUID.fromString("344848b9-8a5d-4818-a57d-1815528d543e");
-    final String fullName = "Jean ValJean";
-    final String email = "24601@jail.fr";
-    final User user = BackOfficeUser
-      .builder()
-      .id(userId)
-      .fullName(fullName)
-      .email(email)
-      .build();
-
-    given(getUserService.getUser(null)).willReturn(user);
-
-    var response = webTestClient
-      .post()
-      .uri("/note")
-      .body(BodyInserters.fromValue(createNoteRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectBody();
-
-    response.json(createNoteResponse);
+    createNoteResponse.json(expectedResponse);
   }
 
   @Test
   void shouldReturnTheNotesForABeaconId() throws Exception {
     final String beaconId = createBeacon();
-    final String firstNoteId = createNote(beaconId);
-    final String secondNoteId = createNote(beaconId);
-
+    final String firstNoteId = getNoteId(createNote(beaconId));
+    final String secondNoteId = getNoteId(createNote(beaconId));
     final String expectedResponse = readFile(
       "src/test/resources/fixtures/getNotesByBeaconIdResponse.json"
     )
@@ -92,7 +70,7 @@ class NoteControllerIntegrationTest {
       .replace("replace-with-second-test-note-id", secondNoteId)
       .replace("replace-with-test-beacon-id", beaconId);
 
-    var response = webTestClient
+    final var response = webTestClient
       .get()
       .uri("/note/beacon/" + beaconId)
       .exchange()
@@ -138,7 +116,7 @@ class NoteControllerIntegrationTest {
     return createdBeacon.getId().toString();
   }
 
-  private String createNote(String beaconId) throws Exception {
+  private BodyContentSpec createNote(String beaconId) throws Exception {
     final String createNoteRequest = readFile(
       "src/test/resources/fixtures/createNoteRequest.json"
     )
@@ -156,18 +134,22 @@ class NoteControllerIntegrationTest {
 
     given(getUserService.getUser(null)).willReturn(user);
 
-    final var responseBody = webTestClient
+    return webTestClient
       .post()
       .uri("/note")
       .body(BodyInserters.fromValue(createNoteRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
-      .expectBody()
-      .returnResult()
-      .getResponseBody();
+      .expectBody();
+  }
 
+  private String getNoteId(BodyContentSpec createNoteResponse)
+    throws Exception {
     return new ObjectMapper()
-      .readValue(responseBody, ObjectNode.class)
+      .readValue(
+        createNoteResponse.returnResult().getResponseBody(),
+        ObjectNode.class
+      )
       .get("data")
       .get("id")
       .textValue();
