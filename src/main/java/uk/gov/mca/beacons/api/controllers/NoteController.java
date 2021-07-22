@@ -1,10 +1,14 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,15 @@ public class NoteController {
     this.noteMapper = noteMapper;
     this.noteService = noteService;
     this.getUserService = getUserService;
+  }
+
+  @GetMapping(value = "/beacon/{beaconId}")
+  public WrapperDTO<List<NoteDTO>> getNotesByBeaconId(
+    @PathVariable("beaconId") UUID beaconId
+  ) {
+    final List<Note> foundNotes = noteService.findAllByBeaconId(beaconId);
+
+    return noteMapper.toWrapperDTO(foundNotes);
   }
 
   @PostMapping
