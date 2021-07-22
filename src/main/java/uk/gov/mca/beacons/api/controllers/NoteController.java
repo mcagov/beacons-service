@@ -48,7 +48,7 @@ public class NoteController {
   ) {
     final List<Note> foundNotes = noteService.findAllByBeaconId(beaconId);
 
-    return noteMapper.toWrapperDTO(foundNotes);
+    return noteMapper.toOrderedWrapperDTO(foundNotes);
   }
 
   @PostMapping

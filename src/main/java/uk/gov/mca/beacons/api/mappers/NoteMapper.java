@@ -4,6 +4,7 @@ import static uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,10 +95,13 @@ public class NoteMapper extends BaseMapper {
     return wrapperDTO;
   }
 
-  public WrapperDTO<List<NoteDTO>> toWrapperDTO(List<Note> notes) {
+  public WrapperDTO<List<NoteDTO>> toOrderedWrapperDTO(List<Note> notes) {
     final WrapperDTO<List<NoteDTO>> wrapperDTO = new WrapperDTO<>();
     final var noteDTOs = notes
       .stream()
+      .sorted(
+        Comparator.comparing(Note::getCreatedDate, Comparator.reverseOrder())
+      )
       .map(this::toDTO)
       .collect(Collectors.toList());
     wrapperDTO.setData(noteDTOs);

@@ -113,13 +113,48 @@ class NoteMapperTest {
   }
 
   @Test
-  void toWrapperDTO_shouldConvertAListOfNotesToAWrappedDTO() {
-    final WrapperDTO<List<NoteDTO>> wrappedNotes = noteMapper.toWrapperDTO(
+  void toOrderedWrapperDTO_shouldConvertAListOfNotesToAWrappedDTO() {
+    final WrapperDTO<List<NoteDTO>> wrappedNotes = noteMapper.toOrderedWrapperDTO(
       List.of(note)
     );
 
     assertThat(wrappedNotes.getMeta().get("count"), is(1));
     assertNotNull(wrappedNotes.getData());
+    assertNotNull(wrappedNotes.getIncluded());
+  }
+
+  @Test
+  void toOrderedWrapperDTO_shouldOrderAListOfNotesByLatestFirst() {
+    final var oldestNote = Note
+      .builder()
+      .createdDate(LocalDateTime.of(1990, 1, 1, 0, 0, 0))
+      .build();
+    final var middleNote = Note
+      .builder()
+      .createdDate(LocalDateTime.of(2020, 1, 1, 0, 0, 0))
+      .build();
+    final var newestNote = Note
+      .builder()
+      .createdDate(LocalDateTime.now())
+      .build();
+
+    final WrapperDTO<List<NoteDTO>> wrappedNotes = noteMapper.toOrderedWrapperDTO(
+      List.of(middleNote, oldestNote, newestNote)
+    );
+
+    assertThat(wrappedNotes.getMeta().get("count"), is(3));
+    assertThat(
+      wrappedNotes.getData().get(0).getAttributes().getCreatedDate(),
+      is(newestNote.getCreatedDate())
+    );
+    assertThat(
+      wrappedNotes.getData().get(1).getAttributes().getCreatedDate(),
+      is(middleNote.getCreatedDate())
+    );
+    assertThat(
+      wrappedNotes.getData().get(2).getAttributes().getCreatedDate(),
+      is(oldestNote.getCreatedDate())
+    );
     assertNotNull(wrappedNotes.getIncluded());
   }
 }
