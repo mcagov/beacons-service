@@ -1,8 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +9,11 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -37,78 +40,133 @@ class NoteGatewayImplTest {
   @Captor
   private ArgumentCaptor<NoteEntity> noteCaptor;
 
-  @Test
-  void shouldCreateANoteEntityFromANote() {
-    final UUID id = UUID.randomUUID();
-    final UUID beaconId = UUID.randomUUID();
-    final String text = "This beacon belongs to a cat.";
-    final NoteType type = NoteType.GENERAL;
-    final LocalDateTime createdDate = LocalDateTime.now();
-    final UUID userId = UUID.randomUUID();
-    final String fullName = "Alfred the cat";
-    final String email = "alfred@cute.cat.com";
+  @Nested
+  class CreateNote {
 
-    final Note note = Note
-      .builder()
-      .beaconId(beaconId)
-      .text(text)
-      .type(type)
-      .createdDate(createdDate)
-      .userId(userId)
-      .fullName(fullName)
-      .email(email)
-      .build();
+    @Test
+    void shouldCreateANoteEntityFromANote() {
+      final UUID id = UUID.randomUUID();
+      final UUID beaconId = UUID.randomUUID();
+      final String text = "This beacon belongs to a cat.";
+      final NoteType type = NoteType.GENERAL;
+      final LocalDateTime createdDate = LocalDateTime.now();
+      final UUID userId = UUID.randomUUID();
+      final String fullName = "Alfred the cat";
+      final String email = "alfred@cute.cat.com";
 
-    final NoteEntity createdEntity = NoteEntity
-      .builder()
-      .id(id)
-      .beaconId(beaconId)
-      .text(text)
-      .type(type)
-      .createdDate(createdDate)
-      .userId(userId)
-      .fullName(fullName)
-      .email(email)
-      .build();
+      final Note note = Note
+        .builder()
+        .beaconId(beaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
 
-    final NoteMapper noteMapper = new NoteMapper(fixedClock);
-    final NoteGateway noteGateway = new NoteGatewayImpl(
-      noteMapper,
-      noteRepository
-    );
+      final NoteEntity createdEntity = NoteEntity
+        .builder()
+        .id(id)
+        .beaconId(beaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
 
-    when(noteRepository.save(any(NoteEntity.class))).thenReturn(createdEntity);
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
 
-    final Note createdNote = noteGateway.create(note);
+      when(noteRepository.save(any(NoteEntity.class)))
+        .thenReturn(createdEntity);
 
-    assertThat(createdNote.getId(), is(id));
-    assertThat(createdNote.getBeaconId(), is(beaconId));
-    assertThat(createdNote.getText(), is(text));
-    assertThat(createdNote.getType(), is(type));
-    assertThat(createdNote.getCreatedDate(), is(createdDate));
-    assertThat(createdNote.getUserId(), is(userId));
-    assertThat(createdNote.getFullName(), is(fullName));
-    assertThat(createdNote.getEmail(), is(email));
+      final Note createdNote = noteGateway.create(note);
+
+      assertThat(createdNote.getId(), is(id));
+      assertThat(createdNote.getBeaconId(), is(beaconId));
+      assertThat(createdNote.getText(), is(text));
+      assertThat(createdNote.getType(), is(type));
+      assertThat(createdNote.getCreatedDate(), is(createdDate));
+      assertThat(createdNote.getUserId(), is(userId));
+      assertThat(createdNote.getFullName(), is(fullName));
+      assertThat(createdNote.getEmail(), is(email));
+    }
+
+    @Test
+    void shouldSetCreatedDateIfNotProvided() {
+      final Note note = new Note();
+      final NoteEntity createdEntity = new NoteEntity();
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      when(noteRepository.save(noteCaptor.capture())).thenReturn(createdEntity);
+
+      noteGateway.create(note);
+
+      final NoteEntity entity = noteCaptor.getValue();
+      assertThat(
+        entity.getCreatedDate(),
+        is(equalTo(LocalDateTime.now(fixedClock)))
+      );
+    }
   }
 
-  @Test
-  void shouldSetCreatedDateIfNotProvided() {
-    final Note note = new Note();
-    final NoteEntity createdEntity = new NoteEntity();
-    final NoteMapper noteMapper = new NoteMapper(fixedClock);
-    final NoteGateway noteGateway = new NoteGatewayImpl(
-      noteMapper,
-      noteRepository
-    );
+  @Nested
+  class GetNotesByBeaconId {
 
-    when(noteRepository.save(noteCaptor.capture())).thenReturn(createdEntity);
+    @Test
+    void shouldReturnNotesRelatedToABeacons() {
+      final UUID beaconId = UUID.randomUUID();
+      final NoteEntity firstNoteEntity = NoteEntity
+        .builder()
+        .beaconId(beaconId)
+        .build();
+      final NoteEntity secondNoteEntity = NoteEntity
+        .builder()
+        .beaconId(beaconId)
+        .build();
 
-    noteGateway.create(note);
+      final List<NoteEntity> foundNoteEntities = new ArrayList<>();
+      foundNoteEntities.add(firstNoteEntity);
+      foundNoteEntities.add(secondNoteEntity);
 
-    final NoteEntity entity = noteCaptor.getValue();
-    assertThat(
-      entity.getCreatedDate(),
-      is(equalTo(LocalDateTime.now(fixedClock)))
-    );
+      when(noteRepository.findAllByBeaconId(beaconId))
+        .thenReturn(foundNoteEntities);
+
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      List<Note> foundNotes = noteGateway.findAllByBeaconId(beaconId);
+
+      foundNotes.forEach(note -> assertThat(note.getBeaconId(), is(beaconId)));
+    }
+
+    @Test
+    void shouldReturnAnEmptyListIfNoNotesAreFound() {
+      final UUID beaconId = UUID.randomUUID();
+
+      when(noteRepository.findAllByBeaconId(beaconId))
+        .thenReturn(Collections.emptyList());
+
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      assertThat(noteGateway.findAllByBeaconId(beaconId), is(empty()));
+    }
   }
 }
