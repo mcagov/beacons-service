@@ -33,8 +33,7 @@ import uk.gov.mca.beacons.api.services.GetUserService;
 @AutoConfigureWebTestClient
 class NoteControllerIntegrationTest {
 
-  private Beacon beacon;
-  private Beacon createdBeacon;
+  private String beaconId;
   private Registration createdRegistration;
 
   @Autowired
@@ -62,7 +61,7 @@ class NoteControllerIntegrationTest {
     String manufacturer = "French";
     String model = "Revolution";
     String manufacturerSerialNumber = "2460124601";
-    beacon = new Beacon();
+    final Beacon beacon = new Beacon();
     beacon.setHexId(hexId);
     beacon.setManufacturer(manufacturer);
     beacon.setModel(model);
@@ -74,7 +73,8 @@ class NoteControllerIntegrationTest {
     Registration registration = new Registration();
     registration.setBeacons(List.of(beacon));
     createdRegistration = createRegistrationService.register(registration);
-    createdBeacon = createdRegistration.getBeacons().get(0);
+    final Beacon createdBeacon = createdRegistration.getBeacons().get(0);
+    beaconId = createdBeacon.getId().toString();
   }
 
   @Test
@@ -82,12 +82,12 @@ class NoteControllerIntegrationTest {
     final String createNoteRequest = readFile(
       "src/test/resources/fixtures/createNoteRequest.json"
     )
-      .replace("replace-with-test-beacon-id", createdBeacon.getId().toString());
+      .replace("replace-with-test-beacon-id", beaconId);
 
     final String createNoteResponse = readFile(
       "src/test/resources/fixtures/createNoteResponse.json"
     )
-      .replace("replace-with-test-beacon-id", createdBeacon.getId().toString());
+      .replace("replace-with-test-beacon-id", beaconId);
 
     final UUID userId = UUID.fromString("344848b9-8a5d-4818-a57d-1815528d543e");
     final String fullName = "Jean ValJean";

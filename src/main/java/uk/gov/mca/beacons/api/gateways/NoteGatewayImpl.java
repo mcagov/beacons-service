@@ -1,5 +1,8 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,5 +32,16 @@ public class NoteGatewayImpl implements NoteGateway {
     final NoteEntity noteEntity = noteMapper.toNoteEntity(note);
     final NoteEntity createdEntity = noteJpaRepository.save(noteEntity);
     return noteMapper.fromNoteEntity(createdEntity);
+  }
+
+  @Override
+  public List<Note> findAllByBeaconId(UUID beaconId) {
+    List<NoteEntity> foundEntities = noteJpaRepository.findAllByBeaconId(
+      beaconId
+    );
+    return foundEntities
+      .stream()
+      .map(noteEntity -> noteMapper.fromNoteEntity(noteEntity))
+      .collect(Collectors.toList());
   }
 }

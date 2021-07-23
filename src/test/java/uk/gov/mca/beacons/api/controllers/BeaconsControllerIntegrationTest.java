@@ -1,6 +1,14 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.mockito.BDDMockito.given;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,16 +16,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.domain.Activity;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.Environment;
 import uk.gov.mca.beacons.api.domain.Purpose;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
 import uk.gov.mca.beacons.api.jpa.entities.Registration;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
+import uk.gov.mca.beacons.api.services.GetUserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -28,6 +43,9 @@ class BeaconsControllerIntegrationTest {
 
   @Autowired
   private CreateRegistrationService createRegistrationService;
+
+  @MockBean
+  private GetUserService getUserService;
 
   private UUID uuid;
   private UUID useUuid;
@@ -147,5 +165,70 @@ class BeaconsControllerIntegrationTest {
       .expectStatus()
       .is2xxSuccessful()
       .expectBody();
+  }
+
+  @Test
+  void shouldReturnTheNotesForABeaconId() throws Exception {
+    final String beaconId = uuid.toString();
+    final String firstNoteId = getNoteId(createNote(beaconId));
+    final String secondNoteId = getNoteId(createNote(beaconId));
+    final String expectedResponse = readFile(
+      "src/test/resources/fixtures/getNotesByBeaconIdResponse.json"
+    )
+      .replace("replace-with-first-test-note-id", firstNoteId)
+      .replace("replace-with-second-test-note-id", secondNoteId)
+      .replace("replace-with-test-beacon-id", beaconId);
+
+    final var response = webTestClient
+      .get()
+      .uri("/beacons/" + beaconId + "/notes")
+      .exchange()
+      .expectBody();
+
+    response.json(expectedResponse);
+  }
+
+  private String readFile(String filePath) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(filePath)));
+  }
+
+  private WebTestClient.BodyContentSpec createNote(String beaconId)
+    throws Exception {
+    final String createNoteRequest = readFile(
+      "src/test/resources/fixtures/createNoteRequest.json"
+    )
+      .replace("replace-with-test-beacon-id", beaconId);
+
+    final UUID userId = UUID.fromString("344848b9-8a5d-4818-a57d-1815528d543e");
+    final String fullName = "Jean ValJean";
+    final String email = "24601@jail.fr";
+    final User user = BackOfficeUser
+      .builder()
+      .id(userId)
+      .fullName(fullName)
+      .email(email)
+      .build();
+
+    given(getUserService.getUser(null)).willReturn(user);
+
+    return webTestClient
+      .post()
+      .uri("/note")
+      .body(BodyInserters.fromValue(createNoteRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody();
+  }
+
+  private String getNoteId(WebTestClient.BodyContentSpec createNoteResponse)
+    throws Exception {
+    return new ObjectMapper()
+      .readValue(
+        createNoteResponse.returnResult().getResponseBody(),
+        ObjectNode.class
+      )
+      .get("data")
+      .get("id")
+      .textValue();
   }
 }
