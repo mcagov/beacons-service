@@ -58,19 +58,19 @@ class AuthGatewayImplTest {
 
     @Test
     void getsUserAttributesAndCreatesUser() {
-      final String authId = "0fd158e9-d648-4b11-88d9-7bc57080aa5e";
+      final String userId = "0fd158e9-d648-4b11-88d9-7bc57080aa5e";
       final String fullName = "Marie Antoinette";
       final String email = "let.them.eat@cake.fr";
 
       final var mockPrincipal = new HashMap<String, Object>();
-      mockPrincipal.put("oid", authId.toString());
+      mockPrincipal.put("oid", userId);
       mockPrincipal.put("name", fullName);
       mockPrincipal.put("email", email);
       given(principal.getAttributes()).willReturn(mockPrincipal);
 
       User user = authGateway.getUser();
 
-      assertThat(user.getAuthId(), is(authId));
+      assertThat(user.getId(), is(UUID.fromString(userId)));
       assertThat(user.getFullName(), is(fullName));
       assertThat(user.getEmail(), is(email));
     }

@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.domain;
 
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Builder
 public class BackOfficeUser implements User {
 
-  private String authId;
+  private UUID id;
   private String fullName;
   private String email;
 }

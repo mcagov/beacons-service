@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.services;
 
+import java.util.List;
+import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +21,9 @@ public class NoteService {
 
   public Note create(Note note) {
     return noteGateway.create(note);
+  }
+
+  public List<Note> findAllByBeaconId(UUID beaconId) {
+    return noteGateway.findAllByBeaconId(beaconId);
   }
 }

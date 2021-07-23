@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.BeaconsSearchResultDTO;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
+import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.InvalidBeaconDeleteException;
 import uk.gov.mca.beacons.api.exceptions.InvalidPatchException;
 import uk.gov.mca.beacons.api.mappers.BeaconMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
+import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController
 @RequestMapping("/beacons")
@@ -34,18 +39,24 @@ public class BeaconsController {
   private final BeaconsResponseFactory responseFactory;
   private final BeaconMapper beaconMapper;
   private final DeleteBeaconService deleteBeaconService;
+  private final NoteService noteService;
+  private final NoteMapper noteMapper;
 
   @Autowired
   public BeaconsController(
     BeaconsService beaconsService,
     BeaconsResponseFactory responseFactory,
     BeaconMapper beaconMapper,
-    DeleteBeaconService deleteBeaconService
+    DeleteBeaconService deleteBeaconService,
+    NoteService noteService,
+    NoteMapper noteMapper
   ) {
     this.beaconsService = beaconsService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
     this.deleteBeaconService = deleteBeaconService;
+    this.noteService = noteService;
+    this.noteMapper = noteMapper;
   }
 
   @GetMapping
@@ -61,6 +72,15 @@ public class BeaconsController {
     return responseFactory.buildDTO(beacon);
   }
 
+  @GetMapping(value = "/{uuid}/notes")
+  public WrapperDTO<List<NoteDTO>> getNotesByBeaconId(
+    @PathVariable("uuid") UUID beaconId
+  ) {
+    final List<Note> foundNotes = noteService.findAllByBeaconId(beaconId);
+
+    return noteMapper.toOrderedWrapperDTO(foundNotes);
+  }
+
   @PatchMapping(value = "/{uuid}")
   @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
   public ResponseEntity<Void> update(
@@ -74,7 +94,7 @@ public class BeaconsController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @DeleteMapping(value = "/{uuid}")
+  @PatchMapping(value = "{uuid}/delete")
   public ResponseEntity<Void> delete(
     @PathVariable("uuid") UUID id,
     @RequestBody @Valid DeleteBeaconRequestDTO requestDTO

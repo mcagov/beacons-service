@@ -164,13 +164,13 @@ class AccountHolderControllerIntegrationTest {
       final var deleteBeaconRequest = DeleteBeaconRequestDTO
         .builder()
         .beaconId(UUID.fromString(beaconId))
-        .actorId(UUID.fromString(createdAccountHolderId))
+        .userId(UUID.fromString(createdAccountHolderId))
         .reason("Not used on my boat")
         .build();
 
       webTestClient
-        .method(HttpMethod.DELETE)
-        .uri("/beacons/" + beaconId)
+        .patch()
+        .uri("/beacons/" + beaconId + "/delete")
         .body(BodyInserters.fromValue(deleteBeaconRequest))
         .exchange()
         .expectStatus()
