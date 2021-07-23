@@ -8,12 +8,14 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -27,14 +29,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
+import uk.gov.mca.beacons.api.domain.BackOfficeUser;
+import uk.gov.mca.beacons.api.domain.Note;
+import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.mappers.BeaconMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
+import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.GetUserService;
+import uk.gov.mca.beacons.api.services.NoteService;
 
 @WebMvcTest(controllers = BeaconsController.class)
 @AutoConfigureMockMvc
@@ -55,6 +63,12 @@ class BeaconsControllerUnitTest {
 
   @MockBean
   private DeleteBeaconService deleteBeaconService;
+
+  @MockBean
+  private NoteService noteService;
+
+  @MockBean
+  private NoteMapper noteMapper;
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -202,6 +216,63 @@ class BeaconsControllerUnitTest {
         )
         .andExpect(status().isBadRequest());
       then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
+    }
+  }
+
+  @Nested
+  class GetNotes {
+
+    @Test
+    void shouldRequestNotesFromNoteServiceByBeaconId() throws Exception {
+      UUID beaconId = UUID.randomUUID();
+      final Note firstNote = Note.builder().beaconId(beaconId).build();
+      final Note secondNote = Note.builder().beaconId(beaconId).build();
+
+      final List<Note> foundNotes = List.of(firstNote, secondNote);
+
+      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
+
+      mockMvc
+        .perform(
+          get("/beacons/" + beaconId + "/notes")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andReturn();
+
+      verify(noteService, times(1)).findAllByBeaconId(beaconId);
+    }
+
+    @Test
+    void shouldReturn200WhenThereAreNotesForABeaconId() throws Exception {
+      UUID beaconId = UUID.randomUUID();
+      final Note firstNote = Note.builder().beaconId(beaconId).build();
+      final Note secondNote = Note.builder().beaconId(beaconId).build();
+
+      final List<Note> foundNotes = List.of(firstNote, secondNote);
+
+      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
+
+      mockMvc
+        .perform(
+          get("/beacons/" + beaconId + "/notes")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturn200WhenThereAreNoNotesForABeaconId() throws Exception {
+      UUID beaconId = UUID.randomUUID();
+
+      given(noteService.findAllByBeaconId(beaconId))
+        .willReturn(Collections.emptyList());
+
+      mockMvc
+        .perform(
+          get("/beacons/" + beaconId + "/notes")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk());
     }
   }
 }
