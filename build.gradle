@@ -31,7 +31,7 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
 	implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.6.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-	implementation 'org.jetbrains:annotations:16.0.2'
+	implementation 'org.jetbrains:annotations:21.0.1'
 
 	runtimeOnly 'org.postgresql:postgresql'
 
