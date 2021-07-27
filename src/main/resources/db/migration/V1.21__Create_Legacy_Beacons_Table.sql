@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS legacy_beacon_records (
     hex_id text NOT NULL,
     owner_email text,
     created_date timestamp NOT NULL,
-    last_modifiedd timestamp NOT NULL
+    last_modified timestamp NOT NULL
 )
