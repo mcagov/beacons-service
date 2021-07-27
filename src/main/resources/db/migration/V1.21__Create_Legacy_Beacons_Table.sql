@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS legacy_beacon_records (
+CREATE TABLE IF NOT EXISTS legacy_registrations (
     id uuid PRIMARY KEY,
     "value" jsonb NOT NULL,
     hex_id text NOT NULL,
