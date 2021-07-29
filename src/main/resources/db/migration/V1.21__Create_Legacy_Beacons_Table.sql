@@ -4,6 +4,5 @@ CREATE TABLE IF NOT EXISTS legacy_registrations (
     hex_id text NOT NULL,
     owner_email text,
     created_date timestamp NOT NULL,
-    last_modified timestamp NOT NULL,
-    status text NOT NULL
+    last_modified timestamp NOT NULL
 )
