@@ -2,17 +2,17 @@ package uk.gov.mca.beacons.api.dto;
 
 import static uk.gov.mca.beacons.api.dto.LegacyBeaconDTO.Attributes;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class LegacyBeaconDTO extends DomainDTO<Attributes> {
+
   private String type = "legacyBeacon";
 
   public String getType() {
