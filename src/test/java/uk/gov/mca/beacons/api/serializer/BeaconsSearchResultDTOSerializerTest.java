@@ -52,9 +52,8 @@ class BeaconsSearchResultDTOSerializerTest {
 
   @Test
   void shouldSerializeResultForZeroResultsAsExpected() throws IOException {
-    final String json = new String(
-      Files.readAllBytes(Paths.get(JSON_RESOURCE_EMPTY))
-    )
+    final String json = Files
+      .readString(Paths.get(JSON_RESOURCE_EMPTY))
       .replaceAll("[\\n\\t ]", "");
     final var serializer = new BeaconsSearchResultSerializer();
     beaconsSearchResultDTO.setBeacons(List.of());
@@ -125,9 +124,8 @@ class BeaconsSearchResultDTOSerializerTest {
     );
     jsonGenerator.flush();
 
-    final String expectedJson = new String(
-      Files.readAllBytes(Paths.get(JSON_RESOURCE))
-    )
+    final String expectedJson = Files
+      .readString(Paths.get(JSON_RESOURCE))
       .replaceAll("[\\n\\t ]", "");
     assertThat(
       jsonWriter.toString().replaceAll("[\\n\\t ]", ""),

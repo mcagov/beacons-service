@@ -219,7 +219,7 @@ class AccountHolderControllerIntegrationTest {
   }
 
   private String readFile(String filePath) throws IOException {
-    return new String(Files.readAllBytes(Paths.get(filePath)));
+    return Files.readString(Paths.get(filePath));
   }
 
   private String createAccountHolder() throws Exception {
