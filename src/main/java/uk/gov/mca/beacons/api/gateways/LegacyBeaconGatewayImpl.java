@@ -27,5 +27,6 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   @Override
   public void deleteAll() {
     legacyBeaconJpaRepository.deleteAll();
+    legacyBeaconJpaRepository.flush();
   }
 }
