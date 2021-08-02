@@ -117,7 +117,7 @@
           "note": "Some more notes"
         }
       ],
-      "owner": [
+      "owners": [
         {
           "pkBeaconOwnerId": 231035,
           "fkBeaconId": 6062,
