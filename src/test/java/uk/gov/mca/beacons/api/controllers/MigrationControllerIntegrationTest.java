@@ -40,6 +40,20 @@ class MigrationControllerIntegrationTest {
     }
   }
 
+  @Nested
+  class DeleteAllLegacyBeacons {
+
+    @Test
+    void shouldDeleteAllLegacyBeacons() throws Exception {
+      webTestClient
+        .get()
+        .uri("/migration/delete-all-legacy-beacons")
+        .exchange()
+        .expectStatus()
+        .isOk();
+    }
+  }
+
   private String readFile(String filePath) throws IOException {
     return Files.readString(Paths.get(filePath));
   }

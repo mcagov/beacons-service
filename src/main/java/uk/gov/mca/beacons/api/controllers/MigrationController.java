@@ -41,6 +41,11 @@ public class MigrationController {
     return "Migration Controller";
   }
 
+  @GetMapping(value = "/delete-all-legacy-beacons")
+  public String deleteAllLegacyBeacons() {
+    return "Migration Controller";
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<LegacyBeaconDTO> createLegacyBeacon(
