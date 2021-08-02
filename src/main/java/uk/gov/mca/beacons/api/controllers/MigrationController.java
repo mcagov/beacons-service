@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,9 @@ public class MigrationController {
   }
 
   @GetMapping(value = "/delete-all-legacy-beacons")
-  public String deleteAllLegacyBeacons() {
-    return "Migration Controller";
+  public ResponseEntity<Void> deleteAllLegacyBeacons() {
+    legacyBeaconService.deleteAll();
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping

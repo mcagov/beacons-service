@@ -21,4 +21,8 @@ public class LegacyBeaconService {
   public LegacyBeacon create(LegacyBeacon beacon) {
     return legacyBeaconGateway.save(beacon);
   }
+
+  public void deleteAll() {
+    legacyBeaconGateway.deleteAll();
+  }
 }
