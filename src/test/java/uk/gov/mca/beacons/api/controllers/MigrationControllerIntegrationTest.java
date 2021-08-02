@@ -32,7 +32,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migration")
+        .uri("/migrate")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -53,7 +53,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migration")
+        .uri("/migrate")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -64,7 +64,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/migration/delete-all-legacy-beacons")
+        .uri("/migrate/delete-all-legacy-beacons")
         .exchange()
         .expectStatus()
         .isOk();
@@ -75,7 +75,7 @@ class MigrationControllerIntegrationTest {
     void shouldRespondWithOKStatusIfLegacyBeaconsDeleted() throws Exception {
       webTestClient
         .get()
-        .uri("/migration/delete-all-legacy-beacons")
+        .uri("/migrate/delete-all-legacy-beacons")
         .exchange()
         .expectStatus()
         .isOk();
