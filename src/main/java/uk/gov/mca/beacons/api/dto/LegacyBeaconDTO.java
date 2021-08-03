@@ -27,9 +27,9 @@ public class LegacyBeaconDTO extends DomainDTO<Attributes> {
   public static class Attributes {
 
     private Map<String, Object> beacon;
+    private List<Map<String, Object>> uses;
     private Map<String, Object> owner;
     private List<Map<String, Object>> secondaryOwners;
-    private List<Map<String, Object>> uses;
     private Map<String, Object> emergencyContact;
   }
 }
