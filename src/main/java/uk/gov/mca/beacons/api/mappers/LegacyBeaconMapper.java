@@ -93,6 +93,22 @@ public class LegacyBeaconMapper {
   }
 
   public LegacyBeacon fromJpaEntity(LegacyBeaconEntity beaconEntity) {
-    return new LegacyBeacon();
+    final var data = beaconEntity.getData();
+    final var beacon = data.get("beacon");
+    final var uses = data.get("uses");
+    final var owner = data.get("owner");
+    final var secondaryOwners = data.get("secondaryOwners");
+    final var emergencyContact = data.get("emergencyContact");
+
+    return LegacyBeacon
+      .builder()
+      .id(beaconEntity.getId())
+      .beaconStatus(beaconEntity.getBeaconStatus())
+      .beacon(beacon)
+      .uses(uses)
+      .owner(owner)
+      .secondaryOwners(secondaryOwners)
+      .emergencyContact(emergencyContact)
+      .build();
   }
 }
