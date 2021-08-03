@@ -18,7 +18,8 @@ public class LegacyBeacon {
 
   private UUID id;
   private Map<String, Object> beacon;
-  private Map<String, Object> emergencyContact;
   private List<Map<String, Object>> uses;
-  private List<Map<String, Object>> owners;
+  private Map<String, Object> owner;
+  private List<Map<String, Object>> secondaryOwners;
+  private Map<String, Object> emergencyContact;
 }

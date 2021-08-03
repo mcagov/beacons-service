@@ -14,7 +14,8 @@ public class LegacyBeaconMapper {
       .builder()
       .beacon(attributes.getBeacon())
       .uses(attributes.getUses())
-      .owners(attributes.getOwners())
+      .owner(attributes.getOwner())
+      .secondaryOwners(attributes.getSecondaryOwners())
       .emergencyContact(attributes.getEmergencyContact())
       .build();
   }
@@ -34,7 +35,8 @@ public class LegacyBeaconMapper {
       .builder()
       .beacon(beacon.getBeacon())
       .uses(beacon.getUses())
-      .owners(beacon.getOwners())
+      .owner(beacon.getOwner())
+      .secondaryOwners(beacon.getSecondaryOwners())
       .emergencyContact(beacon.getEmergencyContact())
       .build();
     dto.setAttributes(attributes);
