@@ -21,6 +21,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Override
   public LegacyBeacon save(LegacyBeacon beacon) {
+    // TODO: Update implementation
     return new LegacyBeacon();
   }
 
