@@ -22,10 +22,10 @@ class MigrationControllerIntegrationTest {
   private WebTestClient webTestClient;
 
   @Nested
-  class CreateMigration {
+  class CreateLegacyBeacon {
 
     @Test
-    void shouldRespondWithTheCreatedResource() throws Exception {
+    void shouldRespondWithTheOKIfTheResourceIsCreated() throws Exception {
       final String createLegacyBeaconRequest = readFile(
         "src/test/resources/fixtures/createLegacyBeaconRequest.json"
       );
@@ -38,6 +38,30 @@ class MigrationControllerIntegrationTest {
         .exchange()
         .expectStatus()
         .isCreated();
+    }
+
+    @Test
+    void shouldRespondWithTheCreatedResource() throws Exception {
+      final String createLegacyBeaconRequest = readFile(
+        "src/test/resources/fixtures/createLegacyBeaconRequest.json"
+      );
+
+      final String createLegacyBeaconResponse = readFile(
+        "src/test/resources/fixtures/createLegacyBeaconResponse.json"
+      );
+
+      webTestClient
+        .post()
+        .uri("/migrate")
+        .body(BodyInserters.fromValue(createLegacyBeaconRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectBody()
+        .jsonPath("$.data.id")
+        .isNotEmpty()
+        .json(createLegacyBeaconResponse);
     }
   }
 
