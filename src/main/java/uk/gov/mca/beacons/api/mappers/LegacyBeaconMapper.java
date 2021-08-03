@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.mappers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
@@ -104,11 +105,11 @@ public class LegacyBeaconMapper {
       .builder()
       .id(beaconEntity.getId())
       .beaconStatus(beaconEntity.getBeaconStatus())
-      .beacon(beacon)
-      .uses(uses)
-      .owner(owner)
-      .secondaryOwners(secondaryOwners)
-      .emergencyContact(emergencyContact)
+      .beacon((Map) beacon)
+      .uses((List) uses)
+      .owner((Map) owner)
+      .secondaryOwners((List) secondaryOwners)
+      .emergencyContact((Map) emergencyContact)
       .build();
   }
 }
