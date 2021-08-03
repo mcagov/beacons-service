@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 
 @Entity(name = "legacy_beacon")
 @Getter
@@ -36,5 +39,6 @@ public class LegacyBeaconEntity {
 
   private LocalDateTime lastModifiedDate;
 
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private BeaconStatus beaconStatus;
 }

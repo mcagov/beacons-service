@@ -17,6 +17,7 @@ import lombok.Setter;
 public class LegacyBeacon {
 
   private UUID id;
+  private BeaconStatus beaconStatus;
   private Map<String, Object> beacon;
   private List<Map<String, Object>> uses;
   private Map<String, Object> owner;

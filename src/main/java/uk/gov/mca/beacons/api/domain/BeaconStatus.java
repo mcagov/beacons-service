@@ -6,4 +6,5 @@ package uk.gov.mca.beacons.api.domain;
 public enum BeaconStatus {
   NEW,
   DELETED,
+  MIGRATED,
 }
