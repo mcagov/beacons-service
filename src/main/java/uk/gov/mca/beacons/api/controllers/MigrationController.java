@@ -46,7 +46,7 @@ public class MigrationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PostMapping
+  @PostMapping(value = "/legacy-beacon")
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<LegacyBeaconDTO> createLegacyBeacon(
     @RequestBody WrapperDTO<LegacyBeaconDTO> wrapperDTO
