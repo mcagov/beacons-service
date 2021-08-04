@@ -46,6 +46,8 @@ public class SecurityConfiguration {
         .cors()
         .and()
         .antMatcher("/migrate/**")
+        .csrf()
+        .disable()
         .authorizeRequests()
         .anyRequest()
         .authenticated()
