@@ -19,9 +19,7 @@ import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 
 @RestController
 @RequestMapping("/migrate")
-@Tag(
-  name = "Migration Controller for existing beacon records, owners, emergency contacts, and uses"
-)
+@Tag(name = "Migration Controller")
 @Profile("migration")
 public class MigrationController {
 
