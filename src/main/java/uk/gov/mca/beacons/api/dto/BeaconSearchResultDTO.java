@@ -2,10 +2,12 @@ package uk.gov.mca.beacons.api.dto;
 
 import static uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO.Attributes;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.util.UUID;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 
 public class BeaconSearchResultDTO extends DomainDTO<Attributes> {
@@ -23,9 +25,6 @@ public class BeaconSearchResultDTO extends DomainDTO<Attributes> {
   @Builder
   public static class Attributes {
 
-    private UUID id;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastModifiedDate;
 
     private BeaconStatus beaconStatus;
