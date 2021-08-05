@@ -32,7 +32,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate")
+        .uri("/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -52,7 +52,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate")
+        .uri("/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -77,7 +77,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate")
+        .uri("/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()

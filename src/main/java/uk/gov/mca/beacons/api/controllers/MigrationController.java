@@ -19,9 +19,7 @@ import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 
 @RestController
 @RequestMapping("/migrate")
-@Tag(
-  name = "Migration Controller for existing beacon records, owners, emergency contacts, and uses"
-)
+@Tag(name = "Migration Controller")
 @Profile("migration")
 public class MigrationController {
 
@@ -48,7 +46,7 @@ public class MigrationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PostMapping
+  @PostMapping(value = "/legacy-beacon")
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<LegacyBeaconDTO> createLegacyBeacon(
     @RequestBody WrapperDTO<LegacyBeaconDTO> wrapperDTO

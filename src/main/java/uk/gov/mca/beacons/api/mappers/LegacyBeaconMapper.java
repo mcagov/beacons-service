@@ -13,10 +13,6 @@ import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 @Service
 public class LegacyBeaconMapper {
 
-  private static final DateTimeFormatter MIGRATED_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern(
-    "yyyy-MM-dd HH:mm:ss"
-  );
-
   public LegacyBeacon fromDTO(LegacyBeaconDTO dto) {
     final var attributes = dto.getAttributes();
     return LegacyBeacon
@@ -63,14 +59,12 @@ public class LegacyBeaconMapper {
     legacyBeaconEntity.setOwnerEmail(ownerEmail);
 
     final var createdDate = LocalDateTime.parse(
-      (String) beacon.getBeacon().get("createdDate"),
-      MIGRATED_DATE_TIME_FORMAT
+      (String) beacon.getBeacon().get("createdDate")
     );
     legacyBeaconEntity.setCreatedDate(createdDate);
 
     final var lastModifiedDate = LocalDateTime.parse(
-      (String) beacon.getBeacon().get("lastModifiedDate"),
-      MIGRATED_DATE_TIME_FORMAT
+      (String) beacon.getBeacon().get("lastModifiedDate")
     );
     legacyBeaconEntity.setLastModifiedDate(lastModifiedDate);
 

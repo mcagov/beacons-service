@@ -36,9 +36,9 @@ class LegacyBeaconMapperUnitTest {
             "hexId",
             "Hex me",
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(emptyMap())
@@ -59,9 +59,9 @@ class LegacyBeaconMapperUnitTest {
         .beacon(
           Map.of(
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(Map.of("email", "beacons@mca.gov.uk"))
@@ -82,9 +82,9 @@ class LegacyBeaconMapperUnitTest {
         .beacon(
           Map.of(
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(emptyMap())
@@ -97,12 +97,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getCreatedDate(),
-        is(
-          LocalDateTime.parse(
-            "2020-08-01 21:33:13",
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-          )
-        )
+        is(LocalDateTime.parse("2020-08-01T21:33:13"))
       );
     }
 
@@ -113,9 +108,9 @@ class LegacyBeaconMapperUnitTest {
         .beacon(
           Map.of(
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(emptyMap())
@@ -128,12 +123,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getLastModifiedDate(),
-        is(
-          LocalDateTime.parse(
-            "2021-08-01 21:33:13",
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-          )
-        )
+        is(LocalDateTime.parse("2021-08-01T21:33:13"))
       );
     }
 
@@ -144,9 +134,9 @@ class LegacyBeaconMapperUnitTest {
         .beacon(
           Map.of(
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(emptyMap())
@@ -170,9 +160,9 @@ class LegacyBeaconMapperUnitTest {
             "hexId",
             "Hex me",
             "createdDate",
-            "2020-08-01 21:33:13",
+            "2020-08-01T21:33:13",
             "lastModifiedDate",
-            "2021-08-01 21:33:13"
+            "2021-08-01T21:33:13"
           )
         )
         .owner(Map.of("email", "beacons@mca.gov.uk"))
