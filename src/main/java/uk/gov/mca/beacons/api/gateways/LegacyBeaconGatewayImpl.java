@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,5 +40,14 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   public void deleteAll() {
     legacyBeaconJpaRepository.deleteAll();
     legacyBeaconJpaRepository.flush();
+  }
+
+  @Override
+  public List<LegacyBeacon> findAll() {
+    return legacyBeaconJpaRepository
+      .findAll()
+      .stream()
+      .map(legacyBeaconMapper::fromJpaEntity)
+      .collect(Collectors.toList());
   }
 }

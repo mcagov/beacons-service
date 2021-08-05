@@ -1,8 +1,12 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.api.domain.Note;
-import uk.gov.mca.beacons.api.dto.BeaconDTO;
-import uk.gov.mca.beacons.api.dto.BeaconsSearchResultDTO;
-import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
-import uk.gov.mca.beacons.api.dto.NoteDTO;
-import uk.gov.mca.beacons.api.dto.WrapperDTO;
+import uk.gov.mca.beacons.api.dto.*;
 import uk.gov.mca.beacons.api.exceptions.InvalidBeaconDeleteException;
 import uk.gov.mca.beacons.api.exceptions.InvalidPatchException;
 import uk.gov.mca.beacons.api.mappers.BeaconMapper;
@@ -28,6 +28,7 @@ import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController
@@ -36,6 +37,7 @@ import uk.gov.mca.beacons.api.services.NoteService;
 public class BeaconsController {
 
   private final BeaconsService beaconsService;
+  private final LegacyBeaconService legacyBeaconService;
   private final BeaconsResponseFactory responseFactory;
   private final BeaconMapper beaconMapper;
   private final DeleteBeaconService deleteBeaconService;
@@ -45,6 +47,7 @@ public class BeaconsController {
   @Autowired
   public BeaconsController(
     BeaconsService beaconsService,
+    LegacyBeaconService legacyBeaconService,
     BeaconsResponseFactory responseFactory,
     BeaconMapper beaconMapper,
     DeleteBeaconService deleteBeaconService,
@@ -52,6 +55,7 @@ public class BeaconsController {
     NoteMapper noteMapper
   ) {
     this.beaconsService = beaconsService;
+    this.legacyBeaconService = legacyBeaconService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
     this.deleteBeaconService = deleteBeaconService;
@@ -60,10 +64,18 @@ public class BeaconsController {
   }
 
   @GetMapping
-  public BeaconsSearchResultDTO findAll() {
-    final var results = new BeaconsSearchResultDTO();
-    results.setBeacons(beaconsService.findAll());
-    return results;
+  public WrapperDTO<List<BeaconSearchResultDTO>> findAll() {
+    WrapperDTO<List<BeaconSearchResultDTO>> wrapperDTO = new WrapperDTO<>();
+    List<BeaconSearchResultDTO> results = Stream
+      .of(
+        beaconsService.findAllBeaconSearchResult(),
+        legacyBeaconService.findAllBeaconSearchResult()
+      )
+      .flatMap(Collection::stream)
+      .collect(Collectors.toList());
+    wrapperDTO.setData(results);
+    wrapperDTO.addMeta("count", results.size());
+    return wrapperDTO;
   }
 
   @GetMapping(value = "/{uuid}")

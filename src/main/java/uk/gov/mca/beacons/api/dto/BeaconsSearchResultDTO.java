@@ -5,10 +5,21 @@ import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
 public class BeaconsSearchResultDTO {
 
+  private List<BeaconSearchResultDTO> beaconSearchResults;
   private List<Beacon> beacons;
+
+  public List<BeaconSearchResultDTO> getBeaconSearchResults() {
+    return beaconSearchResults;
+  }
 
   public List<Beacon> getBeacons() {
     return beacons;
+  }
+
+  public void setBeaconSearchResults(
+    List<BeaconSearchResultDTO> beaconSearchResults
+  ) {
+    this.beaconSearchResults = beaconSearchResults;
   }
 
   public void setBeacons(List<Beacon> beacons) {
@@ -16,14 +27,10 @@ public class BeaconsSearchResultDTO {
   }
 
   public int getCount() {
-    return beacons.size();
+    return beaconSearchResults.size();
   }
 
   public int getPageSize() {
-    return beacons.size();
-  }
-
-  public List<Beacon> getBeacons(List<Beacon> beacons) {
-    return beacons;
+    return beaconSearchResults.size();
   }
 }
