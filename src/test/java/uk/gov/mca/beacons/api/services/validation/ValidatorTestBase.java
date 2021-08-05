@@ -1,10 +1,11 @@
 package uk.gov.mca.beacons.api.services.validation;
 
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.validation.Errors;
 
-public class ValidatorTestBase {
+public final class ValidatorTestBase {
 
   public static void assertFieldErrors(
     Errors errors,
@@ -23,18 +24,17 @@ public class ValidatorTestBase {
 
     assertTrue(
       found,
-      "Could not find " +
-      errorCode +
-      " error for field " +
-      field +
-      " in " +
-      errors
+      format(
+        "Could not find %s error for field %s in %s",
+        errorCode,
+        field,
+        errors
+      )
     );
   }
 
   public static void assertNoFieldErrors(Errors errors, String field) {
     final var fieldError = errors.getFieldErrors(field);
-
     assertTrue(fieldError.isEmpty());
   }
 
