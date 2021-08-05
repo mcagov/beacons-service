@@ -26,7 +26,6 @@ public class BeaconSearchResultDTO extends DomainDTO<Attributes> {
   public static class Attributes {
 
     private LocalDateTime lastModifiedDate;
-
     private BeaconStatus beaconStatus;
     private String hexId;
     private String ownerName;
