@@ -1,5 +1,8 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,6 +65,33 @@ class MigrationControllerIntegrationTest {
         .jsonPath("$.data.id")
         .isNotEmpty()
         .json(createLegacyBeaconResponse);
+    }
+
+    @Test
+    void shouldReturnWithBadRequestAndTheValidationErrors() throws Exception {
+      final String createLegacyBeaconInvalidRequest = readFile(
+        "src/test/resources/fixtures/createLegacyBeaconInvalidRequest.json"
+      );
+
+      webTestClient
+        .post()
+        .uri("/migrate/legacy-beacon")
+        .body(BodyInserters.fromValue(createLegacyBeaconInvalidRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isBadRequest()
+        .expectBody()
+        .jsonPath("$.errors.length()")
+        .isEqualTo(3)
+        .jsonPath("$.errors[*].field")
+        .value(
+          hasItems(
+            "beacon[hexId]",
+            "beacon[createdDate]",
+            "beacon[lastModifiedDate]"
+          )
+        );
     }
   }
 
