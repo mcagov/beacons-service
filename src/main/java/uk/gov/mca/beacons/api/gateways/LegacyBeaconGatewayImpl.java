@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @Repository
 @Transactional
+@Slf4j
 public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
@@ -29,6 +31,10 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     final var legacyBeaconEntity = legacyBeaconMapper.toJpaEntity(beacon);
     legacyBeaconEntity.setBeaconStatus(BeaconStatus.MIGRATED);
 
+    log.info(
+      "Saving beacon record with PK {}",
+      beacon.getBeacon().get("pkBeaconId")
+    );
     return legacyBeaconMapper.fromJpaEntity(
       legacyBeaconJpaRepository.save(legacyBeaconEntity)
     );
