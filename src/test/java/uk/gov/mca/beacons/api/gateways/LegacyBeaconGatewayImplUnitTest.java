@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.jdbc.core.JdbcTemplate;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
@@ -30,6 +31,9 @@ class LegacyBeaconGatewayImplUnitTest {
   @Mock
   private LegacyBeaconMapper legacyBeaconMapper;
 
+  @Mock
+  private JdbcTemplate jdbcTemplate;
+
   @Test
   void save_shouldSetTheStatusOfTheLegacyBeaconToMigrated(
     @Mock LegacyBeaconEntity legacyBeaconEntity
@@ -41,5 +45,12 @@ class LegacyBeaconGatewayImplUnitTest {
     legacyBeaconGateway.save(legacyBeacon);
 
     verify(legacyBeaconEntity, times(1)).setBeaconStatus(BeaconStatus.MIGRATED);
+  }
+
+  @Test
+  void deleteAll_shouldDeleteAllLegacyRecordsThroughJdbc() {
+    legacyBeaconGateway.deleteAll();
+
+    verify(jdbcTemplate, times(1)).execute("TRUNCATE TABLE legacy_beacon");
   }
 }
