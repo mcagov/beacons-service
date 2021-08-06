@@ -26,13 +26,6 @@ public class LegacyBeaconValidator implements Validator {
   public void validate(Object target, Errors errors) {
     ValidationUtils.rejectIfEmptyOrWhitespace(
       errors,
-      "beacon[hexId]",
-      FIELD_REQUIRED,
-      "Hex id must not be null"
-    );
-
-    ValidationUtils.rejectIfEmptyOrWhitespace(
-      errors,
       "beacon[createdDate]",
       FIELD_REQUIRED,
       "Created date must not be null"

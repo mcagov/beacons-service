@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -83,15 +82,9 @@ class MigrationControllerIntegrationTest {
         .isBadRequest()
         .expectBody()
         .jsonPath("$.errors.length()")
-        .isEqualTo(3)
+        .isEqualTo(2)
         .jsonPath("$.errors[*].field")
-        .value(
-          hasItems(
-            "beacon[hexId]",
-            "beacon[createdDate]",
-            "beacon[lastModifiedDate]"
-          )
-        );
+        .value(hasItems("beacon[createdDate]", "beacon[lastModifiedDate]"));
     }
   }
 

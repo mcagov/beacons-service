@@ -32,32 +32,6 @@ class LegacyBeaconValidatorUnitTest {
   class Validate {
 
     @Test
-    void shouldHaveErrorsIfTheHexIdIsNotDefined() {
-      final var beacon = LegacyBeacon
-        .builder()
-        .beacon(Map.of("manufacturer", "ASOS"))
-        .build();
-      final var errors = new BeanPropertyBindingResult(beacon, "legacyBeacon");
-
-      legacyBeaconValidator.validate(beacon, errors);
-
-      assertFieldErrors(errors, "beacon[hexId]", "field.required");
-    }
-
-    @Test
-    void shouldNotHaveAnyErrorsIfTheHexIdIsDefined() {
-      final var beacon = LegacyBeacon
-        .builder()
-        .beacon(Map.of("hexId", "123456789"))
-        .build();
-      final var errors = new BeanPropertyBindingResult(beacon, "legacyBeacon");
-
-      legacyBeaconValidator.validate(beacon, errors);
-
-      assertNoFieldErrors(errors, "beacon[hexId]");
-    }
-
-    @Test
     void shouldHaveErrorsIfTheCreatedDateIsNotDefined() {
       final var beacon = LegacyBeacon
         .builder()
