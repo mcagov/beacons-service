@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.gateways;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -16,14 +17,17 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
   private final LegacyBeaconMapper legacyBeaconMapper;
+  private final JdbcTemplate jdbcTemplate;
 
   @Autowired
   public LegacyBeaconGatewayImpl(
     LegacyBeaconJpaRepository legacyBeaconJpaRepository,
-    LegacyBeaconMapper legacyBeaconMapper
+    LegacyBeaconMapper legacyBeaconMapper,
+    JdbcTemplate jdbcTemplate
   ) {
     this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
     this.legacyBeaconMapper = legacyBeaconMapper;
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   @Override
@@ -42,7 +46,6 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Override
   public void deleteAll() {
-    legacyBeaconJpaRepository.deleteAll();
-    legacyBeaconJpaRepository.flush();
+    jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
   }
 }
