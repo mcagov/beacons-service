@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +39,10 @@ class LegacyBeaconGatewayImplUnitTest {
   void save_shouldSetTheStatusOfTheLegacyBeaconToMigrated(
     @Mock LegacyBeaconEntity legacyBeaconEntity
   ) {
-    final var legacyBeacon = new LegacyBeacon();
+    final var legacyBeacon = LegacyBeacon
+      .builder()
+      .beacon(Map.of("pkBeaconId", 1))
+      .build();
     given(legacyBeaconMapper.toJpaEntity(legacyBeacon))
       .willReturn(legacyBeaconEntity);
 
