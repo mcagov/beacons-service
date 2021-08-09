@@ -39,6 +39,7 @@ import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @WebMvcTest(controllers = BeaconsController.class)
@@ -46,230 +47,225 @@ import uk.gov.mca.beacons.api.services.NoteService;
 @Import(WebMvcTestConfiguration.class)
 class BeaconsControllerUnitTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private BeaconsService beaconsService;
+    @MockBean
+    private LegacyBeaconService legacyBeaconService;
+    @MockBean
+    private BeaconMapper beaconMapper;
+    @MockBean
+    private BeaconsResponseFactory beaconsResponseFactory;
+    @MockBean
+    private DeleteBeaconService deleteBeaconService;
+    @MockBean
+    private NoteService noteService;
+    @MockBean
+    private NoteMapper noteMapper;
 
-  @MockBean
-  private BeaconsService beaconsService;
+    @Nested
+    class BeaconPatchUpdate {
 
-  @MockBean
-  private BeaconMapper beaconMapper;
+        private WrapperDTO<BeaconDTO> dto;
+        private BeaconDTO beaconDTO;
+        private UUID beaconId;
+        private Beacon beaconToUpdate;
 
-  @MockBean
-  private BeaconsResponseFactory beaconsResponseFactory;
+        @BeforeEach
+        void init() {
+            dto = new WrapperDTO<>();
+            beaconDTO = new BeaconDTO();
+            dto.setData(beaconDTO);
+            beaconId = UUID.randomUUID();
+            beaconDTO.setId(beaconId);
+            final var beaconToUpdate = new Beacon();
+            beaconToUpdate.setId(beaconId);
+        }
 
-  @MockBean
-  private DeleteBeaconService deleteBeaconService;
+        @Test
+        void shouldCallThroughToTheBeaconsServiceIfAValidPatchRequest()
+                throws Exception {
+            given(beaconMapper.fromDTO(any(BeaconDTO.class)))
+                    .willReturn(beaconToUpdate);
 
-  @MockBean
-  private NoteService noteService;
+            mockMvc
+                    .perform(
+                            patch("/beacons/" + beaconId)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(OBJECT_MAPPER.writeValueAsString(dto))
+                    )
+                    .andExpect(status().isOk());
 
-  @MockBean
-  private NoteMapper noteMapper;
+            then(beaconsService).should(times(1)).update(beaconId, beaconToUpdate);
+        }
 
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+        @Test
+        void shouldThrowAnErrorIfTheIdWithinTheJsonDoesNotMatchThePathVariable()
+                throws Exception {
+            beaconDTO.setId(UUID.randomUUID());
+            given(beaconMapper.fromDTO(any(BeaconDTO.class)))
+                    .willReturn(beaconToUpdate);
 
-  @Nested
-  class BeaconPatchUpdate {
+            mockMvc
+                    .perform(
+                            patch("/beacons/" + beaconId)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(OBJECT_MAPPER.writeValueAsString(dto))
+                    )
+                    .andExpect(status().isConflict());
 
-    private WrapperDTO<BeaconDTO> dto;
-    private BeaconDTO beaconDTO;
-    private UUID beaconId;
-    private Beacon beaconToUpdate;
-
-    @BeforeEach
-    void init() {
-      dto = new WrapperDTO<>();
-      beaconDTO = new BeaconDTO();
-      dto.setData(beaconDTO);
-      beaconId = UUID.randomUUID();
-      beaconDTO.setId(beaconId);
-      final var beaconToUpdate = new Beacon();
-      beaconToUpdate.setId(beaconId);
+            then(beaconsService).should(never()).update(beaconId, beaconToUpdate);
+        }
     }
 
-    @Test
-    void shouldCallThroughToTheBeaconsServiceIfAValidPatchRequest()
-      throws Exception {
-      given(beaconMapper.fromDTO(any(BeaconDTO.class)))
-        .willReturn(beaconToUpdate);
+    @Nested
+    class DeleteBeacon {
 
-      mockMvc
-        .perform(
-          patch("/beacons/" + beaconId)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(OBJECT_MAPPER.writeValueAsString(dto))
-        )
-        .andExpect(status().isOk());
+        private UUID beaconId;
+        private UUID userId;
 
-      then(beaconsService).should(times(1)).update(beaconId, beaconToUpdate);
+        @BeforeEach
+        public void init() {
+            beaconId = UUID.randomUUID();
+            userId = UUID.randomUUID();
+        }
+
+        @Test
+        void shouldDeleteTheBeacon() throws Exception {
+            final var deleteBeaconRequest = DeleteBeaconRequestDTO
+                    .builder()
+                    .beaconId(beaconId)
+                    .reason("Unused on my boat anymore")
+                    .userId(userId)
+                    .build();
+
+            mockMvc
+                    .perform(
+                            patch("/beacons/" + beaconId + "/delete")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+                    )
+                    .andExpect(status().isOk());
+
+            final var deleteBeaconRequestCaptor = ArgumentCaptor.forClass(
+                    DeleteBeaconRequestDTO.class
+            );
+            then(deleteBeaconService)
+                    .should(times(1))
+                    .delete(deleteBeaconRequestCaptor.capture());
+            final var deleteBeaconRequestValue = deleteBeaconRequestCaptor.getValue();
+            assertThat(deleteBeaconRequestValue.getBeaconId(), is(beaconId));
+            assertThat(
+                    deleteBeaconRequestValue.getReason(),
+                    is("Unused on my boat anymore")
+            );
+            assertThat(deleteBeaconRequestValue.getUserId(), is(userId));
+        }
+
+        @Test
+        void shouldNotAcceptTheJsonPayloadIfTheReasonIsNull() throws Exception {
+            final var deleteBeaconRequest = DeleteBeaconRequestDTO
+                    .builder()
+                    .beaconId(beaconId)
+                    .userId(userId)
+                    .build();
+
+            mockMvc
+                    .perform(
+                            patch("/beacons/" + beaconId + "/delete")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.errors.length()", is(1)))
+                    .andExpect(jsonPath("$.errors[0].field", is("reason")))
+                    .andExpect(
+                            jsonPath(
+                                    "$.errors[0].description",
+                                    is("Reason for deleting a beacon must be defined")
+                            )
+                    );
+            then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
+        }
+
+        @Test
+        void shouldNotDeleteTheBeaconIfTheIdInThePathDoesNotMatchTheRequestBody()
+                throws Exception {
+            final var differentBeaconId = UUID.randomUUID();
+            final var deleteBeaconRequest = DeleteBeaconRequestDTO
+                    .builder()
+                    .beaconId(beaconId)
+                    .reason("Unused on my boat anymore")
+                    .userId(userId)
+                    .build();
+
+            mockMvc
+                    .perform(
+                            patch("/beacons/" + differentBeaconId + "/delete")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
+                    )
+                    .andExpect(status().isBadRequest());
+            then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
+        }
     }
 
-    @Test
-    void shouldThrowAnErrorIfTheIdWithinTheJsonDoesNotMatchThePathVariable()
-      throws Exception {
-      beaconDTO.setId(UUID.randomUUID());
-      given(beaconMapper.fromDTO(any(BeaconDTO.class)))
-        .willReturn(beaconToUpdate);
+    @Nested
+    class GetNotes {
 
-      mockMvc
-        .perform(
-          patch("/beacons/" + beaconId)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(OBJECT_MAPPER.writeValueAsString(dto))
-        )
-        .andExpect(status().isConflict());
+        @Test
+        void shouldRequestNotesFromNoteServiceByBeaconId() throws Exception {
+            UUID beaconId = UUID.randomUUID();
+            final Note firstNote = Note.builder().beaconId(beaconId).build();
+            final Note secondNote = Note.builder().beaconId(beaconId).build();
 
-      then(beaconsService).should(never()).update(beaconId, beaconToUpdate);
+            final List<Note> foundNotes = List.of(firstNote, secondNote);
+
+            given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
+
+            mockMvc
+                    .perform(
+                            get("/beacons/" + beaconId + "/notes")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andReturn();
+
+            verify(noteService, times(1)).findAllByBeaconId(beaconId);
+        }
+
+        @Test
+        void shouldReturn200WhenThereAreNotesForABeaconId() throws Exception {
+            UUID beaconId = UUID.randomUUID();
+            final Note firstNote = Note.builder().beaconId(beaconId).build();
+            final Note secondNote = Note.builder().beaconId(beaconId).build();
+
+            final List<Note> foundNotes = List.of(firstNote, secondNote);
+
+            given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
+
+            mockMvc
+                    .perform(
+                            get("/beacons/" + beaconId + "/notes")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void shouldReturn200WhenThereAreNoNotesForABeaconId() throws Exception {
+            UUID beaconId = UUID.randomUUID();
+
+            given(noteService.findAllByBeaconId(beaconId))
+                    .willReturn(Collections.emptyList());
+
+            mockMvc
+                    .perform(
+                            get("/beacons/" + beaconId + "/notes")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk());
+        }
     }
-  }
-
-  @Nested
-  class DeleteBeacon {
-
-    private UUID beaconId;
-    private UUID userId;
-
-    @BeforeEach
-    public void init() {
-      beaconId = UUID.randomUUID();
-      userId = UUID.randomUUID();
-    }
-
-    @Test
-    void shouldDeleteTheBeacon() throws Exception {
-      final var deleteBeaconRequest = DeleteBeaconRequestDTO
-        .builder()
-        .beaconId(beaconId)
-        .reason("Unused on my boat anymore")
-        .userId(userId)
-        .build();
-
-      mockMvc
-        .perform(
-          patch("/beacons/" + beaconId + "/delete")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
-        )
-        .andExpect(status().isOk());
-
-      final var deleteBeaconRequestCaptor = ArgumentCaptor.forClass(
-        DeleteBeaconRequestDTO.class
-      );
-      then(deleteBeaconService)
-        .should(times(1))
-        .delete(deleteBeaconRequestCaptor.capture());
-      final var deleteBeaconRequestValue = deleteBeaconRequestCaptor.getValue();
-      assertThat(deleteBeaconRequestValue.getBeaconId(), is(beaconId));
-      assertThat(
-        deleteBeaconRequestValue.getReason(),
-        is("Unused on my boat anymore")
-      );
-      assertThat(deleteBeaconRequestValue.getUserId(), is(userId));
-    }
-
-    @Test
-    void shouldNotAcceptTheJsonPayloadIfTheReasonIsNull() throws Exception {
-      final var deleteBeaconRequest = DeleteBeaconRequestDTO
-        .builder()
-        .beaconId(beaconId)
-        .userId(userId)
-        .build();
-
-      mockMvc
-        .perform(
-          patch("/beacons/" + beaconId + "/delete")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
-        )
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.errors.length()", is(1)))
-        .andExpect(jsonPath("$.errors[0].field", is("reason")))
-        .andExpect(
-          jsonPath(
-            "$.errors[0].description",
-            is("Reason for deleting a beacon must be defined")
-          )
-        );
-      then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
-    }
-
-    @Test
-    void shouldNotDeleteTheBeaconIfTheIdInThePathDoesNotMatchTheRequestBody()
-      throws Exception {
-      final var differentBeaconId = UUID.randomUUID();
-      final var deleteBeaconRequest = DeleteBeaconRequestDTO
-        .builder()
-        .beaconId(beaconId)
-        .reason("Unused on my boat anymore")
-        .userId(userId)
-        .build();
-
-      mockMvc
-        .perform(
-          patch("/beacons/" + differentBeaconId + "/delete")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
-        )
-        .andExpect(status().isBadRequest());
-      then(deleteBeaconService).should(never()).delete(deleteBeaconRequest);
-    }
-  }
-
-  @Nested
-  class GetNotes {
-
-    @Test
-    void shouldRequestNotesFromNoteServiceByBeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-      final Note firstNote = Note.builder().beaconId(beaconId).build();
-      final Note secondNote = Note.builder().beaconId(beaconId).build();
-
-      final List<Note> foundNotes = List.of(firstNote, secondNote);
-
-      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
-
-      mockMvc
-        .perform(
-          get("/beacons/" + beaconId + "/notes")
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andReturn();
-
-      verify(noteService, times(1)).findAllByBeaconId(beaconId);
-    }
-
-    @Test
-    void shouldReturn200WhenThereAreNotesForABeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-      final Note firstNote = Note.builder().beaconId(beaconId).build();
-      final Note secondNote = Note.builder().beaconId(beaconId).build();
-
-      final List<Note> foundNotes = List.of(firstNote, secondNote);
-
-      given(noteService.findAllByBeaconId(beaconId)).willReturn(foundNotes);
-
-      mockMvc
-        .perform(
-          get("/beacons/" + beaconId + "/notes")
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldReturn200WhenThereAreNoNotesForABeaconId() throws Exception {
-      UUID beaconId = UUID.randomUUID();
-
-      given(noteService.findAllByBeaconId(beaconId))
-        .willReturn(Collections.emptyList());
-
-      mockMvc
-        .perform(
-          get("/beacons/" + beaconId + "/notes")
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().isOk());
-    }
-  }
 }
