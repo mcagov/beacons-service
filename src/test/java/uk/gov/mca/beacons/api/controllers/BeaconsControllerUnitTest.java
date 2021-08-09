@@ -8,8 +8,8 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,9 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
-import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.Note;
-import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
@@ -41,7 +39,7 @@ import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
-import uk.gov.mca.beacons.api.services.GetUserService;
+import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @WebMvcTest(controllers = BeaconsController.class)
@@ -49,11 +47,16 @@ import uk.gov.mca.beacons.api.services.NoteService;
 @Import(WebMvcTestConfiguration.class)
 class BeaconsControllerUnitTest {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
   private BeaconsService beaconsService;
+
+  @MockBean
+  private LegacyBeaconService legacyBeaconService;
 
   @MockBean
   private BeaconMapper beaconMapper;
@@ -69,8 +72,6 @@ class BeaconsControllerUnitTest {
 
   @MockBean
   private NoteMapper noteMapper;
-
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Nested
   class BeaconPatchUpdate {

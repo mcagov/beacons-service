@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.PersonType;
@@ -23,6 +24,7 @@ import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.mappers.BeaconSearchResultMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
@@ -41,6 +43,9 @@ class GetAllBeaconsServiceUnitTest {
   @Mock
   private ModelPatcherFactory<Beacon> patcherFactory;
 
+  @Mock
+  private BeaconSearchResultMapper beaconSearchResultMapper;
+
   private BeaconsService beaconsService;
 
   @BeforeEach
@@ -51,6 +56,7 @@ class GetAllBeaconsServiceUnitTest {
         beaconPersonJpaRepository,
         beaconUseJpaRepository,
         new BeaconsRelationshipMapper(),
+        beaconSearchResultMapper,
         patcherFactory
       );
   }

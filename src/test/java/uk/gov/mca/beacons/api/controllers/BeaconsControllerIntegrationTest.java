@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,19 +104,14 @@ class BeaconsControllerIntegrationTest {
   void requestAllBeaconControllerShouldReturnSomeBeacons() {
     var request = makeGetRequest("/beacons");
 
-    request.jsonPath("$.meta.pageSize").exists();
     request.jsonPath("$.meta.count").exists();
     request.jsonPath("$.data").exists();
-    request.jsonPath("$.data[0].type").isEqualTo("beacon");
+    request.jsonPath("$.data[0].type").isEqualTo("beaconSearchResult");
     request.jsonPath("$.data[0].id").exists();
     request.jsonPath("$.data[0].attributes.hexId").exists();
-    request.jsonPath("$.data[0].attributes.manufacturer").exists();
-    request.jsonPath("$.data[0].attributes.status").exists();
-    request.jsonPath("$.data[0].attributes.uses[0].environment").exists();
-    request.jsonPath("$.data[0].attributes.owner.fullName").exists();
-    request
-      .jsonPath("$.data[0].attributes.emergencyContacts[0].fullName")
-      .exists();
+    request.jsonPath("$.data[0].attributes.beaconStatus").exists();
+    request.jsonPath("$.data[0].attributes.beaconUse").exists();
+    request.jsonPath("$.data[0].attributes.ownerName").exists();
   }
 
   @Test
