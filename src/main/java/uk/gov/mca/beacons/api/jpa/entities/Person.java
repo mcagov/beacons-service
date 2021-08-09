@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 import uk.gov.mca.beacons.api.domain.PersonType;
@@ -38,7 +37,6 @@ public class Person {
   @Column(name = "alternative_telephone_number_2")
   private String alternativeTelephoneNumber2;
 
-  @Email
   private String email;
 
   @Enumerated(EnumType.STRING)
@@ -81,4 +79,6 @@ public class Person {
   private Integer updateUserId;
 
   private Integer versioning;
+
+  private Boolean migrated;
 }

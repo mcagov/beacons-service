@@ -12,6 +12,7 @@ public class RelationshipDTO {
     return data;
   }
 
+  @SuppressWarnings("rawtypes")
   public void addData(DomainDTO domainDto) {
     data.add(new RelationshipData(domainDto.getType(), domainDto.getId()));
   }

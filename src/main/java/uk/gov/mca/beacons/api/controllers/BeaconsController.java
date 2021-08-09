@@ -1,7 +1,12 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +17,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
-import uk.gov.mca.beacons.api.dto.BeaconsSearchResultDTO;
+import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
+import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
+import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
+import uk.gov.mca.beacons.api.exceptions.InvalidBeaconDeleteException;
 import uk.gov.mca.beacons.api.exceptions.InvalidPatchException;
 import uk.gov.mca.beacons.api.mappers.BeaconMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
+import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
+import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.LegacyBeaconService;
+import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController
 @RequestMapping("/beacons")
@@ -26,31 +39,60 @@ import uk.gov.mca.beacons.api.services.BeaconsService;
 public class BeaconsController {
 
   private final BeaconsService beaconsService;
+  private final LegacyBeaconService legacyBeaconService;
   private final BeaconsResponseFactory responseFactory;
   private final BeaconMapper beaconMapper;
+  private final DeleteBeaconService deleteBeaconService;
+  private final NoteService noteService;
+  private final NoteMapper noteMapper;
 
   @Autowired
   public BeaconsController(
     BeaconsService beaconsService,
+    LegacyBeaconService legacyBeaconService,
     BeaconsResponseFactory responseFactory,
-    BeaconMapper beaconMapper
+    BeaconMapper beaconMapper,
+    DeleteBeaconService deleteBeaconService,
+    NoteService noteService,
+    NoteMapper noteMapper
   ) {
     this.beaconsService = beaconsService;
+    this.legacyBeaconService = legacyBeaconService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
+    this.deleteBeaconService = deleteBeaconService;
+    this.noteService = noteService;
+    this.noteMapper = noteMapper;
   }
 
   @GetMapping
-  public BeaconsSearchResultDTO findAll() {
-    final var results = new BeaconsSearchResultDTO();
-    results.setBeacons(beaconsService.findAll());
-    return results;
+  public WrapperDTO<List<BeaconSearchResultDTO>> findAll() {
+    WrapperDTO<List<BeaconSearchResultDTO>> wrapperDTO = new WrapperDTO<>();
+    List<BeaconSearchResultDTO> results = Stream
+      .of(
+        beaconsService.findAllBeaconSearchResult(),
+        legacyBeaconService.findAllBeaconSearchResult()
+      )
+      .flatMap(Collection::stream)
+      .collect(Collectors.toList());
+    wrapperDTO.setData(results);
+    wrapperDTO.addMeta("count", results.size());
+    return wrapperDTO;
   }
 
   @GetMapping(value = "/{uuid}")
   public WrapperDTO<BeaconDTO> findByUuid(@PathVariable("uuid") UUID uuid) {
     final var beacon = beaconsService.find(uuid);
     return responseFactory.buildDTO(beacon);
+  }
+
+  @GetMapping(value = "/{uuid}/notes")
+  public WrapperDTO<List<NoteDTO>> getNotesByBeaconId(
+    @PathVariable("uuid") UUID beaconId
+  ) {
+    final List<Note> foundNotes = noteService.findAllByBeaconId(beaconId);
+
+    return noteMapper.toOrderedWrapperDTO(foundNotes);
   }
 
   @PatchMapping(value = "/{uuid}")
@@ -63,6 +105,19 @@ public class BeaconsController {
     if (!uuid.equals(dto.getData().getId())) throw new InvalidPatchException();
 
     beaconsService.update(uuid, update);
-    return new ResponseEntity<Void>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PatchMapping(value = "{uuid}/delete")
+  public ResponseEntity<Void> delete(
+    @PathVariable("uuid") UUID id,
+    @RequestBody @Valid DeleteBeaconRequestDTO requestDTO
+  ) {
+    if (
+      !id.equals(requestDTO.getBeaconId())
+    ) throw new InvalidBeaconDeleteException();
+
+    deleteBeaconService.delete(requestDTO);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

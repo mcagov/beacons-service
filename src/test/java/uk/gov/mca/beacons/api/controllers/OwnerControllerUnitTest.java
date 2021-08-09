@@ -74,12 +74,8 @@ class OwnerControllerUnitTest {
 
     @Test
     void shouldReturn400IfInvalidJsonSent() throws Exception {
-      final String createOwnerInvalidRequest = new String(
-        Files.readAllBytes(
-          Paths.get(
-            "src/test/resources/fixtures/createOwnerInvalidRequest.json"
-          )
-        )
+      final String createOwnerInvalidRequest = Files.readString(
+        Paths.get("src/test/resources/fixtures/createOwnerInvalidRequest.json")
       );
 
       mvc

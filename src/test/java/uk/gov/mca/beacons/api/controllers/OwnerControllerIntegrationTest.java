@@ -19,15 +19,11 @@ class OwnerControllerIntegrationTest {
 
   @Test
   void shouldCreateTheOwner() throws Exception {
-    final String createOwnerRequest = new String(
-      Files.readAllBytes(
-        Paths.get("src/test/resources/fixtures/createOwnerRequest.json")
-      )
+    final String createOwnerRequest = Files.readString(
+      Paths.get("src/test/resources/fixtures/createOwnerRequest.json")
     );
-    final String createOwnerResponse = new String(
-      Files.readAllBytes(
-        Paths.get("src/test/resources/fixtures/createOwnerResponse.json")
-      )
+    final String createOwnerResponse = Files.readString(
+      Paths.get("src/test/resources/fixtures/createOwnerResponse.json")
     );
 
     webTestClient
@@ -51,18 +47,14 @@ class OwnerControllerIntegrationTest {
   @Test
   void shouldCreateTheOwnerWithCreatedDatesAndLastModifiedDates()
     throws Exception {
-    final String createOwnerRequest = new String(
-      Files.readAllBytes(
-        Paths.get(
-          "src/test/resources/fixtures/createOwnerRequestWithDatesSpecified.json"
-        )
+    final String createOwnerRequest = Files.readString(
+      Paths.get(
+        "src/test/resources/fixtures/createOwnerRequestWithDatesSpecified.json"
       )
     );
-    final String createOwnerResponse = new String(
-      Files.readAllBytes(
-        Paths.get(
-          "src/test/resources/fixtures/createOwnerResponseWithDatesSpecified.json"
-        )
+    final String createOwnerResponse = Files.readString(
+      Paths.get(
+        "src/test/resources/fixtures/createOwnerResponseWithDatesSpecified.json"
       )
     );
 

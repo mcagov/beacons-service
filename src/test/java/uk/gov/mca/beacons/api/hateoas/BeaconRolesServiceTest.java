@@ -4,91 +4,46 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static uk.gov.mca.beacons.api.hateoas.BeaconRolesService.SupportedPermissions;
 
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import uk.gov.mca.beacons.api.gateways.AuthGateway;
+import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
+import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconRolesServiceTest {
 
-  SimpleGrantedAuthority updaterAuth = new SimpleGrantedAuthority(
-    SupportedPermissions.APPROLE_UPDATE_RECORDS.toString()
-  );
-  SimpleGrantedAuthority unsupportedAuth1 = new SimpleGrantedAuthority(
-    "JUNK_AUTH_1"
-  );
-  SimpleGrantedAuthority unsupportedAuth2 = new SimpleGrantedAuthority(
-    "JUNK_AUTH_2"
-  );
+  @InjectMocks
+  private BeaconRolesService beaconRolesService;
 
-  Authentication authentication = mock(Authentication.class);
-  SecurityContext context = mock(SecurityContext.class);
-
-  @BeforeEach
-  void before() {
-    given(context.getAuthentication()).willReturn(authentication);
-    SecurityContextHolder.setContext(context);
-  }
+  @Mock
+  private AuthGateway authGateway;
 
   @Test
-  void ShouldReturnNoPermissionsForNullAuth() {
-    given(context.getAuthentication()).willReturn(null);
-
-    var rolesService = new BeaconRolesService();
-    var roles = rolesService.getUserRoles();
+  void shouldReturnNoPermissionsForRolelessUser() {
+    given(authGateway.getUserRoles()).willReturn(new ArrayList<>());
+    var roles = beaconRolesService.getUserRoles();
 
     assertThat(roles, is(empty()));
   }
 
   @Test
-  void ShouldReturnNoPermissionsForRolelessUser() {
-    var rolesService = new BeaconRolesService();
-    var roles = rolesService.getUserRoles();
+  void shouldReturnPermissionForUpdateRecordsUser() {
+    final var userRoles = new ArrayList<SupportedPermissions>();
+    userRoles.add(SupportedPermissions.APPROLE_UPDATE_RECORDS);
 
-    assertThat(roles, is(empty()));
-  }
-
-  @Test
-  void ShouldReturnPermissionForUpdateRecordsUser() {
-    doReturn(List.of(updaterAuth)).when(authentication).getAuthorities();
-
-    var rolesService = new BeaconRolesService();
-    var roles = rolesService.getUserRoles();
+    given(authGateway.getUserRoles()).willReturn(userRoles);
+    var roles = beaconRolesService.getUserRoles();
 
     assertThat(roles.size(), is(1));
-  }
-
-  @Test
-  void ShouldReturnPermissionForUpdateRecordsUserAndIgnoreUnsupportedPermissions() {
-    doReturn(List.of(unsupportedAuth1, updaterAuth, unsupportedAuth2))
-      .when(authentication)
-      .getAuthorities();
-
-    var rolesService = new BeaconRolesService();
-    var roles = rolesService.getUserRoles();
-
-    assertThat(roles.size(), is(1));
-  }
-
-  @Test
-  void ShouldReturnIgnoreUnsupportedPermissions() {
-    doReturn(List.of(unsupportedAuth1, unsupportedAuth2))
-      .when(authentication)
-      .getAuthorities();
-
-    var rolesService = new BeaconRolesService();
-    var roles = rolesService.getUserRoles();
-
-    assertThat(roles, is(empty()));
+    assertThat(
+      roles.contains(SupportedPermissions.APPROLE_UPDATE_RECORDS),
+      is(true)
+    );
   }
 }

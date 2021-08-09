@@ -36,4 +36,5 @@ public class CreateOwnerRequest {
   private Integer createUserId;
   private Integer updateUserId;
   private Integer versioning;
+  private Boolean migrated;
 }

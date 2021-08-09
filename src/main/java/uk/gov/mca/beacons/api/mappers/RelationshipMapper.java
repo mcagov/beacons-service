@@ -6,6 +6,7 @@ import uk.gov.mca.beacons.api.dto.DomainDTO;
 import uk.gov.mca.beacons.api.dto.RelationshipDTO;
 
 @Service
+@SuppressWarnings("rawtypes")
 public class RelationshipMapper {
 
   public RelationshipDTO toDTO(DomainDTO related) {

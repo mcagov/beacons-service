@@ -79,6 +79,16 @@ A Continuous Integration and Deployment (CI/CD) pipeline is configured to deploy
 
 Please see the [Beacons Integration](https://github.com/mcagov/beacons-integration) project which manages the infrastructure-as-code and deployments for the application.
 
+## Database Schema Generation
+
+To generate a database schema diagram for the Beacons API:
+
+- Ensure that the PostgreSQL instance is running
+- Ensure that the Spring Boot service is running and Flyway has applied the migration scripts
+- Run `docker compose up schemacrawler`
+
+This will output a `beacons-schema.html` diagram in [this directory](./schemacrawler).
+
 ## Licence
 
 Unless stated otherwise, the codebase is released under [the MIT License][mit].

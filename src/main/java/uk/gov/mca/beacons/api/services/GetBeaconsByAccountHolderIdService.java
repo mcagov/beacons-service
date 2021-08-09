@@ -36,7 +36,7 @@ public class GetBeaconsByAccountHolderIdService {
   }
 
   public List<Beacon> execute(UUID accountId) {
-    final List<Beacon> beacons = beaconGateway.findAllByAccountHolderId(
+    final List<Beacon> beacons = beaconGateway.findAllActiveBeaconsByAccountHolderId(
       accountId
     );
     if (beacons.isEmpty()) return emptyList();
