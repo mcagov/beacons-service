@@ -39,6 +39,7 @@ import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
+import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @WebMvcTest(controllers = BeaconsController.class)
@@ -46,11 +47,16 @@ import uk.gov.mca.beacons.api.services.NoteService;
 @Import(WebMvcTestConfiguration.class)
 class BeaconsControllerUnitTest {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
   private BeaconsService beaconsService;
+
+  @MockBean
+  private LegacyBeaconService legacyBeaconService;
 
   @MockBean
   private BeaconMapper beaconMapper;
@@ -66,8 +72,6 @@ class BeaconsControllerUnitTest {
 
   @MockBean
   private NoteMapper noteMapper;
-
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Nested
   class BeaconPatchUpdate {

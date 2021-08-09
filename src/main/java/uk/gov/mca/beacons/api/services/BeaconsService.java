@@ -8,13 +8,18 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.mappers.BeaconSearchResultMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
@@ -26,6 +31,7 @@ public class BeaconsService {
   private final BeaconPersonJpaRepository beaconPersonJpaRepository;
   private final BeaconUseJpaRepository beaconUseJpaRepository;
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
+  private final BeaconSearchResultMapper beaconSearchResultMapper;
   private final ModelPatcherFactory<Beacon> beaconPatcherFactory;
 
   @Autowired
@@ -34,13 +40,20 @@ public class BeaconsService {
     BeaconPersonJpaRepository beaconPersonJpaRepository,
     BeaconUseJpaRepository beaconUseJpaRepository,
     BeaconsRelationshipMapper beaconsRelationshipMapper,
+    BeaconSearchResultMapper beaconSearchResultMapper,
     ModelPatcherFactory<Beacon> beaconPatcherFactory
   ) {
     this.beaconJpaRepository = beaconJpaRepository;
     this.beaconPersonJpaRepository = beaconPersonJpaRepository;
     this.beaconUseJpaRepository = beaconUseJpaRepository;
     this.beaconsRelationshipMapper = beaconsRelationshipMapper;
+    this.beaconSearchResultMapper = beaconSearchResultMapper;
     this.beaconPatcherFactory = beaconPatcherFactory;
+  }
+
+  public List<BeaconSearchResultDTO> findAllBeaconSearchResult() {
+    final List<Beacon> allBeacons = findAll();
+    return beaconSearchResultMapper.getBeaconSearchResults(allBeacons);
   }
 
   public List<Beacon> findAll() {
