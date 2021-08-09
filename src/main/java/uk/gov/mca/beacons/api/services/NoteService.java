@@ -2,9 +2,9 @@ package uk.gov.mca.beacons.api.services;
 
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
 
