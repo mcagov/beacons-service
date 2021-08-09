@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JacksonConfiguration {
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(
-                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                true
-        );
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+  @Bean
+  public ObjectMapper objectMapper() {
+    final ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(
+      DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+      true
+    );
+    objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 
-        return objectMapper;
-    }
+    return objectMapper;
+  }
 }
