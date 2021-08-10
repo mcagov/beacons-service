@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.gateways;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,8 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     try {
       log.info("Caching legacy beacon records");
       cache =
-        legacyBeaconJpaRepository
-          .findAll()
-          .stream()
+        StreamSupport
+          .stream(legacyBeaconJpaRepository.findAll().spliterator(), false)
           .map(legacyBeaconMapper::fromJpaEntity)
           .collect(Collectors.toList());
       log.info("Cached {} legacy beacons", cache.size());
