@@ -37,7 +37,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   }
 
   @PostConstruct
-  public void seedCache() {
+  public synchronized void seedCache() {
     log.info("Caching legacy beacon records");
     cache =
       legacyBeaconJpaRepository
