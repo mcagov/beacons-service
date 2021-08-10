@@ -29,7 +29,7 @@ public class BeaconSearchResultMapper {
           .getUses()
           .stream()
           .map(beaconUse -> String.valueOf(beaconUse.getActivity()))
-          .collect(Collectors.joining(","))
+          .collect(Collectors.joining(", "))
       )
       .build();
 
