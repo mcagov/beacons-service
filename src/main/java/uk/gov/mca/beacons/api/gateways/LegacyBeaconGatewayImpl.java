@@ -38,14 +38,19 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @PostConstruct
   public synchronized void seedCache() {
-    log.info("Caching legacy beacon records");
-    cache =
-      legacyBeaconJpaRepository
-        .findAll()
-        .stream()
-        .map(legacyBeaconMapper::fromJpaEntity)
-        .collect(Collectors.toList());
-    log.info("Cached {} legacy beacons", cache.size());
+    try {
+      log.info("Caching legacy beacon records");
+      cache =
+        legacyBeaconJpaRepository
+          .findAll()
+          .stream()
+          .map(legacyBeaconMapper::fromJpaEntity)
+          .collect(Collectors.toList());
+      log.info("Cached {} legacy beacons", cache.size());
+    } catch (Exception e) {
+      log.error("Unable to load legacy beacons into memory", e);
+      throw e;
+    }
   }
 
   @Override
