@@ -19,54 +19,55 @@ import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 @Slf4j
 public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
-    private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
-    private final LegacyBeaconMapper legacyBeaconMapper;
-    private final JdbcTemplate jdbcTemplate;
+  private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
+  private final LegacyBeaconMapper legacyBeaconMapper;
+  private final JdbcTemplate jdbcTemplate;
 
-    private List<LegacyBeacon> cache = new ArrayList<>();
+  private List<LegacyBeacon> cache = new ArrayList<>();
 
-    @Autowired
-    public LegacyBeaconGatewayImpl(
-            LegacyBeaconJpaRepository legacyBeaconJpaRepository,
-            LegacyBeaconMapper legacyBeaconMapper,
-            JdbcTemplate jdbcTemplate
-    ) {
-        this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
-        this.legacyBeaconMapper = legacyBeaconMapper;
-        this.jdbcTemplate = jdbcTemplate;
-    }
+  @Autowired
+  public LegacyBeaconGatewayImpl(
+    LegacyBeaconJpaRepository legacyBeaconJpaRepository,
+    LegacyBeaconMapper legacyBeaconMapper,
+    JdbcTemplate jdbcTemplate
+  ) {
+    this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
+    this.legacyBeaconMapper = legacyBeaconMapper;
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    @PostConstruct
-    public void seedCache() {
-        log.info("Caching legacy beacon records");
-        cache = legacyBeaconJpaRepository
-                .findAll()
-                .stream()
-                .map(legacyBeaconMapper::fromJpaEntity)
-                .collect(Collectors.toList());
-    }
+  @PostConstruct
+  public void seedCache() {
+    log.info("Caching legacy beacon records");
+    cache =
+      legacyBeaconJpaRepository
+        .findAll()
+        .stream()
+        .map(legacyBeaconMapper::fromJpaEntity)
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public LegacyBeacon save(LegacyBeacon beacon) {
-        final var legacyBeaconEntity = legacyBeaconMapper.toJpaEntity(beacon);
-        legacyBeaconEntity.setBeaconStatus(BeaconStatus.MIGRATED);
+  @Override
+  public LegacyBeacon save(LegacyBeacon beacon) {
+    final var legacyBeaconEntity = legacyBeaconMapper.toJpaEntity(beacon);
+    legacyBeaconEntity.setBeaconStatus(BeaconStatus.MIGRATED);
 
-        log.info(
-                "Saving beacon record with PK {}",
-                beacon.getBeacon().get("pkBeaconId")
-        );
-        return legacyBeaconMapper.fromJpaEntity(
-                legacyBeaconJpaRepository.save(legacyBeaconEntity)
-        );
-    }
+    log.info(
+      "Saving beacon record with PK {}",
+      beacon.getBeacon().get("pkBeaconId")
+    );
+    return legacyBeaconMapper.fromJpaEntity(
+      legacyBeaconJpaRepository.save(legacyBeaconEntity)
+    );
+  }
 
-    @Override
-    public void deleteAll() {
-        jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
-    }
+  @Override
+  public void deleteAll() {
+    jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
+  }
 
-    @Override
-    public List<LegacyBeacon> findAll() {
-        return cache;
-    }
+  @Override
+  public List<LegacyBeacon> findAll() {
+    return cache;
+  }
 }
