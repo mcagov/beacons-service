@@ -45,6 +45,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
         .stream()
         .map(legacyBeaconMapper::fromJpaEntity)
         .collect(Collectors.toList());
+    log.info("Cached {} legacy beacons", cache.size());
   }
 
   @Override
