@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class BeaconSearchControllerIntegrationTest {
       final var createLegacyBeaconRequest = readFile(
         "src/test/resources/fixtures/createLegacyBeaconRequest.json"
       )
-        .replace("hexId", randomHexId);
+        .replace("9D0E1D1B8C00001", randomHexId);
 
       webTestClient
         .post()
@@ -47,13 +48,16 @@ class BeaconSearchControllerIntegrationTest {
         .expectStatus()
         .isCreated();
 
-      final String uri = "/beacon-search/search/find-all?q=" + randomHexId;
+      final String uri = "/beacon-search/search/find-all";
       webTestClient
         .get()
-        .uri(uri)
+        .uri(
+          uriBuilder ->
+            uriBuilder.path(uri).queryParam("term", randomHexId).build()
+        )
         .exchange()
         .expectBody()
-        .jsonPath("_embedded.beaconSearches[0].hexId")
+        .jsonPath("_embedded.beacon-search[0].hexId")
         .isEqualTo(randomHexId);
     }
   }
