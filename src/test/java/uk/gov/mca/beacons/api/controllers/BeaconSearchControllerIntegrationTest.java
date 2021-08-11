@@ -30,7 +30,7 @@ class BeaconSearchControllerIntegrationTest {
     }
 
     @Test
-    void shouldReturnTheCreatedLegacyBeacon() throws Exception {
+    void shouldFindTheCreatedLegacyBeacon() throws Exception {
       final var randomHexId = UUID.randomUUID().toString();
       final var createLegacyBeaconRequest = readFile(
         "src/test/resources/fixtures/createLegacyBeaconRequest.json"
@@ -60,7 +60,7 @@ class BeaconSearchControllerIntegrationTest {
     }
 
     @Test
-    void shouldReturnTheCreatedRegistration() throws Exception {
+    void shouldFindTheCreatedBeacon() throws Exception {
       final var randomHexId = UUID.randomUUID().toString();
       final var createBeaconRequest = readFile(
         "src/test/resources/fixtures/createBeaconRequest.json"
@@ -69,7 +69,7 @@ class BeaconSearchControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/registration/register")
+        .uri("/registrations/register")
         .bodyValue(createBeaconRequest)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
