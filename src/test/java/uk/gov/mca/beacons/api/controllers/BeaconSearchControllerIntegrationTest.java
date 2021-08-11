@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -43,6 +41,36 @@ class BeaconSearchControllerIntegrationTest {
         .post()
         .uri("/migrate/legacy-beacon")
         .bodyValue(createLegacyBeaconRequest)
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isCreated();
+
+      final String uri = "/beacon-search/search/find-all";
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder.path(uri).queryParam("term", randomHexId).build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beacon-search[0].hexId")
+        .isEqualTo(randomHexId);
+    }
+
+    @Test
+    void shouldReturnTheCreatedRegistration() throws Exception {
+      final var randomHexId = UUID.randomUUID().toString();
+      final var createBeaconRequest = readFile(
+        "src/test/resources/fixtures/createBeaconRequest.json"
+      )
+        .replace("1D0EA08C52FFBFF", randomHexId);
+
+      webTestClient
+        .post()
+        .uri("/registration/register")
+        .bodyValue(createBeaconRequest)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
         .expectStatus()
