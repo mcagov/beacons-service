@@ -53,7 +53,7 @@ class BeaconSearchControllerIntegrationTest {
         .uri(uri)
         .exchange()
         .expectBody()
-        .jsonPath("_embedded.beaconSearch[0].hexId")
+        .jsonPath("_embedded.beaconSearches[0].hexId")
         .isEqualTo(randomHexId);
     }
   }
