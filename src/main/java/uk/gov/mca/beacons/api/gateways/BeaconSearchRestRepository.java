@@ -12,7 +12,7 @@ import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
   path = "beacon-search",
   collectionResourceRel = "beaconSearch"
 )
-public interface BeaconSearchRestRepository
+interface BeaconSearchRestRepository
   extends JpaRepository<BeaconSearchEntity, UUID> {
   @RestResource(path = "find-all", rel = "findAllBeacons")
   Page<BeaconSearchEntity> findAllBy(Pageable page);
