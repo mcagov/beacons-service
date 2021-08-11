@@ -23,11 +23,16 @@ class BeaconSearchControllerIntegrationTest {
   @Nested
   class GetBeaconSearchResults {
 
+    private static final String FIND_ALL_URI = "/beacon-search/search/find-all";
+
     @Test
     void givenAValidRequest_shouldReturnAHttp200() {
-      final String uri = "/beacon-search/search/find-all";
-
-      webTestClient.get().uri(uri).exchange().expectStatus().is2xxSuccessful();
+      webTestClient
+        .get()
+        .uri(FIND_ALL_URI)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful();
     }
 
     @Test
@@ -47,10 +52,15 @@ class BeaconSearchControllerIntegrationTest {
         .expectStatus()
         .isCreated();
 
-      final String uri = "/beacon-search/search/find-all";
       webTestClient
         .get()
-        .uri(uri, Map.of("term", randomHexId))
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .build()
+        )
         .exchange()
         .expectBody()
         .jsonPath("_embedded.beacon-search[0].hexId")
@@ -63,7 +73,8 @@ class BeaconSearchControllerIntegrationTest {
       final var createBeaconRequest = readFile(
         "src/test/resources/fixtures/createBeaconRequest.json"
       )
-        .replace("1D0EA08C52FFBFF", randomHexId);
+        .replace("1D0EA08C52FFBFF", randomHexId)
+        .replace("account-holder-id-placeholder", "null");
 
       webTestClient
         .post()
@@ -74,10 +85,15 @@ class BeaconSearchControllerIntegrationTest {
         .expectStatus()
         .isCreated();
 
-      final String uri = "/beacon-search/search/find-all";
       webTestClient
         .get()
-        .uri(uri, Map.of("term", randomHexId))
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .build()
+        )
         .exchange()
         .expectBody()
         .jsonPath("_embedded.beacon-search[0].hexId")
