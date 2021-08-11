@@ -9,19 +9,19 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class BeaconSearchResultControllerIntegrationTest {
+class BeaconSearchControllerIntegrationTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+  @Autowired
+  private WebTestClient webTestClient;
 
-    @Nested
-    class GetBeaconSearchResults {
+  @Nested
+  class GetBeaconSearchResults {
 
-        @Test
-        void givenAValidRequest_shouldReturnAHttp200() {
-            final String uri = "/beacon-search/search/find-all";
+    @Test
+    void givenAValidRequest_shouldReturnAHttp200() {
+      final String uri = "/beacon-search/search/find-all";
 
-            webTestClient.get().uri(uri).exchange().expectStatus().is2xxSuccessful();
-        }
+      webTestClient.get().uri(uri).exchange().expectStatus().is2xxSuccessful();
     }
+  }
 }
