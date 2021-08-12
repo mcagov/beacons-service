@@ -2,7 +2,6 @@ package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -73,7 +72,6 @@ class BeaconSearchControllerIntegrationTest {
       final var createBeaconRequest = readFile(
         "src/test/resources/fixtures/createBeaconRequest.json"
       )
-        .replace("1D0EA08C52FFBFF", randomHexId)
         .replace("account-holder-id-placeholder", "null");
 
       webTestClient
