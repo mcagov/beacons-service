@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -79,12 +80,13 @@ class BeaconSearchControllerIntegrationTest {
       final var createBeaconRequest = readFile(
         "src/test/resources/fixtures/createBeaconRequest.json"
       )
-        .replace("account-holder-id-placeholder", "null");
+        .replace("1D0EA08C52FFBFF", randomHexId)
+        .replace("\"account-holder-id-placeholder\"", "null");
 
       webTestClient
         .post()
         .uri("/registrations/register")
-        .bodyValue(createBeaconRequest)
+        .body(BodyInserters.fromValue(createBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
         .expectStatus()
