@@ -68,29 +68,30 @@ public class SecurityConfiguration {
         .roles("migration");
     }
   }
-  //  @Order(2)
-  //  @Configuration
-  //  @Profile("default")
-  //  public static class AzureAdSecurityConfiguration
-  //    extends AADResourceServerWebSecurityConfigurerAdapter {
-  //
-  //    @Override
-  //    protected void configure(HttpSecurity http) throws Exception {
-  //      super.configure(http);
-  //      http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
-  //    }
-  //
-  //    @Override
-  //    public void configure(WebSecurity web) {
-  //      web
-  //        .ignoring()
-  //        .antMatchers(
-  //          "/actuator/health",
-  //          "/actuator/info",
-  //          "/swagger-ui.html",
-  //          "/swagger-ui/**",
-  //          "/v3/api-docs/**"
-  //        );
-  //    }
-  //  }
+
+  @Order(2)
+  @Configuration
+  @Profile("default")
+  public static class AzureAdSecurityConfiguration
+    extends AADResourceServerWebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      super.configure(http);
+      http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+      web
+        .ignoring()
+        .antMatchers(
+          "/actuator/health",
+          "/actuator/info",
+          "/swagger-ui.html",
+          "/swagger-ui/**",
+          "/v3/api-docs/**"
+        );
+    }
+  }
 }
