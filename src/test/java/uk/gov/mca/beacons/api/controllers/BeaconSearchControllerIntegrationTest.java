@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -101,11 +102,17 @@ class BeaconSearchControllerIntegrationTest {
         .exchange()
         .expectBody()
         .jsonPath("_embedded.beacon-search[0].hexId")
-        .isEqualTo(randomHexId);
+        .isEqualTo(randomHexId)
+        .jsonPath("_embedded.beacon-search[0].lastModifiedDate")
+        .isNotEmpty()
+        .jsonPath("_embedded.beacon-search[0].beaconStatus")
+        .isEqualTo("NEW")
+        .jsonPath("_embedded.beacon-search[0].ownerName")
+        .isEqualTo("Vice-Admiral Horatio Nelson, 1st Viscount Nelson");
     }
   }
 
   private String readFile(String filePath) throws Exception {
-    return Files.readString(Path.of(filePath));
+    return Files.readString(Paths.get(filePath));
   }
 }
