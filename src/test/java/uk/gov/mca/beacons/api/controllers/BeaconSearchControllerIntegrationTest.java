@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
