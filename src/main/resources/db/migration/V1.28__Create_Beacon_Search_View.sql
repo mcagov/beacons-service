@@ -11,5 +11,5 @@ CREATE OR REPLACE VIEW beacon_search AS
            last_modified_date,
            beacon_status,
            hex_id,
-           data->'owner'->>'name' as owner_name
+           data->'owner'->>'ownerName' as owner_name
     FROM legacy_beacon;

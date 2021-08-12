@@ -63,7 +63,13 @@ class BeaconSearchControllerIntegrationTest {
         .exchange()
         .expectBody()
         .jsonPath("_embedded.beacon-search[0].hexId")
-        .isEqualTo(randomHexId);
+        .isEqualTo(randomHexId)
+        .jsonPath("_embedded.beacon-search[0].lastModifiedDate")
+        .isEqualTo("2004-10-13T00:00:00")
+        .jsonPath("_embedded.beacon-search[0].beaconStatus")
+        .isEqualTo("MIGRATED")
+        .jsonPath("_embedded.beacon-search[0].ownerName")
+        .isEqualTo("Mr Beacon");
     }
 
     @Test
