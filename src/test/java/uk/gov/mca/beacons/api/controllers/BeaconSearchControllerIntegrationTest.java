@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.hasItems;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -70,7 +72,9 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("_embedded.beacon-search[0].beaconStatus")
         .isEqualTo("MIGRATED")
         .jsonPath("_embedded.beacon-search[0].ownerName")
-        .isEqualTo("Mr Beacon");
+        .isEqualTo("Mr Beacon")
+        .jsonPath("_embedded.beacon-search[0].uses")
+        .value(hasItems("Maritime", "Aviation"));
     }
 
     @Test

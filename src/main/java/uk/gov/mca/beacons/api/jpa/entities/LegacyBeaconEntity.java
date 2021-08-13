@@ -1,7 +1,9 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -20,7 +22,12 @@ import uk.gov.mca.beacons.api.domain.BeaconStatus;
 @Entity(name = "legacy_beacon")
 @Getter
 @Setter
-@TypeDefs({ @TypeDef(name = "json", typeClass = JsonType.class) })
+@TypeDefs(
+  {
+    @TypeDef(name = "json", typeClass = JsonType.class),
+    @TypeDef(name = "list-array", typeClass = ListArrayType.class),
+  }
+)
 public class LegacyBeaconEntity {
 
   @Id
@@ -35,10 +42,16 @@ public class LegacyBeaconEntity {
 
   private String ownerEmail;
 
+  private String ownerName;
+
   private LocalDateTime createdDate;
 
   private LocalDateTime lastModifiedDate;
 
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
+
+  @Type(type = "list-array")
+  @Column(columnDefinition = "text[]")
+  private List<String> useActivities;
 }
