@@ -32,12 +32,12 @@ END $$;
 CREATE TRIGGER refresh_beacon_search_on_insert_into_legacy_beacons
     AFTER INSERT
     ON legacy_beacon
-    FOR EACH STATEMENT
+    FOR EACH ROW
     EXECUTE PROCEDURE refresh_beacon_search_view();
 
 -- Create a trigger to refresh the beacon search materialized view on inserts into the legacy beacon table
 CREATE TRIGGER refresh_beacon_search_on_insert_into_beacons
     AFTER INSERT
     ON beacon
-    FOR EACH STATEMENT
+    FOR EACH ROW
         EXECUTE PROCEDURE refresh_beacon_search_view();
