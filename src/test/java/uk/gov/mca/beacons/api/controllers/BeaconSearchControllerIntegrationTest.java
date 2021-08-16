@@ -64,7 +64,9 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("_embedded.beacon-search[0].ownerName")
         .isEqualTo("Mr Beacon")
         .jsonPath("_embedded.beacon-search[0].useActivities")
-        .isEqualTo("Maritime, Maritime");
+        .isEqualTo("Maritime, Maritime")
+        .jsonPath("page.totalElements")
+        .isEqualTo(1);
     }
 
     @Test
@@ -86,7 +88,33 @@ class BeaconSearchControllerIntegrationTest {
         .exchange()
         .expectBody()
         .jsonPath("_embedded.beacon-search[0].hexId")
-        .isEqualTo(randomHexId);
+        .isEqualTo(randomHexId)
+        .jsonPath("page.totalElements")
+        .isEqualTo(1);
+    }
+
+    @Test
+    void shouldFindTheLegacyBeaconByHexIdStatusAndUses() throws Exception {
+      final var randomHexId = UUID.randomUUID().toString();
+      createLegacyBeacon(randomHexId);
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "migrated")
+              .queryParam("uses", "maritime")
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beacon-search[0].hexId")
+        .isEqualTo(randomHexId)
+        .jsonPath("page.totalElements")
+        .isEqualTo(1);
     }
 
     @Test
@@ -129,7 +157,9 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("_embedded.beacon-search[0].ownerName")
         .isEqualTo("Vice-Admiral Horatio Nelson, 1st Viscount Nelson")
         .jsonPath("_embedded.beacon-search[0].useActivities")
-        .isEqualTo("SAILING");
+        .isEqualTo("SAILING")
+        .jsonPath("page.totalElements")
+        .isEqualTo(1);
     }
   }
 
