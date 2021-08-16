@@ -113,7 +113,9 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("_embedded.beacon-search[0].beaconStatus")
         .isEqualTo("NEW")
         .jsonPath("_embedded.beacon-search[0].ownerName")
-        .isEqualTo("Vice-Admiral Horatio Nelson, 1st Viscount Nelson");
+        .isEqualTo("Vice-Admiral Horatio Nelson, 1st Viscount Nelson")
+        .jsonPath("_embedded.beacon-search[0].useActivities")
+        .isEqualTo("SAILING, JET_AIRCRAFT");
     }
   }
 
