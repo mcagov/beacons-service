@@ -4,8 +4,8 @@ CREATE OR REPLACE VIEW beacon_search AS
            last_modified_date,
            beacon_status,
            hex_id,
-           (SELECT full_name FROM person WHERE person.person_type = 'OWNER' AND person.beacon_id = beacon.id) as owner_name,
-           (SELECT array_agg(activity) FROM beacon_use WHERE beacon_use.beacon_id = beacon.id) as use_activities
+           (SELECT full_name FROM person WHERE person.person_type = 'OWNER' AND person.beacon_id = beacon.id) AS owner_name,
+           (SELECT string_agg(activity, ', ') FROM beacon_use WHERE beacon_use.beacon_id = beacon.id) AS use_activities
     FROM beacon
         UNION
     SELECT id,
@@ -13,5 +13,5 @@ CREATE OR REPLACE VIEW beacon_search AS
            beacon_status,
            hex_id,
            data->'owner'->>'ownerName' as owner_name,
-           use_activities
+           (SELECT string_agg(use->>'useType', ', ') FROM legacy_beacon CROSS JOIN jsonb_array_elements(data->'uses') AS use) AS use_activities
     FROM legacy_beacon;

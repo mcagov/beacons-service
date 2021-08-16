@@ -42,16 +42,10 @@ public class LegacyBeaconEntity {
 
   private String ownerEmail;
 
-  private String ownerName;
-
   private LocalDateTime createdDate;
 
   private LocalDateTime lastModifiedDate;
 
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
-
-  @Type(type = "list-array")
-  @Column(columnDefinition = "text[]")
-  private List<String> useActivities;
 }

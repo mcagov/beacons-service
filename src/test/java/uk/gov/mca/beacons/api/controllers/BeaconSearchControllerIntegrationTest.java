@@ -73,8 +73,8 @@ class BeaconSearchControllerIntegrationTest {
         .isEqualTo("MIGRATED")
         .jsonPath("_embedded.beacon-search[0].ownerName")
         .isEqualTo("Mr Beacon")
-        .jsonPath("_embedded.beacon-search[0].uses")
-        .value(hasItems("Maritime", "Aviation"));
+        .jsonPath("_embedded.beacon-search[0].useActivities")
+        .isEqualTo("Maritime, Aviation");
     }
 
     @Test
