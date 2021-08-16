@@ -40,19 +40,7 @@ class BeaconSearchControllerIntegrationTest {
     @Test
     void shouldFindTheCreatedLegacyBeacon() throws Exception {
       final var randomHexId = UUID.randomUUID().toString();
-      final var createLegacyBeaconRequest = readFile(
-        "src/test/resources/fixtures/createLegacyBeaconRequest.json"
-      )
-        .replace("9D0E1D1B8C00001", randomHexId);
-
-      webTestClient
-        .post()
-        .uri("/migrate/legacy-beacon")
-        .bodyValue(createLegacyBeaconRequest)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .exchange()
-        .expectStatus()
-        .isCreated();
+      createLegacyBeacon(randomHexId);
 
       webTestClient
         .get()
@@ -77,6 +65,28 @@ class BeaconSearchControllerIntegrationTest {
         .isEqualTo("Mr Beacon")
         .jsonPath("_embedded.beacon-search[0].useActivities")
         .isEqualTo("Maritime, Maritime");
+    }
+
+    @Test
+    void shouldFindTheLegacyBeaconByHexIdIgnoringCase() throws Exception {
+      final var randomHexId = UUID.randomUUID().toString();
+      createLegacyBeacon(randomHexId);
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId.toUpperCase())
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beacon-search[0].hexId")
+        .isEqualTo(randomHexId);
     }
 
     @Test
@@ -125,5 +135,21 @@ class BeaconSearchControllerIntegrationTest {
 
   private String readFile(String filePath) throws Exception {
     return Files.readString(Paths.get(filePath));
+  }
+
+  private void createLegacyBeacon(String hexId) throws Exception {
+    final var createLegacyBeaconRequest = readFile(
+      "src/test/resources/fixtures/createLegacyBeaconRequest.json"
+    )
+      .replace("9D0E1D1B8C00001", hexId);
+
+    webTestClient
+      .post()
+      .uri("/migrate/legacy-beacon")
+      .bodyValue(createLegacyBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated();
   }
 }
