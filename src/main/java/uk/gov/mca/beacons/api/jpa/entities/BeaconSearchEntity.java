@@ -2,17 +2,16 @@ package uk.gov.mca.beacons.api.jpa.entities;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-@Entity(name = "beacon_search")
+@Entity
+@Table(name = "beacon_search")
 @TypeDef(name = "list-array", typeClass = ListArrayType.class)
 @Getter
 @Setter
