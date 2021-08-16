@@ -25,6 +25,7 @@ CREATE OR REPLACE FUNCTION refresh_beacon_search_view()
 AS $$
 BEGIN
     REFRESH MATERIALIZED VIEW CONCURRENTLY beacon_search_mat;
+    RETURN NULL;
 END $$;
 
 -- Create a trigger to refresh the beacon search materialized view on inserts into the legacy beacon table
