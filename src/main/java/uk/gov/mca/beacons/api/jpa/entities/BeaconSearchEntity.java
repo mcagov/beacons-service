@@ -25,8 +25,5 @@ public class BeaconSearchEntity {
   private String beaconStatus;
   private String hexId;
   private String ownerName;
-
-  @Type(type = "list-array")
-  @Column(columnDefinition = "text[]")
-  private List<String> useActivities;
+  private String useActivities;
 }
