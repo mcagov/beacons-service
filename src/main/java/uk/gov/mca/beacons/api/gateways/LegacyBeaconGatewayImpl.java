@@ -1,10 +1,8 @@
 package uk.gov.mca.beacons.api.gateways;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,8 +22,6 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   private final LegacyBeaconMapper legacyBeaconMapper;
   private final JdbcTemplate jdbcTemplate;
 
-  private List<LegacyBeacon> cache = new ArrayList<>();
-
   @Autowired
   public LegacyBeaconGatewayImpl(
     LegacyBeaconJpaRepository legacyBeaconJpaRepository,
@@ -35,22 +31,6 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
     this.legacyBeaconMapper = legacyBeaconMapper;
     this.jdbcTemplate = jdbcTemplate;
-  }
-
-  @PostConstruct
-  public synchronized void seedCache() {
-    try {
-      log.info("Caching legacy beacon records");
-      cache =
-        StreamSupport
-          .stream(legacyBeaconJpaRepository.findAll().spliterator(), false)
-          .map(legacyBeaconMapper::fromJpaEntity)
-          .collect(Collectors.toList());
-      log.info("Cached {} legacy beacons", cache.size());
-    } catch (Exception e) {
-      log.error("Unable to load legacy beacons into memory", e);
-      throw e;
-    }
   }
 
   @Override
@@ -74,6 +54,9 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Override
   public List<LegacyBeacon> findAll() {
-    return cache;
+    return StreamSupport
+      .stream(legacyBeaconJpaRepository.findAll().spliterator(), false)
+      .map(legacyBeaconMapper::fromJpaEntity)
+      .collect(Collectors.toList());
   }
 }

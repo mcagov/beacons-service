@@ -1,5 +1,5 @@
 -- Create a single view of beacons from the beacon and legacy_beacon tables
-CREATE OR REPLACE VIEW beacon_search AS
+CREATE MATERIALIZED VIEW beacon_search_mat AS
     SELECT id,
            last_modified_date,
            beacon_status,
@@ -15,3 +15,5 @@ CREATE OR REPLACE VIEW beacon_search AS
            data->'owner'->>'ownerName' as owner_name,
            (SELECT string_agg(uses->>'useType', ', ') FROM legacy_beacon AS lb, LATERAL jsonb_array_elements(data->'uses') AS uses WHERE lb.id = legacy_beacon.id GROUP BY id) AS use_activities
     FROM legacy_beacon;
+
+CREATE UNIQUE INDEX beacon_search_mat_id ON beacon_search_mat(id);

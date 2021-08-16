@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.gateways;
+package uk.gov.mca.beacons.api.controllers;
 
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
 
+/**
+ * This {@link RepositoryRestResource} exposes controller endpoints to enable searching across beacon records using JPA's built in pagination/sorting capability.
+ * <p>
+ * See the docs: https://docs.spring.io/spring-data/rest/docs/current/reference/html/#reference for more info
+ */
 @RepositoryRestResource(
   path = "beacon-search",
   collectionResourceRel = "beacon-search"
@@ -20,13 +25,13 @@ interface BeaconSearchRestRepository
   @Query(
     "SELECT b FROM BeaconSearchEntity b WHERE " +
     "(" +
-    "LOWER(b.hexId) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-    "LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-    "LOWER(b.ownerName) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-    "LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :term, '%')) " +
+    "COALESCE(LOWER(b.hexId), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "COALESCE(LOWER(b.ownerName), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :term, '%')) " +
     ") " +
-    "AND (LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :status, '%'))) " +
-    "AND (LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :uses, '%')))"
+    "AND (COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :status, '%'))) " +
+    "AND (COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :uses, '%')))"
   )
   Page<BeaconSearchEntity> findALl(
     @Param("term") String term,
