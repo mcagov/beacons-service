@@ -12,7 +12,6 @@ import org.hibernate.annotations.TypeDef;
 
 @Entity
 @Table(name = "beacon_search")
-@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 @Getter
 @Setter
 public class BeaconSearchEntity {
