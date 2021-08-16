@@ -13,5 +13,5 @@ CREATE OR REPLACE VIEW beacon_search AS
            beacon_status,
            hex_id,
            data->'owner'->>'ownerName' as owner_name,
-           (SELECT string_agg(use->>'useType', ', ') FROM legacy_beacon CROSS JOIN jsonb_array_elements(data->'uses') AS use) AS use_activities
+           (SELECT string_agg(uses->>'useType', ', ') FROM legacy_beacon AS lb, LATERAL jsonb_array_elements(data->'uses') AS uses WHERE lb.id = legacy_beacon.id GROUP BY id) AS use_activities
     FROM legacy_beacon;
