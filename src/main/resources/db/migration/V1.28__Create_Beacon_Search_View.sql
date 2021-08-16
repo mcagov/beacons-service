@@ -20,7 +20,8 @@ CREATE UNIQUE INDEX beacon_search_mat_id ON beacon_search_mat(id);
 
 -- Create function to refresh the beacon search materialized view
 CREATE OR REPLACE FUNCTION refresh_beacon_search_view()
-    RETURNS TRIGGER LANGUAGE plpgsql
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
 AS $$
 BEGIN
     REFRESH MATERIALIZED VIEW CONCURRENTLY beacon_search_mat;
@@ -38,4 +39,4 @@ CREATE TRIGGER refresh_beacon_search_on_insert_into_beacons
     AFTER INSERT
     ON beacon
     FOR EACH STATEMENT
-    EXECUTE PROCEDURE refresh_beacon_search_view();
+        EXECUTE PROCEDURE refresh_beacon_search_view();
