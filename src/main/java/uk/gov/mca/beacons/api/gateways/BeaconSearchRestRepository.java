@@ -24,7 +24,8 @@ interface BeaconSearchRestRepository
     "LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
     "LOWER(b.ownerName) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
     "LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :term, '%')) " +
-    ") AND (LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :status, '%'))) " +
+    ") " +
+    "AND (LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :status, '%'))) " +
     "AND (LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :uses, '%')))"
   )
   Page<BeaconSearchEntity> findALl(

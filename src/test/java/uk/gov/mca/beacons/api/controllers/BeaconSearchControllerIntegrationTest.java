@@ -1,7 +1,5 @@
 package uk.gov.mca.beacons.api.controllers;
 
-import static org.hamcrest.Matchers.hasItems;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -120,20 +118,7 @@ class BeaconSearchControllerIntegrationTest {
     @Test
     void shouldFindTheCreatedBeacon() throws Exception {
       final var randomHexId = UUID.randomUUID().toString();
-      final var createBeaconRequest = readFile(
-        "src/test/resources/fixtures/createBeaconRequest.json"
-      )
-        .replace("1D0EA08C52FFBFF", randomHexId)
-        .replace("\"account-holder-id-placeholder\"", "null");
-
-      webTestClient
-        .post()
-        .uri("/registrations/register")
-        .body(BodyInserters.fromValue(createBeaconRequest))
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .exchange()
-        .expectStatus()
-        .isCreated();
+      createBeacon(randomHexId);
 
       webTestClient
         .get()
@@ -161,6 +146,30 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("page.totalElements")
         .isEqualTo(1);
     }
+
+    @Test
+    void shouldFindTheCreatedBeaconByHexIdStatusAndUses() throws Exception {
+      final var randomHexId = UUID.randomUUID().toString();
+      createBeacon(randomHexId);
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "new")
+              .queryParam("uses", "sail")
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beacon-search[0].hexId")
+        .isEqualTo(randomHexId)
+        .jsonPath("page.totalElements")
+        .isEqualTo(1);
+    }
   }
 
   private String readFile(String filePath) throws Exception {
@@ -177,6 +186,23 @@ class BeaconSearchControllerIntegrationTest {
       .post()
       .uri("/migrate/legacy-beacon")
       .bodyValue(createLegacyBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated();
+  }
+
+  private void createBeacon(String hexId) throws Exception {
+    final var createBeaconRequest = readFile(
+      "src/test/resources/fixtures/createBeaconRequest.json"
+    )
+      .replace("1D0EA08C52FFBFF", hexId)
+      .replace("\"account-holder-id-placeholder\"", "null");
+
+    webTestClient
+      .post()
+      .uri("/registrations/register")
+      .body(BodyInserters.fromValue(createBeaconRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
       .expectStatus()
