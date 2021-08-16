@@ -29,7 +29,15 @@ class BeaconSearchControllerIntegrationTest {
     void givenAValidRequest_shouldReturnAHttp200() {
       webTestClient
         .get()
-        .uri(FIND_ALL_URI)
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", "")
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
         .exchange()
         .expectStatus()
         .is2xxSuccessful();
