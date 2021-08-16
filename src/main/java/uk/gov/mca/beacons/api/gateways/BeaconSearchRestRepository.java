@@ -20,11 +20,17 @@ interface BeaconSearchRestRepository
   @Query(
     "SELECT b FROM BeaconSearchEntity b WHERE " +
     "(" +
-    "b.hexId LIKE %:term% OR " +
-    "b.beaconStatus LIKE %:term% OR " +
-    "b.ownerName LIKE %:term% OR " +
-    "b.useActivities LIKE %:term%" +
-    ")"
+    "LOWER(b.hexId) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "LOWER(b.ownerName) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+    "LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :term, '%')) " +
+    ") AND (LOWER(b.beaconStatus) LIKE LOWER(CONCAT('%', :status, '%'))) " +
+    "AND (LOWER(b.useActivities) LIKE LOWER(CONCAT('%', :uses, '%')))"
   )
-  Page<BeaconSearchEntity> findALl(@Param("term") String term, Pageable page);
+  Page<BeaconSearchEntity> findALl(
+    @Param("term") String term,
+    @Param("status") String status,
+    @Param("uses") String uses,
+    Pageable page
+  );
 }

@@ -61,6 +61,8 @@ class BeaconSearchControllerIntegrationTest {
             uriBuilder
               .path(FIND_ALL_URI)
               .queryParam("term", randomHexId)
+              .queryParam("status", "")
+              .queryParam("uses", "")
               .build()
         )
         .exchange()
@@ -102,6 +104,8 @@ class BeaconSearchControllerIntegrationTest {
             uriBuilder
               .path(FIND_ALL_URI)
               .queryParam("term", randomHexId)
+              .queryParam("status", "")
+              .queryParam("uses", "")
               .build()
         )
         .exchange()
