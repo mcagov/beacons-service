@@ -56,6 +56,7 @@ class NoteControllerIntegrationTest {
 
     Person emergencyContact = new Person();
     Person owner = new Person();
+    owner.setFullName("Mr beacon");
 
     String hexId = UUID.randomUUID().toString();
     String manufacturer = "French";
