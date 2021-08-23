@@ -32,10 +32,10 @@ public class LegacyBeaconController {
 
   @GetMapping(value = "/{uuid}")
   public WrapperDTO<LegacyBeaconDTO> findById(@PathVariable("uuid") UUID id) {
-    final var optionalLegacyBeacon = legacyBeaconService
+    final var legacyBeacon = legacyBeaconService
       .findById(id)
       .orElseThrow(ResourceNotFoundException::new);
 
-    return legacyBeaconMapper.toWrapperDTO(optionalLegacyBeacon);
+    return legacyBeaconMapper.toWrapperDTO(legacyBeacon);
   }
 }
