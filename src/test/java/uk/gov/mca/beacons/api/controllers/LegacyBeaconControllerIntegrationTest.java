@@ -14,21 +14,28 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class LegacyControllerIntegrationTest {
+class LegacyBeaconControllerIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
 
   @Test
-  void shouldReturnHttp200ForFetchingALegacyBeaconById() throws Exception {
+  void shouldReturnTheLegacyBeaconById() throws Exception {
     final var legacyBeaconId = createLegacyBeacon();
+    final var createLegacyBeaconResponse = Files.readString(
+      Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
+    );
 
     webTestClient
       .get()
       .uri("/legacy-beacon/" + legacyBeaconId)
       .exchange()
       .expectStatus()
-      .isOk();
+      .isOk()
+      .expectBody()
+      .json(createLegacyBeaconResponse)
+      .jsonPath("$.data.id")
+      .isEqualTo(legacyBeaconId);
   }
 
   @Test
