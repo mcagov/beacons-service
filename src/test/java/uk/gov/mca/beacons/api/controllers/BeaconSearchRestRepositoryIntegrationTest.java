@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class BeaconSearchControllerIntegrationTest {
+class BeaconSearchRestRepositoryIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
@@ -154,7 +154,7 @@ class BeaconSearchControllerIntegrationTest {
         .jsonPath("_embedded.beaconSearch[0].ownerName")
         .isEqualTo("Vice-Admiral Horatio Nelson, 1st Viscount Nelson")
         .jsonPath("_embedded.beaconSearch[0].useActivities")
-        .isEqualTo("SAILING")
+        .isEqualTo("FISHING VESSEL, FLOATING PLATFORM")
         .jsonPath("page.totalElements")
         .isEqualTo(1);
     }
@@ -172,7 +172,7 @@ class BeaconSearchControllerIntegrationTest {
               .path(FIND_ALL_URI)
               .queryParam("term", randomHexId)
               .queryParam("status", "new")
-              .queryParam("uses", "sail")
+              .queryParam("uses", "fishing vessel")
               .build()
         )
         .exchange()
