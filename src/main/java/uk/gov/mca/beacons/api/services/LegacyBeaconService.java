@@ -59,10 +59,6 @@ public class LegacyBeaconService {
   }
 
   public Optional<LegacyBeacon> findById(UUID id) {
-    if (id.equals(UUID.fromString("c603c49d-257f-4445-a11c-52c3b7a90c36"))) {
-      return Optional.of(new LegacyBeacon());
-    }
-
-    return Optional.empty();
+    return legacyBeaconGateway.findById(id);
   }
 }
