@@ -1,11 +1,12 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -22,6 +24,9 @@ class MigrationControllerIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
+
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
   @Nested
   class CreateLegacyBeacon {
@@ -92,7 +97,6 @@ class MigrationControllerIntegrationTest {
   class DeleteAllLegacyBeacons {
 
     @Test
-    @Disabled
     void shouldDeleteAllBeacons() throws Exception {
       final String createLegacyBeaconRequest = readFile(
         "src/test/resources/fixtures/createLegacyBeaconRequest.json"
@@ -107,19 +111,22 @@ class MigrationControllerIntegrationTest {
         .expectStatus()
         .isCreated();
 
-      // TODO: Check that the beacon was created
-
       webTestClient
         .get()
         .uri("/migrate/delete-all-legacy-beacons")
         .exchange()
         .expectStatus()
         .isOk();
-      // TODO: Fetch all legacy beacons and confirm no records present
+
+      final var count = jdbcTemplate.queryForObject(
+        "SELECT COUNT(*) FROM legacy_beacon",
+        Integer.class
+      );
+      assertThat(count, is(0));
     }
 
     @Test
-    void shouldRespondWithOKStatusIfLegacyBeaconsDeleted() throws Exception {
+    void shouldRespondWithOKStatusIfLegacyBeaconsDeleted() {
       webTestClient
         .get()
         .uri("/migrate/delete-all-legacy-beacons")
