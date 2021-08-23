@@ -17,7 +17,7 @@ import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
  */
 @RepositoryRestResource(
   path = "beacon-search",
-  collectionResourceRel = "beacon-search"
+  collectionResourceRel = "beaconSearch"
 )
 interface BeaconSearchRestRepository
   extends JpaRepository<BeaconSearchEntity, UUID> {
