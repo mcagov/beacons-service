@@ -16,7 +16,7 @@ class LegacyControllerIntegrationTest {
 
   @Test
   void shouldReturnHttp200ForFetchingALegacyBeaconById() {
-    final var legacyBeaconId = UUID.randomUUID().toString();
+    final var legacyBeaconId = "c603c49d-257f-4445-a11c-52c3b7a90c36";
 
     webTestClient
       .get()
@@ -24,5 +24,17 @@ class LegacyControllerIntegrationTest {
       .exchange()
       .expectStatus()
       .isOk();
+  }
+
+  @Test
+  void shouldReturnHttp404IfTheLegacyBeaconCannotBeFound() {
+    final var legacyBeaconId = UUID.randomUUID().toString();
+
+    webTestClient
+      .get()
+      .uri("/legacy-beacon/" + legacyBeaconId)
+      .exchange()
+      .expectStatus()
+      .isNotFound();
   }
 }
