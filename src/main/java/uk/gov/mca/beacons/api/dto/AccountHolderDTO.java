@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.dto;
 
 import static uk.gov.mca.beacons.api.dto.AccountHolderDTO.Attributes;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
