@@ -21,6 +21,8 @@ beacons:
   openapi:
     github:
       url: https://github.com/mcagov/beacons-service
+  scheduled:
+    beacon-search-view: ${BEACONS_SEARCH_VIEW_SCHEDULER:5000}
   cors:
     allowedOrigins: ${BEACONS_CORS_ALLOWED_ORIGINS:*}
   security:
