@@ -22,10 +22,11 @@ public class BeaconSearchScheduler {
 
   @Scheduled(fixedRateString = "${beacons.scheduled.beacon-search-view}")
   public void refreshView() {
-    log.info("Refreshing beacon search view");
+    log.debug("Refreshing beacon search view");
 
     final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
       .withFunctionName("refresh_beacon_search_view_schedule");
     simpleJdbcCall.execute();
+    log.debug("Finished refreshing beacon search view");
   }
 }
