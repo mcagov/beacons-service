@@ -23,7 +23,6 @@ import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
-import uk.gov.mca.beacons.api.mappers.BeaconSearchResultMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
@@ -42,9 +41,6 @@ class GetBeaconsByIdUnitTest {
   @Mock
   private ModelPatcherFactory<Beacon> patcherFactory;
 
-  @Mock
-  private BeaconSearchResultMapper beaconSearchResultMapper;
-
   private BeaconsService beaconsService;
 
   @BeforeEach
@@ -55,7 +51,6 @@ class GetBeaconsByIdUnitTest {
         beaconPersonJpaRepository,
         beaconUseJpaRepository,
         new BeaconsRelationshipMapper(),
-        beaconSearchResultMapper,
         patcherFactory
       );
   }

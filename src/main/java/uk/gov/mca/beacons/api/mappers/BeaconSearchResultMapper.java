@@ -64,21 +64,6 @@ public class BeaconSearchResultMapper {
     return dto;
   }
 
-  public List<BeaconSearchResultDTO> getBeaconSearchResults(
-    List<Beacon> allBeacons
-  ) {
-    return allBeacons.stream().map(this::toDTO).collect(Collectors.toList());
-  }
-
-  public List<BeaconSearchResultDTO> getLegacyBeaconSearchResults(
-    List<LegacyBeacon> allLegacyBeacons
-  ) {
-    return allLegacyBeacons
-      .stream()
-      .map(this::toDTO)
-      .collect(Collectors.toList());
-  }
-
   public final WrapperDTO<BeaconSearchResultDTO> toWrapperDTO(Beacon beacon) {
     final WrapperDTO<BeaconSearchResultDTO> wrapperDTO = new WrapperDTO<>();
 
