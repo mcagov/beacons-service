@@ -33,14 +33,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
     void givenAValidRequest_shouldReturnAHttp200() {
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", "")
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", "")
+            .queryParam("status", "")
+            .queryParam("uses", "")
+            .build()
         )
         .exchange()
         .expectStatus()
@@ -54,14 +53,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", randomHexId)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", randomHexId)
+            .queryParam("status", "")
+            .queryParam("uses", "")
+            .build()
         )
         .exchange()
         .expectBody()
@@ -88,14 +86,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", randomHexId.toUpperCase())
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", randomHexId.toUpperCase())
+            .queryParam("status", "")
+            .queryParam("uses", "")
+            .build()
         )
         .exchange()
         .expectBody()
@@ -112,14 +109,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", randomHexId)
-              .queryParam("status", "migrated")
-              .queryParam("uses", "maritime")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", randomHexId)
+            .queryParam("status", "migrated")
+            .queryParam("uses", "maritime")
+            .build()
         )
         .exchange()
         .expectBody()
@@ -136,14 +132,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", randomHexId)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", randomHexId)
+            .queryParam("status", "")
+            .queryParam("uses", "")
+            .build()
         )
         .exchange()
         .expectBody()
@@ -170,14 +165,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", randomHexId)
-              .queryParam("status", "new")
-              .queryParam("uses", "fishing vessel")
-              .build()
+        .uri(uriBuilder ->
+          uriBuilder
+            .path(FIND_ALL_URI)
+            .queryParam("term", randomHexId)
+            .queryParam("status", "new")
+            .queryParam("uses", "fishing vessel")
+            .build()
         )
         .exchange()
         .expectBody()
