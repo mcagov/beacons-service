@@ -225,5 +225,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated();
+
+    scheduler.refreshView();
   }
 }

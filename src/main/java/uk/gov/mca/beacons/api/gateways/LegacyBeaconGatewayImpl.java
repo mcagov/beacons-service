@@ -1,10 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,14 +49,6 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   @Override
   public void deleteAll() {
     jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
-  }
-
-  @Override
-  public List<LegacyBeacon> findAll() {
-    return StreamSupport
-      .stream(legacyBeaconJpaRepository.findAll().spliterator(), false)
-      .map(legacyBeaconMapper::fromJpaEntity)
-      .collect(Collectors.toList());
   }
 
   @Override

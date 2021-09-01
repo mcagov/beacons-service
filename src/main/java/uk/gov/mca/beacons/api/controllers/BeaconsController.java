@@ -39,7 +39,6 @@ import uk.gov.mca.beacons.api.services.NoteService;
 public class BeaconsController {
 
   private final BeaconsService beaconsService;
-  private final LegacyBeaconService legacyBeaconService;
   private final BeaconsResponseFactory responseFactory;
   private final BeaconMapper beaconMapper;
   private final DeleteBeaconService deleteBeaconService;
@@ -49,7 +48,6 @@ public class BeaconsController {
   @Autowired
   public BeaconsController(
     BeaconsService beaconsService,
-    LegacyBeaconService legacyBeaconService,
     BeaconsResponseFactory responseFactory,
     BeaconMapper beaconMapper,
     DeleteBeaconService deleteBeaconService,
@@ -57,27 +55,11 @@ public class BeaconsController {
     NoteMapper noteMapper
   ) {
     this.beaconsService = beaconsService;
-    this.legacyBeaconService = legacyBeaconService;
     this.responseFactory = responseFactory;
     this.beaconMapper = beaconMapper;
     this.deleteBeaconService = deleteBeaconService;
     this.noteService = noteService;
     this.noteMapper = noteMapper;
-  }
-
-  @GetMapping
-  public WrapperDTO<List<BeaconSearchResultDTO>> findAll() {
-    WrapperDTO<List<BeaconSearchResultDTO>> wrapperDTO = new WrapperDTO<>();
-    List<BeaconSearchResultDTO> results = Stream
-      .of(
-        beaconsService.findAllBeaconSearchResult(),
-        legacyBeaconService.findAllBeaconSearchResult()
-      )
-      .flatMap(Collection::stream)
-      .collect(Collectors.toList());
-    wrapperDTO.setData(results);
-    wrapperDTO.addMeta("count", results.size());
-    return wrapperDTO;
   }
 
   @GetMapping(value = "/{uuid}")

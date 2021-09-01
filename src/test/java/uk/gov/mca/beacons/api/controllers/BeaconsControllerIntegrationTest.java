@@ -101,20 +101,6 @@ class BeaconsControllerIntegrationTest {
   }
 
   @Test
-  void requestAllBeaconControllerShouldReturnSomeBeacons() {
-    var request = makeGetRequest("/beacons");
-
-    request.jsonPath("$.meta.count").exists();
-    request.jsonPath("$.data").exists();
-    request.jsonPath("$.data[0].type").isEqualTo("beaconSearchResult");
-    request.jsonPath("$.data[0].id").exists();
-    request.jsonPath("$.data[0].attributes.hexId").exists();
-    request.jsonPath("$.data[0].attributes.beaconStatus").exists();
-    request.jsonPath("$.data[0].attributes.beaconUse").exists();
-    request.jsonPath("$.data[0].attributes.ownerName").exists();
-  }
-
-  @Test
   void requestBeaconControllerShouldReturnBeaconByUuid() {
     String uuidAsString = uuid.toString();
     var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
