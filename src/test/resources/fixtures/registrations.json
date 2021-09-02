@@ -80,7 +80,6 @@
     ]
   },
   "BEACON_TO_UPDATE": {
-    "id": "replace-with-beacon-id",
     "accountHolderId": "replace-with-test-account-holder-id",
     "hexId": "1D0EA08C52FFBFF",
     "manufacturer": "Ocean Sound",

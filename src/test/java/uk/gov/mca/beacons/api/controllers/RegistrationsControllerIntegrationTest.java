@@ -108,7 +108,6 @@ class RegistrationsControllerIntegrationTest {
           "replace-with-test-account-holder-id",
           testAccountHolderId.toString()
         )
-        .replace("replace-with-beacon-id", beaconId)
     )
       .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
