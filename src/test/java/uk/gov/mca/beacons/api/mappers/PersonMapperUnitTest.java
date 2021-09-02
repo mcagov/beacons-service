@@ -5,9 +5,8 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import uk.gov.mca.beacons.api.db.Person;
 import uk.gov.mca.beacons.api.dto.BeaconPersonDTO;
-import uk.gov.mca.beacons.api.entities.PersonType;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 class PersonMapperUnitTest {
 
@@ -16,12 +15,12 @@ class PersonMapperUnitTest {
     final var beaconPersonMapper = new BeaconPersonMapper();
     final Person person = new Person();
     final UUID personId = UUID.randomUUID();
-    final UUID beaconId = UUID.randomUUID();
     final String fullName = "Phoebe Buffay";
     final String telephoneNumber = "07777777777";
-    final String alternativeTelephoneNumber = "07888888888";
+    final String telephoneNumber2 = "07888888888";
+    final String alternativeTelephoneNumber = "07888888889";
+    final String alternativeTelephoneNumber2 = "07888888810";
     final String email = "phoebe@buffay.com";
-    final PersonType personType = PersonType.OWNER;
     final String addressLine1 = "1 Apartment";
     final String addressLine2 = "Building";
     final String addressLine3 = "Street";
@@ -29,12 +28,22 @@ class PersonMapperUnitTest {
     final String townOrCity = "New York";
     final String postcode = "A1 2BC";
     final String county = "Big Apple";
+    final String country = "UK";
+    final String companyName = "MCA";
+    final String careOf = "Me";
+    final String fax = "Fax me";
+    final String isMain = "Y";
+    final Integer createUserId = 0;
+    final Integer updateUserId = 1;
+    final Integer versioning = 10;
 
     person.setId(personId);
     person.setBeaconId(UUID.randomUUID());
     person.setFullName(fullName);
     person.setTelephoneNumber(telephoneNumber);
+    person.setTelephoneNumber2(telephoneNumber2);
     person.setAlternativeTelephoneNumber(alternativeTelephoneNumber);
+    person.setAlternativeTelephoneNumber2(alternativeTelephoneNumber2);
     person.setEmail(email);
     person.setAddressLine1(addressLine1);
     person.setAddressLine2(addressLine2);
@@ -43,24 +52,45 @@ class PersonMapperUnitTest {
     person.setTownOrCity(townOrCity);
     person.setPostcode(postcode);
     person.setCounty(county);
+    person.setCountry(country);
+    person.setCompanyName(companyName);
+    person.setCareOf(careOf);
+    person.setFax(fax);
+    person.setIsMain(isMain);
+    person.setCreateUserId(createUserId);
+    person.setUpdateUserId(updateUserId);
+    person.setVersioning(versioning);
 
     BeaconPersonDTO personDTO = beaconPersonMapper.toDTO(person);
     final var attributes = personDTO.getAttributes();
 
     assertThat(personDTO.getId(), is(personId));
-    assertThat(attributes.get("fullName"), is(fullName));
-    assertThat(attributes.get("telephoneNumber"), is(telephoneNumber));
+    assertThat(attributes.getFullName(), is(fullName));
+    assertThat(attributes.getTelephoneNumber(), is(telephoneNumber));
+    assertThat(attributes.getTelephoneNumber2(), is(telephoneNumber2));
     assertThat(
-      attributes.get("alternativeTelephoneNumber"),
+      attributes.getAlternativeTelephoneNumber(),
       is(alternativeTelephoneNumber)
     );
-    assertThat(attributes.get("email"), is(email));
-    assertThat(attributes.get("addressLine1"), is(addressLine1));
-    assertThat(attributes.get("addressLine2"), is(addressLine2));
-    assertThat(attributes.get("addressLine3"), is(addressLine3));
-    assertThat(attributes.get("addressLine4"), is(addressLine4));
-    assertThat(attributes.get("townOrCity"), is(townOrCity));
-    assertThat(attributes.get("postcode"), is(postcode));
-    assertThat(attributes.get("county"), is(county));
+    assertThat(
+      attributes.getAlternativeTelephoneNumber2(),
+      is(alternativeTelephoneNumber2)
+    );
+    assertThat(attributes.getEmail(), is(email));
+    assertThat(attributes.getAddressLine1(), is(addressLine1));
+    assertThat(attributes.getAddressLine2(), is(addressLine2));
+    assertThat(attributes.getAddressLine3(), is(addressLine3));
+    assertThat(attributes.getAddressLine4(), is(addressLine4));
+    assertThat(attributes.getTownOrCity(), is(townOrCity));
+    assertThat(attributes.getPostcode(), is(postcode));
+    assertThat(attributes.getCounty(), is(county));
+    assertThat(attributes.getCountry(), is(country));
+    assertThat(attributes.getCompanyName(), is(companyName));
+    assertThat(attributes.getCareOf(), is(careOf));
+    assertThat(attributes.getFax(), is(fax));
+    assertThat(attributes.getIsMain(), is(isMain));
+    assertThat(attributes.getCreateUserId(), is(createUserId));
+    assertThat(attributes.getUpdateUserId(), is(updateUserId));
+    assertThat(attributes.getVersioning(), is(versioning));
   }
 }

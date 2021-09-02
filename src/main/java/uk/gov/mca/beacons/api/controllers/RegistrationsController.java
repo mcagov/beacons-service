@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.mca.beacons.api.db.Registration;
 import uk.gov.mca.beacons.api.documentation.RegisterBeaconDocumentation;
+import uk.gov.mca.beacons.api.jpa.entities.Registration;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 
 @RestController

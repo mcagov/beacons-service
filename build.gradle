@@ -1,10 +1,10 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.1'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'com.adarshr.test-logger' version '3.0.0'
-	id 'com.gorylenko.gradle-git-properties' version '2.3.1'
-	id "io.freefair.lombok" version "6.0.0-m2"
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'com.adarshr.test-logger' version '3.0.0'
+    id 'com.gorylenko.gradle-git-properties' version '2.3.1'
+    id "io.freefair.lombok" version "6.1.0"
 }
 
 group = 'uk.gov.mca'
@@ -12,49 +12,52 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 testlogger {
-	theme 'mocha'
+    theme 'mocha'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
-	implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.5.0'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.vladmihalcea:hibernate-types-55:2.12.1'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
+    implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.jetbrains:annotations:21.0.1'
 
-	runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
 
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
-	useJUnitPlatform()
-	filter {
-		excludeTestsMatching '*IntegrationTest'
-	}
+    useJUnitPlatform()
+    filter {
+        excludeTestsMatching '*IntegrationTest'
+    }
 }
 
 task integrationTest(type: Test) {
-	description = 'Runs integration tests.'
-	group = 'verification'
-	useJUnitPlatform()
-	filter {
-		includeTestsMatching '*IntegrationTest'
-	}
+    description = 'Runs integration tests.'
+    group = 'verification'
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching '*IntegrationTest'
+    }
 
-	shouldRunAfter test
+    shouldRunAfter test
 }
 
 check.dependsOn 'integrationTest'

@@ -3,9 +3,9 @@ package uk.gov.mca.beacons.api.services;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.BeaconUse;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.mappers.ModelPatcher;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 

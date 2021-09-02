@@ -18,17 +18,17 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
-import uk.gov.mca.beacons.api.db.Registration;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
-import uk.gov.mca.beacons.api.entities.BeaconStatus;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.jpa.entities.Registration;
 
 @ExtendWith(MockitoExtension.class)
 class CreateRegistrationServiceUnitTest {

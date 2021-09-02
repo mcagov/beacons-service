@@ -2,8 +2,10 @@ package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,10 +14,10 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Person;
+import uk.gov.mca.beacons.api.domain.PersonType;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
-import uk.gov.mca.beacons.api.entities.PersonType;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerGatewayImplUnitTest {
@@ -24,7 +26,7 @@ class OwnerGatewayImplUnitTest {
   private OwnerGatewayImpl ownerGateway;
 
   @Mock
-  private BeaconPersonJpaRepository beaconPersonJpaRepository;
+  private BeaconPersonJpaRepository beaconPersonRepository;
 
   @Captor
   private ArgumentCaptor<Person> ownerCaptor;
@@ -61,7 +63,7 @@ class OwnerGatewayImplUnitTest {
 
     ownerGateway.save(createOwnerRequest);
 
-    verify(beaconPersonJpaRepository).save(ownerCaptor.capture());
+    verify(beaconPersonRepository).save(ownerCaptor.capture());
     final Person owner = ownerCaptor.getValue();
 
     assertThat(owner.getBeaconId(), is(beaconId));
@@ -80,5 +82,35 @@ class OwnerGatewayImplUnitTest {
     assertThat(owner.getTownOrCity(), is(townOrCity));
     assertThat(owner.getPostcode(), is(postcode));
     assertThat(owner.getCounty(), is(county));
+    assertNotNull(owner.getCreatedDate());
+    assertNotNull(owner.getLastModifiedDate());
+  }
+
+  @Test
+  void shouldNotOverrideTheCreatedDate() {
+    final var now = LocalDateTime.now();
+    final var createOwnerRequest = CreateOwnerRequest
+      .builder()
+      .createdDate(now)
+      .build();
+
+    ownerGateway.save(createOwnerRequest);
+    verify(beaconPersonRepository).save(ownerCaptor.capture());
+    final Person owner = ownerCaptor.getValue();
+    assertThat(owner.getCreatedDate(), is(now));
+  }
+
+  @Test
+  void shouldNotOverrideTheLastModifiedDate() {
+    final var now = LocalDateTime.now();
+    final var createOwnerRequest = CreateOwnerRequest
+      .builder()
+      .lastModifiedDate(now)
+      .build();
+
+    ownerGateway.save(createOwnerRequest);
+    verify(beaconPersonRepository).save(ownerCaptor.capture());
+    final Person owner = ownerCaptor.getValue();
+    assertThat(owner.getLastModifiedDate(), is(now));
   }
 }

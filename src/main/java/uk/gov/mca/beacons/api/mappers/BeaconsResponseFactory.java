@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.Beacon;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.BeaconPersonDTO;
 import uk.gov.mca.beacons.api.dto.BeaconUseDTO;
 import uk.gov.mca.beacons.api.dto.DomainDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
 @Service
 public class BeaconsResponseFactory {
@@ -116,6 +116,7 @@ public class BeaconsResponseFactory {
       .collect(Collectors.toList());
   }
 
+  @SuppressWarnings("rawtypes")
   private BeaconDTO buildBeaconDTO(
     Beacon beacon,
     List<BeaconUseDTO> useDTOs,

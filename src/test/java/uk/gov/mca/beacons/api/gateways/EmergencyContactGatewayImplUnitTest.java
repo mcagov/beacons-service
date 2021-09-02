@@ -2,8 +2,10 @@ package uk.gov.mca.beacons.api.gateways;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,10 +14,10 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Person;
+import uk.gov.mca.beacons.api.domain.PersonType;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
-import uk.gov.mca.beacons.api.entities.PersonType;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 @ExtendWith(MockitoExtension.class)
 class EmergencyContactGatewayImplUnitTest {
@@ -24,7 +26,7 @@ class EmergencyContactGatewayImplUnitTest {
   private EmergencyContactGatewayImpl emergencyContactGateway;
 
   @Mock
-  private BeaconPersonJpaRepository beaconPersonJpaRepository;
+  private BeaconPersonJpaRepository beaconPersonRepository;
 
   @Captor
   private ArgumentCaptor<Person> emergencyContactCaptor;
@@ -61,7 +63,7 @@ class EmergencyContactGatewayImplUnitTest {
 
     emergencyContactGateway.save(createEmergencyContactRequest);
 
-    verify(beaconPersonJpaRepository).save(emergencyContactCaptor.capture());
+    verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
     final Person emergencyContact = emergencyContactCaptor.getValue();
 
     assertThat(emergencyContact.getBeaconId(), is(beaconId));
@@ -83,5 +85,37 @@ class EmergencyContactGatewayImplUnitTest {
     assertThat(emergencyContact.getTownOrCity(), is(townOrCity));
     assertThat(emergencyContact.getPostcode(), is(postcode));
     assertThat(emergencyContact.getCounty(), is(county));
+  }
+
+  @Test
+  void shouldOverrideTheCreatedDateToNow() {
+    final var dateInThePast = LocalDateTime.now();
+    final var createEmergencyContactRequest = CreateEmergencyContactRequest
+      .builder()
+      .createdDate(dateInThePast)
+      .build();
+
+    emergencyContactGateway.save(createEmergencyContactRequest);
+
+    verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
+    final Person emergencyContact = emergencyContactCaptor.getValue();
+
+    assertThat(emergencyContact.getCreatedDate(), is(not(dateInThePast)));
+  }
+
+  @Test
+  void shouldOverrideTheLastModifiedDateToNow() {
+    final var dateInThePast = LocalDateTime.now();
+    final var createEmergencyContactRequest = CreateEmergencyContactRequest
+      .builder()
+      .lastModifiedDate(dateInThePast)
+      .build();
+
+    emergencyContactGateway.save(createEmergencyContactRequest);
+
+    verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
+    final Person emergencyContact = emergencyContactCaptor.getValue();
+
+    assertThat(emergencyContact.getLastModifiedDate(), is(not(dateInThePast)));
   }
 }

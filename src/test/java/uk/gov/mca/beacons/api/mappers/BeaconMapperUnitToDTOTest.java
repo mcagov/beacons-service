@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.entities.BeaconStatus;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.hateoas.BeaconLinkStrategy;
 import uk.gov.mca.beacons.api.hateoas.HateoasLinkManager;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconMapperUnitToDTOTest {

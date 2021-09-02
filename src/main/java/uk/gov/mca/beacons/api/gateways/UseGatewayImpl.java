@@ -2,11 +2,11 @@ package uk.gov.mca.beacons.api.gateways;
 
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import uk.gov.mca.beacons.api.db.BeaconUse;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 
 @Repository
 @Transactional

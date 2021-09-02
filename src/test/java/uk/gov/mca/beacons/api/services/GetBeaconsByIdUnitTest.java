@@ -16,13 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
-import uk.gov.mca.beacons.api.entities.PersonType;
+import uk.gov.mca.beacons.api.domain.PersonType;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 

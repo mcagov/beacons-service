@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -7,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.UUID;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
+import uk.gov.mca.beacons.api.services.AccountHolderService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -27,17 +32,28 @@ class RegistrationsControllerIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
+  @Autowired
+  private AccountHolderService accountHolderService;
+
   @ParameterizedTest
   @EnumSource(
     value = RegistrationUseCase.class,
     names = { "SINGLE_BEACON", "MULTIPLE_BEACONS" }
   )
   void givenNewValidRegistration_whenPosted_thenStatus201(
-    RegistrationUseCase registrationJson
+    RegistrationUseCase registrationUseCase
   ) throws IOException {
-    final Map<RegistrationUseCase, Object> registrationsJson = getRegistrationsJson();
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = toJson(
+      readFile(REGISTRATION_JSON_RESOURCE)
+        .replace(
+          "replace-with-test-account-holder-id",
+          testAccountHolderId.toString()
+        )
+    )
+      .get(registrationUseCase);
 
-    makePostRequest(registrationsJson.get(registrationJson))
+    makePostRequest(requestBody)
       .expectStatus()
       .isCreated()
       .expectHeader()
@@ -49,12 +65,23 @@ class RegistrationsControllerIntegrationTest {
     value = RegistrationUseCase.class,
     names = { "NO_HEX_ID", "NO_USES", "NO_EMERGENCY_CONTACTS" }
   )
+  @Disabled(
+    "Disabled until registration dtos/mappers/validation defined for registrations endpoint"
+  )
   void givenInvalidRegistration_whenPosted_thenStatus400(
-    RegistrationUseCase registrationJson
+    RegistrationUseCase registrationUseCase
   ) throws IOException {
-    final Map<RegistrationUseCase, Object> registrationsJson = getRegistrationsJson();
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = toJson(
+      readFile(REGISTRATION_JSON_RESOURCE)
+        .replace(
+          "replace-with-test-account-holder-id",
+          testAccountHolderId.toString()
+        )
+    )
+      .get(registrationUseCase);
 
-    makePostRequest(registrationsJson.get(registrationJson))
+    makePostRequest(requestBody)
       .expectStatus()
       .isBadRequest()
       .expectHeader()
@@ -70,13 +97,34 @@ class RegistrationsControllerIntegrationTest {
       .exchange();
   }
 
-  private Map<RegistrationUseCase, Object> getRegistrationsJson()
-    throws IOException {
-    final String json = new String(
-      Files.readAllBytes(Paths.get(REGISTRATION_JSON_RESOURCE))
-    );
+  private Map<RegistrationUseCase, Object> toJson(String registrationFixture)
+    throws JsonProcessingException {
     final TypeReference<EnumMap<RegistrationUseCase, Object>> typeReference = new TypeReference<>() {};
-    return OBJECT_MAPPER.readValue(json, typeReference);
+    return OBJECT_MAPPER.readValue(registrationFixture, typeReference);
+  }
+
+  private UUID createTestAccountHolder() {
+    CreateAccountHolderRequest createAccountHolderRequest = CreateAccountHolderRequest
+      .builder()
+      .authId(UUID.randomUUID().toString())
+      .email("testy@mctestface.com")
+      .fullName("Tesy McTestface")
+      .telephoneNumber("01178 657123")
+      .alternativeTelephoneNumber("01178 657124")
+      .addressLine1("Flat 42")
+      .addressLine2("Testington Towers")
+      .addressLine3("Tower Test")
+      .addressLine4("Testing Towers")
+      .townOrCity("Testville")
+      .postcode("TS1 23A")
+      .county("Testershire")
+      .build();
+
+    return accountHolderService.create(createAccountHolderRequest).getId();
+  }
+
+  private String readFile(String filePath) throws IOException {
+    return Files.readString(Paths.get(filePath));
   }
 
   enum RegistrationUseCase {

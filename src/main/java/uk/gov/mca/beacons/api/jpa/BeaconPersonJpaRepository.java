@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import uk.gov.mca.beacons.api.db.Person;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 public interface BeaconPersonJpaRepository extends JpaRepository<Person, UUID> {
   @Query(

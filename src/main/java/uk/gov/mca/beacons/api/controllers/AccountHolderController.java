@@ -6,25 +6,25 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.api.dto.AccountHolderIdDTO;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
-import uk.gov.mca.beacons.api.entities.AccountHolder;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
-import uk.gov.mca.beacons.api.services.CreateAccountHolderService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByAuthIdService;
-import uk.gov.mca.beacons.api.services.GetAccountHolderByIdService;
+import uk.gov.mca.beacons.api.services.AccountHolderService;
 import uk.gov.mca.beacons.api.services.GetBeaconsByAccountHolderIdService;
 
 @RestController
@@ -34,11 +34,7 @@ public class AccountHolderController {
 
   private final AccountHolderMapper accountHolderMapper;
 
-  private final GetAccountHolderByIdService getAccountHolderByIdService;
-
-  private final GetAccountHolderByAuthIdService getAccountHolderByAuthIdService;
-
-  private final CreateAccountHolderService createAccountHolderService;
+  private final AccountHolderService accountHolderService;
 
   private final GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService;
 
@@ -47,16 +43,12 @@ public class AccountHolderController {
   @Autowired
   public AccountHolderController(
     AccountHolderMapper accountHolderMapper,
-    GetAccountHolderByIdService getAccountHolderByIdService,
-    GetAccountHolderByAuthIdService getAccountHolderByAuthIdService,
-    CreateAccountHolderService createAccountHolderService,
+    AccountHolderService accountHolderService,
     GetBeaconsByAccountHolderIdService getBeaconsByAccountHolderIdService,
     BeaconsResponseFactory responseFactory
   ) {
     this.accountHolderMapper = accountHolderMapper;
-    this.getAccountHolderByIdService = getAccountHolderByIdService;
-    this.getAccountHolderByAuthIdService = getAccountHolderByAuthIdService;
-    this.createAccountHolderService = createAccountHolderService;
+    this.accountHolderService = accountHolderService;
     this.getBeaconsByAccountHolderIdService =
       getBeaconsByAccountHolderIdService;
     this.responseFactory = responseFactory;
@@ -66,7 +58,7 @@ public class AccountHolderController {
   public WrapperDTO<AccountHolderDTO> getAccountHolder(
     @PathVariable("id") UUID id
   ) {
-    final AccountHolder accountHolder = getAccountHolderByIdService.execute(id);
+    final AccountHolder accountHolder = accountHolderService.getById(id);
 
     if (accountHolder == null) throw new ResourceNotFoundException();
 
@@ -77,7 +69,7 @@ public class AccountHolderController {
   public AccountHolderIdDTO getAccountHolderId(
     @PathVariable("authId") String authId
   ) {
-    final AccountHolder accountHolder = getAccountHolderByAuthIdService.execute(
+    final AccountHolder accountHolder = accountHolderService.getByAuthId(
       authId
     );
 
@@ -96,7 +88,23 @@ public class AccountHolderController {
     );
 
     return accountHolderMapper.toWrapperDTO(
-      createAccountHolderService.execute(newAccountHolderRequest)
+      accountHolderService.create(newAccountHolderRequest)
+    );
+  }
+
+  @PatchMapping(value = "/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
+  public WrapperDTO<AccountHolderDTO> updateAccountHolder(
+    @PathVariable("id") UUID id,
+    @RequestBody WrapperDTO<AccountHolderDTO> dto
+  ) {
+    final AccountHolder newAccountHolderRequest = accountHolderMapper.fromDTO(
+      dto.getData()
+    );
+
+    return accountHolderMapper.toWrapperDTO(
+      accountHolderService.update(id, newAccountHolderRequest)
     );
   }
 

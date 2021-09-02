@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 @Service
 public class GetBeaconsByAccountHolderIdService {
@@ -36,7 +36,7 @@ public class GetBeaconsByAccountHolderIdService {
   }
 
   public List<Beacon> execute(UUID accountId) {
-    final List<Beacon> beacons = beaconGateway.findAllByAccountHolderId(
+    final List<Beacon> beacons = beaconGateway.findAllActiveBeaconsByAccountHolderId(
       accountId
     );
     if (beacons.isEmpty()) return emptyList();

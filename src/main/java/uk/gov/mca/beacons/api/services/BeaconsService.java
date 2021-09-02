@@ -1,20 +1,18 @@
 package uk.gov.mca.beacons.api.services;
 
-import static java.util.Collections.emptyList;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 import uk.gov.mca.beacons.api.mappers.BeaconsRelationshipMapper;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
@@ -41,20 +39,6 @@ public class BeaconsService {
     this.beaconUseJpaRepository = beaconUseJpaRepository;
     this.beaconsRelationshipMapper = beaconsRelationshipMapper;
     this.beaconPatcherFactory = beaconPatcherFactory;
-  }
-
-  public List<Beacon> findAll() {
-    final List<Beacon> allBeacons = beaconJpaRepository.findAll();
-    if (allBeacons.size() == 0) return emptyList();
-
-    final List<Person> allPersons = beaconPersonJpaRepository.findAll();
-    final List<BeaconUse> allBeaconUses = beaconUseJpaRepository.findAll();
-
-    return beaconsRelationshipMapper.getMappedBeacons(
-      allBeacons,
-      allPersons,
-      allBeaconUses
-    );
   }
 
   public Beacon find(UUID id) {

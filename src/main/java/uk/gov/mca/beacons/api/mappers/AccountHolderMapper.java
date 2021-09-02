@@ -3,10 +3,10 @@ package uk.gov.mca.beacons.api.mappers;
 import static uk.gov.mca.beacons.api.dto.AccountHolderDTO.Attributes;
 
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.dto.AccountHolderDTO;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
-import uk.gov.mca.beacons.api.entities.AccountHolder;
 
 @Service
 public class AccountHolderMapper extends BaseMapper {

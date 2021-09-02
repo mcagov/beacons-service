@@ -5,19 +5,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static uk.gov.mca.beacons.api.entities.Environment.AVIATION;
-import static uk.gov.mca.beacons.api.entities.Environment.MARITIME;
+import static uk.gov.mca.beacons.api.domain.Environment.AVIATION;
+import static uk.gov.mca.beacons.api.domain.Environment.MARITIME;
 
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
-import uk.gov.mca.beacons.api.entities.Activity;
-import uk.gov.mca.beacons.api.entities.PersonType;
+import uk.gov.mca.beacons.api.domain.Activity;
+import uk.gov.mca.beacons.api.domain.PersonType;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconsRelationshipMapperTest {

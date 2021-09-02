@@ -2,21 +2,21 @@ package uk.gov.mca.beacons.api.services;
 
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.Beacon;
-import uk.gov.mca.beacons.api.db.BeaconUse;
-import uk.gov.mca.beacons.api.db.Person;
-import uk.gov.mca.beacons.api.db.Registration;
+import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
-import uk.gov.mca.beacons.api.entities.BeaconStatus;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
+import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.jpa.entities.Registration;
 import uk.gov.mca.beacons.api.mappers.CreateEmergencyContactRequestMapper;
 import uk.gov.mca.beacons.api.mappers.CreateOwnerRequestMapper;
 

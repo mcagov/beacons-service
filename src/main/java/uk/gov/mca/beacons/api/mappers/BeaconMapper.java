@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.db.Beacon;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
-import uk.gov.mca.beacons.api.entities.BeaconStatus;
 import uk.gov.mca.beacons.api.hateoas.BeaconLinkStrategy;
 import uk.gov.mca.beacons.api.hateoas.HateoasLinkManager;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
 @Service
 public class BeaconMapper extends BaseMapper {
