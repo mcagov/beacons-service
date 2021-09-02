@@ -1,7 +1,5 @@
 package uk.gov.mca.beacons.api.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -231,18 +228,16 @@ class AccountHolderControllerIntegrationTest {
       "src/test/resources/fixtures/createAccountHolderRequest.json"
     )
       .replace("replace-with-test-auth-id", testAuthId);
-    final var createdAccountResponse = webTestClient
+
+    return webTestClient
       .post()
       .uri("/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
-      .expectBody()
+      .expectBody(ObjectNode.class)
       .returnResult()
-      .getResponseBody();
-
-    return new ObjectMapper()
-      .readValue(createdAccountResponse, ObjectNode.class)
+      .getResponseBody()
       .get("data")
       .get("id")
       .textValue();
@@ -254,7 +249,7 @@ class AccountHolderControllerIntegrationTest {
     )
       .replace("account-holder-id-placeholder", accountHolderId);
 
-    final var responseBody = webTestClient
+    return webTestClient
       .post()
       .uri("/registrations/register")
       .bodyValue(createBeaconRequest)
@@ -262,12 +257,9 @@ class AccountHolderControllerIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated()
-      .expectBody()
+      .expectBody(ObjectNode.class)
       .returnResult()
-      .getResponseBody();
-
-    return new ObjectMapper()
-      .readValue(responseBody, ObjectNode.class)
+      .getResponseBody()
       .get("id")
       .textValue();
   }

@@ -55,7 +55,7 @@ class LegacyBeaconControllerIntegrationTest {
       Paths.get("src/test/resources/fixtures/createLegacyBeaconRequest.json")
     );
 
-    final var createdAccountResponse = webTestClient
+    return webTestClient
       .post()
       .uri("/migrate/legacy-beacon")
       .contentType(MediaType.APPLICATION_JSON)
@@ -63,12 +63,9 @@ class LegacyBeaconControllerIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated()
-      .expectBody()
+      .expectBody(ObjectNode.class)
       .returnResult()
-      .getResponseBody();
-
-    return new ObjectMapper()
-      .readValue(createdAccountResponse, ObjectNode.class)
+      .getResponseBody()
       .get("data")
       .get("id")
       .textValue();
