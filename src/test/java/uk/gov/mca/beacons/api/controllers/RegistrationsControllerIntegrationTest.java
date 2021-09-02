@@ -36,10 +36,7 @@ class RegistrationsControllerIntegrationTest {
   private AccountHolderService accountHolderService;
 
   @ParameterizedTest
-  @EnumSource(
-    value = RegistrationUseCase.class,
-    names = { "SINGLE_BEACON", "MULTIPLE_BEACONS" }
-  )
+  @EnumSource(value = RegistrationUseCase.class, names = { "SINGLE_BEACON" })
   void givenNewValidRegistration_whenPosted_thenStatus201(
     RegistrationUseCase registrationUseCase
   ) throws IOException {
@@ -129,7 +126,6 @@ class RegistrationsControllerIntegrationTest {
 
   enum RegistrationUseCase {
     SINGLE_BEACON,
-    MULTIPLE_BEACONS,
     NO_HEX_ID,
     NO_USES,
     NO_EMERGENCY_CONTACTS,
