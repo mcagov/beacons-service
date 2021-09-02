@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +40,19 @@ public class RegistrationsController {
       createRegistrationService.register(beacon),
       HttpStatus.CREATED
     );
+  }
+
+  /**
+   * Update beacon in place with new values patched
+   * Replace all uses/owners/emergency contacts
+   *
+   * Should not patch hex id
+   * Should not patch account holder id
+   * @param beacon
+   * @return
+   */
+  @PatchMapping(value = "/register/{uuid}")
+  public ResponseEntity<Beacon> update(@Valid @RequestBody Beacon beacon) {
+    return null;
   }
 }

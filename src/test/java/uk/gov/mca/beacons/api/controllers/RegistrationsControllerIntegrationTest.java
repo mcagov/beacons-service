@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,7 +41,7 @@ class RegistrationsControllerIntegrationTest {
   void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
     final UUID testAccountHolderId = createTestAccountHolder();
     final Object requestBody = toJson(
-      readFile(REGISTRATION_JSON_RESOURCE)
+      readRegistrationsJson()
         .replace(
           "replace-with-test-account-holder-id",
           testAccountHolderId.toString()
@@ -68,7 +69,7 @@ class RegistrationsControllerIntegrationTest {
   ) throws IOException {
     final UUID testAccountHolderId = createTestAccountHolder();
     final Object requestBody = toJson(
-      readFile(REGISTRATION_JSON_RESOURCE)
+      readRegistrationsJson()
         .replace(
           "replace-with-test-account-holder-id",
           testAccountHolderId.toString()
@@ -81,6 +82,44 @@ class RegistrationsControllerIntegrationTest {
       .isBadRequest()
       .expectHeader()
       .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+  }
+
+  @Test
+  void givenAnUpdateToARegistration_whenPatched_thenStatus200()
+    throws Exception {
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = toJson(
+      readRegistrationsJson()
+        .replace(
+          "replace-with-test-account-holder-id",
+          testAccountHolderId.toString()
+        )
+    )
+      .get(RegistrationUseCase.SINGLE_BEACON);
+
+    final String beaconId = (String) makePostRequest(requestBody)
+      .expectBody(Map.class)
+      .returnResult()
+      .getResponseBody()
+      .get("id");
+
+    final Object updateRequestBody = toJson(
+      readRegistrationsJson()
+        .replace(
+          "replace-with-test-account-holder-id",
+          testAccountHolderId.toString()
+        )
+        .replace("replace-with-beacon-id", beaconId)
+    )
+      .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+    webTestClient
+      .patch()
+      .uri("/registrations/register/" + beaconId)
+      .bodyValue(updateRequestBody)
+      .exchange()
+      .expectStatus()
+      .isOk();
   }
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
@@ -118,12 +157,13 @@ class RegistrationsControllerIntegrationTest {
     return accountHolderService.create(createAccountHolderRequest).getId();
   }
 
-  private String readFile(String filePath) throws IOException {
-    return Files.readString(Paths.get(filePath));
+  private String readRegistrationsJson() throws IOException {
+    return Files.readString(Paths.get(REGISTRATION_JSON_RESOURCE));
   }
 
   enum RegistrationUseCase {
     SINGLE_BEACON,
+    BEACON_TO_UPDATE,
     NO_HEX_ID,
     NO_USES,
     NO_EMERGENCY_CONTACTS,
