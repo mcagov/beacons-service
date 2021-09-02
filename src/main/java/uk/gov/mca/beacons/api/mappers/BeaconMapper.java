@@ -43,6 +43,7 @@ public class BeaconMapper extends BaseMapper {
     attributes.put("batteryExpiryDate", domain.getBatteryExpiryDate());
     attributes.put("lastServicedDate", domain.getLastServicedDate());
     attributes.put("referenceNumber", domain.getReferenceNumber());
+    attributes.put("lastModifiedDate", domain.getLastModifiedDate());
     dto.setAttributes(attributes);
     dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
