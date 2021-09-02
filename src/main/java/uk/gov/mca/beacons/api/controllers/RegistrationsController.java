@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.api.documentation.RegisterBeaconDocumentation;
-import uk.gov.mca.beacons.api.jpa.entities.Registration;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 
 @RestController
@@ -34,11 +34,9 @@ public class RegistrationsController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @RegisterBeaconDocumentation
-  public ResponseEntity<Registration> register(
-    @Valid @RequestBody Registration registration
-  ) {
+  public ResponseEntity<Beacon> register(@Valid @RequestBody Beacon beacon) {
     return new ResponseEntity<>(
-      createRegistrationService.register(registration),
+      createRegistrationService.register(beacon),
       HttpStatus.CREATED
     );
   }
