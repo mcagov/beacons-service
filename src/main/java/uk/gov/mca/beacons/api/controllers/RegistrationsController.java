@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.api.documentation.RegisterBeaconDocumentation;
+import uk.gov.mca.beacons.api.dto.UpdateRegistrationRequest;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 import uk.gov.mca.beacons.api.services.UpdateRegistrationService;
@@ -62,7 +63,7 @@ public class RegistrationsController {
     @Valid @RequestBody Beacon beacon,
     @PathVariable("uuid") UUID beaconId
   ) {
-    beacon.setId(beaconId);
-    return ResponseEntity.ok(updateRegistrationService.update(beacon));
+    final var updateRequest = new UpdateRegistrationRequest(beaconId, beacon);
+    return ResponseEntity.ok(updateRegistrationService.update(updateRequest));
   }
 }
