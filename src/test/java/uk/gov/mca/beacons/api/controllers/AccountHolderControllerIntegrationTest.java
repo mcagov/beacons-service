@@ -268,8 +268,6 @@ class AccountHolderControllerIntegrationTest {
 
     return new ObjectMapper()
       .readValue(responseBody, ObjectNode.class)
-      .get("beacons")
-      .get(0)
       .get("id")
       .textValue();
   }

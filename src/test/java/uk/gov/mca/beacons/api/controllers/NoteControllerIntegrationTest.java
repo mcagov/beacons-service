@@ -25,7 +25,6 @@ import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
-import uk.gov.mca.beacons.api.jpa.entities.Registration;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 import uk.gov.mca.beacons.api.services.GetUserService;
 
@@ -34,7 +33,6 @@ import uk.gov.mca.beacons.api.services.GetUserService;
 class NoteControllerIntegrationTest {
 
   private String beaconId;
-  private Registration createdRegistration;
 
   @Autowired
   private WebTestClient webTestClient;
@@ -47,21 +45,21 @@ class NoteControllerIntegrationTest {
 
   @BeforeEach
   void init() {
-    BeaconUse beaconUse = new BeaconUse();
+    final BeaconUse beaconUse = new BeaconUse();
     beaconUse.setEnvironment(Environment.LAND);
     beaconUse.setPurpose(Purpose.PLEASURE);
     beaconUse.setActivity(Activity.CLIMBING_MOUNTAINEERING);
     beaconUse.setMainUse(true);
     beaconUse.setMoreDetails("I stole a loaf of bread");
 
-    Person emergencyContact = new Person();
-    Person owner = new Person();
+    final Person emergencyContact = new Person();
+    final Person owner = new Person();
     owner.setFullName("Mr beacon");
 
-    String hexId = UUID.randomUUID().toString();
-    String manufacturer = "French";
-    String model = "Revolution";
-    String manufacturerSerialNumber = "2460124601";
+    final String hexId = UUID.randomUUID().toString();
+    final String manufacturer = "French";
+    final String model = "Revolution";
+    final String manufacturerSerialNumber = "2460124601";
     final Beacon beacon = new Beacon();
     beacon.setHexId(hexId);
     beacon.setManufacturer(manufacturer);
@@ -71,10 +69,7 @@ class NoteControllerIntegrationTest {
     beacon.setOwner(owner);
     beacon.setEmergencyContacts(List.of(emergencyContact));
 
-    Registration registration = new Registration();
-    registration.setBeacons(List.of(beacon));
-    createdRegistration = createRegistrationService.register(registration);
-    final Beacon createdBeacon = createdRegistration.getBeacons().get(0);
+    final Beacon createdBeacon = createRegistrationService.register(beacon);
     beaconId = createdBeacon.getId().toString();
   }
 

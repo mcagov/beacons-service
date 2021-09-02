@@ -29,7 +29,6 @@ import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
-import uk.gov.mca.beacons.api.jpa.entities.Registration;
 import uk.gov.mca.beacons.api.services.CreateRegistrationService;
 import uk.gov.mca.beacons.api.services.GetUserService;
 
@@ -92,10 +91,7 @@ class BeaconsControllerIntegrationTest {
       List.of(firstEmergencyContact, secondEmergencyContact)
     );
 
-    final var registration = new Registration();
-    registration.setBeacons(List.of(beacon));
-
-    createRegistrationService.register(registration);
+    createRegistrationService.register(beacon);
     uuid = beacon.getId();
     useUuid = beacon.getUses().get(0).getId();
   }
