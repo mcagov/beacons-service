@@ -61,10 +61,12 @@ public class CreateRegistrationService {
   }
 
   private void registerBeaconUses(List<BeaconUse> uses, UUID beaconId) {
-    uses.forEach(use -> {
-      use.setBeaconId(beaconId);
-      beaconUseJpaRepository.save(use);
-    });
+    uses.forEach(
+      use -> {
+        use.setBeaconId(beaconId);
+        beaconUseJpaRepository.save(use);
+      }
+    );
   }
 
   private void registerOwner(Person owner, UUID beaconId) {
@@ -79,8 +81,8 @@ public class CreateRegistrationService {
     List<Person> emergencyContacts,
     UUID beaconId
   ) {
-    emergencyContacts.forEach(emergencyContact ->
-      registerEmergencyContact(emergencyContact, beaconId)
+    emergencyContacts.forEach(
+      emergencyContact -> registerEmergencyContact(emergencyContact, beaconId)
     );
   }
 
