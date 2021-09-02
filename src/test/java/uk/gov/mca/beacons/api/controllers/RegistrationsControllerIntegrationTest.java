@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,8 @@ class RegistrationsControllerIntegrationTest {
   @Autowired
   private AccountHolderService accountHolderService;
 
-  @ParameterizedTest
-  @EnumSource(value = RegistrationUseCase.class, names = { "SINGLE_BEACON" })
-  void givenNewValidRegistration_whenPosted_thenStatus201(
-    RegistrationUseCase registrationUseCase
-  ) throws IOException {
+  @Test
+  void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
     final UUID testAccountHolderId = createTestAccountHolder();
     final Object requestBody = toJson(
       readFile(REGISTRATION_JSON_RESOURCE)
@@ -48,7 +46,7 @@ class RegistrationsControllerIntegrationTest {
           testAccountHolderId.toString()
         )
     )
-      .get(registrationUseCase);
+      .get(RegistrationUseCase.SINGLE_BEACON);
 
     makePostRequest(requestBody)
       .expectStatus()
