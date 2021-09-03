@@ -186,7 +186,9 @@ class RegistrationsControllerIntegrationTest {
         .isOk()
         .expectBody()
         .jsonPath("$.uses.length()")
-        .isEqualTo(1);
+        .isEqualTo(1)
+        .jsonPath("$.uses[0].environment")
+        .isEqualTo("AVIATION");
     }
 
     @Test
