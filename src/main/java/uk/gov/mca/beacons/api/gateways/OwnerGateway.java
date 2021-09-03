@@ -8,4 +8,6 @@ public interface OwnerGateway {
   Person save(CreateOwnerRequest request);
 
   Person findByBeaconId(UUID beaconId);
+
+  void deleteByBeaconId(UUID beaconId);
 }

@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.jpa;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
 
@@ -24,4 +25,11 @@ public interface BeaconPersonJpaRepository extends JpaRepository<Person, UUID> {
     value = "SELECT * FROM person WHERE beacon_id = ?1 AND person_type = 'EMERGENCY_CONTACT'"
   )
   List<Person> findEmergencyContactsByBeaconId(UUID beaconId);
+
+  @Modifying
+  @Query(
+    nativeQuery = true,
+    value = "DELETE FROM person WHERE beacon_id = ?1 AND person_type = 'OWNER'"
+  )
+  void deleteOwnerByBeaconId(UUID beaconId);
 }

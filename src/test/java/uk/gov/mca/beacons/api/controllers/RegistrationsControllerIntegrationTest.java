@@ -201,7 +201,7 @@ class RegistrationsControllerIntegrationTest {
         .jsonPath("$.owner.townOrCity")
         .isEqualTo("Granada")
         .jsonPath("$.owner.county")
-        .isEqualTo("Granada")
+        .isEqualTo("Espanol")
         .jsonPath("$.owner.postcode")
         .isEqualTo("ES10 2DG");
     }
