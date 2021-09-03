@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,14 +23,24 @@ public class BeaconGatewayImpl implements BeaconGateway {
   }
 
   @Override
+  public Optional<Beacon> findById(UUID id) {
+    return beaconJpaRepository.findById(id);
+  }
+
+  @Override
+  public Beacon update(Beacon beacon) {
+    return beaconJpaRepository.save(beacon);
+  }
+
+  @Override
   public List<Beacon> findAllActiveBeaconsByAccountHolderId(UUID accountId) {
     return beaconJpaRepository.findAllActiveBeaconsByAccountHolderId(accountId);
   }
 
   @Override
-  public void delete(UUID beaconId) {
+  public void delete(UUID id) {
     final Beacon beacon = beaconJpaRepository
-      .findById(beaconId)
+      .findById(id)
       .orElseThrow(ResourceNotFoundException::new);
 
     beacon.setBeaconStatus(BeaconStatus.DELETED);
