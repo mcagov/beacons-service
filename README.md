@@ -18,6 +18,8 @@ The following dependencies are required to build and test the application.
 | [Docker](https://www.docker.com/products/docker-desktop) | Latest         |
 | [nodejs](https://nodejs.org/en/)                         | 12.x \|\| 14.x |
 
+Gradle is the build tool for the application. See the [docs](https://docs.gradle.org/current/userguide/gradle_wrapper.html#sec:upgrading_wrapper) for updating the Gradle Wrapper.
+
 ## Development
 
 Clone this repo
