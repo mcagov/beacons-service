@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,7 +89,7 @@ class EmergencyContactGatewayImplUnitTest {
 
   @Test
   void shouldOverrideTheCreatedDateToNow() {
-    final var dateInThePast = LocalDateTime.now();
+    final var dateInThePast = OffsetDateTime.now();
     final var createEmergencyContactRequest = CreateEmergencyContactRequest
       .builder()
       .createdDate(dateInThePast)
@@ -105,7 +105,7 @@ class EmergencyContactGatewayImplUnitTest {
 
   @Test
   void shouldOverrideTheLastModifiedDateToNow() {
-    final var dateInThePast = LocalDateTime.now();
+    final var dateInThePast = OffsetDateTime.now();
     final var createEmergencyContactRequest = CreateEmergencyContactRequest
       .builder()
       .lastModifiedDate(dateInThePast)

@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.api.mappers;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 abstract class BaseMapper {
 
@@ -23,9 +23,9 @@ abstract class BaseMapper {
     return Integer.parseInt(value.toString());
   }
 
-  protected LocalDateTime getDateTimeOrNull(Object value) {
+  protected OffsetDateTime getDateTimeOrNull(Object value) {
     if (value == null) return null;
-    return LocalDateTime.parse((String) value);
+    return DateTimeParser.parse((String) value);
   }
 
   protected LocalDate getDateOrNull(Object value) {

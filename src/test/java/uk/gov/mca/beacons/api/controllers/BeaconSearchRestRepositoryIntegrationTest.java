@@ -1,5 +1,9 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -12,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.api.mappers.DateTimeParser;
 import uk.gov.mca.beacons.api.services.scheduled.BeaconSearchScheduler;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,7 +75,15 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(randomHexId)
         .jsonPath("_embedded.beaconSearch[0].lastModifiedDate")
-        .isEqualTo("2004-10-13T00:00:00")
+        .value(
+          (String lastModifiedDate) -> {
+            assert (
+              DateTimeParser
+                .parse(lastModifiedDate)
+                .isEqual(DateTimeParser.parse("2004-10-13T00:00:00"))
+            );
+          }
+        )
         .jsonPath("_embedded.beaconSearch[0].beaconStatus")
         .isEqualTo("MIGRATED")
         .jsonPath("_embedded.beaconSearch[0].ownerName")

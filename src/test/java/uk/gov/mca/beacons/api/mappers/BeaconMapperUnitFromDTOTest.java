@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -55,9 +57,9 @@ class BeaconMapperUnitFromDTOTest {
     attributes.put("chkCode", "2");
     attributes.put("manufacturerSerialNumber", "3");
     attributes.put("status", "NEW");
-    attributes.put("createdDate", "2020-02-01T00:00");
-    attributes.put("batteryExpiryDate", "2022-02-01T00:00");
-    attributes.put("lastServicedDate", "2019-02-01T00:00");
+    attributes.put("createdDate", "2020-02-01T00:00Z");
+    attributes.put("batteryExpiryDate", "2022-02-01T00:00Z");
+    attributes.put("lastServicedDate", "2019-02-01T00:00Z");
     beaconDTO.setAttributes(attributes);
 
     var beacon = beaconMapper.fromDTO(beaconDTO);
@@ -71,7 +73,12 @@ class BeaconMapperUnitFromDTOTest {
     assertThat(beacon.getBeaconStatus(), is(BeaconStatus.NEW));
     assertThat(
       beacon.getCreatedDate(),
-      is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
+      is(
+        OffsetDateTime.of(
+          LocalDateTime.of(2020, 2, 1, 0, 0, 0),
+          ZoneOffset.ofHours(0)
+        )
+      )
     );
     assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
     assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));

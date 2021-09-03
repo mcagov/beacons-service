@@ -1,7 +1,5 @@
 package uk.gov.mca.beacons.api.mappers;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -58,12 +56,12 @@ public class LegacyBeaconMapper {
     final var ownerEmail = (String) beacon.getOwner().get("email");
     legacyBeaconEntity.setOwnerEmail(ownerEmail);
 
-    final var createdDate = LocalDateTime.parse(
+    final var createdDate = DateTimeParser.parse(
       (String) beacon.getBeacon().get("createdDate")
     );
     legacyBeaconEntity.setCreatedDate(createdDate);
 
-    final var lastModifiedDate = LocalDateTime.parse(
+    final var lastModifiedDate = DateTimeParser.parse(
       (String) beacon.getBeacon().get("lastModifiedDate")
     );
     legacyBeaconEntity.setLastModifiedDate(lastModifiedDate);

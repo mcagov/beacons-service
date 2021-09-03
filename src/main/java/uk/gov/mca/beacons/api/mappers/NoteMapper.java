@@ -3,7 +3,7 @@ package uk.gov.mca.beacons.api.mappers;
 import static uk.gov.mca.beacons.api.dto.NoteDTO.Attributes;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class NoteMapper extends BaseMapper {
   }
 
   public NoteEntity toNoteEntity(Note note) {
-    final LocalDateTime now = LocalDateTime.now(clock);
+    final OffsetDateTime now = OffsetDateTime.now(clock);
 
     return NoteEntity
       .builder()

@@ -6,8 +6,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Nested;
@@ -97,7 +96,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getCreatedDate(),
-        is(LocalDateTime.parse("2020-08-01T21:33:13"))
+        is(DateTimeParser.parse("2020-08-01T21:33:13"))
       );
     }
 
@@ -123,7 +122,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getLastModifiedDate(),
-        is(LocalDateTime.parse("2021-08-01T21:33:13"))
+        is(DateTimeParser.parse("2021-08-01T21:33:13"))
       );
     }
 

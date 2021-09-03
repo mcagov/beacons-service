@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,7 +88,7 @@ class OwnerGatewayImplUnitTest {
 
   @Test
   void shouldNotOverrideTheCreatedDate() {
-    final var now = LocalDateTime.now();
+    final var now = OffsetDateTime.now();
     final var createOwnerRequest = CreateOwnerRequest
       .builder()
       .createdDate(now)
@@ -102,7 +102,7 @@ class OwnerGatewayImplUnitTest {
 
   @Test
   void shouldNotOverrideTheLastModifiedDate() {
-    final var now = LocalDateTime.now();
+    final var now = OffsetDateTime.now();
     final var createOwnerRequest = CreateOwnerRequest
       .builder()
       .lastModifiedDate(now)

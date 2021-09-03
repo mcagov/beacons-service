@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +41,7 @@ class NoteMapperTest {
     final UUID beaconId = UUID.randomUUID();
     final String text = "Beacon pancakes, making beacon pancakes";
     final NoteType type = NoteType.INCIDENT;
-    final LocalDateTime createdDate = LocalDateTime.now();
+    final OffsetDateTime createdDate = OffsetDateTime.now();
     final UUID userId = UUID.randomUUID();
     final String fullName = "Jake The Dog";
     final String email = "i.love.lady@rainicorn.com";
@@ -127,15 +129,25 @@ class NoteMapperTest {
   void toOrderedWrapperDTO_shouldOrderAListOfNotesByLatestFirst() {
     final var oldestNote = Note
       .builder()
-      .createdDate(LocalDateTime.of(1990, 1, 1, 0, 0, 0))
+      .createdDate(
+        OffsetDateTime.of(
+          LocalDateTime.of(1990, 1, 1, 0, 0, 0, 0),
+          ZoneOffset.ofHours(0)
+        )
+      )
       .build();
     final var middleNote = Note
       .builder()
-      .createdDate(LocalDateTime.of(2020, 1, 1, 0, 0, 0))
+      .createdDate(
+        OffsetDateTime.of(
+          LocalDateTime.of(2020, 1, 1, 0, 0, 0),
+          ZoneOffset.ofHours(0)
+        )
+      )
       .build();
     final var newestNote = Note
       .builder()
-      .createdDate(LocalDateTime.now())
+      .createdDate(OffsetDateTime.now())
       .build();
 
     final WrapperDTO<List<NoteDTO>> wrappedNotes = noteMapper.toOrderedWrapperDTO(

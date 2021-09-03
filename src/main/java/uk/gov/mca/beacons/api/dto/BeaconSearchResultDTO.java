@@ -2,7 +2,7 @@ package uk.gov.mca.beacons.api.dto;
 
 import static uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO.Attributes;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class BeaconSearchResultDTO extends DomainDTO<Attributes> {
   @Builder
   public static class Attributes {
 
-    private LocalDateTime lastModifiedDate;
+    private OffsetDateTime lastModifiedDate;
     private BeaconStatus beaconStatus;
     private String hexId;
     private String ownerName;

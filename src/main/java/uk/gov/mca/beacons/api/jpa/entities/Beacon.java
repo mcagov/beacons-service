@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.Entity;
@@ -55,10 +55,10 @@ public class Beacon {
   private BeaconStatus beaconStatus;
 
   @CreatedDate
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
 
   @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
+  private OffsetDateTime lastModifiedDate;
 
   @Transient
   @Valid

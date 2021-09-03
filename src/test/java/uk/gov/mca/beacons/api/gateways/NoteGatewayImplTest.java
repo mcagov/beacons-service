@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ class NoteGatewayImplTest {
       final UUID beaconId = UUID.randomUUID();
       final String text = "This beacon belongs to a cat.";
       final NoteType type = NoteType.GENERAL;
-      final LocalDateTime createdDate = LocalDateTime.now();
+      final OffsetDateTime createdDate = OffsetDateTime.now();
       final UUID userId = UUID.randomUUID();
       final String fullName = "Alfred the cat";
       final String email = "alfred@cute.cat.com";
@@ -115,7 +115,7 @@ class NoteGatewayImplTest {
       final NoteEntity entity = noteCaptor.getValue();
       assertThat(
         entity.getCreatedDate(),
-        is(equalTo(LocalDateTime.now(fixedClock)))
+        is(equalTo(OffsetDateTime.now(fixedClock)))
       );
     }
   }

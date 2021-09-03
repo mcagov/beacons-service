@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +32,7 @@ class NoteServiceTest {
       final Note note = new Note();
       final Note createdNote = Note
         .builder()
-        .createdDate(LocalDateTime.now())
+        .createdDate(OffsetDateTime.now())
         .build();
 
       given(mockNoteGateway.create(note)).willReturn(createdNote);
