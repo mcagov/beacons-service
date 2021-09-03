@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
+import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
@@ -20,7 +21,7 @@ import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 @Transactional
 public class BeaconsService {
 
-  private final BeaconJpaRepository beaconJpaRepository;
+  private final BeaconGateway beaconGateway;
   private final BeaconPersonJpaRepository beaconPersonJpaRepository;
   private final BeaconUseJpaRepository beaconUseJpaRepository;
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
@@ -28,13 +29,13 @@ public class BeaconsService {
 
   @Autowired
   public BeaconsService(
-    BeaconJpaRepository beaconJpaRepository,
+    BeaconGateway beaconGateway,
     BeaconPersonJpaRepository beaconPersonJpaRepository,
     BeaconUseJpaRepository beaconUseJpaRepository,
     BeaconsRelationshipMapper beaconsRelationshipMapper,
     ModelPatcherFactory<Beacon> beaconPatcherFactory
   ) {
-    this.beaconJpaRepository = beaconJpaRepository;
+    this.beaconGateway = beaconGateway;
     this.beaconPersonJpaRepository = beaconPersonJpaRepository;
     this.beaconUseJpaRepository = beaconUseJpaRepository;
     this.beaconsRelationshipMapper = beaconsRelationshipMapper;
@@ -42,10 +43,10 @@ public class BeaconsService {
   }
 
   public Beacon find(UUID id) {
-    final Optional<Beacon> beaconResult = beaconJpaRepository.findById(id);
-    if (beaconResult.isEmpty()) return null;
+    final Beacon beacon = beaconGateway
+      .findById(id)
+      .orElseThrow(ResourceNotFoundException::new);
 
-    final Beacon beacon = beaconResult.get();
     final List<Person> persons = beaconPersonJpaRepository.findAllByBeaconId(
       id
     );
@@ -62,7 +63,6 @@ public class BeaconsService {
 
   public void update(UUID id, Beacon update) {
     final Beacon beacon = this.find(id);
-    if (beacon == null) throw new ResourceNotFoundException();
 
     final var patcher = beaconPatcherFactory
       .getModelPatcher()
@@ -82,6 +82,6 @@ public class BeaconsService {
 
     var updatedModel = patcher.patchModel(beacon, update);
 
-    beaconJpaRepository.save(updatedModel);
+    beaconGateway.update(updatedModel);
   }
 }

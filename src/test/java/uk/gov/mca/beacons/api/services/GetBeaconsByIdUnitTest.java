@@ -6,6 +6,7 @@ import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.PersonType;
-import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
+import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
+import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
@@ -30,7 +32,7 @@ import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 class GetBeaconsByIdUnitTest {
 
   @Mock
-  private BeaconJpaRepository beaconJpaRepository;
+  private BeaconGateway beaconGateway;
 
   @Mock
   private BeaconPersonJpaRepository beaconPersonJpaRepository;
@@ -47,7 +49,7 @@ class GetBeaconsByIdUnitTest {
   void before() {
     beaconsService =
       new BeaconsService(
-        beaconJpaRepository,
+        beaconGateway,
         beaconPersonJpaRepository,
         beaconUseJpaRepository,
         new BeaconsRelationshipMapper(),
@@ -56,12 +58,13 @@ class GetBeaconsByIdUnitTest {
   }
 
   @Test
-  void findByIdShouldReturnNullResultsIfIdNotFound() {
+  void findByIdShouldThrowIfNotFound() {
     final var noExistentBeaconId = UUID.randomUUID();
 
-    final var beacon = beaconsService.find(noExistentBeaconId);
-
-    assertNull(beacon);
+    assertThrows(
+      ResourceNotFoundException.class,
+      () -> beaconsService.find(noExistentBeaconId)
+    );
   }
 
   @Test
@@ -74,9 +77,9 @@ class GetBeaconsByIdUnitTest {
     final var secondBeacon = new Beacon();
     secondBeacon.setId(secondBeaconId);
 
-    given(beaconJpaRepository.findById(firstBeaconId))
+    given(beaconGateway.findById(firstBeaconId))
       .willReturn(Optional.of(firstBeacon));
-    given(beaconJpaRepository.findById(secondBeaconId))
+    given(beaconGateway.findById(secondBeaconId))
       .willReturn(Optional.of(secondBeacon));
 
     Beacon firstBeaconOnly = beaconsService.find(firstBeaconId);
@@ -146,7 +149,7 @@ class GetBeaconsByIdUnitTest {
     final var testBeaconId = UUID.randomUUID();
     final Beacon testBeacon = new Beacon();
     testBeacon.setId(testBeaconId);
-    given(beaconJpaRepository.findById(testBeaconId))
+    given(beaconGateway.findById(testBeaconId))
       .willReturn(Optional.of(testBeacon));
 
     final var owner = new Person();
@@ -188,7 +191,7 @@ class GetBeaconsByIdUnitTest {
     final var testBeaconId = UUID.randomUUID();
     final var testBeacon = new Beacon();
     testBeacon.setId(testBeaconId);
-    given(beaconJpaRepository.findById(testBeaconId))
+    given(beaconGateway.findById(testBeaconId))
       .willReturn(Optional.of(testBeacon));
 
     final var owner = new Person();
