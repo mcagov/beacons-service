@@ -49,15 +49,6 @@ public class RegistrationsController {
     );
   }
 
-  /**
-   * Update beacon in place with new values patched
-   * Replace all uses/owner/emergency contacts
-   *
-   * Should not patch hex id
-   * Should not patch account holder id
-   * @param beacon
-   * @return
-   */
   @PatchMapping(value = "/register/{uuid}")
   public ResponseEntity<Beacon> update(
     @Valid @RequestBody Beacon beacon,
