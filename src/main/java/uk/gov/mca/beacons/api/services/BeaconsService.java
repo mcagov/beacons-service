@@ -61,7 +61,7 @@ public class BeaconsService {
     );
   }
 
-  public void update(UUID id, Beacon update) {
+  public Beacon update(UUID id, Beacon update) {
     final Beacon beacon = this.find(id);
 
     final var patcher = beaconPatcherFactory
@@ -82,6 +82,6 @@ public class BeaconsService {
 
     var updatedModel = patcher.patchModel(beacon, update);
 
-    beaconGateway.update(updatedModel);
+    return beaconGateway.update(updatedModel);
   }
 }
