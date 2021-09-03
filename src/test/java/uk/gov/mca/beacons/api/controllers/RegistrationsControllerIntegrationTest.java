@@ -128,15 +128,17 @@ class RegistrationsControllerIntegrationTest {
         .isOk();
     }
 
-    // One test for checking non-editable fields are not patched.  Hex id, account holder id, ref number
-
     @Test
-    void shouldNotUpdateTheHexId() throws Exception {
+    void shouldNotUpdateNonEditableBeaconFields() throws Exception {
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
           .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
-      )
+          .replace(
+            "replace-with-test-account-holder-id",
+            UUID.randomUUID().toString()
+          )
+          .replace("ABCDE4", "ABCDE5")
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -146,18 +148,16 @@ class RegistrationsControllerIntegrationTest {
         .exchange()
         .expectBody()
         .jsonPath("$.hexId")
-        .isEqualTo("1D0EA08C52FFBFF");
+        .isEqualTo("1D0EA08C52FFBFF")
+        .jsonPath("$.accountHolderId")
+        .isEqualTo(testAccountHolderId)
+        .jsonPath("$.referenceNumber")
+        .isEqualTo("ABCDE4");
     }
 
     @Test
-    void shouldNotUpdateTheAccountHolderId() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace(
-            "replace-with-test-account-holder-id",
-            UUID.randomUUID().toString()
-          )
-      )
+    void shouldReplaceTheBeaconUses() throws Exception {
+      final Object updateRequestBody = toJson(readRegistrationsJson())
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -166,10 +166,11 @@ class RegistrationsControllerIntegrationTest {
         .bodyValue(updateRequestBody)
         .exchange()
         .expectBody()
-        .jsonPath("$.accountHolderId")
-        .isEqualTo(testAccountHolderId);
+        .jsonPath("$.uses.length()")
+        .isEqualTo(1);
     }
   }
+
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
     return webTestClient

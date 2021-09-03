@@ -71,8 +71,7 @@ public class BeaconsService {
         Beacon::getManufacturerSerialNumber,
         Beacon::setManufacturerSerialNumber
       )
-      .withMapping(Beacon::getModel, Beacon::setModel)
-      .withMapping(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+      .withMapping(Beacon::getModel, Beacon::setModel);
 
     var updatedModel = patcher.patchModel(beacon, update);
 

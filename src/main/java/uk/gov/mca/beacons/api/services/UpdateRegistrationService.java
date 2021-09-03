@@ -18,6 +18,7 @@ public class UpdateRegistrationService {
   }
 
   public Beacon update(UpdateRegistrationRequest request) {
-    return beaconsService.update(request.getBeaconId(), request.getBeacon());
+    beaconsService.update(request.getBeaconId(), request.getBeacon());
+    return beaconsService.find(request.getBeaconId());
   }
 }
