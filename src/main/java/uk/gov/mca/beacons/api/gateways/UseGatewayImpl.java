@@ -23,4 +23,14 @@ public class UseGatewayImpl implements UseGateway {
   public List<BeaconUse> findAllByBeaconId(UUID beaconId) {
     return beaconUseJpaRepository.findAllByBeaconId(beaconId);
   }
+
+  @Override
+  public void deleteAllByBeaconId(UUID beaconId) {
+    beaconUseJpaRepository.deleteAllByBeaconId(beaconId);
+  }
+
+  @Override
+  public BeaconUse save(BeaconUse use) {
+    return beaconUseJpaRepository.save(use);
+  }
 }
