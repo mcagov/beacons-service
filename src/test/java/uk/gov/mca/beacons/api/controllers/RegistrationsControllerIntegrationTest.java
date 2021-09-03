@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -87,9 +88,12 @@ class RegistrationsControllerIntegrationTest {
   @Nested
   class UpdateRegistrations {
 
-    @Test
-    void shouldReturnHttpStatus200OnValidPatch() throws Exception {
-      final UUID testAccountHolderId = createTestAccountHolder();
+    private String testAccountHolderId;
+    private String beaconId;
+
+    @BeforeEach
+    void init() throws Exception {
+      testAccountHolderId = createTestAccountHolder().toString();
       final Object requestBody = toJson(
         readRegistrationsJson()
           .replace(
@@ -99,12 +103,16 @@ class RegistrationsControllerIntegrationTest {
       )
         .get(RegistrationUseCase.SINGLE_BEACON);
 
-      final String beaconId = (String) makePostRequest(requestBody)
-        .expectBody(Map.class)
-        .returnResult()
-        .getResponseBody()
-        .get("id");
+      beaconId =
+        (String) makePostRequest(requestBody)
+          .expectBody(Map.class)
+          .returnResult()
+          .getResponseBody()
+          .get("id");
+    }
 
+    @Test
+    void shouldReturnHttpStatus200OnValidPatch() throws Exception {
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
           .replace(
@@ -125,22 +133,6 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldNotUpdateTheHexId() throws Exception {
-      final UUID testAccountHolderId = createTestAccountHolder();
-      final Object requestBody = toJson(
-        readRegistrationsJson()
-          .replace(
-            "replace-with-test-account-holder-id",
-            testAccountHolderId.toString()
-          )
-      )
-        .get(RegistrationUseCase.SINGLE_BEACON);
-
-      final String beaconId = (String) makePostRequest(requestBody)
-        .expectBody(Map.class)
-        .returnResult()
-        .getResponseBody()
-        .get("id");
-
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
           .replace(
@@ -159,6 +151,27 @@ class RegistrationsControllerIntegrationTest {
         .expectBody()
         .jsonPath("$.hexId")
         .isEqualTo("1D0EA08C52FFBFF");
+    }
+
+    @Test
+    void shouldNotUpdateTheAccountHolderId() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace(
+            "replace-with-test-account-holder-id",
+            UUID.randomUUID().toString()
+          )
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectBody()
+        .jsonPath("$.accountHolderId")
+        .isEqualTo(testAccountHolderId);
     }
   }
 
