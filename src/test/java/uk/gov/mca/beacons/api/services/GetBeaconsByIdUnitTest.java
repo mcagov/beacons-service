@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
@@ -20,8 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.PersonType;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
+import uk.gov.mca.beacons.api.gateways.UseGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
-import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
@@ -38,7 +37,7 @@ class GetBeaconsByIdUnitTest {
   private BeaconPersonJpaRepository beaconPersonJpaRepository;
 
   @Mock
-  private BeaconUseJpaRepository beaconUseJpaRepository;
+  private UseGateway useGateway;
 
   @Mock
   private ModelPatcherFactory<Beacon> patcherFactory;
@@ -51,7 +50,7 @@ class GetBeaconsByIdUnitTest {
       new BeaconsService(
         beaconGateway,
         beaconPersonJpaRepository,
-        beaconUseJpaRepository,
+        useGateway,
         new BeaconsRelationshipMapper(),
         patcherFactory
       );
@@ -182,7 +181,7 @@ class GetBeaconsByIdUnitTest {
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseJpaRepository.findAllByBeaconId(testBeaconId))
+    given(useGateway.findAllByBeaconId(testBeaconId))
       .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
     return testBeaconId;
   }
@@ -224,7 +223,7 @@ class GetBeaconsByIdUnitTest {
     final var unrelatedBeaconUse = new BeaconUse();
     unrelatedBeaconUse.setMoreDetails("Lockdown Remote Worker");
     unrelatedBeaconUse.setBeaconId(UUID.randomUUID());
-    given(beaconUseJpaRepository.findAllByBeaconId(testBeaconId))
+    given(useGateway.findAllByBeaconId(testBeaconId))
       .willReturn(List.of(firstBeaconUse, unrelatedBeaconUse, secondBeaconUse));
     return testBeaconId;
   }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
+import uk.gov.mca.beacons.api.gateways.UseGateway;
 import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
@@ -23,7 +24,7 @@ public class BeaconsService {
 
   private final BeaconGateway beaconGateway;
   private final BeaconPersonJpaRepository beaconPersonJpaRepository;
-  private final BeaconUseJpaRepository beaconUseJpaRepository;
+  private final UseGateway useGateway;
   private final BeaconsRelationshipMapper beaconsRelationshipMapper;
   private final ModelPatcherFactory<Beacon> beaconPatcherFactory;
 
@@ -31,13 +32,13 @@ public class BeaconsService {
   public BeaconsService(
     BeaconGateway beaconGateway,
     BeaconPersonJpaRepository beaconPersonJpaRepository,
-    BeaconUseJpaRepository beaconUseJpaRepository,
+    UseGateway useGateway,
     BeaconsRelationshipMapper beaconsRelationshipMapper,
     ModelPatcherFactory<Beacon> beaconPatcherFactory
   ) {
     this.beaconGateway = beaconGateway;
     this.beaconPersonJpaRepository = beaconPersonJpaRepository;
-    this.beaconUseJpaRepository = beaconUseJpaRepository;
+    this.useGateway = useGateway;
     this.beaconsRelationshipMapper = beaconsRelationshipMapper;
     this.beaconPatcherFactory = beaconPatcherFactory;
   }
@@ -50,9 +51,7 @@ public class BeaconsService {
     final List<Person> persons = beaconPersonJpaRepository.findAllByBeaconId(
       id
     );
-    final List<BeaconUse> beaconUses = beaconUseJpaRepository.findAllByBeaconId(
-      id
-    );
+    final List<BeaconUse> beaconUses = useGateway.findAllByBeaconId(id);
 
     return beaconsRelationshipMapper.getMappedBeacon(
       beacon,
