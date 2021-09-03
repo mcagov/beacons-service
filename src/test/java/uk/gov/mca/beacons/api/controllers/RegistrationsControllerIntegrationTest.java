@@ -115,10 +115,7 @@ class RegistrationsControllerIntegrationTest {
     void shouldReturnHttpStatus200OnValidPatch() throws Exception {
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
-          .replace(
-            "replace-with-test-account-holder-id",
-            testAccountHolderId.toString()
-          )
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
       )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
@@ -131,14 +128,13 @@ class RegistrationsControllerIntegrationTest {
         .isOk();
     }
 
+    // One test for checking non-editable fields are not patched.  Hex id, account holder id, ref number
+
     @Test
     void shouldNotUpdateTheHexId() throws Exception {
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
-          .replace(
-            "replace-with-test-account-holder-id",
-            testAccountHolderId.toString()
-          )
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
           .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
       )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
