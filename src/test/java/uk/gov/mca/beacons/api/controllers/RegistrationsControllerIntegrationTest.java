@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -83,41 +84,82 @@ class RegistrationsControllerIntegrationTest {
       .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
   }
 
-  @Test
-  void givenAnUpdateToARegistration_whenPatched_thenStatus200()
-    throws Exception {
-    final UUID testAccountHolderId = createTestAccountHolder();
-    final Object requestBody = toJson(
-      readRegistrationsJson()
-        .replace(
-          "replace-with-test-account-holder-id",
-          testAccountHolderId.toString()
-        )
-    )
-      .get(RegistrationUseCase.SINGLE_BEACON);
+  @Nested
+  class UpdateRegistrations {
 
-    final String beaconId = (String) makePostRequest(requestBody)
-      .expectBody(Map.class)
-      .returnResult()
-      .getResponseBody()
-      .get("id");
+    @Test
+    void shouldReturnHttpStatus200OnValidPatch() throws Exception {
+      final UUID testAccountHolderId = createTestAccountHolder();
+      final Object requestBody = toJson(
+        readRegistrationsJson()
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
+        .get(RegistrationUseCase.SINGLE_BEACON);
 
-    final Object updateRequestBody = toJson(
-      readRegistrationsJson()
-        .replace(
-          "replace-with-test-account-holder-id",
-          testAccountHolderId.toString()
-        )
-    )
-      .get(RegistrationUseCase.BEACON_TO_UPDATE);
+      final String beaconId = (String) makePostRequest(requestBody)
+        .expectBody(Map.class)
+        .returnResult()
+        .getResponseBody()
+        .get("id");
 
-    webTestClient
-      .patch()
-      .uri("/registrations/register/" + beaconId)
-      .bodyValue(updateRequestBody)
-      .exchange()
-      .expectStatus()
-      .isOk();
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk();
+    }
+
+    @Test
+    void shouldNotUpdateTheHexId() throws Exception {
+      final UUID testAccountHolderId = createTestAccountHolder();
+      final Object requestBody = toJson(
+        readRegistrationsJson()
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
+        .get(RegistrationUseCase.SINGLE_BEACON);
+
+      final String beaconId = (String) makePostRequest(requestBody)
+        .expectBody(Map.class)
+        .returnResult()
+        .getResponseBody()
+        .get("id");
+
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+          .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectBody()
+        .jsonPath("$.hexId")
+        .isEqualTo("1D0EA08C52FFBFF");
+    }
   }
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
