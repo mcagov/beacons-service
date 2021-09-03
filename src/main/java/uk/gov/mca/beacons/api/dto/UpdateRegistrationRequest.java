@@ -7,7 +7,6 @@ import lombok.Setter;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class UpdateRegistrationRequest {
 
