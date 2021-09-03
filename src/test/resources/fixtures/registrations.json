@@ -61,7 +61,7 @@
         "activity": "SAILING",
         "otherActivity": "On my boat",
         "callSign": "Fish and Ships",
-        "mainUse": true,
+        "mainUse": false,
         "vhfRadio": "true",
         "fixedVhfRadio": "true",
         "fixedVhfRadioValue": "this is my MMSI number",

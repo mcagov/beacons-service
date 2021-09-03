@@ -96,10 +96,7 @@ class RegistrationsControllerIntegrationTest {
       testAccountHolderId = createTestAccountHolder().toString();
       final Object requestBody = toJson(
         readRegistrationsJson()
-          .replace(
-            "replace-with-test-account-holder-id",
-            testAccountHolderId.toString()
-          )
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
       )
         .get(RegistrationUseCase.SINGLE_BEACON);
 
@@ -138,7 +135,7 @@ class RegistrationsControllerIntegrationTest {
             UUID.randomUUID().toString()
           )
           .replace("ABCDE4", "ABCDE5")
-        )
+      )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -146,6 +143,8 @@ class RegistrationsControllerIntegrationTest {
         .uri("/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("$.hexId")
         .isEqualTo("1D0EA08C52FFBFF")
@@ -157,7 +156,10 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldReplaceTheBeaconUses() throws Exception {
-      final Object updateRequestBody = toJson(readRegistrationsJson())
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -165,12 +167,13 @@ class RegistrationsControllerIntegrationTest {
         .uri("/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("$.uses.length()")
         .isEqualTo(1);
     }
   }
-
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
     return webTestClient
