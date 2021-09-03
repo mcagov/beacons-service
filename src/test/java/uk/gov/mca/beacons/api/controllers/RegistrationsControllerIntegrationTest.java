@@ -109,7 +109,7 @@ class RegistrationsControllerIntegrationTest {
     }
 
     @Test
-    void shouldReturnHttpStatus200OnValidPatch() throws Exception {
+    void shouldUpdateTheBeacon() throws Exception {
       final Object updateRequestBody = toJson(
         readRegistrationsJson()
           .replace("replace-with-test-account-holder-id", testAccountHolderId)
@@ -122,7 +122,20 @@ class RegistrationsControllerIntegrationTest {
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
-        .isOk();
+        .isOk()
+        .expectBody()
+        .jsonPath("$.manufacturer")
+        .isEqualTo("Ocean Sound")
+        .jsonPath("$.model")
+        .isEqualTo("EPIRB2")
+        .jsonPath("$.manufacturerSerialNumber")
+        .isEqualTo("1407312905")
+        .jsonPath("$.chkCode")
+        .isEqualTo("9480C")
+        .jsonPath("$.batteryExpiryDate")
+        .isEqualTo("2021-02-01")
+        .jsonPath("$.lastServicedDate")
+        .isEqualTo("2021-02-01");
     }
 
     @Test

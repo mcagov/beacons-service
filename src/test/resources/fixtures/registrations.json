@@ -128,12 +128,12 @@
     "accountHolderId": "replace-with-test-account-holder-id",
     "hexId": "1D0EA08C52FFBFF",
     "manufacturer": "Ocean Sound",
-    "model": "EPIRB1",
-    "manufacturerSerialNumber": "1407312904",
-    "chkCode": "9480B",
+    "model": "EPIRB2",
+    "manufacturerSerialNumber": "1407312905",
+    "chkCode": "9480C",
     "referenceNumber": "ABCDE4",
-    "batteryExpiryDate": "2020-02-01",
-    "lastServicedDate": "2020-02-01",
+    "batteryExpiryDate": "2021-02-01",
+    "lastServicedDate": "2021-02-01",
     "uses": [
       {
         "environment": "AVIATION",
