@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.hasItems;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -217,6 +219,30 @@ class RegistrationsControllerIntegrationTest {
         .isEqualTo("Espanol")
         .jsonPath("$.owner.postcode")
         .isEqualTo("ES10 2DG");
+    }
+
+    @Test
+    void shouldReplaceTheEmergencyContacts() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.emergencyContacts[*].fullName")
+        .value(hasItems("Lord Hamilton", "Father Hamilton"))
+        .jsonPath("$.emergencyContacts[*].telephoneNumber")
+        .value(hasItems("02392 856622", "02392 856623"))
+        .jsonPath("$.emergencyContacts[*].alternativeTelephoneNumber")
+        .value(hasItems("02392 856623", "02392 856624"));
     }
   }
 

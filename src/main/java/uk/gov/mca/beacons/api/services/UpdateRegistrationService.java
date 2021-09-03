@@ -5,13 +5,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
 import uk.gov.mca.beacons.api.dto.UpdateRegistrationRequest;
+import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
+import uk.gov.mca.beacons.api.mappers.CreateEmergencyContactRequestMapper;
 import uk.gov.mca.beacons.api.mappers.CreateOwnerRequestMapper;
 
 @Service
@@ -21,16 +22,19 @@ public class UpdateRegistrationService {
   private final BeaconsService beaconsService;
   private final UseGateway useGateway;
   private final OwnerGateway ownerGateway;
+  private final EmergencyContactGateway emergencyContactGateway;
 
   @Autowired
   public UpdateRegistrationService(
     BeaconsService beaconsService,
     UseGateway useGateway,
-    OwnerGateway ownerGateway
+    OwnerGateway ownerGateway,
+    EmergencyContactGateway emergencyContactGateway
   ) {
     this.beaconsService = beaconsService;
     this.useGateway = useGateway;
     this.ownerGateway = ownerGateway;
+    this.emergencyContactGateway = emergencyContactGateway;
   }
 
   public Beacon update(UpdateRegistrationRequest request) {
@@ -40,6 +44,7 @@ public class UpdateRegistrationService {
     beaconsService.update(beaconId, beacon);
     replaceUses(beaconId, beacon.getUses());
     replaceOwner(beaconId, beacon.getOwner());
+    replaceEmergencyContacts(beaconId, beacon.getEmergencyContacts());
 
     return beaconsService.find(beaconId);
   }
@@ -62,5 +67,22 @@ public class UpdateRegistrationService {
       beaconId
     );
     ownerGateway.save(createOwnerRequest);
+  }
+
+  private void replaceEmergencyContacts(
+    UUID beaconId,
+    List<Person> emergencyContacts
+  ) {
+    emergencyContactGateway.deleteAllByBeaconId(beaconId);
+
+    emergencyContacts.forEach(
+      emergencyContact -> {
+        final var createEmergencyContactRequest = CreateEmergencyContactRequestMapper.fromBeaconPerson(
+          emergencyContact,
+          beaconId
+        );
+        emergencyContactGateway.save(createEmergencyContactRequest);
+      }
+    );
   }
 }

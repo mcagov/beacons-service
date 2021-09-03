@@ -32,4 +32,11 @@ public interface BeaconPersonJpaRepository extends JpaRepository<Person, UUID> {
     value = "DELETE FROM person WHERE beacon_id = ?1 AND person_type = 'OWNER'"
   )
   void deleteOwnerByBeaconId(UUID beaconId);
+
+  @Modifying
+  @Query(
+    nativeQuery = true,
+    value = "DELETE FROM person WHERE beacon_id = ?1 AND person_type = 'EMERGENCY_CONTACT'"
+  )
+  void deleteAllEmergencyContactsByBeaconId(UUID beaconId);
 }
