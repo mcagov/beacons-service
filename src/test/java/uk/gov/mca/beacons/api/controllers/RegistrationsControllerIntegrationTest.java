@@ -173,6 +173,38 @@ class RegistrationsControllerIntegrationTest {
         .jsonPath("$.uses.length()")
         .isEqualTo(1);
     }
+
+    @Test
+    void shouldReplaceTheOwner() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.owner.fullName")
+        .isEqualTo("Nice-Admiral Sergio Nelson, 2nd Viscount Nelson")
+        .jsonPath("$.owner.email")
+        .isEqualTo("sergio@royalnavy.esp")
+        .jsonPath("$.owner.telephoneNumber")
+        .isEqualTo("02392 85666")
+        .jsonPath("$.owner.addressLine1")
+        .isEqualTo("2 The Soft")
+        .jsonPath("$.owner.townOrCity")
+        .isEqualTo("Granada")
+        .jsonPath("$.owner.county")
+        .isEqualTo("Granada")
+        .jsonPath("$.owner.postcode")
+        .isEqualTo("ES10 2DG");
+    }
   }
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {

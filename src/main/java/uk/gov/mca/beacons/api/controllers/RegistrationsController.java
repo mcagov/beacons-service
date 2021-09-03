@@ -51,7 +51,7 @@ public class RegistrationsController {
 
   /**
    * Update beacon in place with new values patched
-   * Replace all uses/owners/emergency contacts
+   * Replace all uses/owner/emergency contacts
    *
    * Should not patch hex id
    * Should not patch account holder id
