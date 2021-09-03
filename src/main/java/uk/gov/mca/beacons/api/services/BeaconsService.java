@@ -42,10 +42,10 @@ public class BeaconsService {
   }
 
   public Beacon find(UUID id) {
-    final Optional<Beacon> beaconResult = beaconJpaRepository.findById(id);
-    if (beaconResult.isEmpty()) return null;
+    final Beacon beacon = beaconJpaRepository
+      .findById(id)
+      .orElseThrow(ResourceNotFoundException::new);
 
-    final Beacon beacon = beaconResult.get();
     final List<Person> persons = beaconPersonJpaRepository.findAllByBeaconId(
       id
     );
@@ -62,7 +62,6 @@ public class BeaconsService {
 
   public void update(UUID id, Beacon update) {
     final Beacon beacon = this.find(id);
-    if (beacon == null) throw new ResourceNotFoundException();
 
     final var patcher = beaconPatcherFactory
       .getModelPatcher()
