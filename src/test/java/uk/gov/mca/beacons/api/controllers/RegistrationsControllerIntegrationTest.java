@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.hamcrest.Matchers.hasItems;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +11,9 @@ import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -40,7 +44,7 @@ class RegistrationsControllerIntegrationTest {
   void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
     final UUID testAccountHolderId = createTestAccountHolder();
     final Object requestBody = toJson(
-      readFile(REGISTRATION_JSON_RESOURCE)
+      readRegistrationsJson()
         .replace(
           "replace-with-test-account-holder-id",
           testAccountHolderId.toString()
@@ -68,7 +72,7 @@ class RegistrationsControllerIntegrationTest {
   ) throws IOException {
     final UUID testAccountHolderId = createTestAccountHolder();
     final Object requestBody = toJson(
-      readFile(REGISTRATION_JSON_RESOURCE)
+      readRegistrationsJson()
         .replace(
           "replace-with-test-account-holder-id",
           testAccountHolderId.toString()
@@ -81,6 +85,167 @@ class RegistrationsControllerIntegrationTest {
       .isBadRequest()
       .expectHeader()
       .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+  }
+
+  @Nested
+  class UpdateRegistrations {
+
+    private String testAccountHolderId;
+    private String beaconId;
+
+    @BeforeEach
+    void init() throws Exception {
+      testAccountHolderId = createTestAccountHolder().toString();
+      final Object requestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.SINGLE_BEACON);
+
+      beaconId =
+        (String) makePostRequest(requestBody)
+          .expectBody(Map.class)
+          .returnResult()
+          .getResponseBody()
+          .get("id");
+    }
+
+    @Test
+    void shouldUpdateTheBeacon() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.manufacturer")
+        .isEqualTo("Ocean Sound")
+        .jsonPath("$.model")
+        .isEqualTo("EPIRB2")
+        .jsonPath("$.manufacturerSerialNumber")
+        .isEqualTo("1407312905")
+        .jsonPath("$.chkCode")
+        .isEqualTo("9480C")
+        .jsonPath("$.batteryExpiryDate")
+        .isEqualTo("2021-02-01")
+        .jsonPath("$.lastServicedDate")
+        .isEqualTo("2021-02-01");
+    }
+
+    @Test
+    void shouldNotUpdateNonEditableBeaconFields() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
+          .replace(
+            "replace-with-test-account-holder-id",
+            UUID.randomUUID().toString()
+          )
+          .replace("ABCDE4", "ABCDE5")
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.hexId")
+        .isEqualTo("1D0EA08C52FFBFF")
+        .jsonPath("$.accountHolderId")
+        .isEqualTo(testAccountHolderId)
+        .jsonPath("$.referenceNumber")
+        .isEqualTo("ABCDE4");
+    }
+
+    @Test
+    void shouldReplaceTheBeaconUses() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.uses.length()")
+        .isEqualTo(1)
+        .jsonPath("$.uses[0].environment")
+        .isEqualTo("AVIATION");
+    }
+
+    @Test
+    void shouldReplaceTheOwner() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.owner.fullName")
+        .isEqualTo("Nice-Admiral Sergio Nelson, 2nd Viscount Nelson")
+        .jsonPath("$.owner.email")
+        .isEqualTo("sergio@royalnavy.esp")
+        .jsonPath("$.owner.telephoneNumber")
+        .isEqualTo("02392 85666")
+        .jsonPath("$.owner.addressLine1")
+        .isEqualTo("2 The Soft")
+        .jsonPath("$.owner.townOrCity")
+        .isEqualTo("Granada")
+        .jsonPath("$.owner.county")
+        .isEqualTo("Espanol")
+        .jsonPath("$.owner.postcode")
+        .isEqualTo("ES10 2DG");
+    }
+
+    @Test
+    void shouldReplaceTheEmergencyContacts() throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.BEACON_TO_UPDATE);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.emergencyContacts[*].fullName")
+        .value(hasItems("Lord Hamilton", "Father Hamilton"))
+        .jsonPath("$.emergencyContacts[*].telephoneNumber")
+        .value(hasItems("02392 856622", "02392 856623"))
+        .jsonPath("$.emergencyContacts[*].alternativeTelephoneNumber")
+        .value(hasItems("02392 856623", "02392 856624"));
+    }
   }
 
   private WebTestClient.ResponseSpec makePostRequest(Object json) {
@@ -118,12 +283,13 @@ class RegistrationsControllerIntegrationTest {
     return accountHolderService.create(createAccountHolderRequest).getId();
   }
 
-  private String readFile(String filePath) throws IOException {
-    return Files.readString(Paths.get(filePath));
+  private String readRegistrationsJson() throws IOException {
+    return Files.readString(Paths.get(REGISTRATION_JSON_RESOURCE));
   }
 
   enum RegistrationUseCase {
     SINGLE_BEACON,
+    BEACON_TO_UPDATE,
     NO_HEX_ID,
     NO_USES,
     NO_EMERGENCY_CONTACTS,

@@ -12,4 +12,6 @@ public interface BeaconUseJpaRepository extends JpaRepository<BeaconUse, UUID> {
     value = "SELECT * FROM beacon_use WHERE beacon_id = ?1"
   )
   List<BeaconUse> findAllByBeaconId(UUID beaconId);
+
+  void deleteAllByBeaconId(UUID beaconId);
 }

@@ -9,4 +9,6 @@ public interface EmergencyContactGateway {
   void save(CreateEmergencyContactRequest request);
 
   List<Person> findAllByBeaconId(UUID beaconId);
+
+  void deleteAllByBeaconId(UUID beaconId);
 }

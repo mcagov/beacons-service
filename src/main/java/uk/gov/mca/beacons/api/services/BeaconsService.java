@@ -1,7 +1,6 @@
 package uk.gov.mca.beacons.api.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
-import uk.gov.mca.beacons.api.jpa.BeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.BeaconPersonJpaRepository;
-import uk.gov.mca.beacons.api.jpa.BeaconUseJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
@@ -68,16 +65,13 @@ public class BeaconsService {
       .withMapping(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate)
       .withMapping(Beacon::getBeaconStatus, Beacon::setBeaconStatus)
       .withMapping(Beacon::getChkCode, Beacon::setChkCode)
-      .withMapping(Beacon::getCreatedDate, Beacon::setCreatedDate)
-      .withMapping(Beacon::getHexId, Beacon::setHexId)
       .withMapping(Beacon::getLastServicedDate, Beacon::setLastServicedDate)
       .withMapping(Beacon::getManufacturer, Beacon::setManufacturer)
       .withMapping(
         Beacon::getManufacturerSerialNumber,
         Beacon::setManufacturerSerialNumber
       )
-      .withMapping(Beacon::getModel, Beacon::setModel)
-      .withMapping(Beacon::getReferenceNumber, Beacon::setReferenceNumber);
+      .withMapping(Beacon::getModel, Beacon::setModel);
 
     var updatedModel = patcher.patchModel(beacon, update);
 
