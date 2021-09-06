@@ -39,21 +39,22 @@ interface BeaconSearchRestRepository
     @Param("uses") String uses,
     Pageable page
   );
-  //  @RestResource(path = "find-all-by-account-holder", rel = "findAllBeacons")
-  //  @Query(
-  //    "SELECT b FROM BeaconSearchEntity b WHERE " +
-  //    "(" +
-  //    "COALESCE(LOWER(b.hexId), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-  //    "COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-  //    "COALESCE(LOWER(b.ownerName), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-  //    "COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :term, '%')) " +
-  //    ") " +
-  //    "AND (COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :status, '%'))) " +
-  //    "AND (COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :uses, '%')))"
-  //  )
-  //  Page<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
-  //    @Param("email") String email,
-  //    @Param("accountHolderId") UUID accountHolderId,
-  //    Pageable page
-  //  );
+
+  @RestResource(
+    path = "find-all-by-account-holder",
+    rel = "findAllBeaconsForAccountHolder"
+  )
+  @Query(
+    "SELECT b FROM BeaconSearchEntity b WHERE " +
+    "(" +
+    "COALESCE(LOWER(b.ownerEmail), '') = LOWER(:email) OR " +
+    "b.accountHolderId = :accountHolderId " +
+    ") " +
+    "AND (b.beaconStatus <> 'DELETED')"
+  )
+  Page<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
+    @Param("email") String email,
+    @Param("accountHolderId") UUID accountHolderId,
+    Pageable page
+  );
 }

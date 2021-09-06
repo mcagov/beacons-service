@@ -30,24 +30,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
     private static final String FIND_ALL_URI = "/beacon-search/search/find-all";
 
     @Test
-    void givenAValidRequest_shouldReturnAHttp200() {
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", "")
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .is2xxSuccessful();
-    }
-
-    @Test
     void shouldFindTheCreatedLegacyBeacon() throws Exception {
       final var randomHexId = UUID.randomUUID().toString();
       createLegacyBeacon(randomHexId);
@@ -188,15 +170,46 @@ class BeaconSearchRestRepositoryIntegrationTest {
     }
   }
 
+  @Nested
+  class GetBeaconSearchResultsForAccountHolder {
+
+    private static final String FIND_BY_ACCOUNT_HOLDER =
+      "/beacon-search/search/find-all-by-account-holder";
+
+    @Test
+    void shouldFindTheLegacyBeaconByEmail() throws Exception {
+      final var randomEmailAddress = UUID.randomUUID().toString();
+      createLegacyBeacon("1D0EA08C52FFBFF", randomEmailAddress);
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", randomEmailAddress)
+              .queryParam("accountHolderId", UUID.randomUUID().toString())
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+        .isEqualTo(randomEmailAddress);
+    }
+  }
+
   private String readFile(String filePath) throws Exception {
     return Files.readString(Paths.get(filePath));
   }
 
-  private void createLegacyBeacon(String hexId) throws Exception {
+  private void createLegacyBeacon(String hexId, String email) throws Exception {
     final var createLegacyBeaconRequest = readFile(
       "src/test/resources/fixtures/createLegacyBeaconRequest.json"
     )
-      .replace("9D0E1D1B8C00001", hexId);
+      .replace("9D0E1D1B8C00001", hexId)
+      .replace("ownerbeacon@beacons.com", email);
 
     webTestClient
       .post()
@@ -210,7 +223,15 @@ class BeaconSearchRestRepositoryIntegrationTest {
     scheduler.refreshView();
   }
 
+  private void createLegacyBeacon(String hexId) throws Exception {
+    createBeacon(hexId, "ownerbeacon@beacons.com");
+  }
+
   private void createBeacon(String hexId) throws Exception {
+    createBeacon(hexId, "nelson@royalnavy.mod.uk");
+  }
+
+  private void createBeacon(String hexId, String ownerEmail) throws Exception {
     final var createBeaconRequest = readFile(
       "src/test/resources/fixtures/createBeaconRequest.json"
     )
