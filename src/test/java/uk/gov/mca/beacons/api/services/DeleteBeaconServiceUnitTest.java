@@ -22,9 +22,7 @@ import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
-import uk.gov.mca.beacons.api.gateways.BeaconGateway;
-import uk.gov.mca.beacons.api.gateways.NoteGateway;
-import uk.gov.mca.beacons.api.gateways.UserGateway;
+import uk.gov.mca.beacons.api.gateways.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteBeaconServiceUnitTest {
@@ -40,6 +38,15 @@ class DeleteBeaconServiceUnitTest {
 
   @Mock
   private NoteGateway noteGateway;
+
+  @Mock
+  private OwnerGateway ownerGateway;
+
+  @Mock
+  private UseGateway useGateway;
+
+  @Mock
+  private EmergencyContactGateway emergencyContactGateway;
 
   @Captor
   private ArgumentCaptor<Note> noteCaptor;
@@ -58,6 +65,10 @@ class DeleteBeaconServiceUnitTest {
 
     deleteBeaconService.delete(request);
 
+    verify(ownerGateway, times(1)).deleteByBeaconId(request.getBeaconId());
+    verify(emergencyContactGateway, times(1))
+      .deleteAllByBeaconId(request.getBeaconId());
+    verify(useGateway, times(1)).deleteAllByBeaconId(request.getBeaconId());
     verify(beaconGateway, times(1)).delete(request.getBeaconId());
   }
 
