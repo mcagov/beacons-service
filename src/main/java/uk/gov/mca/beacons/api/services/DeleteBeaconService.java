@@ -12,7 +12,10 @@ import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
+import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
+import uk.gov.mca.beacons.api.gateways.OwnerGateway;
+import uk.gov.mca.beacons.api.gateways.UseGateway;
 import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @Service
@@ -25,21 +28,32 @@ public class DeleteBeaconService {
   private final BeaconGateway beaconGateway;
   private final UserGateway userGateway;
   private final NoteGateway noteGateway;
+  private final OwnerGateway ownerGateway;
+  private final EmergencyContactGateway emergencyContactGateway;
+  private final UseGateway useGateway;
 
   @Autowired
   public DeleteBeaconService(
     BeaconGateway beaconGateway,
     UserGateway userGateway,
-    NoteGateway noteGateway
+    NoteGateway noteGateway,
+    OwnerGateway ownerGateway,
+    EmergencyContactGateway emergencyContactGateway,
+    UseGateway useGateway
   ) {
     this.beaconGateway = beaconGateway;
     this.userGateway = userGateway;
     this.noteGateway = noteGateway;
+    this.ownerGateway = ownerGateway;
+    this.emergencyContactGateway = emergencyContactGateway;
+    this.useGateway = useGateway;
   }
 
   public void delete(DeleteBeaconRequestDTO request) {
     final User user = userGateway.getUserById(request.getUserId());
     if (user == null) throw new UserNotFoundException();
+
+    final var beaconIdToBeDeleted = request.getBeaconId();
 
     final Note note = Note
       .builder()
@@ -53,6 +67,16 @@ public class DeleteBeaconService {
       .build();
     noteGateway.create(note);
 
-    beaconGateway.delete(request.getBeaconId());
+    // delete beacon owner
+    ownerGateway.deleteByBeaconId(beaconIdToBeDeleted);
+
+    // delete emergency contacts
+    emergencyContactGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+
+    // delete beacon use
+    useGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+
+    // delete beacon entity
+    beaconGateway.delete(beaconIdToBeDeleted);
   }
 }
