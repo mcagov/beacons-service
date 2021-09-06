@@ -21,7 +21,7 @@ SELECT id,
        beacon_status,
        hex_id,
        data->'owner'->>'ownerName' as owner_name,
-       data->'owner'->>'ownerEmail' as owner_email,
+       data->'owner'->>'email' as owner_email,
        NULL as account_holder_id,
        (SELECT string_agg(uses->>'useType', ', ') FROM legacy_beacon AS lb, LATERAL jsonb_array_elements(data->'uses') AS uses WHERE lb.id = legacy_beacon.id GROUP BY id) AS use_activities
 FROM legacy_beacon;
