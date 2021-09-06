@@ -48,11 +48,8 @@ interface BeaconSearchRestRepository
   )
   @Query(
     "SELECT b FROM BeaconSearchEntity b WHERE " +
-    "(" +
-    "COALESCE(LOWER(b.ownerEmail), '') = LOWER(:email) OR " +
-    "b.accountHolderId = :accountHolderId " +
-    ") " +
-    "AND (b.beaconStatus <> 'DELETED')"
+    "(b.ownerEmail = :email AND b.beaconStatus = 'MIGRATED') OR " +
+    "(b.accountHolderId = :accountHolderId AND b.beaconStatus = 'NEW')"
   )
   List<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
     @Param("email") String email,
