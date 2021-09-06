@@ -1,4 +1,4 @@
--- Add extra columns onto materialized view for the online service's account holder page
+-- Add extra columns onto materialized view for enabling account holder to view beacons/legacy beacons
 
 DROP MATERIALIZED VIEW beacon_search_mat;
 
