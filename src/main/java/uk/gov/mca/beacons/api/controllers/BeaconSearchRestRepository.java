@@ -43,7 +43,7 @@ interface BeaconSearchRestRepository
   );
 
   @RestResource(
-    path = "find-all-by-account-holder",
+    path = "find-all-for-account-holder",
     rel = "findAllBeaconsForAccountHolder"
   )
   @Query(
