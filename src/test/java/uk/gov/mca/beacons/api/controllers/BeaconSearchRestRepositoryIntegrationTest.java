@@ -193,7 +193,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
         )
         .exchange()
         .expectBody()
-        .jsonPath("page.totalElements")
+        .jsonPath("_embedded.beaconSearch.length()")
         .isEqualTo(1)
         .jsonPath("_embedded.beaconSearch[0].ownerEmail")
         .isEqualTo(randomEmailAddress);
