@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +54,7 @@ interface BeaconSearchRestRepository
     ") " +
     "AND (b.beaconStatus <> 'DELETED')"
   )
-  Page<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
+  List<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
     @Param("email") String email,
     @Param("accountHolderId") UUID accountHolderId,
     Sort sort
