@@ -57,7 +57,7 @@ public class DeleteBeaconService {
 
     final Note note = Note
       .builder()
-      .beaconId(request.getBeaconId())
+      .beaconId(beaconIdToBeDeleted)
       .email(user.getEmail())
       .fullName(user.getFullName())
       .userId(request.getUserId())
