@@ -251,7 +251,9 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("_embedded.beaconSearch.length()")
         .isEqualTo(1)
         .jsonPath("_embedded.beaconSearch[0].accountHolderId")
-        .isEqualTo(accountHolderId);
+        .isEqualTo(accountHolderId)
+        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+        .isEqualTo("nelson@royalnavy.mod.uk");
     }
   }
 
