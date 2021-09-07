@@ -17,6 +17,7 @@ public class BeaconSearchEntity {
   @Id
   private UUID id;
 
+  private LocalDateTime createdDate;
   private LocalDateTime lastModifiedDate;
   private String beaconStatus;
   private String hexId;
