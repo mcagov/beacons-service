@@ -21,5 +21,7 @@ public class BeaconSearchEntity {
   private String beaconStatus;
   private String hexId;
   private String ownerName;
+  private String ownerEmail;
+  private UUID accountHolderId;
   private String useActivities;
 }
