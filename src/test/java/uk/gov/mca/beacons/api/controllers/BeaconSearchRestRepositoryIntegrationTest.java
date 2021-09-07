@@ -176,7 +176,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
   class GetBeaconSearchResultsForAccountHolder {
 
     private static final String FIND_BY_ACCOUNT_HOLDER =
-      "/beacon-search/search/find-all-for-account-holder";
+      "/beacon-search/search/find-all-by-account-holder-and-email";
 
     @Test
     void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
