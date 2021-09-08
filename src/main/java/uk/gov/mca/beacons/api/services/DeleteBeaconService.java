@@ -75,8 +75,6 @@ public class DeleteBeaconService {
     final Note note = Note
       .builder()
       .beaconId(beaconIdToBeDeleted)
-      .email(user.getEmail())
-      .fullName(user.getFullName())
       .userId(request.getUserId())
       .type(NoteType.RECORD_HISTORY)
       .text(format(TEMPLATE_REASON_TEXT, request.getReason()))

@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -115,8 +116,8 @@ class DeleteBeaconServiceUnitTest {
     verify(noteGateway).create(noteCaptor.capture());
     final var note = noteCaptor.getValue();
     assertThat(note.getBeaconId(), is(beaconId));
-    assertThat(note.getEmail(), is("beacons@beacons.com"));
-    assertThat(note.getFullName(), is("Beacons R Us"));
+    assertThat(note.getEmail(), is(nullValue()));
+    assertThat(note.getFullName(), is(nullValue()));
     assertThat(note.getUserId(), is(accountHolderId));
     assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
     assertThat(
