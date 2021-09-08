@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Transactional
 @Slf4j
-public class BeaconSearchScheduler {
+public class LegacyBeaconSearchScheduler {
 
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  public BeaconSearchScheduler(JdbcTemplate jdbcTemplate) {
+  public LegacyBeaconSearchScheduler(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 

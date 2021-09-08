@@ -14,7 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.services.scheduled.BeaconSearchScheduler;
+import uk.gov.mca.beacons.api.services.scheduled.LegacyBeaconSearchScheduler;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -24,7 +24,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
   private WebTestClient webTestClient;
 
   @Autowired
-  private BeaconSearchScheduler scheduler;
+  private LegacyBeaconSearchScheduler scheduler;
 
   @Nested
   class GetBeaconSearchResults {
