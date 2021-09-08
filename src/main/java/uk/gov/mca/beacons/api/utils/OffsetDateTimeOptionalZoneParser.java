@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
-public class OffsetDateTimeParser {
+public class OffsetDateTimeOptionalZoneParser {
 
   private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
     .parseLenient()

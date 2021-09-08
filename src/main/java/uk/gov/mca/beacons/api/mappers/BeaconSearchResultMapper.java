@@ -2,15 +2,13 @@ package uk.gov.mca.beacons.api.mappers;
 
 import static uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO.Attributes;
 
-import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
-import uk.gov.mca.beacons.api.utils.OffsetDateTimeParser;
+import uk.gov.mca.beacons.api.utils.OffsetDateTimeOptionalZoneParser;
 
 @Service
 public class BeaconSearchResultMapper {
@@ -46,7 +44,7 @@ public class BeaconSearchResultMapper {
     final BeaconSearchResultDTO.Attributes attributes = Attributes
       .builder()
       .lastModifiedDate(
-        OffsetDateTimeParser.parse(
+        OffsetDateTimeOptionalZoneParser.parse(
           (String) domain.getBeacon().get("lastModifiedDate")
         )
       )

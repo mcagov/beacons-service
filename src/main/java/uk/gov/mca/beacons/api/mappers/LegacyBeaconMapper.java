@@ -9,7 +9,7 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.LegacyBeaconDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
-import uk.gov.mca.beacons.api.utils.OffsetDateTimeParser;
+import uk.gov.mca.beacons.api.utils.OffsetDateTimeOptionalZoneParser;
 
 @Service
 public class LegacyBeaconMapper {
@@ -59,12 +59,12 @@ public class LegacyBeaconMapper {
     final var ownerEmail = (String) beacon.getOwner().get("email");
     legacyBeaconEntity.setOwnerEmail(ownerEmail);
 
-    final var createdDate = OffsetDateTimeParser.parse(
+    final var createdDate = OffsetDateTimeOptionalZoneParser.parse(
       (String) beacon.getBeacon().get("createdDate")
     );
     legacyBeaconEntity.setCreatedDate(createdDate);
 
-    final var lastModifiedDate = OffsetDateTimeParser.parse(
+    final var lastModifiedDate = OffsetDateTimeOptionalZoneParser.parse(
       (String) beacon.getBeacon().get("lastModifiedDate")
     );
     legacyBeaconEntity.setLastModifiedDate(lastModifiedDate);
