@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.services;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,22 @@ public class DeleteBeaconService {
     this.useGateway = useGateway;
   }
 
+  public void deleteOwnerByBeaconId(UUID beaconIdToBeDeleted) {
+    ownerGateway.deleteByBeaconId(beaconIdToBeDeleted);
+  }
+
+  public void deleteEmergencyContactByBeaconId(UUID beaconIdToBeDeleted) {
+    emergencyContactGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+  }
+
+  public void deleteUseByBeaconId(UUID beaconIdToBeDeleted) {
+    useGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+  }
+
+  public void deleteBeaconByBeaconId(UUID beaconIdToBeDeleted) {
+    beaconGateway.delete(beaconIdToBeDeleted);
+  }
+
   public void delete(DeleteBeaconRequestDTO request) {
     final User user = userGateway.getUserById(request.getUserId());
     if (user == null) throw new UserNotFoundException();
@@ -67,16 +84,12 @@ public class DeleteBeaconService {
       .build();
     noteGateway.create(note);
 
-    // delete beacon owner
-    ownerGateway.deleteByBeaconId(beaconIdToBeDeleted);
+    deleteOwnerByBeaconId(beaconIdToBeDeleted);
 
-    // delete emergency contacts
-    emergencyContactGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+    deleteEmergencyContactByBeaconId(beaconIdToBeDeleted);
 
-    // delete beacon use
-    useGateway.deleteAllByBeaconId(beaconIdToBeDeleted);
+    deleteUseByBeaconId(beaconIdToBeDeleted);
 
-    // delete beacon entity
-    beaconGateway.delete(beaconIdToBeDeleted);
+    deleteBeaconByBeaconId(beaconIdToBeDeleted);
   }
 }
