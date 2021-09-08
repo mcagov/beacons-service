@@ -10,7 +10,7 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
-import uk.gov.mca.beacons.api.utils.DateTimeParser;
+import uk.gov.mca.beacons.api.utils.OffsetDateTimeParser;
 
 @Service
 public class BeaconSearchResultMapper {
@@ -46,7 +46,7 @@ public class BeaconSearchResultMapper {
     final BeaconSearchResultDTO.Attributes attributes = Attributes
       .builder()
       .lastModifiedDate(
-        DateTimeParser.parse(
+        OffsetDateTimeParser.parse(
           (String) domain.getBeacon().get("lastModifiedDate")
         )
       )
