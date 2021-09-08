@@ -20,7 +20,7 @@ public class LegacyBeaconSearchScheduler {
     this.jdbcTemplate = jdbcTemplate;
   }
 
-  @Scheduled(fixedRateString = "${beacons.scheduled.beacon-search-view}")
+  @Scheduled(fixedRateString = "${beacons.scheduled.legacy-beacon-search-view}")
   public void refreshView() {
     log.debug("Refreshing beacon search view");
 
