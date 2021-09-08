@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,12 +36,22 @@ class ModelPatcherTest {
   @Test
   void shouldMapUpdatedValuesWithoutChangingTheRest() {
     var oldModel = new FakeModel();
-    oldModel.setFirstDate(LocalDateTime.of(1983, 3, 13, 13, 13, 0));
+    oldModel.setFirstDate(
+      OffsetDateTime.of(
+        LocalDateTime.of(1983, 3, 13, 13, 13, 0),
+        ZoneOffset.ofHours(0)
+      )
+    );
     oldModel.setSecondString("The A String");
     oldModel.setThirdInt(3);
     oldModel.setFirstBoolean(false);
     var updateModel = new FakeModel();
-    updateModel.setFirstDate(LocalDateTime.of(1992, 11, 8, 1, 2, 0));
+    updateModel.setFirstDate(
+      OffsetDateTime.of(
+        LocalDateTime.of(1992, 11, 8, 1, 2, 0),
+        ZoneOffset.ofHours(0)
+      )
+    );
     updateModel.setSecondString("The B String");
     updateModel.setThirdInt(33);
     updateModel.setFirstBoolean(true);
@@ -62,12 +74,22 @@ class ModelPatcherTest {
   @Test
   void shouldMapNewValuesWithoutChangingTheExisting() {
     var oldModel = new FakeModel();
-    oldModel.setFirstDate(LocalDateTime.of(1983, 3, 13, 13, 13, 0));
+    oldModel.setFirstDate(
+      OffsetDateTime.of(
+        LocalDateTime.of(1983, 3, 13, 13, 13, 0),
+        ZoneOffset.ofHours(0)
+      )
+    );
     oldModel.setSecondString("The A String");
     oldModel.setThirdInt(3);
     oldModel.setFirstBoolean(false);
     var updateModel = new FakeModel();
-    updateModel.setSecondDate(LocalDateTime.of(1992, 11, 8, 1, 2, 0));
+    updateModel.setSecondDate(
+      OffsetDateTime.of(
+        LocalDateTime.of(1992, 11, 8, 1, 2, 0),
+        ZoneOffset.ofHours(0)
+      )
+    );
     updateModel.setThirdString("The B String");
     updateModel.setFirstInt(11);
     updateModel.setSecondBoolean(true);
@@ -139,27 +161,27 @@ class ModelPatcherTest {
       this.thirdString = thirdString;
     }
 
-    public LocalDateTime getFirstDate() {
+    public OffsetDateTime getFirstDate() {
       return firstDate;
     }
 
-    public void setFirstDate(LocalDateTime firstDate) {
+    public void setFirstDate(OffsetDateTime firstDate) {
       this.firstDate = firstDate;
     }
 
-    public LocalDateTime getSecondDate() {
+    public OffsetDateTime getSecondDate() {
       return secondDate;
     }
 
-    public void setSecondDate(LocalDateTime secondDate) {
+    public void setSecondDate(OffsetDateTime secondDate) {
       this.secondDate = secondDate;
     }
 
-    public LocalDateTime getThirdDate() {
+    public OffsetDateTime getThirdDate() {
       return thirdDate;
     }
 
-    public void setThirdDate(LocalDateTime thirdDate) {
+    public void setThirdDate(OffsetDateTime thirdDate) {
       this.thirdDate = thirdDate;
     }
 
@@ -189,9 +211,9 @@ class ModelPatcherTest {
 
     private String secondString;
     private String thirdString;
-    private LocalDateTime firstDate;
-    private LocalDateTime secondDate;
-    private LocalDateTime thirdDate;
+    private OffsetDateTime firstDate;
+    private OffsetDateTime secondDate;
+    private OffsetDateTime thirdDate;
     private int firstInt;
     private int secondInt;
     private int thirdInt;

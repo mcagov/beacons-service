@@ -3,7 +3,7 @@ package uk.gov.mca.beacons.api.dto;
 import static uk.gov.mca.beacons.api.dto.BeaconPersonDTO.Attributes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,10 +33,10 @@ public class BeaconPersonDTO extends DomainDTO<Attributes> {
     private String email;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastModifiedDate;
+    private OffsetDateTime lastModifiedDate;
 
     @NotNull(message = "Telephone number must not be null")
     private String telephoneNumber;

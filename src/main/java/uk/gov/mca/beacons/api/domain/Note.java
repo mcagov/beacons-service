@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.domain;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class Note {
   private UUID beaconId;
   private String text;
   private NoteType type;
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
   private UUID userId;
   private String fullName;
   private String email;

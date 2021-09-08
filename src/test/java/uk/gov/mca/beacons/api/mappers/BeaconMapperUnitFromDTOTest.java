@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -71,7 +73,12 @@ class BeaconMapperUnitFromDTOTest {
     assertThat(beacon.getBeaconStatus(), is(BeaconStatus.NEW));
     assertThat(
       beacon.getCreatedDate(),
-      is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
+      is(
+        OffsetDateTime.of(
+          LocalDateTime.of(2020, 2, 1, 0, 0, 0),
+          ZoneOffset.ofHours(0)
+        )
+      )
     );
     assertThat(beacon.getBatteryExpiryDate(), is(LocalDate.of(2022, 2, 1)));
     assertThat(beacon.getLastServicedDate(), is(LocalDate.of(2019, 2, 1)));

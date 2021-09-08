@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,9 +40,9 @@ public class Person {
   @Enumerated(EnumType.STRING)
   private PersonType personType;
 
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
 
-  private LocalDateTime lastModifiedDate;
+  private OffsetDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;

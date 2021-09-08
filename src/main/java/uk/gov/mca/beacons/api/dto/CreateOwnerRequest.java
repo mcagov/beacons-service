@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +13,8 @@ public class CreateOwnerRequest {
 
   private UUID beaconId;
   private String fullName;
-  private LocalDateTime createdDate;
-  private LocalDateTime lastModifiedDate;
+  private OffsetDateTime createdDate;
+  private OffsetDateTime lastModifiedDate;
   private String telephoneNumber;
   private String telephoneNumber2;
   private String alternativeTelephoneNumber;

@@ -2,7 +2,7 @@ package uk.gov.mca.beacons.api.mappers;
 
 import static uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO.Attributes;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.utils.DateTimeParser;
 
 @Service
 public class BeaconSearchResultMapper {
@@ -45,7 +46,9 @@ public class BeaconSearchResultMapper {
     final BeaconSearchResultDTO.Attributes attributes = Attributes
       .builder()
       .lastModifiedDate(
-        LocalDateTime.parse((String) domain.getBeacon().get("lastModifiedDate"))
+        DateTimeParser.parse(
+          (String) domain.getBeacon().get("lastModifiedDate")
+        )
       )
       .beaconStatus(domain.getBeaconStatus())
       .hexId((String) domain.getBeacon().get("hexId"))

@@ -6,7 +6,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.utils.DateTimeParser;
 
 @ExtendWith(MockitoExtension.class)
 class LegacyBeaconMapperUnitTest {
@@ -97,7 +98,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getCreatedDate(),
-        is(LocalDateTime.parse("2020-08-01T21:33:13"))
+        is(DateTimeParser.parse("2020-08-01T21:33:13"))
       );
     }
 
@@ -123,7 +124,7 @@ class LegacyBeaconMapperUnitTest {
 
       assertThat(
         result.getLastModifiedDate(),
-        is(LocalDateTime.parse("2021-08-01T21:33:13"))
+        is(DateTimeParser.parse("2021-08-01T21:33:13"))
       );
     }
 

@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -33,7 +33,7 @@ public class NoteEntity {
   @Enumerated(EnumType.STRING)
   private NoteType type;
 
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
 
   private UUID userId;
 
