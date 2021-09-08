@@ -25,7 +25,7 @@ public class BeaconSearchScheduler {
     log.debug("Refreshing beacon search view");
 
     final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-      .withFunctionName("refresh_beacon_search_view_schedule");
+      .withFunctionName("refresh_legacy_beacon_search_schedule");
     simpleJdbcCall.execute();
     log.debug("Finished refreshing beacon search view");
   }

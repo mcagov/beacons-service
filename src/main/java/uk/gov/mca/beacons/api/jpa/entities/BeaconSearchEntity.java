@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "beacon_search_mat")
+@Table(name = "beacon_search")
 @Getter
 @Setter
 public class BeaconSearchEntity {

@@ -306,8 +306,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated();
-
-    scheduler.refreshView();
   }
 
   private String createAccountHolder(String testAuthId) throws Exception {
