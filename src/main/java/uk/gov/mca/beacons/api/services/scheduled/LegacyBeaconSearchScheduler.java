@@ -11,21 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Transactional
 @Slf4j
-public class BeaconSearchScheduler {
+public class LegacyBeaconSearchScheduler {
 
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  public BeaconSearchScheduler(JdbcTemplate jdbcTemplate) {
+  public LegacyBeaconSearchScheduler(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
-  @Scheduled(fixedRateString = "${beacons.scheduled.beacon-search-view}")
+  @Scheduled(fixedRateString = "${beacons.scheduled.legacy-beacon-search-view}")
   public void refreshView() {
     log.debug("Refreshing beacon search view");
 
     final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-      .withFunctionName("refresh_beacon_search_view_schedule");
+      .withFunctionName("refresh_legacy_beacon_search_schedule");
     simpleJdbcCall.execute();
     log.debug("Finished refreshing beacon search view");
   }

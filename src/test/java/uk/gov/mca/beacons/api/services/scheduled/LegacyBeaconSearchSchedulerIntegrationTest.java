@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class BeaconSearchSchedulerIntegrationTest {
+class LegacyBeaconSearchSchedulerIntegrationTest {
 
   @Autowired
-  private BeaconSearchScheduler scheduler;
+  private LegacyBeaconSearchScheduler scheduler;
 
   @Test
   void shouldRefreshTheView() {

@@ -1,8 +1,10 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+import java.util.function.Function;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.services.scheduled.BeaconSearchScheduler;
+import uk.gov.mca.beacons.api.services.scheduled.LegacyBeaconSearchScheduler;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -22,30 +24,12 @@ class BeaconSearchRestRepositoryIntegrationTest {
   private WebTestClient webTestClient;
 
   @Autowired
-  private BeaconSearchScheduler scheduler;
+  private LegacyBeaconSearchScheduler scheduler;
 
   @Nested
   class GetBeaconSearchResults {
 
     private static final String FIND_ALL_URI = "/beacon-search/search/find-all";
-
-    @Test
-    void givenAValidRequest_shouldReturnAHttp200() {
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", "")
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .is2xxSuccessful();
-    }
 
     @Test
     void shouldFindTheCreatedLegacyBeacon() throws Exception {
@@ -188,15 +172,100 @@ class BeaconSearchRestRepositoryIntegrationTest {
     }
   }
 
+  @Nested
+  class GetBeaconSearchResultsForAccountHolder {
+
+    private static final String FIND_BY_ACCOUNT_HOLDER =
+      "/beacon-search/search/find-all-by-account-holder-and-email";
+
+    @Test
+    void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
+      createBeacon(
+        request -> request.replace("\"account-holder-id-placeholder\"", "null")
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", "")
+              .queryParam("accountHolderId", "")
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beaconSearch.length()")
+        .isEqualTo(0);
+    }
+
+    @Test
+    void shouldFindTheLegacyBeaconByEmail() throws Exception {
+      final var randomEmailAddress = UUID.randomUUID().toString();
+      createLegacyBeacon(
+        request ->
+          request.replace("ownerbeacon@beacons.com", randomEmailAddress)
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", randomEmailAddress)
+              .queryParam("accountHolderId", UUID.randomUUID().toString())
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beaconSearch.length()")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+        .isEqualTo(randomEmailAddress);
+    }
+
+    @Test
+    void shouldFindTheBeaconByAccountHolderId() throws Exception {
+      final var accountHolderId = createAccountHolder(
+        UUID.randomUUID().toString()
+      );
+      createBeacon(
+        request ->
+          request.replace("account-holder-id-placeholder", accountHolderId)
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", "")
+              .queryParam("accountHolderId", accountHolderId)
+              .build()
+        )
+        .exchange()
+        .expectBody()
+        .jsonPath("_embedded.beaconSearch.length()")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].accountHolderId")
+        .isEqualTo(accountHolderId)
+        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+        .isEqualTo("nelson@royalnavy.mod.uk");
+    }
+  }
+
   private String readFile(String filePath) throws Exception {
     return Files.readString(Paths.get(filePath));
   }
 
-  private void createLegacyBeacon(String hexId) throws Exception {
-    final var createLegacyBeaconRequest = readFile(
-      "src/test/resources/fixtures/createLegacyBeaconRequest.json"
-    )
-      .replace("9D0E1D1B8C00001", hexId);
+  private void createLegacyBeacon(Function<String, String> mapRequestObject)
+    throws Exception {
+    final var createLegacyBeaconRequest = mapRequestObject.apply(
+      readFile("src/test/resources/fixtures/createLegacyBeaconRequest.json")
+    );
 
     webTestClient
       .post()
@@ -210,12 +279,24 @@ class BeaconSearchRestRepositoryIntegrationTest {
     scheduler.refreshView();
   }
 
+  private void createLegacyBeacon(String hexId) throws Exception {
+    createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
+  }
+
   private void createBeacon(String hexId) throws Exception {
-    final var createBeaconRequest = readFile(
-      "src/test/resources/fixtures/createBeaconRequest.json"
-    )
-      .replace("1D0EA08C52FFBFF", hexId)
-      .replace("\"account-holder-id-placeholder\"", "null");
+    createBeacon(
+      request ->
+        request
+          .replace("1D0EA08C52FFBFF", hexId)
+          .replace("\"account-holder-id-placeholder\"", "null")
+    );
+  }
+
+  private void createBeacon(Function<String, String> mapRequestObject)
+    throws Exception {
+    final var createBeaconRequest = mapRequestObject.apply(
+      readFile("src/test/resources/fixtures/createBeaconRequest.json")
+    );
 
     webTestClient
       .post()
@@ -225,7 +306,25 @@ class BeaconSearchRestRepositoryIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated();
+  }
 
-    scheduler.refreshView();
+  private String createAccountHolder(String testAuthId) throws Exception {
+    final String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+
+    return webTestClient
+      .post()
+      .uri("/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody(ObjectNode.class)
+      .returnResult()
+      .getResponseBody()
+      .get("data")
+      .get("id")
+      .textValue();
   }
 }

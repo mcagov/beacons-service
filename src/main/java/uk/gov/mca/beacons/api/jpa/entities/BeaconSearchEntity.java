@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "beacon_search_mat")
+@Table(name = "beacon_search")
 @Getter
 @Setter
 public class BeaconSearchEntity {
@@ -17,9 +17,12 @@ public class BeaconSearchEntity {
   @Id
   private UUID id;
 
+  private LocalDateTime createdDate;
   private LocalDateTime lastModifiedDate;
   private String beaconStatus;
   private String hexId;
   private String ownerName;
+  private String ownerEmail;
+  private UUID accountHolderId;
   private String useActivities;
 }

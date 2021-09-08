@@ -1,8 +1,10 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,5 +40,20 @@ interface BeaconSearchRestRepository
     @Param("status") String status,
     @Param("uses") String uses,
     Pageable page
+  );
+
+  @RestResource(
+    path = "find-all-by-account-holder-and-email",
+    rel = "findAllBeaconsForAccountHolder"
+  )
+  @Query(
+    "SELECT b FROM BeaconSearchEntity b WHERE " +
+    "(b.ownerEmail = :email AND b.beaconStatus = 'MIGRATED') OR " +
+    "(b.accountHolderId = :accountHolderId AND b.beaconStatus = 'NEW')"
+  )
+  List<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
+    @Param("email") String email,
+    @Param("accountHolderId") UUID accountHolderId,
+    Sort sort
   );
 }
