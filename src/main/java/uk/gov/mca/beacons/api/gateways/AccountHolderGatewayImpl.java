@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +107,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   public AccountHolder create(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
-    final var now = LocalDateTime.now(clock);
+    final var now = OffsetDateTime.now(clock);
     final var personId = UUID.randomUUID();
     final SqlParameterSource personParamMap = new MapSqlParameterSource()
       .addValue("id", personId)
@@ -254,7 +254,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
         "alternativeTelephoneNumber",
         updatedModel.getAlternativeTelephoneNumber()
       )
-      .addValue("lastModifiedDate", LocalDateTime.now(clock))
+      .addValue("lastModifiedDate", OffsetDateTime.now(clock))
       .addValue("addressLine1", updatedModel.getAddressLine1())
       .addValue("addressLine2", updatedModel.getAddressLine2())
       .addValue("addressLine3", updatedModel.getAddressLine3())

@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -128,5 +128,5 @@ public class BeaconUse {
   private String moreDetails;
 
   @CreatedDate
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
 }

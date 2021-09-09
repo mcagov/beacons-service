@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +51,12 @@ class BeaconMapperUnitToDTOTest {
     domainBeacon.setManufacturerSerialNumber("3");
     domainBeacon.setBeaconStatus(BeaconStatus.NEW);
     domainBeacon.setReferenceNumber("123456");
-    domainBeacon.setCreatedDate(LocalDateTime.of(2020, 2, 1, 0, 0, 0));
+    domainBeacon.setCreatedDate(
+      OffsetDateTime.of(
+        LocalDateTime.of(2020, 2, 1, 0, 0, 0),
+        ZoneOffset.ofHours(0)
+      )
+    );
     domainBeacon.setBatteryExpiryDate(LocalDate.of(2022, 2, 1));
     domainBeacon.setLastServicedDate(LocalDate.of(2019, 2, 1));
 
@@ -65,7 +72,12 @@ class BeaconMapperUnitToDTOTest {
     assertThat(dtoAttributes.get("referenceNumber"), is("123456"));
     assertThat(
       dtoAttributes.get("createdDate"),
-      is(LocalDateTime.of(2020, 2, 1, 0, 0, 0))
+      is(
+        OffsetDateTime.of(
+          LocalDateTime.of(2020, 2, 1, 0, 0, 0),
+          ZoneOffset.ofHours(0)
+        )
+      )
     );
     assertThat(
       dtoAttributes.get("batteryExpiryDate"),

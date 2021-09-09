@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -91,8 +91,8 @@ public class AccountHolderGatewayImplTest {
     assertThat(sqlParams.get("townOrCity"), is("London"));
     assertThat(sqlParams.get("postcode"), is("V1N6 4LO"));
     assertThat(sqlParams.get("county"), is("England"));
-    var modifiedDate = (LocalDateTime) sqlParams.get("lastModifiedDate");
-    assertThat(modifiedDate, is(equalTo(LocalDateTime.now(fixedClock))));
+    var modifiedDate = (OffsetDateTime) sqlParams.get("lastModifiedDate");
+    assertThat(modifiedDate, is(equalTo(OffsetDateTime.now(fixedClock))));
   }
 
   @Test

@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,8 +17,8 @@ public class BeaconSearchEntity {
   @Id
   private UUID id;
 
-  private LocalDateTime createdDate;
-  private LocalDateTime lastModifiedDate;
+  private OffsetDateTime createdDate;
+  private OffsetDateTime lastModifiedDate;
   private String beaconStatus;
   private String hexId;
   private String ownerName;

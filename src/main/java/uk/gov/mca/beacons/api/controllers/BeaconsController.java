@@ -1,11 +1,8 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
-import uk.gov.mca.beacons.api.dto.BeaconSearchResultDTO;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
@@ -30,7 +26,6 @@ import uk.gov.mca.beacons.api.mappers.BeaconsResponseFactory;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.BeaconsService;
 import uk.gov.mca.beacons.api.services.DeleteBeaconService;
-import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController

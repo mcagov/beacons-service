@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -35,9 +35,9 @@ public class LegacyBeaconEntity {
 
   private String ownerEmail;
 
-  private LocalDateTime createdDate;
+  private OffsetDateTime createdDate;
 
-  private LocalDateTime lastModifiedDate;
+  private OffsetDateTime lastModifiedDate;
 
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;

@@ -54,7 +54,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(randomHexId)
         .jsonPath("_embedded.beaconSearch[0].lastModifiedDate")
-        .isEqualTo("2004-10-13T00:00:00")
+        .isEqualTo("2004-10-13T00:00:00Z")
         .jsonPath("_embedded.beaconSearch[0].beaconStatus")
         .isEqualTo("MIGRATED")
         .jsonPath("_embedded.beaconSearch[0].ownerName")

@@ -1,6 +1,6 @@
 package uk.gov.mca.beacons.api.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +12,6 @@ import lombok.Setter;
 public class CreateEmergencyContactRequest {
 
   private UUID beaconId;
-  private LocalDateTime createdDate;
-  private LocalDateTime lastModifiedDate;
   private String fullName;
   private String telephoneNumber;
   private String alternativeTelephoneNumber;

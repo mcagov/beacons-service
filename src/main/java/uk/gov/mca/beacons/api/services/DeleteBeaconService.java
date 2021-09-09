@@ -1,7 +1,7 @@
 package uk.gov.mca.beacons.api.services;
 
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import static java.time.OffsetDateTime.now;
 
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;

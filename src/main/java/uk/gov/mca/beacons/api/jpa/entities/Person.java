@@ -1,20 +1,25 @@
 package uk.gov.mca.beacons.api.jpa.entities;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.mca.beacons.api.domain.PersonType;
 
 @Entity(name = "person")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Person {
 
   @Id
@@ -40,9 +45,11 @@ public class Person {
   @Enumerated(EnumType.STRING)
   private PersonType personType;
 
-  private LocalDateTime createdDate;
+  @CreatedDate
+  private OffsetDateTime createdDate;
 
-  private LocalDateTime lastModifiedDate;
+  @LastModifiedDate
+  private OffsetDateTime lastModifiedDate;
 
   @Column(name = "address_line_1")
   private String addressLine1;
