@@ -7,6 +7,8 @@ import static org.hamcrest.core.IsNull.nullValue;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -109,105 +111,11 @@ class ModelPatcherTest {
     assertThat(result.thirdBoolean, is(nullValue()));
   }
 
+  @Getter
+  @Setter
   class FakeModel {
 
     private String firstString;
-
-    public String getFirstString() {
-      return firstString;
-    }
-
-    public Boolean getSecondBoolean() {
-      return secondBoolean;
-    }
-
-    public void setSecondBoolean(Boolean secondBoolean) {
-      this.secondBoolean = secondBoolean;
-    }
-
-    public Boolean getFirstBoolean() {
-      return firstBoolean;
-    }
-
-    public void setFirstBoolean(Boolean firstBoolean) {
-      this.firstBoolean = firstBoolean;
-    }
-
-    public Boolean getThirdBoolean() {
-      return thirdBoolean;
-    }
-
-    public void setThirdBoolean(Boolean thirdBoolean) {
-      this.thirdBoolean = thirdBoolean;
-    }
-
-    public void setFirstString(String firstString) {
-      this.firstString = firstString;
-    }
-
-    public String getSecondString() {
-      return secondString;
-    }
-
-    public void setSecondString(String secondString) {
-      this.secondString = secondString;
-    }
-
-    public String getThirdString() {
-      return thirdString;
-    }
-
-    public void setThirdString(String thirdString) {
-      this.thirdString = thirdString;
-    }
-
-    public OffsetDateTime getFirstDate() {
-      return firstDate;
-    }
-
-    public void setFirstDate(OffsetDateTime firstDate) {
-      this.firstDate = firstDate;
-    }
-
-    public OffsetDateTime getSecondDate() {
-      return secondDate;
-    }
-
-    public void setSecondDate(OffsetDateTime secondDate) {
-      this.secondDate = secondDate;
-    }
-
-    public OffsetDateTime getThirdDate() {
-      return thirdDate;
-    }
-
-    public void setThirdDate(OffsetDateTime thirdDate) {
-      this.thirdDate = thirdDate;
-    }
-
-    public int getFirstInt() {
-      return firstInt;
-    }
-
-    public void setFirstInt(int firstInt) {
-      this.firstInt = firstInt;
-    }
-
-    public int getSecondInt() {
-      return secondInt;
-    }
-
-    public void setSecondInt(int secondInt) {
-      this.secondInt = secondInt;
-    }
-
-    public int getThirdInt() {
-      return thirdInt;
-    }
-
-    public void setThirdInt(int thindInt) {
-      this.thirdInt = thindInt;
-    }
 
     private String secondString;
     private String thirdString;
