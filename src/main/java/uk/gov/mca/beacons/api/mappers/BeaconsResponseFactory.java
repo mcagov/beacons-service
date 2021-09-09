@@ -126,7 +126,10 @@ public class BeaconsResponseFactory {
     final var beaconDTO = beaconMapper.toDTO(beacon);
     if (useDTOs.size() > 0) {
       final var useRelationshipDTO = useRelationshipMapper.toDTO(
-              useDTOs.stream().map(dto -> (DomainDTO) dto).collect(Collectors.toList())
+        useDTOs
+          .stream()
+          .map(dto -> (DomainDTO) dto)
+          .collect(Collectors.toList())
       );
       beaconDTO.addRelationship("uses", useRelationshipDTO);
     }
@@ -136,17 +139,17 @@ public class BeaconsResponseFactory {
     }
     if (emergencyContactDTOs.size() > 0) {
       final var emergencyContactRelationshipDTO = personRelationshipMapper.toDTO(
-              emergencyContactDTOs
-                      .stream()
-                      .map(dto -> (DomainDTO) dto)
-                      .collect(Collectors.toList())
+        emergencyContactDTOs
+          .stream()
+          .map(dto -> (DomainDTO) dto)
+          .collect(Collectors.toList())
       );
       beaconDTO.addRelationship(
-              "emergencyContacts",
-              emergencyContactRelationshipDTO
+        "emergencyContacts",
+        emergencyContactRelationshipDTO
       );
     }
-    
+
     return beaconDTO;
   }
 }
