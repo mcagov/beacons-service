@@ -1,10 +1,12 @@
 package uk.gov.mca.beacons.api.controllers;
 
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -92,6 +94,7 @@ class RegistrationsControllerIntegrationTest {
 
     private String testAccountHolderId;
     private String beaconId;
+    private String lastModifiedDate;
 
     @BeforeEach
     void init() throws Exception {
@@ -102,12 +105,13 @@ class RegistrationsControllerIntegrationTest {
       )
         .get(RegistrationUseCase.SINGLE_BEACON);
 
-      beaconId =
-        (String) makePostRequest(requestBody)
-          .expectBody(Map.class)
-          .returnResult()
-          .getResponseBody()
-          .get("id");
+      final var responseBody = makePostRequest(requestBody)
+        .expectBody(ObjectNode.class)
+        .returnResult()
+        .getResponseBody();
+
+      beaconId = responseBody.get("id").textValue();
+      lastModifiedDate = responseBody.get("lastModifiedDate").textValue();
     }
 
     @Test
@@ -138,6 +142,27 @@ class RegistrationsControllerIntegrationTest {
         .isEqualTo("2021-02-01")
         .jsonPath("$.lastServicedDate")
         .isEqualTo("2021-02-01");
+    }
+
+    @Test
+    void shouldUpdateTheLastModifiedDateEvenIfTheBeaconValuesHaveNotChanged()
+      throws Exception {
+      final Object updateRequestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", testAccountHolderId)
+      )
+        .get(RegistrationUseCase.SINGLE_BEACON);
+
+      webTestClient
+        .patch()
+        .uri("/registrations/register/" + beaconId)
+        .bodyValue(updateRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.lastModifiedDate")
+        .value(not(lastModifiedDate));
     }
 
     @Test

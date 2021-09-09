@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -16,10 +17,15 @@ import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 public class BeaconGatewayImpl implements BeaconGateway {
 
   private final BeaconJpaRepository beaconJpaRepository;
+  private final AuditingHandler auditingHandler;
 
   @Autowired
-  public BeaconGatewayImpl(BeaconJpaRepository beaconJpaRepository) {
+  public BeaconGatewayImpl(
+    BeaconJpaRepository beaconJpaRepository,
+    AuditingHandler auditingHandler
+  ) {
     this.beaconJpaRepository = beaconJpaRepository;
+    this.auditingHandler = auditingHandler;
   }
 
   @Override
@@ -29,6 +35,7 @@ public class BeaconGatewayImpl implements BeaconGateway {
 
   @Override
   public Beacon update(Beacon beacon) {
+    auditingHandler.markModified(beacon);
     return beaconJpaRepository.save(beacon);
   }
 
