@@ -20,7 +20,6 @@ public class JacksonConfiguration {
     );
     objectMapper.registerModule(new JavaTimeModule());
     objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-    objectMapper.setTimeZone(TimeZone.getTimeZone("GMT"));
 
     return objectMapper;
   }
