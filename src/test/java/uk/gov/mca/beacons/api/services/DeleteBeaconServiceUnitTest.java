@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -22,9 +23,7 @@ import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
-import uk.gov.mca.beacons.api.gateways.BeaconGateway;
-import uk.gov.mca.beacons.api.gateways.NoteGateway;
-import uk.gov.mca.beacons.api.gateways.UserGateway;
+import uk.gov.mca.beacons.api.gateways.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteBeaconServiceUnitTest {
@@ -40,6 +39,15 @@ class DeleteBeaconServiceUnitTest {
 
   @Mock
   private NoteGateway noteGateway;
+
+  @Mock
+  private OwnerGateway ownerGateway;
+
+  @Mock
+  private UseGateway useGateway;
+
+  @Mock
+  private EmergencyContactGateway emergencyContactGateway;
 
   @Captor
   private ArgumentCaptor<Note> noteCaptor;
@@ -58,6 +66,10 @@ class DeleteBeaconServiceUnitTest {
 
     deleteBeaconService.delete(request);
 
+    verify(ownerGateway, times(1)).deleteByBeaconId(request.getBeaconId());
+    verify(emergencyContactGateway, times(1))
+      .deleteAllByBeaconId(request.getBeaconId());
+    verify(useGateway, times(1)).deleteAllByBeaconId(request.getBeaconId());
     verify(beaconGateway, times(1)).delete(request.getBeaconId());
   }
 
@@ -104,8 +116,8 @@ class DeleteBeaconServiceUnitTest {
     verify(noteGateway).create(noteCaptor.capture());
     final var note = noteCaptor.getValue();
     assertThat(note.getBeaconId(), is(beaconId));
-    assertThat(note.getEmail(), is("beacons@beacons.com"));
-    assertThat(note.getFullName(), is("Beacons R Us"));
+    assertThat(note.getEmail(), is(nullValue()));
+    assertThat(note.getFullName(), is(nullValue()));
     assertThat(note.getUserId(), is(accountHolderId));
     assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
     assertThat(

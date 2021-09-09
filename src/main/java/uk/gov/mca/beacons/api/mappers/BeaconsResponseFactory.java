@@ -124,23 +124,32 @@ public class BeaconsResponseFactory {
     List<BeaconPersonDTO> emergencyContactDTOs
   ) {
     final var beaconDTO = beaconMapper.toDTO(beacon);
-    final var useRelationshipDTO = useRelationshipMapper.toDTO(
-      useDTOs.stream().map(dto -> (DomainDTO) dto).collect(Collectors.toList())
-    );
-    final var ownerRelationshipDTO = personRelationshipMapper.toDTO(ownerDTO);
-    final var emergencyContactRelationshipDTO = personRelationshipMapper.toDTO(
-      emergencyContactDTOs
-        .stream()
-        .map(dto -> (DomainDTO) dto)
-        .collect(Collectors.toList())
-    );
+    if (useDTOs.size() > 0) {
+      final var useRelationshipDTO = useRelationshipMapper.toDTO(
+        useDTOs
+          .stream()
+          .map(dto -> (DomainDTO) dto)
+          .collect(Collectors.toList())
+      );
+      beaconDTO.addRelationship("uses", useRelationshipDTO);
+    }
+    if (ownerDTO != null) {
+      final var ownerRelationshipDTO = personRelationshipMapper.toDTO(ownerDTO);
+      beaconDTO.addRelationship("owner", ownerRelationshipDTO);
+    }
+    if (emergencyContactDTOs.size() > 0) {
+      final var emergencyContactRelationshipDTO = personRelationshipMapper.toDTO(
+        emergencyContactDTOs
+          .stream()
+          .map(dto -> (DomainDTO) dto)
+          .collect(Collectors.toList())
+      );
+      beaconDTO.addRelationship(
+        "emergencyContacts",
+        emergencyContactRelationshipDTO
+      );
+    }
 
-    beaconDTO.addRelationship("uses", useRelationshipDTO);
-    beaconDTO.addRelationship("owner", ownerRelationshipDTO);
-    beaconDTO.addRelationship(
-      "emergencyContacts",
-      emergencyContactRelationshipDTO
-    );
     return beaconDTO;
   }
 }
