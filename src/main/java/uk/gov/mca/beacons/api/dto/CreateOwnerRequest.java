@@ -13,8 +13,6 @@ public class CreateOwnerRequest {
 
   private UUID beaconId;
   private String fullName;
-  private OffsetDateTime createdDate;
-  private OffsetDateTime lastModifiedDate;
   private String telephoneNumber;
   private String telephoneNumber2;
   private String alternativeTelephoneNumber;

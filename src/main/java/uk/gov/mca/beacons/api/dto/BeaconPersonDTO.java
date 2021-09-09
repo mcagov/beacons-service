@@ -32,10 +32,8 @@ public class BeaconPersonDTO extends DomainDTO<Attributes> {
     @NotNull(message = "Email must not be null")
     private String email;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private OffsetDateTime createdDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private OffsetDateTime lastModifiedDate;
 
     @NotNull(message = "Telephone number must not be null")

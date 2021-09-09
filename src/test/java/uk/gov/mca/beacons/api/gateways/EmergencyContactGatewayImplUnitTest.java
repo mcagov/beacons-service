@@ -86,36 +86,4 @@ class EmergencyContactGatewayImplUnitTest {
     assertThat(emergencyContact.getPostcode(), is(postcode));
     assertThat(emergencyContact.getCounty(), is(county));
   }
-
-  @Test
-  void shouldOverrideTheCreatedDateToNow() {
-    final var dateInThePast = OffsetDateTime.now();
-    final var createEmergencyContactRequest = CreateEmergencyContactRequest
-      .builder()
-      .createdDate(dateInThePast)
-      .build();
-
-    emergencyContactGateway.save(createEmergencyContactRequest);
-
-    verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
-    final Person emergencyContact = emergencyContactCaptor.getValue();
-
-    assertThat(emergencyContact.getCreatedDate(), is(not(dateInThePast)));
-  }
-
-  @Test
-  void shouldOverrideTheLastModifiedDateToNow() {
-    final var dateInThePast = OffsetDateTime.now();
-    final var createEmergencyContactRequest = CreateEmergencyContactRequest
-      .builder()
-      .lastModifiedDate(dateInThePast)
-      .build();
-
-    emergencyContactGateway.save(createEmergencyContactRequest);
-
-    verify(beaconPersonRepository).save(emergencyContactCaptor.capture());
-    final Person emergencyContact = emergencyContactCaptor.getValue();
-
-    assertThat(emergencyContact.getLastModifiedDate(), is(not(dateInThePast)));
-  }
 }

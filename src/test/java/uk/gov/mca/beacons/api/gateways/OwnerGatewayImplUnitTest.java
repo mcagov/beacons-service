@@ -82,35 +82,5 @@ class OwnerGatewayImplUnitTest {
     assertThat(owner.getTownOrCity(), is(townOrCity));
     assertThat(owner.getPostcode(), is(postcode));
     assertThat(owner.getCounty(), is(county));
-    assertNotNull(owner.getCreatedDate());
-    assertNotNull(owner.getLastModifiedDate());
-  }
-
-  @Test
-  void shouldNotOverrideTheCreatedDate() {
-    final var now = OffsetDateTime.now();
-    final var createOwnerRequest = CreateOwnerRequest
-      .builder()
-      .createdDate(now)
-      .build();
-
-    ownerGateway.save(createOwnerRequest);
-    verify(beaconPersonRepository).save(ownerCaptor.capture());
-    final Person owner = ownerCaptor.getValue();
-    assertThat(owner.getCreatedDate(), is(now));
-  }
-
-  @Test
-  void shouldNotOverrideTheLastModifiedDate() {
-    final var now = OffsetDateTime.now();
-    final var createOwnerRequest = CreateOwnerRequest
-      .builder()
-      .lastModifiedDate(now)
-      .build();
-
-    ownerGateway.save(createOwnerRequest);
-    verify(beaconPersonRepository).save(ownerCaptor.capture());
-    final Person owner = ownerCaptor.getValue();
-    assertThat(owner.getLastModifiedDate(), is(now));
   }
 }

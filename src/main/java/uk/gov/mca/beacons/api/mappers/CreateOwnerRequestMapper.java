@@ -9,18 +9,9 @@ import uk.gov.mca.beacons.api.jpa.entities.Person;
 public class CreateOwnerRequestMapper {
 
   public static Person toBeaconPerson(CreateOwnerRequest request) {
-    final var now = OffsetDateTime.now();
     final Person owner = new Person();
     owner.setBeaconId(request.getBeaconId());
     owner.setFullName(request.getFullName());
-    owner.setCreatedDate(
-      request.getCreatedDate() != null ? request.getCreatedDate() : now
-    );
-    owner.setLastModifiedDate(
-      request.getLastModifiedDate() != null
-        ? request.getLastModifiedDate()
-        : now
-    );
     owner.setTelephoneNumber(request.getTelephoneNumber());
     owner.setTelephoneNumber2(request.getTelephoneNumber2());
     owner.setAlternativeTelephoneNumber(
@@ -59,8 +50,6 @@ public class CreateOwnerRequestMapper {
       .builder()
       .beaconId(beaconId)
       .fullName(owner.getFullName())
-      .createdDate(owner.getCreatedDate())
-      .lastModifiedDate(owner.getLastModifiedDate())
       .telephoneNumber(owner.getTelephoneNumber())
       .telephoneNumber2(owner.getTelephoneNumber2())
       .alternativeTelephoneNumber(owner.getAlternativeTelephoneNumber())

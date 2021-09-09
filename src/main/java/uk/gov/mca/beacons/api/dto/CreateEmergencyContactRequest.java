@@ -12,8 +12,6 @@ import lombok.Setter;
 public class CreateEmergencyContactRequest {
 
   private UUID beaconId;
-  private OffsetDateTime createdDate;
-  private OffsetDateTime lastModifiedDate;
   private String fullName;
   private String telephoneNumber;
   private String alternativeTelephoneNumber;
