@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.LegacyBeaconDTO;
@@ -58,6 +59,16 @@ public class LegacyBeaconMapper {
 
     final var ownerEmail = (String) beacon.getOwner().get("email");
     legacyBeaconEntity.setOwnerEmail(ownerEmail);
+
+    final var ownerName = (String) beacon.getOwner().get("ownerName");
+    legacyBeaconEntity.setOwnerName(ownerName);
+
+    final var useActivities = beacon
+      .getUses()
+      .stream()
+      .map(use -> (String) use.getOrDefault("useType", ""))
+      .collect(Collectors.joining(", "));
+    legacyBeaconEntity.setUseActivities(useActivities);
 
     final var createdDate = OffsetDateTimeOptionalZoneParser.parse(
       (String) beacon.getBeacon().get("createdDate")

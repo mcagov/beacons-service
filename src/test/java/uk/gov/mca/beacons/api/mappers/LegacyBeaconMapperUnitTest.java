@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.mappers;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
@@ -72,6 +73,77 @@ class LegacyBeaconMapperUnitTest {
       final var result = legacyBeaconMapper.toJpaEntity(beacon);
 
       assertThat(result.getOwnerEmail(), is("beacons@mca.gov.uk"));
+    }
+
+    @Test
+    void shouldSetTheOwnersName() {
+      final var beacon = LegacyBeacon
+        .builder()
+        .beacon(
+          Map.of(
+            "createdDate",
+            "2020-08-01T21:33:13",
+            "lastModifiedDate",
+            "2021-08-01T21:33:13"
+          )
+        )
+        .owner(Map.of("ownerName", "Mrs Beacon"))
+        .secondaryOwners(emptyList())
+        .uses(emptyList())
+        .emergencyContact(emptyMap())
+        .build();
+
+      final var result = legacyBeaconMapper.toJpaEntity(beacon);
+
+      assertThat(result.getOwnerName(), is("Mrs Beacon"));
+    }
+
+    @Test
+    void shouldSetTheSummaryOfASingleUse() {
+      final var beacon = LegacyBeacon
+        .builder()
+        .beacon(
+          Map.of(
+            "createdDate",
+            "2020-08-01T21:33:13",
+            "lastModifiedDate",
+            "2021-08-01T21:33:13"
+          )
+        )
+        .owner(Map.of("ownerName", "Mrs Beacon"))
+        .uses(singletonList(Map.of("useType", "SAILING")))
+        .secondaryOwners(emptyList())
+        .emergencyContact(emptyMap())
+        .build();
+
+      final var result = legacyBeaconMapper.toJpaEntity(beacon);
+
+      assertThat(result.getUseActivities(), is("SAILING"));
+    }
+
+    @Test
+    void shouldSetTheSummaryOfAMultipleUses() {
+      final var beacon = LegacyBeacon
+        .builder()
+        .beacon(
+          Map.of(
+            "createdDate",
+            "2020-08-01T21:33:13",
+            "lastModifiedDate",
+            "2021-08-01T21:33:13"
+          )
+        )
+        .owner(Map.of("ownerName", "Mrs Beacon"))
+        .uses(
+          asList(Map.of("useType", "SAILING"), Map.of("useType", "CLIMBING"))
+        )
+        .secondaryOwners(emptyList())
+        .emergencyContact(emptyMap())
+        .build();
+
+      final var result = legacyBeaconMapper.toJpaEntity(beacon);
+
+      assertThat(result.getUseActivities(), is("SAILING, CLIMBING"));
     }
 
     @Test
