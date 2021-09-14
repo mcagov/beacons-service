@@ -1,5 +1,4 @@
--- Add columns to legacy_beacon table
-
+-- Add additional columns to legacy_beacon table to enable searching across
 ALTER TABLE legacy_beacon
     ADD COLUMN owner_name text,
     ADD COLUMN use_activities text;
@@ -10,7 +9,7 @@ CREATE INDEX legacy_beacon_use_activities ON legacy_beacon(use_activities);
 
 DROP MATERIALIZED VIEW legacy_beacon_search CASCADE;
 
--- Re-create view using top level columns on legacy_beacon table
+-- Re-create view using top level columns on legacy_beacon table.  Taken from V1.35
 CREATE OR REPLACE VIEW beacon_search AS
 SELECT id,
        created_date,

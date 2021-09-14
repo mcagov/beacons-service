@@ -1,7 +1,5 @@
 package uk.gov.mca.beacons.api.mappers;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
