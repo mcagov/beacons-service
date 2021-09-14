@@ -56,7 +56,7 @@ class LegacyBeaconGatewayImplUnitTest {
   void deleteAll_shouldDeleteAllLegacyRecordsThroughJdbc() {
     legacyBeaconGateway.deleteAll();
 
-    verify(jdbcTemplate, times(1)).execute("TRUNCATE TABLE legacy_beacon");
+    verify(jdbcTemplate, times(1)).execute("DELETE FROM legacy_beacon");
   }
 
   @Test
