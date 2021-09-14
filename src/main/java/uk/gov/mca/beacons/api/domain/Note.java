@@ -17,6 +17,7 @@ public class Note {
 
   private UUID id;
   private UUID beaconId;
+  private UUID legacyBeaconId;
   private String text;
   private NoteType type;
   private OffsetDateTime createdDate;
