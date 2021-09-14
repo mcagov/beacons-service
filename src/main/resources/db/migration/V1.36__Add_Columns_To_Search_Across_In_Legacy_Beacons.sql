@@ -3,6 +3,8 @@ ALTER TABLE legacy_beacon
     ADD COLUMN owner_name text,
     ADD COLUMN use_activities text;
 
+UPDATE legacy_beacon SET owner_name = data->'owner'->>'ownerName';
+
 -- Add indexes for searching across additional columns
 CREATE INDEX legacy_beacon_beacon_status ON legacy_beacon(beacon_status);
 CREATE INDEX legacy_beacon_use_activities ON legacy_beacon(use_activities);
