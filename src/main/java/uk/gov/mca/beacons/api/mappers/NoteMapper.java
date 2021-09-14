@@ -45,6 +45,7 @@ public class NoteMapper extends BaseMapper {
       .builder()
       .id(noteEntity.getId())
       .beaconId(noteEntity.getBeaconId())
+      .legacyBeaconId(noteEntity.getLegacyBeaconId())
       .userId(noteEntity.getUserId())
       .fullName(noteEntity.getFullName())
       .email(noteEntity.getEmail())
@@ -61,6 +62,7 @@ public class NoteMapper extends BaseMapper {
       .builder()
       .id(noteDTO.getId())
       .beaconId(attributes.getBeaconId())
+      .legacyBeaconId(attributes.getLegacyBeaconId())
       .text(attributes.getText())
       .type(attributes.getType())
       .createdDate(attributes.getCreatedDate())
@@ -77,6 +79,7 @@ public class NoteMapper extends BaseMapper {
     final Attributes attributes = Attributes
       .builder()
       .beaconId(note.getBeaconId())
+      .legacyBeaconId(note.getLegacyBeaconId())
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate())
