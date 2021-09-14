@@ -9,4 +9,10 @@ import uk.gov.mca.beacons.api.jpa.entities.NoteEntity;
 public interface NoteJpaRepository extends JpaRepository<NoteEntity, UUID> {
   @Query(nativeQuery = true, value = "SELECT * FROM note WHERE beacon_id = ?1")
   List<NoteEntity> findAllByBeaconId(UUID beaconId);
+
+  @Query(
+    nativeQuery = true,
+    value = "SELECT * FROM note WHERE legacy_beacon_id = ?1"
+  )
+  List<NoteEntity> findAllByLegacyBeaconId(UUID legacyBeaconId);
 }
