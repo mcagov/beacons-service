@@ -28,6 +28,8 @@ public class NoteEntity {
 
   private UUID beaconId;
 
+  private UUID legacyBeaconId;
+
   private String text;
 
   @Enumerated(EnumType.STRING)
