@@ -106,6 +106,78 @@ class NoteMapperTest {
   }
 
   @Test
+  void repeat_toDTO_fromDTO_withLegacyBeaconIdSet() {
+    final UUID id = UUID.randomUUID();
+    final UUID legacyBeaconId = UUID.randomUUID();
+    final String text = "Ain't mine";
+    final NoteType type = NoteType.RECORD_HISTORY;
+    final OffsetDateTime createdDate = OffsetDateTime.now();
+    final UUID userId = UUID.randomUUID();
+    final String fullName = "Finn The Human";
+    final String email = "i.love.lady@rainicorn.com";
+
+    note =
+      Note
+        .builder()
+        .id(id)
+        .legacyBeaconId(legacyBeaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
+
+    DTOAttributes =
+      Attributes
+        .builder()
+        .legacyBeaconId(legacyBeaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
+
+    noteDTO = new NoteDTO();
+    noteDTO.setId(id);
+    noteDTO.setAttributes(DTOAttributes);
+
+    // fromDTO
+    final Note mappedNote = noteMapper.fromDTO(noteDTO);
+
+    assertThat(mappedNote.getId(), is(noteDTO.getId()));
+    assertThat(
+      mappedNote.getLegacyBeaconId(),
+      is(DTOAttributes.getLegacyBeaconId())
+    );
+    assertThat(mappedNote.getText(), is(DTOAttributes.getText()));
+    assertThat(mappedNote.getType(), is(DTOAttributes.getType()));
+    assertThat(mappedNote.getCreatedDate(), is(DTOAttributes.getCreatedDate()));
+    assertThat(mappedNote.getUserId(), is(DTOAttributes.getUserId()));
+    assertThat(mappedNote.getFullName(), is(DTOAttributes.getFullName()));
+    assertThat(mappedNote.getEmail(), is(DTOAttributes.getEmail()));
+
+    // toDTO
+    final NoteDTO mappedDTO = noteMapper.toDTO(note);
+    final Attributes mappedAttributes = mappedDTO.getAttributes();
+
+    assertThat(mappedDTO.getId(), is(note.getId()));
+    assertThat(
+      mappedAttributes.getLegacyBeaconId(),
+      is(note.getLegacyBeaconId())
+    );
+    assertThat(mappedAttributes.getText(), is(note.getText()));
+    assertThat(mappedAttributes.getType(), is(note.getType()));
+    assertThat(mappedAttributes.getCreatedDate(), is(note.getCreatedDate()));
+    assertThat(mappedAttributes.getUserId(), is(note.getUserId()));
+    assertThat(mappedAttributes.getFullName(), is(note.getFullName()));
+    assertThat(mappedAttributes.getEmail(), is(note.getEmail()));
+  }
+
+  @Test
   void toWrapperDTO_shouldConvertANoteToAWrappedDTO() {
     final WrapperDTO<NoteDTO> wrappedNote = noteMapper.toWrapperDTO(note);
 
