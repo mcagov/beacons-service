@@ -48,7 +48,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Override
   public void deleteAll() {
-    jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
+    jdbcTemplate.execute("DELETE FROM legacy_beacon");
   }
 
   @Override
