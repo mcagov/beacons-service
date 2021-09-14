@@ -25,6 +25,7 @@ public class NoteDTO extends DomainDTO<NoteDTO.Attributes> {
   public static class Attributes {
 
     private UUID beaconId;
+    private UUID legacyBeaconId;
     private String text;
     private NoteType type;
     private OffsetDateTime createdDate;
