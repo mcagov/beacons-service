@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import uk.gov.mca.beacons.api.domain.BeaconStatus;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -51,27 +52,26 @@ class LegacyBeaconControllerIntegrationTest {
   }
 
   @Test
-  void shouldReturnHttp200IfTheLegacyBeaconWasDeleted() throws Exception {
-    final var legacyBeaconId = createLegacyBeacon();
+  void shouldUpdateTheStatusOfALegacyBeaconToDeletedWhenItIsDeleted()
+    throws Exception {
     final var userId = UUID.randomUUID().toString();
     String reason = "I do not recognise this beacon.";
-
-    final var deleteLegacyBeaconRequest = Files
+    final var legacyBeaconId = createLegacyBeacon();
+    deleteLegacyBeacon(legacyBeaconId, userId, reason);
+    final var deleteLegacyBeaconResponse = Files
       .readString(
-        Paths.get("src/test/resources/fixtures/deleteLegacyBeaconRequest.json")
+        Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
       )
-      .replace("replace-with-test-legacy-beacon-id", legacyBeaconId)
-      .replace("replace-with-test-user-id", userId)
-      .replace("replace-with-test-reason", reason);
+      .replace("MIGRATED", BeaconStatus.DELETED.toString());
 
     webTestClient
-      .patch()
-      .uri("/legacy-beacon/" + legacyBeaconId + "/delete")
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(deleteLegacyBeaconRequest)
+      .get()
+      .uri("legacy-beacon/" + legacyBeaconId)
       .exchange()
       .expectStatus()
-      .isOk();
+      .isOk()
+      .expectBody()
+      .json(deleteLegacyBeaconResponse);
   }
 
   private String createLegacyBeacon() throws Exception {
@@ -93,5 +93,28 @@ class LegacyBeaconControllerIntegrationTest {
       .get("data")
       .get("id")
       .textValue();
+  }
+
+  private void deleteLegacyBeacon(
+    String legacyBeaconId,
+    String userId,
+    String reason
+  ) throws Exception {
+    final var deleteLegacyBeaconRequest = Files
+      .readString(
+        Paths.get("src/test/resources/fixtures/deleteLegacyBeaconRequest.json")
+      )
+      .replace("replace-with-test-legacy-beacon-id", legacyBeaconId)
+      .replace("replace-with-test-user-id", userId)
+      .replace("replace-with-test-reason", reason);
+
+    webTestClient
+      .patch()
+      .uri("/legacy-beacon/" + legacyBeaconId + "/delete")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(deleteLegacyBeaconRequest)
+      .exchange()
+      .expectStatus()
+      .isOk();
   }
 }
