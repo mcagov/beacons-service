@@ -62,7 +62,7 @@ public class BeaconMapper extends BaseMapper {
     beacon.setManufacturer((String) attributes.get("manufacturer"));
     beacon.setModel((String) attributes.get("model"));
     beacon.setMti((String) attributes.get("mti"));
-    beacon.setSvdr((String) attributes.get("svdr") == "true");
+    beacon.setSvdr(parseBooleanOrNull((String) attributes.get("svdr")));
     beacon.setCsta((String) attributes.get("csta"));
     beacon.setChkCode((String) attributes.get("chkCode"));
     beacon.setManufacturerSerialNumber(
