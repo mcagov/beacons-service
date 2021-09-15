@@ -58,6 +58,7 @@ class BeaconsControllerIntegrationTest {
     beacon.setChkCode("9480B");
     beacon.setHexId("HEXID123");
     beacon.setMti("EXAMPLE MTI CODE");
+    beacon.setSvdr(true);
     beacon.setBatteryExpiryDate(LocalDate.of(2020, 2, 1));
     beacon.setLastServicedDate(LocalDate.of(2020, 2, 1));
     final var owner = new Person();
