@@ -69,6 +69,7 @@ public class BeaconsService {
       .withMapping(Beacon::getManufacturer, Beacon::setManufacturer)
       .withMapping(Beacon::getMti, Beacon::setMti)
       .withMapping(Beacon::getSvdr, Beacon::setSvdr)
+      .withMapping(Beacon::getCsta, Beacon::setCsta)
       .withMapping(
         Beacon::getManufacturerSerialNumber,
         Beacon::setManufacturerSerialNumber

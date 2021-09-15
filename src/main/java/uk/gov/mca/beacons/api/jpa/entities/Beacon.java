@@ -55,6 +55,8 @@ public class Beacon {
 
   private Boolean svdr;
 
+  private String csta;
+
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
 
