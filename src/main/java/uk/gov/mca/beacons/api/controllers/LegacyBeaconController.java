@@ -2,11 +2,17 @@ package uk.gov.mca.beacons.api.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mca.beacons.api.dto.DeleteLegacyBeaconRequestDTO;
 import uk.gov.mca.beacons.api.dto.LegacyBeaconDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
@@ -37,5 +43,13 @@ public class LegacyBeaconController {
       .orElseThrow(ResourceNotFoundException::new);
 
     return legacyBeaconMapper.toWrapperDTO(legacyBeacon);
+  }
+
+  @PatchMapping(value = "/{uuid}/delete")
+  public ResponseEntity<Void> delete(
+    @PathVariable("uuid") UUID id,
+    @RequestBody @Valid DeleteLegacyBeaconRequestDTO requestDTO
+  ) {
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
