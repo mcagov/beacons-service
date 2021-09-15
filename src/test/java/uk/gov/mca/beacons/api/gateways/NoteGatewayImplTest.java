@@ -44,7 +44,7 @@ class NoteGatewayImplTest {
   class CreateNote {
 
     @Test
-    void shouldCreateANoteEntityFromANote() {
+    void shouldCreateANoteEntityFromANoteWithABeaconId() {
       final UUID id = UUID.randomUUID();
       final UUID beaconId = UUID.randomUUID();
       final String text = "This beacon belongs to a cat.";
@@ -90,6 +90,61 @@ class NoteGatewayImplTest {
 
       assertThat(createdNote.getId(), is(id));
       assertThat(createdNote.getBeaconId(), is(beaconId));
+      assertThat(createdNote.getText(), is(text));
+      assertThat(createdNote.getType(), is(type));
+      assertThat(createdNote.getCreatedDate(), is(createdDate));
+      assertThat(createdNote.getUserId(), is(userId));
+      assertThat(createdNote.getFullName(), is(fullName));
+      assertThat(createdNote.getEmail(), is(email));
+    }
+
+    @Test
+    void shouldCreateANoteEntityFromANoteWithALegacyBeaconId() {
+      final UUID id = UUID.randomUUID();
+      final UUID legacyBeaconId = UUID.randomUUID();
+      final String text = "This beacon belongs to a cat.";
+      final NoteType type = NoteType.GENERAL;
+      final OffsetDateTime createdDate = OffsetDateTime.now();
+      final UUID userId = UUID.randomUUID();
+      final String fullName = "Alfred the cat";
+      final String email = "alfred@cute.cat.com";
+
+      final Note note = Note
+        .builder()
+        .legacyBeaconId(legacyBeaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
+
+      final NoteEntity createdEntity = NoteEntity
+        .builder()
+        .id(id)
+        .legacyBeaconId(legacyBeaconId)
+        .text(text)
+        .type(type)
+        .createdDate(createdDate)
+        .userId(userId)
+        .fullName(fullName)
+        .email(email)
+        .build();
+
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      when(noteRepository.save(any(NoteEntity.class)))
+        .thenReturn(createdEntity);
+
+      final Note createdNote = noteGateway.create(note);
+
+      assertThat(createdNote.getId(), is(id));
+      assertThat(createdNote.getLegacyBeaconId(), is(legacyBeaconId));
       assertThat(createdNote.getText(), is(text));
       assertThat(createdNote.getType(), is(type));
       assertThat(createdNote.getCreatedDate(), is(createdDate));
@@ -167,6 +222,63 @@ class NoteGatewayImplTest {
       );
 
       assertThat(noteGateway.findAllByBeaconId(beaconId), is(empty()));
+    }
+  }
+
+  @Nested
+  class GetNotesByLegacyBeaconId {
+
+    @Test
+    void shouldReturnNotesRelatedToALegacyBeacon() {
+      final UUID legacyBeaconId = UUID.randomUUID();
+      final NoteEntity firstNoteEntity = NoteEntity
+        .builder()
+        .legacyBeaconId(legacyBeaconId)
+        .build();
+      final NoteEntity secondNoteEntity = NoteEntity
+        .builder()
+        .legacyBeaconId(legacyBeaconId)
+        .build();
+
+      final List<NoteEntity> foundNoteEntities = new ArrayList<>();
+      foundNoteEntities.add(firstNoteEntity);
+      foundNoteEntities.add(secondNoteEntity);
+
+      when(noteRepository.findAllByLegacyBeaconId(legacyBeaconId))
+        .thenReturn(foundNoteEntities);
+
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      List<Note> foundNotes = noteGateway.findAllByLegacyBeaconId(
+        legacyBeaconId
+      );
+
+      foundNotes.forEach(
+        note -> assertThat(note.getLegacyBeaconId(), is(legacyBeaconId))
+      );
+    }
+
+    @Test
+    void shouldReturnAnEmptyListIfNoNotesAreFound() {
+      final UUID legacyBeaconId = UUID.randomUUID();
+
+      when(noteRepository.findAllByLegacyBeaconId(legacyBeaconId))
+        .thenReturn(Collections.emptyList());
+
+      final NoteMapper noteMapper = new NoteMapper(fixedClock);
+      final NoteGateway noteGateway = new NoteGatewayImpl(
+        noteMapper,
+        noteRepository
+      );
+
+      assertThat(
+        noteGateway.findAllByLegacyBeaconId(legacyBeaconId),
+        is(empty())
+      );
     }
   }
 }
