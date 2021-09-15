@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.services.scheduled.LegacyBeaconSearchScheduler;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -22,9 +21,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
   @Autowired
   private WebTestClient webTestClient;
-
-  @Autowired
-  private LegacyBeaconSearchScheduler scheduler;
 
   @Nested
   class GetBeaconSearchResults {
@@ -275,8 +271,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated();
-
-    scheduler.refreshView();
   }
 
   private void createLegacyBeacon(String hexId) throws Exception {
