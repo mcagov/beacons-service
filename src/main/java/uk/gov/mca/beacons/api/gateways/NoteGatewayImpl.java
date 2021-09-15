@@ -44,4 +44,16 @@ public class NoteGatewayImpl implements NoteGateway {
       .map(noteEntity -> noteMapper.fromNoteEntity(noteEntity))
       .collect(Collectors.toList());
   }
+
+  @Override
+  public List<Note> findAllByLegacyBeaconId(UUID legacyBeaconId) {
+    List<NoteEntity> foundEntities = noteJpaRepository.findAllByLegacyBeaconId(
+      legacyBeaconId
+    );
+
+    return foundEntities
+      .stream()
+      .map(noteEntity -> noteMapper.fromNoteEntity(noteEntity))
+      .collect(Collectors.toList());
+  }
 }

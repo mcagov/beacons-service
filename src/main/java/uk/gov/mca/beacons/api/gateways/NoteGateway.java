@@ -8,4 +8,6 @@ public interface NoteGateway {
   Note create(Note note);
 
   List<Note> findAllByBeaconId(UUID beaconId);
+
+  List<Note> findAllByLegacyBeaconId(UUID legacyBeaconId);
 }
