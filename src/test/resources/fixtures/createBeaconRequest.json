@@ -9,6 +9,7 @@
   "lastServicedDate": "2020-02-01",
   "accountHolderId": "account-holder-id-placeholder",
   "mti": "EXAMPLE MTI CODE",
+  "svdr": true,
   "uses": [
     {
       "environment": "MARITIME",
