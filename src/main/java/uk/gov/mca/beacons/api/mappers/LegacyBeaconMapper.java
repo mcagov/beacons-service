@@ -39,6 +39,7 @@ public class LegacyBeaconMapper {
     final var attributes = LegacyBeaconDTO.Attributes
       .builder()
       .beacon(beacon.getBeacon())
+      .beaconStatus(beacon.getBeaconStatus())
       .uses(beacon.getUses())
       .owner(beacon.getOwner())
       .secondaryOwners(beacon.getSecondaryOwners())
