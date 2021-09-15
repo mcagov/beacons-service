@@ -35,6 +35,10 @@ public class LegacyBeaconEntity {
 
   private String ownerEmail;
 
+  private String useActivities;
+
+  private String ownerName;
+
   private OffsetDateTime createdDate;
 
   private OffsetDateTime lastModifiedDate;
