@@ -30,6 +30,7 @@
         "versioning": 0,
         "note": "CHANGE OF ADDRESS/EMERGENCY DETAILS ADDED. 13/10/04\\r\\nKAYCEE"
       },
+      "beaconStatus": "MIGRATED",
       "uses": [
         {
           "pkBeaconUsesId": 6057,
