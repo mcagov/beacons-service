@@ -51,6 +51,8 @@ public class Beacon {
 
   private LocalDate lastServicedDate;
 
+  private String mti;
+
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
 

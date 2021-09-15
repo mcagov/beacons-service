@@ -45,6 +45,7 @@ public class BeaconMapper extends BaseMapper {
     attributes.put("referenceNumber", domain.getReferenceNumber());
     attributes.put("lastModifiedDate", domain.getLastModifiedDate());
     attributes.put("accountHolderId", domain.getAccountHolderId());
+    attributes.put("mti", domain.getMti());
     dto.setAttributes(attributes);
     dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
@@ -58,6 +59,7 @@ public class BeaconMapper extends BaseMapper {
     beacon.setHexId((String) attributes.get("hexId"));
     beacon.setManufacturer((String) attributes.get("manufacturer"));
     beacon.setModel((String) attributes.get("model"));
+    beacon.setMti((String) attributes.get("mti"));
     beacon.setChkCode((String) attributes.get("chkCode"));
     beacon.setManufacturerSerialNumber(
       (String) attributes.get("manufacturerSerialNumber")

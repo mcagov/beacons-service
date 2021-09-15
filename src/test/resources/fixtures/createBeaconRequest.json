@@ -8,6 +8,7 @@
   "batteryExpiryDate": "2020-02-01",
   "lastServicedDate": "2020-02-01",
   "accountHolderId": "account-holder-id-placeholder",
+  "mti": "EXAMPLE MTI CODE",
   "uses": [
     {
       "environment": "MARITIME",
