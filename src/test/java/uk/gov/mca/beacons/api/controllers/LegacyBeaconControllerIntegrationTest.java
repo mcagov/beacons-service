@@ -50,6 +50,30 @@ class LegacyBeaconControllerIntegrationTest {
       .isNotFound();
   }
 
+  @Test
+  void shouldReturnHttp200IfTheLegacyBeaconWasDeleted() throws Exception {
+    final var legacyBeaconId = createLegacyBeacon();
+    final var userId = UUID.randomUUID().toString();
+    String reason = "I do not recognise this beacon.";
+
+    final var deleteLegacyBeaconRequest = Files
+      .readString(
+        Paths.get("src/test/resources/fixtures/deleteLegacyBeaconRequest.json")
+      )
+      .replace("replace-with-test-legacy-beacon-id", legacyBeaconId)
+      .replace("replace-with-test-user-id", userId)
+      .replace("replace-with-test-reason", reason);
+
+    webTestClient
+      .patch()
+      .uri("/legacy-beacon/" + legacyBeaconId + "/delete")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(deleteLegacyBeaconRequest)
+      .exchange()
+      .expectStatus()
+      .isOk();
+  }
+
   private String createLegacyBeacon() throws Exception {
     final var createLegacyBeaconRequest = Files.readString(
       Paths.get("src/test/resources/fixtures/createLegacyBeaconRequest.json")
