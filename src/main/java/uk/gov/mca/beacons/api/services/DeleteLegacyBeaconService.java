@@ -1,9 +1,14 @@
 package uk.gov.mca.beacons.api.services;
 
+import static java.lang.String.format;
+import static java.time.OffsetDateTime.now;
+
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mca.beacons.api.domain.Note;
+import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.DeleteLegacyBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
@@ -44,6 +49,16 @@ public class DeleteLegacyBeaconService {
     }
 
     final var legacyBeaconId = request.getLegacyBeaconId();
+
+    final Note note = Note
+      .builder()
+      .legacyBeaconId(legacyBeaconId)
+      .userId(request.getUserId())
+      .type(NoteType.RECORD_HISTORY)
+      .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
+      .createdDate(now())
+      .build();
+    noteGateway.create(note);
 
     deleteLegacyBeaconById(legacyBeaconId);
   }
