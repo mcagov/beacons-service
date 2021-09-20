@@ -18,6 +18,7 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.gateways.UserGateway;
+import uk.gov.mca.beacons.api.services.GetUserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -96,6 +97,32 @@ class LegacyBeaconControllerIntegrationTest {
       .isOk()
       .expectBody()
       .json(deleteLegacyBeaconResponse);
+  }
+
+  @Test
+  void shouldCreateANoteWithTheReasonForDeletionWhenTheLegacyBeaconIsDeleted()
+    throws Exception {
+    final String reason = "I do not recognise this beacon.";
+    final var legacyBeaconId = createLegacyBeacon();
+    deleteLegacyBeacon(legacyBeaconId, user.getId().toString(), reason);
+
+    final var noteForDeletedLegacyBeaconResponse = Files
+      .readString(
+        Paths.get(
+          "src/test/resources/fixtures/getNotesByDeletedLegacyBeaconIdResponse.json"
+        )
+      )
+      .replace("replace-with-deleted-legacy-beacon-id", legacyBeaconId)
+      .replace("replace-with-user-id", user.getId().toString());
+
+    webTestClient
+      .get()
+      .uri("legacy-beacon/" + legacyBeaconId + "/notes")
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(noteForDeletedLegacyBeaconResponse);
   }
 
   private String createLegacyBeacon() throws Exception {
