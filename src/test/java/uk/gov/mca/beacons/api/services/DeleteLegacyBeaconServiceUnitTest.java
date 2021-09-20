@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -27,6 +28,8 @@ import uk.gov.mca.beacons.api.gateways.UserGateway;
 @ExtendWith(MockitoExtension.class)
 class DeleteLegacyBeaconServiceUnitTest {
 
+  private DeleteLegacyBeaconRequestDTO request;
+
   @InjectMocks
   private DeleteLegacyBeaconService deleteLegacyBeaconService;
 
@@ -42,17 +45,20 @@ class DeleteLegacyBeaconServiceUnitTest {
   @Captor
   private ArgumentCaptor<Note> noteCaptor;
 
+  @BeforeEach
+  void init() {
+    request =
+      DeleteLegacyBeaconRequestDTO
+        .builder()
+        .legacyBeaconId(UUID.randomUUID())
+        .userId(UUID.randomUUID())
+        .reason("I do not recognise this beacon")
+        .build();
+  }
+
   @Test
   void shouldCallTheLegacyBeaconGatewayToDeleteTheLegacyBeacon() {
-    final var accountHolderId = UUID.randomUUID();
-    final var request = DeleteLegacyBeaconRequestDTO
-      .builder()
-      .legacyBeaconId(UUID.randomUUID())
-      .userId(accountHolderId)
-      .reason("I do not recognise this beacon")
-      .build();
-
-    given(userGateway.getUserById(accountHolderId))
+    given(userGateway.getUserById(request.getUserId()))
       .willReturn(new AccountHolder());
 
     deleteLegacyBeaconService.delete(request);
@@ -62,15 +68,7 @@ class DeleteLegacyBeaconServiceUnitTest {
 
   @Test
   void shouldNotDeleteTheLegacyBeaconOrCreateTheNoteIfAUserCannotBeFound() {
-    final var accountHolderId = UUID.randomUUID();
-    final var request = DeleteLegacyBeaconRequestDTO
-      .builder()
-      .legacyBeaconId(UUID.randomUUID())
-      .userId(accountHolderId)
-      .reason("I do not recognise this beacon")
-      .build();
-
-    given(userGateway.getUserById(accountHolderId)).willReturn(null);
+    given(userGateway.getUserById(request.getUserId())).willReturn(null);
 
     assertThrows(
       UserNotFoundException.class,
