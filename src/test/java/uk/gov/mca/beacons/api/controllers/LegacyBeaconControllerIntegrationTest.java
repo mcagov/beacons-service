@@ -1,23 +1,48 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import static org.mockito.BDDMockito.given;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
+import uk.gov.mca.beacons.api.domain.User;
+import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 class LegacyBeaconControllerIntegrationTest {
 
+  private User user;
+
   @Autowired
   private WebTestClient webTestClient;
+
+  @MockBean
+  private UserGateway userGateway;
+
+  @BeforeEach
+  void init() {
+    final var userId = UUID.randomUUID();
+
+    user =
+      AccountHolder
+        .builder()
+        .id(userId)
+        .email("beacon@beacons.com")
+        .fullName("Mr. Beacon")
+        .build();
+  }
 
   @Test
   void shouldReturnTheLegacyBeaconById() throws Exception {
@@ -53,10 +78,10 @@ class LegacyBeaconControllerIntegrationTest {
   @Test
   void shouldUpdateTheStatusOfALegacyBeaconToDeletedWhenItIsDeleted()
     throws Exception {
-    final var userId = UUID.randomUUID().toString();
     final String reason = "I do not recognise this beacon.";
     final var legacyBeaconId = createLegacyBeacon();
-    deleteLegacyBeacon(legacyBeaconId, userId, reason);
+    deleteLegacyBeacon(legacyBeaconId, user.getId().toString(), reason);
+
     final var deleteLegacyBeaconResponse = Files
       .readString(
         Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
@@ -106,6 +131,8 @@ class LegacyBeaconControllerIntegrationTest {
       .replace("replace-with-test-legacy-beacon-id", legacyBeaconId)
       .replace("replace-with-test-user-id", userId)
       .replace("replace-with-test-reason", reason);
+
+    given(userGateway.getUserById(user.getId())).willReturn(user);
 
     webTestClient
       .patch()
