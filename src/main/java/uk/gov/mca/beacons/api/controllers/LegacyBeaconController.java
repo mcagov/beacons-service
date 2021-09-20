@@ -17,6 +17,7 @@ import uk.gov.mca.beacons.api.dto.LegacyBeaconDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
+import uk.gov.mca.beacons.api.services.DeleteLegacyBeaconService;
 import uk.gov.mca.beacons.api.services.LegacyBeaconService;
 
 @RestController
@@ -26,14 +27,17 @@ public class LegacyBeaconController {
 
   private final LegacyBeaconService legacyBeaconService;
   private final LegacyBeaconMapper legacyBeaconMapper;
+  private final DeleteLegacyBeaconService deleteLegacyBeaconService;
 
   @Autowired
   public LegacyBeaconController(
     LegacyBeaconService legacyBeaconService,
-    LegacyBeaconMapper legacyBeaconMapper
+    LegacyBeaconMapper legacyBeaconMapper,
+    DeleteLegacyBeaconService deleteLegacyBeaconService
   ) {
     this.legacyBeaconService = legacyBeaconService;
     this.legacyBeaconMapper = legacyBeaconMapper;
+    this.deleteLegacyBeaconService = deleteLegacyBeaconService;
   }
 
   @GetMapping(value = "/{uuid}")
@@ -50,6 +54,7 @@ public class LegacyBeaconController {
     @PathVariable("uuid") UUID id,
     @RequestBody @Valid DeleteLegacyBeaconRequestDTO requestDTO
   ) {
+    deleteLegacyBeaconService.delete(requestDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
