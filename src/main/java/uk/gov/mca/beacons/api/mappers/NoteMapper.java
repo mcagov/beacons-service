@@ -31,6 +31,7 @@ public class NoteMapper extends BaseMapper {
       .builder()
       .id(note.getId())
       .beaconId(note.getBeaconId())
+      .legacyBeaconId(note.getLegacyBeaconId())
       .text(note.getText())
       .type(note.getType())
       .createdDate(note.getCreatedDate() == null ? now : note.getCreatedDate())
