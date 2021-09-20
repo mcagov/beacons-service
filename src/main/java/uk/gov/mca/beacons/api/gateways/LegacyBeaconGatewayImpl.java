@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @Repository
@@ -44,6 +46,16 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     return legacyBeaconMapper.fromJpaEntity(
       legacyBeaconJpaRepository.save(legacyBeaconEntity)
     );
+  }
+
+  @Override
+  public void delete(UUID id) {
+    final LegacyBeaconEntity legacyBeacon = legacyBeaconJpaRepository
+      .findById(id)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    legacyBeacon.setBeaconStatus(BeaconStatus.DELETED);
+    legacyBeaconJpaRepository.save(legacyBeacon);
   }
 
   @Override
