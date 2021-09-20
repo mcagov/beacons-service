@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.services;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -18,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.Note;
-import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
+import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.dto.DeleteLegacyBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
@@ -78,5 +80,34 @@ class DeleteLegacyBeaconServiceUnitTest {
     );
     verify(legacyBeaconGateway, never()).delete(request.getLegacyBeaconId());
     verify(noteGateway, never()).create(any(Note.class));
+  }
+
+  @Test
+  void shouldCallTheNoteGatewayToCreateTheNote() {
+    final var accountHolder = AccountHolder
+      .builder()
+      .email("bbeacon@beacons.com")
+      .fullName("Mr B. Beacon")
+      .build();
+
+    given(userGateway.getUserById(request.getUserId()))
+      .willReturn(accountHolder);
+
+    deleteLegacyBeaconService.delete(request);
+
+    verify(noteGateway).create(noteCaptor.capture());
+    final var note = noteCaptor.getValue();
+
+    assertThat(note.getLegacyBeaconId(), is(request.getLegacyBeaconId()));
+    assertThat(note.getUserId(), is(request.getUserId()));
+    assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
+    assertThat(
+      note.getText(),
+      is(
+        "The account holder deleted the record with reason: '" +
+        "I do not recognise this beacon" +
+        "'"
+      )
+    );
   }
 }
