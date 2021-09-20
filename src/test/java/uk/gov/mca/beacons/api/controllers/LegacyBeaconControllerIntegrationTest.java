@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.api.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +54,7 @@ class LegacyBeaconControllerIntegrationTest {
   void shouldUpdateTheStatusOfALegacyBeaconToDeletedWhenItIsDeleted()
     throws Exception {
     final var userId = UUID.randomUUID().toString();
-    String reason = "I do not recognise this beacon.";
+    final String reason = "I do not recognise this beacon.";
     final var legacyBeaconId = createLegacyBeacon();
     deleteLegacyBeacon(legacyBeaconId, userId, reason);
     final var deleteLegacyBeaconResponse = Files
