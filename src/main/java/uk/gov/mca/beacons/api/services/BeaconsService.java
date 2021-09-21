@@ -67,6 +67,9 @@ public class BeaconsService {
       .withMapping(Beacon::getChkCode, Beacon::setChkCode)
       .withMapping(Beacon::getLastServicedDate, Beacon::setLastServicedDate)
       .withMapping(Beacon::getManufacturer, Beacon::setManufacturer)
+      .withMapping(Beacon::getMti, Beacon::setMti)
+      .withMapping(Beacon::getSvdr, Beacon::setSvdr)
+      .withMapping(Beacon::getCsta, Beacon::setCsta)
       .withMapping(
         Beacon::getManufacturerSerialNumber,
         Beacon::setManufacturerSerialNumber
