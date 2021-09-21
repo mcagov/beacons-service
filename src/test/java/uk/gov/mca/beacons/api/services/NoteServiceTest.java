@@ -69,4 +69,41 @@ class NoteServiceTest {
       assertThat(noteService.findAllByBeaconId(beaconId), is(empty()));
     }
   }
+
+  @Nested
+  class GetByLegacyBeaconId {
+
+    @Test
+    void shouldReturnAListOfNotesForALegacyBeacon() {
+      final NoteService noteService = new NoteService(mockNoteGateway);
+      final UUID legacyBeaconId = UUID.randomUUID();
+
+      final Note firstNote = Note.builder().beaconId(legacyBeaconId).build();
+      final Note secondNote = Note.builder().beaconId(legacyBeaconId).build();
+
+      final List<Note> foundNotes = List.of(firstNote, secondNote);
+
+      given(mockNoteGateway.findAllByLegacyBeaconId(legacyBeaconId))
+        .willReturn(foundNotes);
+
+      assertThat(
+        noteService.findAllByLegacyBeaconId(legacyBeaconId),
+        is(foundNotes)
+      );
+    }
+
+    @Test
+    void shouldReturnAnEmptyListIfThereAreNoNotesForALegacyBeacon() {
+      final NoteService noteService = new NoteService(mockNoteGateway);
+      final UUID legacyBeaconId = UUID.randomUUID();
+
+      given(mockNoteGateway.findAllByLegacyBeaconId(legacyBeaconId))
+        .willReturn(Collections.emptyList());
+
+      assertThat(
+        noteService.findAllByLegacyBeaconId(legacyBeaconId),
+        is(empty())
+      );
+    }
+  }
 }

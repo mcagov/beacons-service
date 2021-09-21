@@ -26,4 +26,8 @@ public class NoteService {
   public List<Note> findAllByBeaconId(UUID beaconId) {
     return noteGateway.findAllByBeaconId(beaconId);
   }
+
+  public List<Note> findAllByLegacyBeaconId(UUID legacyBeaconId) {
+    return noteGateway.findAllByLegacyBeaconId(legacyBeaconId);
+  }
 }
