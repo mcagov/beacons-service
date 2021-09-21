@@ -5,9 +5,8 @@
   "data": [
     {
       "type": "note",
-      "id": "replace-with-deleted-legacy-beacon-id",
       "attributes": {
-        "beaconId": "",
+        "legacyBeaconId": "replace-with-deleted-legacy-beacon-id",
         "text": "The account holder deleted the record with reason: 'I do not recognise this beacon.'",
         "type": "RECORD_HISTORY",
         "userId": "replace-with-user-id"

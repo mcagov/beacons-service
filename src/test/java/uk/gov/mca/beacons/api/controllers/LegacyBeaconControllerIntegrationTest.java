@@ -18,7 +18,6 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.gateways.UserGateway;
-import uk.gov.mca.beacons.api.services.GetUserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
