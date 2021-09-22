@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +59,11 @@ public class LegacyBeaconController {
       .orElseThrow(ResourceNotFoundException::new);
 
     return legacyBeaconMapper.toWrapperDTO(legacyBeacon);
+  }
+
+  @PostMapping(value = "/{uuid}/claim")
+  public ResponseEntity<Void> claimLegacyBeacon(@PathVariable("uuid") UUID id) {
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping(value = "/{uuid}/notes")
