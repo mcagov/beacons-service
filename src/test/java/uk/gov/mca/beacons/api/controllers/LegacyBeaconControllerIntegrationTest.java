@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.gateways.UserGateway;
@@ -47,7 +50,7 @@ class LegacyBeaconControllerIntegrationTest {
 
     @Test
     void shouldReturnTheLegacyBeaconById() throws Exception {
-        final String legacyBeaconId = getLegacyBeaconId(createLegacyBeacon());
+        final String legacyBeaconId = getLegacyBeaconId(seedLegacyBeacon());
         final var createLegacyBeaconResponse = Files.readString(
                 Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
         );
@@ -76,7 +79,7 @@ class LegacyBeaconControllerIntegrationTest {
                 .isNotFound();
     }
 
-    private WebTestClient.BodyContentSpec createLegacyBeacon() throws Exception {
+    private WebTestClient.BodyContentSpec seedLegacyBeacon() throws Exception {
         final var createLegacyBeaconRequest = Files.readString(
                 Paths.get("src/test/resources/fixtures/createLegacyBeaconRequest.json")
         );
@@ -120,6 +123,21 @@ class LegacyBeaconControllerIntegrationTest {
                 .textValue();
     }
 
+    private String getLegacyBeaconEmail(
+            WebTestClient.BodyContentSpec createLegacyBeaconResponse
+    ) throws Exception {
+        return new ObjectMapper()
+                .readValue(
+                        createLegacyBeaconResponse.returnResult().getResponseBody(),
+                        ObjectNode.class
+                )
+                .get("data")
+                .get("attributes")
+                .get("owner")
+                .get("email")
+                .textValue();
+    }
+
     private void deleteLegacyBeacon(
             String legacyBeaconId,
             String userId,
@@ -151,9 +169,11 @@ class LegacyBeaconControllerIntegrationTest {
         @Test
         void whenTheUserHitsTheClaimEndpoint_aNewRegistrationIsCreatedWithTheNecessaryProperties()
                 throws Exception {
-            var legacyBeaconResponse = createLegacyBeacon();
+            var legacyBeaconResponse = seedLegacyBeacon();
             var legacyBeaconId = getLegacyBeaconId(legacyBeaconResponse);
             var legacyBeaconHexId = getLegacyBeaconHexId(legacyBeaconResponse);
+            var legacyBeaconEmail = getLegacyBeaconEmail(legacyBeaconResponse);
+            seedAccountHolderWithEmail(legacyBeaconEmail);
 
             webTestClient
                     .post()
@@ -180,6 +200,24 @@ class LegacyBeaconControllerIntegrationTest {
                     .isEqualTo(legacyBeaconHexId)
                     .jsonPath("$.data[0].attributes.status")
                     .isEqualTo("NEW");
+        }
+
+        public void seedAccountHolderWithEmail(String email) throws Exception {
+            String newAccountHolderRequest = readFile(
+                    "src/test/resources/fixtures/createAccountHolderRequest.json"
+            ).replace("testy@mctestface.com", email);
+
+            webTestClient
+                    .post()
+                    .uri("/account-holder")
+                    .body(BodyInserters.fromValue(newAccountHolderRequest))
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .exchange()
+                    .expectBody();
+        }
+
+        private String readFile(String filePath) throws IOException {
+            return Files.readString(Paths.get(filePath));
         }
     }
 }
