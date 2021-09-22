@@ -127,11 +127,10 @@ public class PostgresAccountHolderGateway implements AccountHolderGateway {
                             "INNER JOIN person ON account_holder.person_id = person.id " +
                             "WHERE person.email = :email",
                     paramMap,
-                    new AccountHolderRowMapper()
-            );
+                    new AccountHolderRowMapper());
         } catch (EmptyResultDataAccessException e) {
             log.info("Unable to find account holder with email {}", email);
-            return null;
+            throw new ResourceNotFoundException();
         }
     }
 
