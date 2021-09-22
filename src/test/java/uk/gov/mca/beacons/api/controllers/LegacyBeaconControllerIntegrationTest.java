@@ -88,7 +88,7 @@ class LegacyBeaconControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("legacy-beacon/" + legacyBeaconId + ":claim")
+        .uri("legacy-beacon/" + legacyBeaconId + "/claim")
         .exchange()
         .expectStatus()
         .isOk();
