@@ -5,11 +5,13 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
 
 public interface AccountHolderGateway {
-  AccountHolder getById(UUID id);
+    AccountHolder getById(UUID id);
 
-  AccountHolder getByAuthId(String authId);
+    AccountHolder getByAuthId(String authId);
 
-  AccountHolder create(CreateAccountHolderRequest createAccountHolderRequest);
+    AccountHolder getByEmail(String email);
 
-  AccountHolder update(UUID id, AccountHolder createAccountHolderRequest);
+    AccountHolder create(CreateAccountHolderRequest createAccountHolderRequest);
+
+    AccountHolder update(UUID id, AccountHolder createAccountHolderRequest);
 }
