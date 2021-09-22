@@ -2,11 +2,13 @@ package uk.gov.mca.beacons.api.controllers;
 
 import static org.mockito.BDDMockito.given;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
-import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.gateways.UserGateway;
 
@@ -46,7 +47,7 @@ class LegacyBeaconControllerIntegrationTest {
 
   @Test
   void shouldReturnTheLegacyBeaconById() throws Exception {
-    final var legacyBeaconId = createLegacyBeacon();
+    final String legacyBeaconId = getLegacyBeaconId(createLegacyBeacon());
     final var createLegacyBeaconResponse = Files.readString(
       Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
     );
@@ -75,56 +76,45 @@ class LegacyBeaconControllerIntegrationTest {
       .isNotFound();
   }
 
-  @Test
-  void shouldUpdateTheStatusOfALegacyBeaconToDeletedWhenItIsDeleted()
-    throws Exception {
-    final String reason = "I do not recognise this beacon.";
-    final var legacyBeaconId = createLegacyBeacon();
-    deleteLegacyBeacon(legacyBeaconId, user.getId().toString(), reason);
+  @Nested
+  class ClaimEvent {
 
-    final var deleteLegacyBeaconResponse = Files
-      .readString(
-        Paths.get("src/test/resources/fixtures/createLegacyBeaconResponse.json")
-      )
-      .replace("MIGRATED", BeaconStatus.DELETED.toString());
+    @Test
+    void whenTheUserHitsTheClaimEndpoint_aNewREgistrationIsCreatedWithTheNecessaryProperties()
+      throws Exception {
+      var legacyBeaconResponse = createLegacyBeacon();
+      var legacyBeaconId = getLegacyBeaconId(legacyBeaconResponse);
+      var legacyBeaconHexId = getLegacyBeaconHexId(legacyBeaconResponse);
 
-    webTestClient
-      .get()
-      .uri("legacy-beacon/" + legacyBeaconId)
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectBody()
-      .json(deleteLegacyBeaconResponse);
-  }
+      webTestClient
+        .post()
+        .uri("legacy-beacon/" + legacyBeaconId + ":claim")
+        .exchange()
+        .expectStatus()
+        .isOk();
 
-  @Test
-  void shouldCreateANoteWithTheReasonForDeletionWhenTheLegacyBeaconIsDeleted()
-    throws Exception {
-    final String reason = "I do not recognise this beacon.";
-    final var legacyBeaconId = createLegacyBeacon();
-    deleteLegacyBeacon(legacyBeaconId, user.getId().toString(), reason);
-
-    final var noteForDeletedLegacyBeaconResponse = Files
-      .readString(
-        Paths.get(
-          "src/test/resources/fixtures/getNotesByDeletedLegacyBeaconIdResponse.json"
+      webTestClient
+        .get()
+        .uri(
+          "beacon-search/find-all-by-account-holder-and-email?email=" +
+          user.getEmail() +
+          "&accountHolderId=" +
+          user.getId()
         )
-      )
-      .replace("replace-with-deleted-legacy-beacon-id", legacyBeaconId)
-      .replace("replace-with-user-id", user.getId().toString());
-
-    webTestClient
-      .get()
-      .uri("legacy-beacon/" + legacyBeaconId + "/notes")
-      .exchange()
-      .expectStatus()
-      .isOk()
-      .expectBody()
-      .json(noteForDeletedLegacyBeaconResponse);
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.data[0].type")
+        .isEqualTo("beacon")
+        .jsonPath("$.data[0].attributes.hexId")
+        .isEqualTo(legacyBeaconHexId)
+        .jsonPath("$.data[0].attributes.status")
+        .isEqualTo("NEW");
+    }
   }
 
-  private String createLegacyBeacon() throws Exception {
+  private WebTestClient.BodyContentSpec createLegacyBeacon() throws Exception {
     final var createLegacyBeaconRequest = Files.readString(
       Paths.get("src/test/resources/fixtures/createLegacyBeaconRequest.json")
     );
@@ -137,11 +127,34 @@ class LegacyBeaconControllerIntegrationTest {
       .exchange()
       .expectStatus()
       .isCreated()
-      .expectBody(ObjectNode.class)
-      .returnResult()
-      .getResponseBody()
+      .expectBody();
+  }
+
+  private String getLegacyBeaconId(
+    WebTestClient.BodyContentSpec createLegacyBeaconResponse
+  ) throws Exception {
+    return new ObjectMapper()
+      .readValue(
+        createLegacyBeaconResponse.returnResult().getResponseBody(),
+        ObjectNode.class
+      )
       .get("data")
       .get("id")
+      .textValue();
+  }
+
+  private String getLegacyBeaconHexId(
+    WebTestClient.BodyContentSpec createLegacyBeaconResponse
+  ) throws Exception {
+    return new ObjectMapper()
+      .readValue(
+        createLegacyBeaconResponse.returnResult().getResponseBody(),
+        ObjectNode.class
+      )
+      .get("data")
+      .get("attributes")
+      .get("beacon")
+      .get("hexId")
       .textValue();
   }
 
