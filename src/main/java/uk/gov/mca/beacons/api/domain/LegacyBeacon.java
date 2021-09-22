@@ -16,11 +16,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LegacyBeacon {
 
-  private UUID id;
-  private BeaconStatus beaconStatus;
-  private Map<String, Object> beacon;
-  private List<Map<String, Object>> uses;
-  private Map<String, Object> owner;
-  private List<Map<String, Object>> secondaryOwners;
-  private Map<String, Object> emergencyContact;
+    private UUID id;
+    private BeaconStatus beaconStatus;
+    private Map<String, Object> beacon;
+    private List<Map<String, Object>> uses;
+    private Map<String, Object> owner;
+    private List<Map<String, Object>> secondaryOwners;
+    private Map<String, Object> emergencyContact;
+
+    public String getAssociatedEmailAddress() {
+        return owner.get("email").toString();
+    }
 }
