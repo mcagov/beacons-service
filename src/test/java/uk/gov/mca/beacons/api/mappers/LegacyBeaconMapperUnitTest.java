@@ -7,6 +7,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.utils.OffsetDateTimeOptionalZoneParser;
 
 @ExtendWith(MockitoExtension.class)
@@ -269,6 +271,30 @@ class LegacyBeaconMapperUnitTest {
         secondaryOwnersData.get(0).get("email"),
         is("mrsbeacon@beacons.gov.uk")
       );
+    }
+
+    @Nested
+    class ToBeacon {
+
+      @Test
+      void shouldSetTheHexIdAndManufacturerOfTheBeacon() {
+        String hexId = "9D0E1D1B8C00001";
+        String manufacturer = "ACR";
+
+        HashMap<String, Object> beaconMap = new HashMap<>();
+        beaconMap.put("hexId", hexId);
+        beaconMap.put("manufacturer", manufacturer);
+
+        LegacyBeacon legacyBeacon = LegacyBeacon
+          .builder()
+          .beacon(beaconMap)
+          .build();
+
+        Beacon result = legacyBeaconMapper.toBeacon(legacyBeacon);
+
+        assertThat(result.getHexId(), is(hexId));
+        assertThat(result.getManufacturer(), is(manufacturer));
+      }
     }
   }
 }
