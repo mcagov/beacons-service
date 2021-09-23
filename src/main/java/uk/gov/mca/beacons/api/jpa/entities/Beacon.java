@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,6 +26,7 @@ import uk.gov.mca.beacons.api.domain.BeaconStatus;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@Builder
 public class Beacon {
 
   @Id
