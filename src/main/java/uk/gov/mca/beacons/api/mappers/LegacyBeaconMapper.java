@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.LegacyBeaconDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
+import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.utils.OffsetDateTimeOptionalZoneParser;
 
@@ -116,5 +117,15 @@ public class LegacyBeaconMapper {
       .secondaryOwners((List) secondaryOwners)
       .emergencyContact((Map) emergencyContact)
       .build();
+  }
+
+  public Beacon toBeacon(LegacyBeacon legacyBeacon) {
+    final Beacon beacon = Beacon
+      .builder()
+      .hexId(legacyBeacon.getHexId())
+      .manufacturer(legacyBeacon.getManufacturer())
+      .build();
+
+    return beacon;
   }
 }
