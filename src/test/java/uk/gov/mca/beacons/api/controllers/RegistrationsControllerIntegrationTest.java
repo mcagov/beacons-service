@@ -22,8 +22,10 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.dto.CreateAccountHolderRequest;
 import uk.gov.mca.beacons.api.services.AccountHolderService;
 
@@ -270,6 +272,148 @@ class RegistrationsControllerIntegrationTest {
         .value(hasItems("02392 856622", "02392 856623"))
         .jsonPath("$.emergencyContacts[*].alternativeTelephoneNumber")
         .value(hasItems("02392 856623", "02392 856624"));
+    }
+  }
+
+  @Nested
+  class ClaimLegacyBeacon {
+
+    @Test
+    void whenUserRegistersABeaconWithSameHexIdAndAccountHolderEmailAsLegacyBeacon_shouldCreateClaimEventForLegacyBeacon()
+      throws Exception {
+      // Setup
+      final var email = UUID.randomUUID().toString() + "@test.com";
+      final var legacyBeaconHexId = "1D0EA08C52FFBFF";
+      final var legacyBeaconResponseBody = seedLegacyBeaconWithEmailAndHexId(
+        email,
+        legacyBeaconHexId
+      );
+      final var legacyBeaconId = getLegacyBeaconId(legacyBeaconResponseBody);
+      final var createAccountResponseBody = seedAccountHolderWithEmail(email);
+      final var accountHolderId = getAccountHolderId(createAccountResponseBody);
+
+      final Object requestBody = toJson(
+        readRegistrationsJson()
+          .replace("replace-with-test-account-holder-id", accountHolderId)
+      )
+        .get(RegistrationUseCase.SINGLE_BEACON);
+
+      // assertions
+      makePostRequest(requestBody).expectStatus().isCreated();
+
+      webTestClient
+        .get()
+        .uri("/legacy-beacon/" + legacyBeaconId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.data.id")
+        .isEqualTo(legacyBeaconId)
+        .jsonPath("$.data.attributes.event[0].type")
+        .isEqualTo("claim");
+    }
+
+    private WebTestClient.BodyContentSpec seedAccountHolderWithEmail(
+      String email
+    ) throws Exception {
+      String newAccountHolderRequest = readFile(
+        "src/test/resources/fixtures/createAccountHolderRequest.json"
+      )
+        .replace("testy@mctestface.com", email)
+        .replace("replace-with-test-auth-id", UUID.randomUUID().toString());
+
+      return webTestClient
+        .post()
+        .uri("/account-holder")
+        .body(BodyInserters.fromValue(newAccountHolderRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectBody();
+    }
+
+    private String getAccountHolderId(
+      WebTestClient.BodyContentSpec createAccountResponse
+    ) throws Exception {
+      return OBJECT_MAPPER
+        .readValue(
+          createAccountResponse.returnResult().getResponseBody(),
+          ObjectNode.class
+        )
+        .get("data")
+        .get("id")
+        .textValue();
+    }
+
+    private WebTestClient.BodyContentSpec seedLegacyBeaconWithEmailAndHexId(
+      String email,
+      String hexId
+    ) throws Exception {
+      final var createLegacyBeaconRequest = Files
+        .readString(
+          Paths.get(
+            "src/test/resources/fixtures/createLegacyBeaconRequest.json"
+          )
+        )
+        .replace("ownerbeacon@beacons.com", email)
+        .replace("9D0E1D1B8C00001", hexId);
+
+      return webTestClient
+        .post()
+        .uri("/migrate/legacy-beacon")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(createLegacyBeaconRequest)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectBody();
+    }
+
+    private String getLegacyBeaconId(
+      WebTestClient.BodyContentSpec createLegacyBeaconResponse
+    ) throws Exception {
+      return OBJECT_MAPPER
+        .readValue(
+          createLegacyBeaconResponse.returnResult().getResponseBody(),
+          ObjectNode.class
+        )
+        .get("data")
+        .get("id")
+        .textValue();
+    }
+
+    private String getLegacyBeaconHexId(
+      WebTestClient.BodyContentSpec createLegacyBeaconResponse
+    ) throws Exception {
+      return OBJECT_MAPPER
+        .readValue(
+          createLegacyBeaconResponse.returnResult().getResponseBody(),
+          ObjectNode.class
+        )
+        .get("data")
+        .get("attributes")
+        .get("beacon")
+        .get("hexId")
+        .textValue();
+    }
+
+    private String getLegacyBeaconEmail(
+      WebTestClient.BodyContentSpec createLegacyBeaconResponse
+    ) throws Exception {
+      return OBJECT_MAPPER
+        .readValue(
+          createLegacyBeaconResponse.returnResult().getResponseBody(),
+          ObjectNode.class
+        )
+        .get("data")
+        .get("attributes")
+        .get("owner")
+        .get("email")
+        .textValue();
+    }
+
+    private String readFile(String filePath) throws IOException {
+      return Files.readString(Paths.get(filePath));
     }
   }
 
