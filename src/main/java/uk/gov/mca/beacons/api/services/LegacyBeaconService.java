@@ -24,7 +24,6 @@ public class LegacyBeaconService {
     LegacyBeaconValidator legacyBeaconValidator
   ) {
     this.legacyBeaconGateway = legacyBeaconGateway;
-
     this.legacyBeaconValidator = legacyBeaconValidator;
   }
 
@@ -48,5 +47,9 @@ public class LegacyBeaconService {
 
   public Optional<LegacyBeacon> findById(UUID id) {
     return legacyBeaconGateway.findById(id);
+  }
+
+  public void claim(LegacyBeacon legacyBeacon) {
+    //
   }
 }
