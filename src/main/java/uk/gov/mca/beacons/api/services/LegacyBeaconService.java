@@ -56,12 +56,14 @@ public class LegacyBeaconService {
     }
 
     public Optional<List<LegacyBeacon>> findMatchingLegacyBeacons(Beacon beacon) {
+        if (beacon.getHexId() == null || beacon.getAccountHolderId() == null) return Optional.empty();
+
         AccountHolder accountHolder = accountHolderService.getById(beacon.getAccountHolderId());
 
         return Optional.ofNullable(legacyBeaconGateway.findAllByHexIdAndEmail(beacon.getHexId(), accountHolder.getEmail()));
     }
 
     public void claim(LegacyBeacon legacyBeacon) {
-        //
+        // TODO
     }
 }

@@ -1,15 +1,18 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -57,7 +60,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
     @Override
     public void deleteAll() {
-        jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
+        jdbcTemplate.execute("DELETE FROM legacy_beacon");
     }
 
     @Override
@@ -69,24 +72,39 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
     @Override
     public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
-        final SqlParameterSource paramMap = new MapSqlParameterSource()
-                .addValue("hexId", hexId)
-                .addValue("email", email);
+        final String sql = "SELECT " +
+                "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = '" + email + "' AND hex_id = '" + hexId + "'";
 
-        LegacyBeaconEntity legacyBeaconEntity;
+
+        List<LegacyBeaconEntity> legacyBeaconEntities =
+                jdbcTemplate.query(
+                        sql,
+                        this::mapRow
+                );
+
+        return legacyBeaconEntities.stream().map(legacyBeaconMapper::fromJpaEntity).collect(Collectors.toList());
+    }
+
+    private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum) {
+        LegacyBeaconEntity legacyBeaconEntity = new LegacyBeaconEntity();
+
         try {
-            legacyBeaconEntity =
-                    namedParameterJdbcTemplate.queryForObject(
-                            "SELECT " +
-                                    "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = 'ownerbeacon@beacons.com' AND hex_id = '9D0E1D1B8C00001'",
-                            paramMap,
-                            LegacyBeaconEntity.class
-                    );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
+            legacyBeaconEntity.setId(UUID.fromString(resultSet.getString("id")));
+            legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
+            legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
+            legacyBeaconEntity.setUseActivities(resultSet.getString("use_activities"));
+            legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
+            legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
         }
+        return legacyBeaconEntity;
+    }
 
-        assert legacyBeaconEntity != null;
-        return List.of(legacyBeaconMapper.fromJpaEntity(legacyBeaconEntity));
+    private Map<String, Object> dataColumnToMap(String contentsOfJsonBDataColumn) throws JsonProcessingException {
+        ObjectMapper dataColumnMapper = new ObjectMapper();
+
+        return dataColumnMapper.readValue(contentsOfJsonBDataColumn, new TypeReference<>() {
+        });
     }
 }

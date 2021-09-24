@@ -20,29 +20,29 @@ import uk.gov.mca.beacons.api.domain.BeaconStatus;
 @Entity(name = "legacy_beacon")
 @Getter
 @Setter
-@TypeDefs({ @TypeDef(name = "json", typeClass = JsonType.class) })
+@TypeDefs({@TypeDef(name = "json", typeClass = JsonType.class)})
 public class LegacyBeaconEntity {
 
-  @Id
-  @GeneratedValue
-  private UUID id;
+    @Id
+    @GeneratedValue
+    private UUID id;
 
-  @Type(type = "json")
-  @Column(columnDefinition = "jsonb")
-  private Map<String, Object> data;
+    @Type(type = "json")
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> data;
 
-  private String hexId;
+    private String hexId;
 
-  private String ownerEmail;
+    private String ownerEmail;
 
-  private String useActivities;
+    private String useActivities;
 
-  private String ownerName;
+    private String ownerName;
 
-  private OffsetDateTime createdDate;
+    private OffsetDateTime createdDate;
 
-  private OffsetDateTime lastModifiedDate;
+    private OffsetDateTime lastModifiedDate;
 
-  @Enumerated(EnumType.STRING)
-  private BeaconStatus beaconStatus;
+    @Enumerated(EnumType.STRING)
+    private BeaconStatus beaconStatus;
 }
