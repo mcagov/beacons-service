@@ -28,22 +28,30 @@ public class CreateRegistrationService {
   private final BeaconUseJpaRepository beaconUseJpaRepository;
   private final OwnerGateway ownerGateway;
   private final EmergencyContactGateway emergencyContactGateway;
+  private final LegacyBeaconService legacyBeaconService;
 
   @Autowired
   public CreateRegistrationService(
     BeaconJpaRepository beaconJpaRepository,
     BeaconUseJpaRepository beaconUseJpaRepository,
     OwnerGateway ownerGateway,
-    EmergencyContactGateway emergencyContactGateway
+    EmergencyContactGateway emergencyContactGateway,
+    LegacyBeaconService legacyBeaconService
   ) {
     this.beaconJpaRepository = beaconJpaRepository;
     this.beaconUseJpaRepository = beaconUseJpaRepository;
     this.ownerGateway = ownerGateway;
     this.emergencyContactGateway = emergencyContactGateway;
+    this.legacyBeaconService = legacyBeaconService;
   }
 
   public Beacon register(Beacon beacon) {
     log.info("Attempting to persist registration {}", beacon);
+
+    LegacyBeacon legacyBeacon = legacyBeaconService.match(beacon);
+    if (legacyBeacon != null) {
+      legacyBeaconService.claim(legacyBeacon);
+    }
 
     registerBeacon(beacon);
 
