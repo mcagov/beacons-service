@@ -10,4 +10,6 @@ public interface LegacyBeaconGateway {
   void deleteAll();
 
   Optional<LegacyBeacon> findById(UUID id);
+
+  LegacyBeacon findByHexIdAndEmail(String hexId, String email);
 }
