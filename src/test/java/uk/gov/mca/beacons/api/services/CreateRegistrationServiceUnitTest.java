@@ -7,10 +7,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
+import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
@@ -46,6 +47,9 @@ class CreateRegistrationServiceUnitTest {
 
   @Mock
   private EmergencyContactGateway emergencyContactGateway;
+
+  @Mock
+  private LegacyBeaconService legacyBeaconService;
 
   @Captor
   private ArgumentCaptor<CreateOwnerRequest> ownerRequestCaptor;
@@ -91,5 +95,15 @@ class CreateRegistrationServiceUnitTest {
     then(emergencyContactGateway)
       .should(times(1))
       .save(isA(CreateEmergencyContactRequest.class));
+  }
+
+  @Nested
+  class WhenTheNewBeaconMatchesALegacyBeaconOnEmailAndHexId_ShouldClaimLegacyBeacon {
+
+    @Test
+    void shouldClaimTheLegacyBeacon() {
+      createRegistrationService.register(beacon);
+      then(legacyBeaconService).should(times(1)).claim(isA(LegacyBeacon.class));
+    }
   }
 }
