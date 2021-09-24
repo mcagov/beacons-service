@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uk.gov.mca.beacons.api.domain.events.Event;
 
 @Getter
 @Setter
@@ -23,20 +24,9 @@ public class LegacyBeacon {
   private Map<String, Object> owner;
   private List<Map<String, Object>> secondaryOwners;
   private Map<String, Object> emergencyContact;
+  private List<Event> events;
 
   public String getAssociatedEmailAddress() {
     return owner.get("email").toString();
-  }
-
-  public String getHexId() {
-    return beacon.get("hexId").toString();
-  }
-
-  public String getManufacturer() {
-    return beacon.get("manufacturer").toString();
-  }
-
-  public String getSerialNumber() {
-    return beacon.get("serialNumber").toString();
   }
 }

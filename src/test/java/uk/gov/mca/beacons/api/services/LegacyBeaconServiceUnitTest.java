@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.services;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -20,6 +21,7 @@ import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
+import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class LegacyBeaconServiceUnitTest {
@@ -39,6 +41,9 @@ public class LegacyBeaconServiceUnitTest {
   @Mock
   CreateRegistrationService createRegistrationService;
 
+  @Mock
+  LegacyBeaconMapper legacyBeaconMapper;
+
   @Nested
   class Claim {
 
@@ -48,6 +53,7 @@ public class LegacyBeaconServiceUnitTest {
     void init() {
       Map<String, Object> owner = new HashMap<>();
       owner.put("email", "steve@apple.com");
+
       legacyBeacon =
         LegacyBeacon.builder().id(UUID.randomUUID()).owner(owner).build();
     }
@@ -57,13 +63,6 @@ public class LegacyBeaconServiceUnitTest {
       legacyBeaconService.claim(legacyBeacon);
 
       verify(eventGateway, times(1)).save(any(LegacyBeaconClaimEvent.class));
-    }
-
-    @Test
-    void shouldRegisterANewBeacon() {
-      legacyBeaconService.claim(legacyBeacon);
-
-      verify(createRegistrationService, times(1)).register(any(Beacon.class));
     }
   }
 }

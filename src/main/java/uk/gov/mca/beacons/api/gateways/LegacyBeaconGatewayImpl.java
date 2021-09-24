@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -68,5 +69,22 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     return legacyBeaconJpaRepository
       .findById(id)
       .map(legacyBeaconMapper::fromJpaEntity);
+  }
+
+  @Override
+  public Optional<LegacyBeacon> actualFindById(UUID id) {
+    final SqlParameterSource legacyBeaconParamMap = new MapSqlParameterSource()
+      .addValue("id", id);
+
+    LegacyBeacon legacyBeacon = jdbcTemplate.queryForObject(
+      "SELECT " +
+      "legacy_beacon.hex_id, " +
+      "legacy_beacon.owner_email, " +
+      "legacy_beacon.created_date, " +
+      "legacy_beacon.last_modified_date, " +
+      "legacy_beacon.owner_name, " +
+      "legacy_beacon.use_activities, "
+    );
+    return Optional.of(legacyBeacon);
   }
 }

@@ -272,29 +272,5 @@ class LegacyBeaconMapperUnitTest {
         is("mrsbeacon@beacons.gov.uk")
       );
     }
-
-    @Nested
-    class ToBeacon {
-
-      @Test
-      void shouldSetTheHexIdAndManufacturerOfTheBeacon() {
-        String hexId = "9D0E1D1B8C00001";
-        String manufacturer = "ACR";
-
-        HashMap<String, Object> beaconMap = new HashMap<>();
-        beaconMap.put("hexId", hexId);
-        beaconMap.put("manufacturer", manufacturer);
-
-        LegacyBeacon legacyBeacon = LegacyBeacon
-          .builder()
-          .beacon(beaconMap)
-          .build();
-
-        Beacon result = legacyBeaconMapper.toBeacon(legacyBeacon);
-
-        assertThat(result.getHexId(), is(hexId));
-        assertThat(result.getManufacturer(), is(manufacturer));
-      }
-    }
   }
 }

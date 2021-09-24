@@ -120,11 +120,11 @@ public class LegacyBeaconMapper {
   }
 
   public Beacon toBeacon(LegacyBeacon legacyBeacon) {
-    final Beacon beacon = Beacon
-      .builder()
-      .hexId(legacyBeacon.getHexId())
-      .manufacturer(legacyBeacon.getManufacturer())
-      .build();
+    Beacon beacon = new Beacon();
+    beacon.setHexId(legacyBeacon.getHexId());
+    beacon.setManufacturer(legacyBeacon.getManufacturer());
+    beacon.setModel(legacyBeacon.getModel());
+    beacon.setManufacturerSerialNumber("");
 
     return beacon;
   }

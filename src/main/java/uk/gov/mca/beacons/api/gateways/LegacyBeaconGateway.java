@@ -12,4 +12,5 @@ public interface LegacyBeaconGateway {
   void deleteAll();
 
   Optional<LegacyBeacon> findById(UUID id);
+  // Optional<LegacyBeacon> betterFindById(UUID id);
 }
