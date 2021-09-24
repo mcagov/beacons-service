@@ -19,56 +19,56 @@ import uk.gov.mca.beacons.api.services.validation.LegacyBeaconValidator;
 @Transactional
 public class LegacyBeaconService {
 
-    private final LegacyBeaconGateway legacyBeaconGateway;
-    private final EventGateway eventGateway;
-    private final AccountHolderGateway accountHolderGateway;
-    private final LegacyBeaconValidator legacyBeaconValidator;
+  private final LegacyBeaconGateway legacyBeaconGateway;
+  private final EventGateway eventGateway;
+  private final AccountHolderGateway accountHolderGateway;
+  private final LegacyBeaconValidator legacyBeaconValidator;
 
-    @Autowired
-    public LegacyBeaconService(
-            LegacyBeaconGateway legacyBeaconGateway,
-            EventGateway eventGateway,
-            AccountHolderGateway accountHolderGateway,
-            LegacyBeaconValidator legacyBeaconValidator
-    ) {
-        this.legacyBeaconGateway = legacyBeaconGateway;
-        this.eventGateway = eventGateway;
-        this.accountHolderGateway = accountHolderGateway;
-        this.legacyBeaconValidator = legacyBeaconValidator;
+  @Autowired
+  public LegacyBeaconService(
+    LegacyBeaconGateway legacyBeaconGateway,
+    EventGateway eventGateway,
+    AccountHolderGateway accountHolderGateway,
+    LegacyBeaconValidator legacyBeaconValidator
+  ) {
+    this.legacyBeaconGateway = legacyBeaconGateway;
+    this.eventGateway = eventGateway;
+    this.accountHolderGateway = accountHolderGateway;
+    this.legacyBeaconValidator = legacyBeaconValidator;
+  }
+
+  public LegacyBeacon create(LegacyBeacon beacon) {
+    validate(beacon);
+    return legacyBeaconGateway.save(beacon);
+  }
+
+  private void validate(LegacyBeacon beacon) {
+    final var errors = new BeanPropertyBindingResult(beacon, "legacyBeacon");
+    legacyBeaconValidator.validate(beacon, errors);
+
+    if (errors.hasFieldErrors()) {
+      throw new BeaconsValidationException(errors);
     }
+  }
 
-    public LegacyBeacon create(LegacyBeacon beacon) {
-        validate(beacon);
-        return legacyBeaconGateway.save(beacon);
-    }
+  public void deleteAll() {
+    legacyBeaconGateway.deleteAll();
+  }
 
-    private void validate(LegacyBeacon beacon) {
-        final var errors = new BeanPropertyBindingResult(beacon, "legacyBeacon");
-        legacyBeaconValidator.validate(beacon, errors);
+  public Optional<LegacyBeacon> findById(UUID id) {
+    return legacyBeaconGateway.findById(id);
+  }
 
-        if (errors.hasFieldErrors()) {
-            throw new BeaconsValidationException(errors);
-        }
-    }
-
-    public void deleteAll() {
-        legacyBeaconGateway.deleteAll();
-    }
-
-    public Optional<LegacyBeacon> findById(UUID id) {
-        return legacyBeaconGateway.findById(id);
-    }
-
-    public void claim(LegacyBeacon legacyBeacon) {
-        var accountHolder = accountHolderGateway.getByEmail(
-                legacyBeacon.getAssociatedEmailAddress()
-        );
-        eventGateway.save(
-                new LegacyBeaconClaimEvent(
-                        legacyBeacon,
-                        accountHolder,
-                        OffsetDateTime.now()
-                )
-        );
-    }
+  public void claim(LegacyBeacon legacyBeacon) {
+    var accountHolder = accountHolderGateway.getByEmail(
+      legacyBeacon.getAssociatedEmailAddress()
+    );
+    eventGateway.save(
+      new LegacyBeaconClaimEvent(
+        legacyBeacon,
+        accountHolder,
+        OffsetDateTime.now()
+      )
+    );
+  }
 }

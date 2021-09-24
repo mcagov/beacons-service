@@ -32,60 +32,62 @@ import uk.gov.mca.beacons.api.services.NoteService;
 @Tag(name = "Legacy Beacon Controller")
 public class LegacyBeaconController {
 
-    private final LegacyBeaconService legacyBeaconService;
-    private final LegacyBeaconMapper legacyBeaconMapper;
-    private final DeleteLegacyBeaconService deleteLegacyBeaconService;
-    private final NoteService noteService;
-    private final NoteMapper noteMapper;
+  private final LegacyBeaconService legacyBeaconService;
+  private final LegacyBeaconMapper legacyBeaconMapper;
+  private final DeleteLegacyBeaconService deleteLegacyBeaconService;
+  private final NoteService noteService;
+  private final NoteMapper noteMapper;
 
-    @Autowired
-    public LegacyBeaconController(
-            LegacyBeaconService legacyBeaconService,
-            LegacyBeaconMapper legacyBeaconMapper,
-            DeleteLegacyBeaconService deleteLegacyBeaconService,
-            NoteService noteService,
-            NoteMapper noteMapper
-    ) {
-        this.legacyBeaconService = legacyBeaconService;
-        this.legacyBeaconMapper = legacyBeaconMapper;
-        this.deleteLegacyBeaconService = deleteLegacyBeaconService;
-        this.noteService = noteService;
-        this.noteMapper = noteMapper;
-    }
+  @Autowired
+  public LegacyBeaconController(
+    LegacyBeaconService legacyBeaconService,
+    LegacyBeaconMapper legacyBeaconMapper,
+    DeleteLegacyBeaconService deleteLegacyBeaconService,
+    NoteService noteService,
+    NoteMapper noteMapper
+  ) {
+    this.legacyBeaconService = legacyBeaconService;
+    this.legacyBeaconMapper = legacyBeaconMapper;
+    this.deleteLegacyBeaconService = deleteLegacyBeaconService;
+    this.noteService = noteService;
+    this.noteMapper = noteMapper;
+  }
 
-    @GetMapping(value = "/{uuid}")
-    public WrapperDTO<LegacyBeaconDTO> findById(@PathVariable("uuid") UUID id) {
-        final var legacyBeacon = legacyBeaconService
-                .findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+  @GetMapping(value = "/{uuid}")
+  public WrapperDTO<LegacyBeaconDTO> findById(@PathVariable("uuid") UUID id) {
+    final var legacyBeacon = legacyBeaconService
+      .findById(id)
+      .orElseThrow(ResourceNotFoundException::new);
 
-        return legacyBeaconMapper.toWrapperDTO(legacyBeacon);
-    }
+    return legacyBeaconMapper.toWrapperDTO(legacyBeacon);
+  }
 
-    @PostMapping(value = "/{uuid}/claim")
-    public ResponseEntity<Void> claimLegacyBeacon(@PathVariable("uuid") UUID id) {
-        LegacyBeacon legacyBeaconToClaim = legacyBeaconService.findById(id).orElseThrow(ResourceNotFoundException::new);
+  @PostMapping(value = "/{uuid}/claim")
+  public ResponseEntity<Void> claimLegacyBeacon(@PathVariable("uuid") UUID id) {
+    LegacyBeacon legacyBeaconToClaim = legacyBeaconService
+      .findById(id)
+      .orElseThrow(ResourceNotFoundException::new);
 
-        legacyBeaconService.claim(legacyBeaconToClaim);
+    legacyBeaconService.claim(legacyBeaconToClaim);
 
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @GetMapping(value = "/{uuid}/notes")
-    public WrapperDTO<List<NoteDTO>> getNotesByLegacyBeaconId(
-            @PathVariable("uuid") UUID id
-    ) {
-        final List<Note> foundNotes = noteService.findAllByLegacyBeaconId(id);
+  @GetMapping(value = "/{uuid}/notes")
+  public WrapperDTO<List<NoteDTO>> getNotesByLegacyBeaconId(
+    @PathVariable("uuid") UUID id
+  ) {
+    final List<Note> foundNotes = noteService.findAllByLegacyBeaconId(id);
 
-        return noteMapper.toOrderedWrapperDTO(foundNotes);
-    }
+    return noteMapper.toOrderedWrapperDTO(foundNotes);
+  }
 
-    @PatchMapping(value = "/{uuid}/delete")
-    public ResponseEntity<Void> delete(
-            @PathVariable("uuid") UUID id,
-            @RequestBody @Valid DeleteLegacyBeaconRequestDTO requestDTO
-    ) {
-        deleteLegacyBeaconService.delete(requestDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PatchMapping(value = "/{uuid}/delete")
+  public ResponseEntity<Void> delete(
+    @PathVariable("uuid") UUID id,
+    @RequestBody @Valid DeleteLegacyBeaconRequestDTO requestDTO
+  ) {
+    deleteLegacyBeaconService.delete(requestDTO);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

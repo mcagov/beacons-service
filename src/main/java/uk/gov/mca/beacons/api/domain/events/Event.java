@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 public abstract class Event {
-    protected final OffsetDateTime dateTime;
 
-    protected Event(OffsetDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
+  protected final OffsetDateTime dateTime;
+
+  protected Event(OffsetDateTime dateTime) {
+    this.dateTime = dateTime;
+  }
 }
