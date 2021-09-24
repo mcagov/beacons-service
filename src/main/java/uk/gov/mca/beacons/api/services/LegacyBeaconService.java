@@ -13,7 +13,6 @@ import uk.gov.mca.beacons.api.exceptions.BeaconsValidationException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
-import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 import uk.gov.mca.beacons.api.services.validation.LegacyBeaconValidator;
 
 @Service
@@ -24,24 +23,18 @@ public class LegacyBeaconService {
     private final EventGateway eventGateway;
     private final AccountHolderGateway accountHolderGateway;
     private final LegacyBeaconValidator legacyBeaconValidator;
-    private final LegacyBeaconMapper legacyBeaconMapper;
-    private final CreateRegistrationService createRegistrationService;
 
     @Autowired
     public LegacyBeaconService(
             LegacyBeaconGateway legacyBeaconGateway,
             EventGateway eventGateway,
             AccountHolderGateway accountHolderGateway,
-            LegacyBeaconValidator legacyBeaconValidator,
-            LegacyBeaconMapper legacyBeaconMapper,
-            CreateRegistrationService createRegistrationService
+            LegacyBeaconValidator legacyBeaconValidator
     ) {
         this.legacyBeaconGateway = legacyBeaconGateway;
         this.eventGateway = eventGateway;
         this.accountHolderGateway = accountHolderGateway;
         this.legacyBeaconValidator = legacyBeaconValidator;
-        this.legacyBeaconMapper = legacyBeaconMapper;
-        this.createRegistrationService = createRegistrationService;
     }
 
     public LegacyBeacon create(LegacyBeacon beacon) {
@@ -77,7 +70,5 @@ public class LegacyBeaconService {
                         OffsetDateTime.now()
                 )
         );
-        // Beacon beacon = legacyBeaconMapper.toBeacon(legacyBeacon);
-        createRegistrationService.register(beacon);
     }
 }
