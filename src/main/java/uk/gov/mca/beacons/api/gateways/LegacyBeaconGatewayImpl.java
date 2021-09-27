@@ -3,7 +3,9 @@ package uk.gov.mca.beacons.api.gateways;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +14,11 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -74,14 +80,18 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
     final String sql =
       "SELECT " +
-      "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = '" +
-      email +
-      "' AND hex_id = '" +
-      hexId +
-      "'";
+      "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = :email" +
+      " AND hex_id = ?hexId";
 
     List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
       sql,
+      new PreparedStatementSetter() {
+        public void setValues(PreparedStatement preparedStatement)
+          throws SQLException {
+          preparedStatement.setString(1, email);
+          preparedStatement.setString(2, hexId);
+        }
+      },
       this::mapRow
     );
 
