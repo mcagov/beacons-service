@@ -8,6 +8,8 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -98,12 +100,17 @@ class CreateRegistrationServiceUnitTest {
   }
 
   @Nested
-  class WhenTheNewBeaconMatchesALegacyBeaconOnEmailAndHexId_ShouldClaimLegacyBeacon {
+  class WhenTheNewBeaconMatchesALegacyBeacon {
 
     @Test
-    void shouldClaimTheLegacyBeacon() {
+    void thenItShouldClaimTheLegacyBeacon() {
+      LegacyBeacon matchingLegacyBeacon = LegacyBeacon.builder().build();
+      given(legacyBeaconService.findMatchingLegacyBeacons(beacon))
+        .willReturn(Optional.of(List.of(matchingLegacyBeacon)));
+
       createRegistrationService.register(beacon);
-      then(legacyBeaconService).should(times(1)).claim(isA(LegacyBeacon.class));
+
+      then(legacyBeaconService).should(times(1)).claim(matchingLegacyBeacon);
     }
   }
 }
