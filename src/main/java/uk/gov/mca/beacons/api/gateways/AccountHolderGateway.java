@@ -9,6 +9,8 @@ public interface AccountHolderGateway {
 
   AccountHolder getByAuthId(String authId);
 
+  AccountHolder getByEmail(String email);
+
   AccountHolder create(CreateAccountHolderRequest createAccountHolderRequest);
 
   AccountHolder update(UUID id, AccountHolder createAccountHolderRequest);

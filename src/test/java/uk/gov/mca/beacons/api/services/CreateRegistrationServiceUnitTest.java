@@ -103,7 +103,7 @@ class CreateRegistrationServiceUnitTest {
   class WhenTheNewBeaconMatchesALegacyBeacon {
 
     @Test
-    void thenItShouldClaimTheLegacyBeacon() {
+    void thenItShouldClaimTheLegacyBeacon() throws Exception {
       LegacyBeacon matchingLegacyBeacon = LegacyBeacon.builder().build();
       given(legacyBeaconService.findMatchingLegacyBeacons(beacon))
         .willReturn(Optional.of(List.of(matchingLegacyBeacon)));

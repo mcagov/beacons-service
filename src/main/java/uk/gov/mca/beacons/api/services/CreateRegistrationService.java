@@ -55,7 +55,19 @@ public class CreateRegistrationService {
     );
 
     matchingLegacyBeacons.ifPresent(
-      matches -> matches.forEach(legacyBeaconService::claim)
+      matches ->
+        matches.forEach(
+          match -> {
+            try {
+              legacyBeaconService.claim(match);
+            } catch (Exception e) {
+              log.error(
+                "Failed to claim LegacyBeacon with id " + match.getId()
+              );
+              e.printStackTrace();
+            }
+          }
+        )
     );
 
     registerBeacon(beacon);

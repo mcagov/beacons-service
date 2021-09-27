@@ -11,7 +11,12 @@ public abstract class Event {
   protected OffsetDateTime dateTime;
 
   protected Event(UUID id, OffsetDateTime dateTime) {
-    this.id = id;
+    if (id == null) {
+      this.id = UUID.randomUUID();
+    } else {
+      this.id = id;
+    }
+
     this.dateTime = dateTime;
   }
 }

@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
+import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
@@ -31,6 +32,9 @@ public class LegacyBeaconServiceUnitTest {
 
   @Mock
   private AccountHolderService accountHolderService;
+
+  @Mock
+  private AccountHolderGateway accountHolderGateway;
 
   @Mock
   private EventGateway eventGateway;
@@ -148,7 +152,14 @@ public class LegacyBeaconServiceUnitTest {
 
   @Test
   void givenALegacyBeacon_thenItShouldCreateAClaimEvent() throws Exception {
-    LegacyBeacon legacyBeacon = LegacyBeacon.builder().build();
+    Map<String, Object> owner = new HashMap<>();
+    owner.put("email", "steve@apple.com");
+
+    LegacyBeacon legacyBeacon = LegacyBeacon
+      .builder()
+      .id(UUID.randomUUID())
+      .owner(owner)
+      .build();
 
     legacyBeaconService.claim(legacyBeacon);
 

@@ -104,6 +104,38 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
   }
 
   @Override
+  public AccountHolder getByEmail(String email) {
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("email", email);
+    try {
+      return jdbcTemplate.queryForObject(
+        "SELECT " +
+        "account_holder.id, " +
+        "account_holder.auth_id, " +
+        "person.full_name, " +
+        "person.email, " +
+        "person.address_line_1 as address_line1, " +
+        "person.address_line_2 as address_line2, " +
+        "person.address_line_3 as address_line3, " +
+        "person.address_line_4 as address_line4, " +
+        "person.postcode, " +
+        "person.county, " +
+        "person.telephone_number, " +
+        "person.alternative_telephone_number, " +
+        "person.town_or_city " +
+        "FROM account_holder " +
+        "INNER JOIN person ON account_holder.person_id = person.id " +
+        "WHERE person.email = :email",
+        paramMap,
+        new AccountHolderRowMapper()
+      );
+    } catch (EmptyResultDataAccessException e) {
+      log.info("Unable to find account holder with email {}", email);
+      throw new ResourceNotFoundException();
+    }
+  }
+
+  @Override
   public AccountHolder create(
     CreateAccountHolderRequest createAccountHolderRequest
   ) {
