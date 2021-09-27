@@ -33,10 +33,10 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Autowired
   public LegacyBeaconGatewayImpl(
-          LegacyBeaconJpaRepository legacyBeaconJpaRepository,
-          LegacyBeaconMapper legacyBeaconMapper,
-          NamedParameterJdbcTemplate namedParameterJdbcTemplate,
-          JdbcTemplate jdbcTemplate
+    LegacyBeaconJpaRepository legacyBeaconJpaRepository,
+    LegacyBeaconMapper legacyBeaconMapper,
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+    JdbcTemplate jdbcTemplate
   ) {
     this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
     this.legacyBeaconMapper = legacyBeaconMapper;
@@ -50,11 +50,11 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     legacyBeaconEntity.setBeaconStatus(BeaconStatus.MIGRATED);
 
     log.info(
-            "Saving beacon record with PK {}",
-            beacon.getBeacon().get("pkBeaconId")
+      "Saving beacon record with PK {}",
+      beacon.getBeacon().get("pkBeaconId")
     );
     return legacyBeaconMapper.fromJpaEntity(
-            legacyBeaconJpaRepository.save(legacyBeaconEntity)
+      legacyBeaconJpaRepository.save(legacyBeaconEntity)
     );
   }
 
@@ -66,30 +66,30 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   @Override
   public Optional<LegacyBeacon> findById(UUID id) {
     return legacyBeaconJpaRepository
-            .findById(id)
-            .map(legacyBeaconMapper::fromJpaEntity);
+      .findById(id)
+      .map(legacyBeaconMapper::fromJpaEntity);
   }
 
   @Override
   public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
     final String sql =
-            "SELECT " +
-                    "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = ?" +
-                    " AND hex_id = ?";
+      "SELECT " +
+      "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = ?" +
+      " AND hex_id = ?";
 
     List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
-            sql,
-            preparedStatement -> {
-              preparedStatement.setString(1, email);
-              preparedStatement.setString(2, hexId);
-            },
-            this::mapRow
+      sql,
+      preparedStatement -> {
+        preparedStatement.setString(1, email);
+        preparedStatement.setString(2, hexId);
+      },
+      this::mapRow
     );
 
     return legacyBeaconEntities
-            .stream()
-            .map(legacyBeaconMapper::fromJpaEntity)
-            .collect(Collectors.toList());
+      .stream()
+      .map(legacyBeaconMapper::fromJpaEntity)
+      .collect(Collectors.toList());
   }
 
   private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum) {
@@ -100,7 +100,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
       legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
       legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
       legacyBeaconEntity.setUseActivities(
-              resultSet.getString("use_activities")
+        resultSet.getString("use_activities")
       );
       legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
       legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
@@ -111,13 +111,12 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   }
 
   private Map<String, Object> dataColumnToMap(String contentsOfJsonBDataColumn)
-          throws JsonProcessingException {
+    throws JsonProcessingException {
     ObjectMapper dataColumnMapper = new ObjectMapper();
 
     return dataColumnMapper.readValue(
-            contentsOfJsonBDataColumn,
-            new TypeReference<>() {
-            }
+      contentsOfJsonBDataColumn,
+      new TypeReference<>() {}
     );
   }
 }
