@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.controllers;
 
 import static org.mockito.BDDMockito.given;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
@@ -149,13 +150,19 @@ class BeaconsControllerIntegrationTest {
   @Test
   void shouldReturnTheNotesForABeaconId() throws Exception {
     final String beaconId = uuid.toString();
-    final String firstNoteId = getNoteId(createNote(beaconId));
-    final String secondNoteId = getNoteId(createNote(beaconId));
+    final var firstNote = createNote(beaconId);
+    final String firstNoteId = getNoteId(firstNote);
+    final String firstNoteCreatedDate = getCreatedDate(firstNote);
+    final var secondNote = createNote(beaconId);
+    final String secondNoteId = getNoteId(secondNote);
+    final String secondNoteCreatedDate = getCreatedDate(secondNote);
     final String expectedResponse = readFile(
       "src/test/resources/fixtures/getNotesByBeaconIdResponse.json"
     )
       .replace("replace-with-first-test-note-id", firstNoteId)
+      .replace("replace-with-first-created-date", firstNoteCreatedDate)
       .replace("replace-with-second-test-note-id", secondNoteId)
+      .replace("replace-with-second-created-date", secondNoteCreatedDate)
       .replace("replace-with-test-beacon-id", beaconId);
 
     final var response = webTestClient
@@ -171,8 +178,7 @@ class BeaconsControllerIntegrationTest {
     return Files.readString(Paths.get(filePath));
   }
 
-  private WebTestClient.BodyContentSpec createNote(String beaconId)
-    throws Exception {
+  private JsonNode createNote(String beaconId) throws Exception {
     final String createNoteRequest = readFile(
       "src/test/resources/fixtures/createNoteRequest.json"
     )
@@ -188,26 +194,29 @@ class BeaconsControllerIntegrationTest {
       .email(email)
       .build();
 
-    given(getUserService.getUser(null)).willReturn(user);
+    given(getUserService.getUser()).willReturn(user);
 
-    return webTestClient
+    final var createNoteResponse = webTestClient
       .post()
       .uri("/note")
       .body(BodyInserters.fromValue(createNoteRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
       .expectBody();
-  }
 
-  private String getNoteId(WebTestClient.BodyContentSpec createNoteResponse)
-    throws Exception {
     return new ObjectMapper()
       .readValue(
         createNoteResponse.returnResult().getResponseBody(),
         ObjectNode.class
       )
-      .get("data")
-      .get("id")
-      .textValue();
+      .get("data");
+  }
+
+  private String getNoteId(JsonNode createNoteResponse) {
+    return createNoteResponse.get("id").textValue();
+  }
+
+  private String getCreatedDate(JsonNode createNoteResponse) {
+    return createNoteResponse.get("attributes").get("createdDate").textValue();
   }
 }
