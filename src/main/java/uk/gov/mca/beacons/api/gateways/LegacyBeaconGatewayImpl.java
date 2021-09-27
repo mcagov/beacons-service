@@ -81,15 +81,15 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     final String sql =
       "SELECT " +
       "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = :email" +
-      " AND hex_id = ?hexId";
+      " AND hex_id = :hexId";
 
     List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
       sql,
       new PreparedStatementSetter() {
         public void setValues(PreparedStatement preparedStatement)
           throws SQLException {
-          preparedStatement.setString(1, email);
-          preparedStatement.setString(2, hexId);
+          preparedStatement.setString(0, email);
+          preparedStatement.setString(1, hexId);
         }
       },
       this::mapRow
