@@ -3,6 +3,8 @@ package uk.gov.mca.beacons.api.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +32,9 @@ public class LegacyBeaconServiceUnitTest {
 
   @Mock
   private AccountHolderService accountHolderService;
+
+  @Mock
+  private EventGateway eventGateway;
 
   @Test
   void whenTheEmailAndHexIdAreTheSameInBothBeaconAndLegacyBeacon_thenReturnAMatch() {
@@ -140,5 +145,14 @@ public class LegacyBeaconServiceUnitTest {
 
     // Assert
     assertThat(matchingLegacyBeacons.size(), is(0));
+  }
+
+  @Test
+  void givenALegacyBeacon_thenItShouldCreateAClaimEvent() {
+    LegacyBeacon legacyBeacon = LegacyBeacon.builder().build();
+
+    legacyBeaconService.claim(legacyBeacon);
+
+    then(eventGateway).should(times(1)).save(isA(LegacyBeaconClaimEvent.class));
   }
 }
