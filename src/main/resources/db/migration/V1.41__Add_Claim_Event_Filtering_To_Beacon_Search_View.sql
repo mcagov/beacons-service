@@ -14,7 +14,7 @@ SELECT id,
        NULL                     as account_holder_id,
        use_activities
 FROM legacy_beacon
-UNION
+UNION ALL
 SELECT id,
        created_date,
        last_modified_date,
