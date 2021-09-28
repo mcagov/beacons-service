@@ -35,7 +35,7 @@ class DeleteBeaconServiceUnitTest {
   private BeaconGateway beaconGateway;
 
   @Mock
-  private UserGateway userGateway;
+  private AccountHolderGateway accountHolderGateway;
 
   @Mock
   private NoteGateway noteGateway;
@@ -61,7 +61,7 @@ class DeleteBeaconServiceUnitTest {
       .userId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
-    given(userGateway.getUserById(accountHolderId))
+    given(accountHolderGateway.getById(accountHolderId))
       .willReturn(new AccountHolder());
 
     deleteBeaconService.delete(request);
@@ -82,13 +82,11 @@ class DeleteBeaconServiceUnitTest {
       .userId(accountHolderId)
       .reason("Unused on my boat anymore")
       .build();
-    given(userGateway.getUserById(accountHolderId)).willReturn(null);
+    given(accountHolderGateway.getById(accountHolderId)).willReturn(null);
 
     assertThrows(
       UserNotFoundException.class,
-      () -> {
-        deleteBeaconService.delete(request);
-      }
+      () -> deleteBeaconService.delete(request)
     );
     verify(beaconGateway, never()).delete(request.getBeaconId());
     verify(noteGateway, never()).create(any(Note.class));
@@ -109,7 +107,8 @@ class DeleteBeaconServiceUnitTest {
       .email("beacons@beacons.com")
       .fullName("Beacons R Us")
       .build();
-    given(userGateway.getUserById(accountHolderId)).willReturn(accountHolder);
+    given(accountHolderGateway.getById(accountHolderId))
+      .willReturn(accountHolder);
 
     deleteBeaconService.delete(request);
 
@@ -117,7 +116,7 @@ class DeleteBeaconServiceUnitTest {
     final var note = noteCaptor.getValue();
     assertThat(note.getBeaconId(), is(beaconId));
     assertThat(note.getEmail(), is(nullValue()));
-    assertThat(note.getFullName(), is(nullValue()));
+    assertThat(note.getFullName(), is("Account Holder"));
     assertThat(note.getUserId(), is(accountHolderId));
     assertThat(note.getType(), is(NoteType.RECORD_HISTORY));
     assertThat(

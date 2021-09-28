@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
-import uk.gov.mca.beacons.api.gateways.UserGateway;
+import uk.gov.mca.beacons.api.gateways.AuthGateway;
 
 @ExtendWith(MockitoExtension.class)
 class GetUserServiceTest {
@@ -20,7 +20,7 @@ class GetUserServiceTest {
   private GetUserService getUserService;
 
   @Mock
-  private UserGateway userGateway;
+  private AuthGateway authGateway;
 
   @Test
   void shouldReturnTheCurrentUser() {
@@ -34,8 +34,8 @@ class GetUserServiceTest {
       .email(email)
       .build();
 
-    given(userGateway.getUserById(null)).willReturn(user);
+    given(authGateway.getUser()).willReturn(user);
 
-    assertThat(getUserService.getUser(null), is(user));
+    assertThat(getUserService.getUser(), is(user));
   }
 }

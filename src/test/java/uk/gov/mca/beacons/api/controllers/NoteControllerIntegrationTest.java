@@ -95,7 +95,7 @@ class NoteControllerIntegrationTest {
       .email(email)
       .build();
 
-    given(getUserService.getUser(null)).willReturn(user);
+    given(getUserService.getUser()).willReturn(user);
 
     var response = webTestClient
       .post()

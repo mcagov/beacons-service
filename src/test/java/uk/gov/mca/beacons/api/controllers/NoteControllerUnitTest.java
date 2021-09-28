@@ -76,7 +76,7 @@ class NoteControllerUnitTest {
         .writeValueAsString(newNoteDTO);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
-      given(getUserService.getUser(null)).willReturn(user);
+      given(getUserService.getUser()).willReturn(user);
 
       mvc
         .perform(
@@ -94,7 +94,7 @@ class NoteControllerUnitTest {
         .writeValueAsString(newNoteDTO);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
-      given(getUserService.getUser(null)).willReturn(user);
+      given(getUserService.getUser()).willReturn(user);
 
       mvc.perform(
         post("/note")
@@ -102,7 +102,7 @@ class NoteControllerUnitTest {
           .content(newNoteRequest)
       );
 
-      verify(getUserService, times(1)).getUser(null);
+      verify(getUserService, times(1)).getUser();
     }
 
     @Test
@@ -112,7 +112,7 @@ class NoteControllerUnitTest {
         .writeValueAsString(newNoteDTO);
 
       given(noteMapper.fromDTO(newNoteDTO.getData())).willReturn(note);
-      given(getUserService.getUser(null)).willReturn(user);
+      given(getUserService.getUser()).willReturn(user);
 
       mvc.perform(
         post("/note")
