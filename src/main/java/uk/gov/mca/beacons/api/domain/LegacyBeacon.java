@@ -3,11 +3,7 @@ package uk.gov.mca.beacons.api.domain;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -23,4 +19,8 @@ public class LegacyBeacon {
   private Map<String, Object> owner;
   private List<Map<String, Object>> secondaryOwners;
   private Map<String, Object> emergencyContact;
+
+  public String getAssociatedEmailAddress() {
+    return owner.get("email").toString();
+  }
 }

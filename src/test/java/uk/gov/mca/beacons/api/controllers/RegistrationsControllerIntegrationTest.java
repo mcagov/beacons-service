@@ -3,15 +3,8 @@ package uk.gov.mca.beacons.api.controllers;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -31,10 +24,8 @@ import uk.gov.mca.beacons.api.services.AccountHolderService;
 @AutoConfigureWebTestClient
 class RegistrationsControllerIntegrationTest {
 
-  private static final String REGISTRATION_ENDPOINT = "/registrations/register";
   private static final String REGISTRATION_JSON_RESOURCE =
     "src/test/resources/fixtures/registrations.json";
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Autowired
   private WebTestClient webTestClient;
@@ -43,18 +34,54 @@ class RegistrationsControllerIntegrationTest {
   private AccountHolderService accountHolderService;
 
   @Test
-  void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
+  void givenNewValidRegistration_whenPosted_thenStatus201_2()
+    throws IOException {
+    TestSeeder testSeeder = new TestSeeder(webTestClient);
     final UUID testAccountHolderId = createTestAccountHolder();
-    final Object requestBody = toJson(
-      readRegistrationsJson()
-        .replace(
-          "replace-with-test-account-holder-id",
-          testAccountHolderId.toString()
-        )
-    )
+    final Object requestBody = testSeeder
+      .registrationFixtureToMap(
+        testSeeder
+          .readFile(REGISTRATION_JSON_RESOURCE)
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
       .get(RegistrationUseCase.SINGLE_BEACON);
 
-    makePostRequest(requestBody)
+    webTestClient
+      .post()
+      .uri("/registrations/register")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(requestBody)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectHeader()
+      .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+  }
+
+  @Test
+  void givenNewValidRegistration_whenPosted_thenStatus201() throws IOException {
+    TestSeeder testSeeder = new TestSeeder(webTestClient);
+    final UUID testAccountHolderId = createTestAccountHolder();
+    final Object requestBody = testSeeder
+      .registrationFixtureToMap(
+        testSeeder
+          .readFile(REGISTRATION_JSON_RESOURCE)
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
+      .get(RegistrationUseCase.SINGLE_BEACON);
+
+    webTestClient
+      .post()
+      .uri("/registrations/register")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(requestBody)
+      .exchange()
       .expectStatus()
       .isCreated()
       .expectHeader()
@@ -72,21 +99,57 @@ class RegistrationsControllerIntegrationTest {
   void givenInvalidRegistration_whenPosted_thenStatus400(
     RegistrationUseCase registrationUseCase
   ) throws IOException {
+    TestSeeder testSeeder = new TestSeeder(webTestClient);
     final UUID testAccountHolderId = createTestAccountHolder();
-    final Object requestBody = toJson(
-      readRegistrationsJson()
-        .replace(
-          "replace-with-test-account-holder-id",
-          testAccountHolderId.toString()
-        )
-    )
+    final Object requestBody = testSeeder
+      .registrationFixtureToMap(
+        testSeeder
+          .readFile(REGISTRATION_JSON_RESOURCE)
+          .replace(
+            "replace-with-test-account-holder-id",
+            testAccountHolderId.toString()
+          )
+      )
       .get(registrationUseCase);
 
-    makePostRequest(requestBody)
+    webTestClient
+      .post()
+      .uri("/registrations/register")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(requestBody)
+      .exchange()
       .expectStatus()
       .isBadRequest()
       .expectHeader()
       .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+  }
+
+  private UUID createTestAccountHolder() {
+    CreateAccountHolderRequest createAccountHolderRequest = CreateAccountHolderRequest
+      .builder()
+      .authId(UUID.randomUUID().toString())
+      .email("testy@mctestface.com")
+      .fullName("Tesy McTestface")
+      .telephoneNumber("01178 657123")
+      .alternativeTelephoneNumber("01178 657124")
+      .addressLine1("Flat 42")
+      .addressLine2("Testington Towers")
+      .addressLine3("Tower Test")
+      .addressLine4("Testing Towers")
+      .townOrCity("Testville")
+      .postcode("TS1 23A")
+      .county("Testershire")
+      .build();
+
+    return accountHolderService.create(createAccountHolderRequest).getId();
+  }
+
+  enum RegistrationUseCase {
+    SINGLE_BEACON,
+    BEACON_TO_UPDATE,
+    NO_HEX_ID,
+    NO_USES,
+    NO_EMERGENCY_CONTACTS,
   }
 
   @Nested
@@ -99,13 +162,21 @@ class RegistrationsControllerIntegrationTest {
     @BeforeEach
     void init() throws Exception {
       testAccountHolderId = createTestAccountHolder().toString();
-      final Object requestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object requestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.SINGLE_BEACON);
 
-      final var responseBody = makePostRequest(requestBody)
+      final var responseBody = webTestClient
+        .post()
+        .uri("/registrations/register")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestBody)
+        .exchange()
         .expectBody(ObjectNode.class)
         .returnResult()
         .getResponseBody();
@@ -116,10 +187,13 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldUpdateTheBeacon() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -147,10 +221,13 @@ class RegistrationsControllerIntegrationTest {
     @Test
     void shouldUpdateTheLastModifiedDateEvenIfTheBeaconValuesHaveNotChanged()
       throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.SINGLE_BEACON);
 
       webTestClient
@@ -167,15 +244,18 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldNotUpdateNonEditableBeaconFields() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
-          .replace(
-            "replace-with-test-account-holder-id",
-            UUID.randomUUID().toString()
-          )
-          .replace("ABCDE4", "ABCDE5")
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("1D0EA08C52FFBFF", "1D0EA08C52FFBFD")
+            .replace(
+              "replace-with-test-account-holder-id",
+              UUID.randomUUID().toString()
+            )
+            .replace("ABCDE4", "ABCDE5")
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -196,10 +276,13 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldReplaceTheBeaconUses() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -218,10 +301,13 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldReplaceTheOwner() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -250,10 +336,13 @@ class RegistrationsControllerIntegrationTest {
 
     @Test
     void shouldReplaceTheEmergencyContacts() throws Exception {
-      final Object updateRequestBody = toJson(
-        readRegistrationsJson()
-          .replace("replace-with-test-account-holder-id", testAccountHolderId)
-      )
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final Object updateRequestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", testAccountHolderId)
+        )
         .get(RegistrationUseCase.BEACON_TO_UPDATE);
 
       webTestClient
@@ -273,50 +362,60 @@ class RegistrationsControllerIntegrationTest {
     }
   }
 
-  private WebTestClient.ResponseSpec makePostRequest(Object json) {
-    return webTestClient
-      .post()
-      .uri(REGISTRATION_ENDPOINT)
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(json)
-      .exchange();
-  }
+  @Nested
+  class ClaimLegacyBeacon {
 
-  private Map<RegistrationUseCase, Object> toJson(String registrationFixture)
-    throws JsonProcessingException {
-    final TypeReference<EnumMap<RegistrationUseCase, Object>> typeReference = new TypeReference<>() {};
-    return OBJECT_MAPPER.readValue(registrationFixture, typeReference);
-  }
+    @Test
+    void whenUserRegistersABeaconWithSameHexIdAndAccountHolderEmailAsLegacyBeacon_shouldClaimLegacyBeacon()
+      throws Exception {
+      // Setup
+      TestSeeder testSeeder = new TestSeeder(webTestClient);
+      final var email = UUID.randomUUID().toString() + "@test.com";
+      final var legacyBeaconHexId = "1D0EA08C52FFBFF";
+      final var createAccountResponseBody = testSeeder.seedAccountHolderWithEmail(
+        email
+      );
+      final var accountHolderId = testSeeder.getAccountHolderId(
+        createAccountResponseBody
+      );
+      testSeeder.seedLegacyBeaconWithEmailAndHexId(email, legacyBeaconHexId);
 
-  private UUID createTestAccountHolder() {
-    CreateAccountHolderRequest createAccountHolderRequest = CreateAccountHolderRequest
-      .builder()
-      .authId(UUID.randomUUID().toString())
-      .email("testy@mctestface.com")
-      .fullName("Tesy McTestface")
-      .telephoneNumber("01178 657123")
-      .alternativeTelephoneNumber("01178 657124")
-      .addressLine1("Flat 42")
-      .addressLine2("Testington Towers")
-      .addressLine3("Tower Test")
-      .addressLine4("Testing Towers")
-      .townOrCity("Testville")
-      .postcode("TS1 23A")
-      .county("Testershire")
-      .build();
+      final Object requestBody = testSeeder
+        .registrationFixtureToMap(
+          testSeeder
+            .readFile(REGISTRATION_JSON_RESOURCE)
+            .replace("replace-with-test-account-holder-id", accountHolderId)
+        )
+        .get(RegistrationUseCase.SINGLE_BEACON);
 
-    return accountHolderService.create(createAccountHolderRequest).getId();
-  }
+      // assertions
+      webTestClient
+        .post()
+        .uri("/registrations/register")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestBody)
+        .exchange()
+        .expectStatus()
+        .isCreated();
 
-  private String readRegistrationsJson() throws IOException {
-    return Files.readString(Paths.get(REGISTRATION_JSON_RESOURCE));
-  }
-
-  enum RegistrationUseCase {
-    SINGLE_BEACON,
-    BEACON_TO_UPDATE,
-    NO_HEX_ID,
-    NO_USES,
-    NO_EMERGENCY_CONTACTS,
+      webTestClient
+        .get()
+        .uri(
+          "/beacon-search/search/find-all-by-account-holder-and-email?email=" +
+          email +
+          "&accountHolderId=" +
+          accountHolderId
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("_embedded.beaconSearch.length()")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].hexId")
+        .isEqualTo(legacyBeaconHexId)
+        .jsonPath("_embedded.beaconSearch[0].beaconStatus")
+        .isEqualTo("NEW");
+    }
   }
 }

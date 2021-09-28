@@ -1,12 +1,14 @@
 package uk.gov.mca.beacons.api.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
+import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.dto.CreateEmergencyContactRequest;
 import uk.gov.mca.beacons.api.dto.CreateOwnerRequest;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
@@ -28,26 +30,67 @@ public class CreateRegistrationService {
   private final BeaconUseJpaRepository beaconUseJpaRepository;
   private final OwnerGateway ownerGateway;
   private final EmergencyContactGateway emergencyContactGateway;
+  private final LegacyBeaconService legacyBeaconService;
 
   @Autowired
   public CreateRegistrationService(
     BeaconJpaRepository beaconJpaRepository,
     BeaconUseJpaRepository beaconUseJpaRepository,
     OwnerGateway ownerGateway,
-    EmergencyContactGateway emergencyContactGateway
+    EmergencyContactGateway emergencyContactGateway,
+    LegacyBeaconService legacyBeaconService
   ) {
     this.beaconJpaRepository = beaconJpaRepository;
     this.beaconUseJpaRepository = beaconUseJpaRepository;
     this.ownerGateway = ownerGateway;
     this.emergencyContactGateway = emergencyContactGateway;
+    this.legacyBeaconService = legacyBeaconService;
   }
 
   public Beacon register(Beacon beacon) {
-    log.info("Attempting to persist registration {}", beacon);
+    log.info(
+      "Attempting to claim matching LegacyBeacons for Registration with HexId {} owned by AccountHolder {}",
+      beacon.getHexId(),
+      beacon.getAccountHolderId()
+    );
+    claimMatchingLegacyBeacons(beacon);
 
+    log.info(
+      "Attempting to persist Registration with HexId {} owned by AccountHolder {}",
+      beacon.getHexId(),
+      beacon.getAccountHolderId()
+    );
     registerBeacon(beacon);
 
     return beacon;
+  }
+
+  private void claimMatchingLegacyBeacons(Beacon beacon) {
+    Optional<List<LegacyBeacon>> matchingLegacyBeacons = legacyBeaconService.findMatchingLegacyBeacons(
+      beacon
+    );
+
+    matchingLegacyBeacons.ifPresent(
+      matches ->
+        matches.forEach(
+          matchingLegacyBeacon -> {
+            try {
+              log.info(
+                "Matching LegacyBeacon {} found for AccountHolder {}.  Attempting to claim",
+                matchingLegacyBeacon.getId(),
+                beacon.getAccountHolderId()
+              );
+              legacyBeaconService.claim(matchingLegacyBeacon);
+            } catch (Exception e) {
+              log.error(
+                "Failed to claim LegacyBeacon {}",
+                matchingLegacyBeacon.getId()
+              );
+              e.printStackTrace();
+            }
+          }
+        )
+    );
   }
 
   private void registerBeacon(Beacon beacon) {

@@ -1,7 +1,14 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
+import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @Repository
@@ -48,7 +56,7 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   @Override
   public void deleteAll() {
-    jdbcTemplate.execute("TRUNCATE TABLE legacy_beacon");
+    jdbcTemplate.execute("DELETE FROM legacy_beacon");
   }
 
   @Override
@@ -56,5 +64,69 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
     return legacyBeaconJpaRepository
       .findById(id)
       .map(legacyBeaconMapper::fromJpaEntity);
+  }
+
+  @Override
+  public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
+    final String sql =
+      "SELECT " +
+      "id, " +
+      "hex_id, " +
+      "owner_email, " +
+      "use_activities, " +
+      "owner_name, " +
+      "created_date, " +
+      "last_modified_date, " +
+      "beacon_status, " +
+      "data " +
+      "FROM legacy_beacon WHERE owner_email = ? " +
+      "AND hex_id = ?";
+
+    List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
+      sql,
+      preparedStatement -> {
+        preparedStatement.setString(1, email);
+        preparedStatement.setString(2, hexId);
+      },
+      this::mapRow
+    );
+
+    return legacyBeaconEntities
+      .stream()
+      .map(legacyBeaconMapper::fromJpaEntity)
+      .collect(Collectors.toList());
+  }
+
+  private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum)
+    throws SQLException {
+    LegacyBeaconEntity legacyBeaconEntity = new LegacyBeaconEntity();
+
+    legacyBeaconEntity.setId(UUID.fromString(resultSet.getString("id")));
+    legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
+    legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
+    legacyBeaconEntity.setUseActivities(resultSet.getString("use_activities"));
+    legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
+    legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
+
+    return legacyBeaconEntity;
+  }
+
+  private Map<String, Object> dataColumnToMap(
+    String contentsOfJsonBDataColumn
+  ) {
+    ObjectMapper dataColumnMapper = new ObjectMapper();
+
+    try {
+      return dataColumnMapper.readValue(
+        contentsOfJsonBDataColumn,
+        new TypeReference<>() {}
+      );
+    } catch (Exception e) {
+      log.error(
+        "Error reading value of 'legacy_beacon' table column 'data': " + e
+      );
+    }
+
+    return null;
   }
 }
