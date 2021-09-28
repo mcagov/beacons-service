@@ -1,9 +1,9 @@
 package uk.gov.mca.beacons.api.gateways;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,31 +97,36 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
       .collect(Collectors.toList());
   }
 
-  private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum) {
+  private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum)
+    throws SQLException {
     LegacyBeaconEntity legacyBeaconEntity = new LegacyBeaconEntity();
 
-    try {
-      legacyBeaconEntity.setId(UUID.fromString(resultSet.getString("id")));
-      legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
-      legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
-      legacyBeaconEntity.setUseActivities(
-        resultSet.getString("use_activities")
-      );
-      legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
-      legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
-    } catch (Exception e) {
-      log.error(String.valueOf(e));
-    }
+    legacyBeaconEntity.setId(UUID.fromString(resultSet.getString("id")));
+    legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
+    legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
+    legacyBeaconEntity.setUseActivities(resultSet.getString("use_activities"));
+    legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
+    legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
+
     return legacyBeaconEntity;
   }
 
-  private Map<String, Object> dataColumnToMap(String contentsOfJsonBDataColumn)
-    throws JsonProcessingException {
+  private Map<String, Object> dataColumnToMap(
+    String contentsOfJsonBDataColumn
+  ) {
     ObjectMapper dataColumnMapper = new ObjectMapper();
 
-    return dataColumnMapper.readValue(
-      contentsOfJsonBDataColumn,
-      new TypeReference<>() {}
-    );
+    try {
+      return dataColumnMapper.readValue(
+        contentsOfJsonBDataColumn,
+        new TypeReference<>() {}
+      );
+    } catch (Exception e) {
+      log.error(
+        "Error reading value of 'legacy_beacon' table column 'data': " + e
+      );
+    }
+
+    return null;
   }
 }
