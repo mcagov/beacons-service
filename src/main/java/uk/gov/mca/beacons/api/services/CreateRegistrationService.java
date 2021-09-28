@@ -48,8 +48,24 @@ public class CreateRegistrationService {
   }
 
   public Beacon register(Beacon beacon) {
-    log.info("Attempting to persist registration {}", beacon);
+    log.info(
+      "Attempting to claim matching LegacyBeacons for Registration with HexId {} owned by AccountHolder {}",
+      beacon.getHexId(),
+      beacon.getAccountHolderId()
+    );
+    claimMatchingLegacyBeacons(beacon);
 
+    log.info(
+      "Attempting to persist Registration with HexId {} owned by AccountHolder {}",
+      beacon.getHexId(),
+      beacon.getAccountHolderId()
+    );
+    registerBeacon(beacon);
+
+    return beacon;
+  }
+
+  private void claimMatchingLegacyBeacons(Beacon beacon) {
     Optional<List<LegacyBeacon>> matchingLegacyBeacons = legacyBeaconService.findMatchingLegacyBeacons(
       beacon
     );
@@ -57,22 +73,24 @@ public class CreateRegistrationService {
     matchingLegacyBeacons.ifPresent(
       matches ->
         matches.forEach(
-          match -> {
+          matchingLegacyBeacon -> {
             try {
-              legacyBeaconService.claim(match);
+              log.info(
+                "Matching LegacyBeacon {} found for AccountHolder {}.  Attempting to claim",
+                matchingLegacyBeacon.getId(),
+                beacon.getAccountHolderId()
+              );
+              legacyBeaconService.claim(matchingLegacyBeacon);
             } catch (Exception e) {
               log.error(
-                "Failed to claim LegacyBeacon with id " + match.getId()
+                "Failed to claim LegacyBeacon {}",
+                matchingLegacyBeacon.getId()
               );
               e.printStackTrace();
             }
           }
         )
     );
-
-    registerBeacon(beacon);
-
-    return beacon;
   }
 
   private void registerBeacon(Beacon beacon) {
