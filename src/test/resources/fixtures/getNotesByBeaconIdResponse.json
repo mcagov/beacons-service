@@ -10,6 +10,7 @@
         "beaconId": "replace-with-test-beacon-id",
         "text": "That's a great beacon right there",
         "type": "GENERAL",
+        "createdDate": "replace-with-first-created-date",
         "userId": "344848b9-8a5d-4818-a57d-1815528d543e",
         "fullName": "Jean ValJean",
         "email": "24601@jail.fr"
@@ -23,6 +24,7 @@
         "beaconId": "replace-with-test-beacon-id",
         "text": "That's a great beacon right there",
         "type": "GENERAL",
+        "createdDate": "replace-with-second-created-date",
         "userId": "344848b9-8a5d-4818-a57d-1815528d543e",
         "fullName": "Jean ValJean",
         "email": "24601@jail.fr"

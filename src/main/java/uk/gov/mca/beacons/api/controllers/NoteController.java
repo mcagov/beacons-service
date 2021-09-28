@@ -49,8 +49,7 @@ public class NoteController {
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
     final Note note = noteMapper.fromDTO(dto.getData());
-    // TODO: how to handle an Account Holder creating a note?
-    final User user = getUserService.getUser(null);
+    final User user = getUserService.getUser();
 
     note.setUserId(user.getId());
     note.setFullName(user.getFullName());

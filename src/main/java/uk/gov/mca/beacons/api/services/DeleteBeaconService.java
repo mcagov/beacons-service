@@ -12,12 +12,12 @@ import uk.gov.mca.beacons.api.domain.NoteType;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
+import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.BeaconGateway;
 import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
-import uk.gov.mca.beacons.api.gateways.UserGateway;
 
 @Service
 @Transactional
@@ -27,7 +27,7 @@ public class DeleteBeaconService {
     "The account holder deleted the record with reason: '%s'";
 
   private final BeaconGateway beaconGateway;
-  private final UserGateway userGateway;
+  private final AccountHolderGateway accountHolderGateway;
   private final NoteGateway noteGateway;
   private final OwnerGateway ownerGateway;
   private final EmergencyContactGateway emergencyContactGateway;
@@ -36,14 +36,14 @@ public class DeleteBeaconService {
   @Autowired
   public DeleteBeaconService(
     BeaconGateway beaconGateway,
-    UserGateway userGateway,
+    AccountHolderGateway accountHolderGateway,
     NoteGateway noteGateway,
     OwnerGateway ownerGateway,
     EmergencyContactGateway emergencyContactGateway,
     UseGateway useGateway
   ) {
     this.beaconGateway = beaconGateway;
-    this.userGateway = userGateway;
+    this.accountHolderGateway = accountHolderGateway;
     this.noteGateway = noteGateway;
     this.ownerGateway = ownerGateway;
     this.emergencyContactGateway = emergencyContactGateway;
@@ -67,7 +67,7 @@ public class DeleteBeaconService {
   }
 
   public void delete(DeleteBeaconRequestDTO request) {
-    final User user = userGateway.getUserById(request.getUserId());
+    final User user = accountHolderGateway.getById(request.getUserId());
     if (user == null) throw new UserNotFoundException();
 
     final var beaconIdToBeDeleted = request.getBeaconId();
@@ -76,6 +76,7 @@ public class DeleteBeaconService {
       .builder()
       .beaconId(beaconIdToBeDeleted)
       .userId(request.getUserId())
+      .fullName("Account Holder")
       .type(NoteType.RECORD_HISTORY)
       .text(format(TEMPLATE_REASON_TEXT, request.getReason()))
       .createdDate(now())
