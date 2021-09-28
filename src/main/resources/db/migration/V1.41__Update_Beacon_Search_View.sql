@@ -12,7 +12,7 @@ SELECT id,
        owner_email,
        NULL as account_holder_id,
        use_activities
-FROM legacy_beacon
+FROM legacy_beacon_search
 UNION ALL
 SELECT id,
        created_date,
