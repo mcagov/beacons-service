@@ -23,7 +23,6 @@ import uk.gov.mca.beacons.api.services.validation.LegacyBeaconValidator;
 public class LegacyBeaconService {
 
   private final LegacyBeaconGateway legacyBeaconGateway;
-  private final AccountHolderService accountHolderService;
   private final LegacyBeaconValidator legacyBeaconValidator;
   private final AccountHolderGateway accountHolderGateway;
   private final EventGateway eventGateway;
@@ -32,13 +31,11 @@ public class LegacyBeaconService {
   public LegacyBeaconService(
     LegacyBeaconGateway legacyBeaconGateway,
     LegacyBeaconValidator legacyBeaconValidator,
-    AccountHolderService accountHolderService,
     AccountHolderGateway accountHolderGateway,
     EventGateway eventGateway
   ) {
     this.legacyBeaconGateway = legacyBeaconGateway;
     this.legacyBeaconValidator = legacyBeaconValidator;
-    this.accountHolderService = accountHolderService;
     this.accountHolderGateway = accountHolderGateway;
     this.eventGateway = eventGateway;
   }
@@ -72,7 +69,7 @@ public class LegacyBeaconService {
       beacon.getHexId() == null || beacon.getAccountHolderId() == null
     ) return Optional.empty();
 
-    AccountHolder accountHolder = accountHolderService.getById(
+    AccountHolder accountHolder = accountHolderGateway.getById(
       beacon.getAccountHolderId()
     );
 

@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
+import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
@@ -30,10 +31,10 @@ public class LegacyBeaconServiceUnitTest {
   private LegacyBeaconGateway legacyBeaconGateway;
 
   @Mock
-  private AccountHolderService accountHolderService;
+  private EventGateway eventGateway;
 
   @Mock
-  private EventGateway eventGateway;
+  private AccountHolderGateway accountHolderGateway;
 
   @Test
   void whenTheEmailAndHexIdAreTheSameInBothBeaconAndLegacyBeacon_thenReturnAMatch() {
@@ -44,7 +45,7 @@ public class LegacyBeaconServiceUnitTest {
       .email(accountHolderEmail)
       .id(accountHolderId)
       .build();
-    given(accountHolderService.getById(accountHolderId))
+    given(accountHolderGateway.getById(accountHolderId))
       .willReturn(accountHolder);
 
     String hexId = "1D1234123412345";
@@ -84,7 +85,7 @@ public class LegacyBeaconServiceUnitTest {
       .email(accountHolderEmail)
       .id(accountHolderId)
       .build();
-    given(accountHolderService.getById(accountHolderId))
+    given(accountHolderGateway.getById(accountHolderId))
       .willReturn(accountHolder);
 
     String hexId = "does not match";
@@ -111,7 +112,7 @@ public class LegacyBeaconServiceUnitTest {
       .email(accountHolderEmail)
       .id(accountHolderId)
       .build();
-    given(accountHolderService.getById(accountHolderId))
+    given(accountHolderGateway.getById(accountHolderId))
       .willReturn(accountHolder);
 
     String hexId = "1D1234123412345";
