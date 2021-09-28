@@ -16,11 +16,11 @@ public class LegacyBeaconClaimEvent extends Event {
 
   public LegacyBeaconClaimEvent(
     UUID id,
-    OffsetDateTime dateTime,
+    OffsetDateTime whenHappened,
     LegacyBeacon legacyBeacon,
     AccountHolder accountHolder
   ) {
-    super(id, dateTime);
+    super(id, whenHappened);
     this.legacyBeacon = legacyBeacon;
     this.accountHolder = accountHolder;
   }

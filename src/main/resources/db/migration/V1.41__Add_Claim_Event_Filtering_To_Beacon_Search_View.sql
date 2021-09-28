@@ -3,7 +3,9 @@ SELECT id,
        created_date,
        last_modified_date,
        (CASE
-            WHEN (SELECT COUNT(*) FROM claim_event WHERE claim_event.legacy_beacon_id = legacy_beacon.id) = 0
+            WHEN (SELECT COUNT(*)
+                  FROM legacy_beacon_claim_event
+                  WHERE legacy_beacon_claim_event.legacy_beacon_id = legacy_beacon.id) = 0
                 THEN 'MIGRATED'
             ELSE 'DELETED' END) AS beacon_status,
        hex_id,

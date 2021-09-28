@@ -33,11 +33,11 @@ public class PostgresEventGateway implements EventGateway {
         "accountHolderId",
         legacyBeaconClaimEvent.getAccountHolder().getId()
       )
-      .addValue("dateTime", legacyBeaconClaimEvent.getDateTime());
+      .addValue("dateTime", legacyBeaconClaimEvent.getWhenHappened());
 
     jdbcTemplate.update(
-      "INSERT INTO claim_event " +
-      "(id, legacy_beacon_id, account_holder_id, type, date_time) " +
+      "INSERT INTO legacy_beacon_claim_event " +
+      "(id, legacy_beacon_id, account_holder_id, claim_event_type, when_happened) " +
       "VALUES " +
       "(:id, :legacyBeaconId, :accountHolderId, 'claim', :dateTime)",
       paramMap

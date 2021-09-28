@@ -8,15 +8,15 @@ import lombok.Getter;
 public abstract class Event {
 
   protected UUID id;
-  protected OffsetDateTime dateTime;
+  protected OffsetDateTime whenHappened;
 
-  protected Event(UUID id, OffsetDateTime dateTime) {
+  protected Event(UUID id, OffsetDateTime whenHappened) {
     if (id == null) {
       this.id = UUID.randomUUID();
     } else {
       this.id = id;
     }
 
-    this.dateTime = dateTime;
+    this.whenHappened = whenHappened;
   }
 }
