@@ -70,8 +70,17 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
   public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
     final String sql =
       "SELECT " +
-      "id, hex_id, owner_email, use_activities, owner_name, created_date, last_modified_date, beacon_status, data FROM legacy_beacon WHERE owner_email = ?" +
-      " AND hex_id = ?";
+      "id, " +
+      "hex_id, " +
+      "owner_email, " +
+      "use_activities, " +
+      "owner_name, " +
+      "created_date, " +
+      "last_modified_date, " +
+      "beacon_status, " +
+      "data " +
+      "FROM legacy_beacon WHERE owner_email = ? " +
+      "AND hex_id = ?";
 
     List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
       sql,
