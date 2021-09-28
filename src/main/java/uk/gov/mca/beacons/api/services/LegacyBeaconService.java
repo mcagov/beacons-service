@@ -66,6 +66,8 @@ public class LegacyBeaconService {
   }
 
   public Optional<List<LegacyBeacon>> findMatchingLegacyBeacons(Beacon beacon) {
+    // TODO: Change RegistrationController integration tests to use TestSeeder methods, so test data is seeded
+    // with valid relationships (e.g. AccountHolder).  This guard clause can then be removed.
     if (
       beacon.getHexId() == null || beacon.getAccountHolderId() == null
     ) return Optional.empty();
