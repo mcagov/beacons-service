@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
@@ -28,19 +27,16 @@ public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
 
   private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
   private final LegacyBeaconMapper legacyBeaconMapper;
-  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
   public LegacyBeaconGatewayImpl(
     LegacyBeaconJpaRepository legacyBeaconJpaRepository,
     LegacyBeaconMapper legacyBeaconMapper,
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate,
     JdbcTemplate jdbcTemplate
   ) {
     this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
     this.legacyBeaconMapper = legacyBeaconMapper;
-    this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     this.jdbcTemplate = jdbcTemplate;
   }
 
