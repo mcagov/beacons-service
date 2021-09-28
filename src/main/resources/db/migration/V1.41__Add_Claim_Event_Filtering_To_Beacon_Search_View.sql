@@ -12,7 +12,8 @@ SELECT id,
        owner_name,
        owner_email,
        NULL                     as account_holder_id,
-       use_activities
+       use_activities,
+       'LEGACY_BEACON'          AS beacon_type
 FROM legacy_beacon
 UNION ALL
 SELECT id,
@@ -30,5 +31,6 @@ SELECT id,
         WHERE account_holder.id = beacon.account_holder_id)                                               AS account_holder_id,
        (SELECT REPLACE(string_agg(activity, ', '), '_', ' ')
         FROM beacon_use
-        WHERE beacon_use.beacon_id = beacon.id)                                                           AS use_activities
+        WHERE beacon_use.beacon_id = beacon.id)                                                           AS use_activities,
+       'BEACON'                                                                                           AS beacon_type
 FROM beacon;
