@@ -370,7 +370,7 @@ class RegistrationsControllerIntegrationTest {
       throws Exception {
       // Setup
       TestSeeder testSeeder = new TestSeeder(webTestClient);
-      final var email = UUID.randomUUID().toString() + "@test.com";
+      final var email = UUID.randomUUID() + "@test.com";
       final var legacyBeaconHexId = "1D0EA08C52FFBFF";
       final var createAccountResponseBody = testSeeder.seedAccountHolderWithEmail(
         email

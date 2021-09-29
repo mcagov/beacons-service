@@ -49,19 +49,21 @@ public class LegacyBeaconMapper {
     return dto;
   }
 
-  public LegacyBeaconEntity toJpaEntity(LegacyBeacon beacon) {
+  public LegacyBeaconEntity toJpaEntity(LegacyBeacon legacyBeacon) {
     final var legacyBeaconEntity = new LegacyBeaconEntity();
 
-    final var hexId = (String) beacon.getBeacon().get("hexId");
+    legacyBeaconEntity.setId(legacyBeacon.getId());
+
+    final var hexId = (String) legacyBeacon.getBeacon().get("hexId");
     legacyBeaconEntity.setHexId(hexId);
 
-    final var ownerEmail = (String) beacon.getOwner().get("email");
+    final var ownerEmail = (String) legacyBeacon.getOwner().get("email");
     legacyBeaconEntity.setOwnerEmail(ownerEmail);
 
-    final var ownerName = (String) beacon.getOwner().get("ownerName");
+    final var ownerName = (String) legacyBeacon.getOwner().get("ownerName");
     legacyBeaconEntity.setOwnerName(ownerName);
 
-    final var useActivities = beacon
+    final var useActivities = legacyBeacon
       .getUses()
       .stream()
       .map(use -> (String) use.getOrDefault("useType", ""))
@@ -69,28 +71,28 @@ public class LegacyBeaconMapper {
     legacyBeaconEntity.setUseActivities(useActivities);
 
     final var createdDate = OffsetDateTimeOptionalZoneParser.parse(
-      (String) beacon.getBeacon().get("createdDate")
+      (String) legacyBeacon.getBeacon().get("createdDate")
     );
     legacyBeaconEntity.setCreatedDate(createdDate);
 
     final var lastModifiedDate = OffsetDateTimeOptionalZoneParser.parse(
-      (String) beacon.getBeacon().get("lastModifiedDate")
+      (String) legacyBeacon.getBeacon().get("lastModifiedDate")
     );
     legacyBeaconEntity.setLastModifiedDate(lastModifiedDate);
 
-    legacyBeaconEntity.setBeaconStatus(beacon.getBeaconStatus());
+    legacyBeaconEntity.setBeaconStatus(legacyBeacon.getBeaconStatus());
 
     final var data = Map.of(
       "beacon",
-      beacon.getBeacon(),
+      legacyBeacon.getBeacon(),
       "uses",
-      beacon.getUses(),
+      legacyBeacon.getUses(),
       "owner",
-      beacon.getOwner(),
+      legacyBeacon.getOwner(),
       "secondaryOwners",
-      beacon.getSecondaryOwners(),
+      legacyBeacon.getSecondaryOwners(),
       "emergencyContact",
-      beacon.getEmergencyContact()
+      legacyBeacon.getEmergencyContact()
     );
     legacyBeaconEntity.setData(data);
 
