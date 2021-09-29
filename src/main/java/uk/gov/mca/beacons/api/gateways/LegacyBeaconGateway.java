@@ -12,5 +12,8 @@ public interface LegacyBeaconGateway {
 
   Optional<LegacyBeacon> findById(UUID id);
 
-  List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email);
+  Optional<List<LegacyBeacon>> findAllByHexIdAndEmail(
+    String hexId,
+    String email
+  );
 }

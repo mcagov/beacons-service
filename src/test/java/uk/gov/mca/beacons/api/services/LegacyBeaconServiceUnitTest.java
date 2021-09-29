@@ -2,11 +2,12 @@ package uk.gov.mca.beacons.api.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,12 +50,14 @@ public class LegacyBeaconServiceUnitTest {
     beacon.setAccountHolderId(accountHolderId);
 
     String emailAssociatedWithLegacyBeacon = accountHolderEmail;
-    List<LegacyBeacon> foundLegacyBeacons = List.of(
-      LegacyBeacon
-        .builder()
-        .beacon(Map.of("hexId", hexId))
-        .owner(Map.of("email", emailAssociatedWithLegacyBeacon))
-        .build()
+    Optional<List<LegacyBeacon>> foundLegacyBeacons = Optional.of(
+      List.of(
+        LegacyBeacon
+          .builder()
+          .beacon(Map.of("hexId", hexId))
+          .owner(Map.of("email", emailAssociatedWithLegacyBeacon))
+          .build()
+      )
     );
     given(
       legacyBeaconGateway.findAllByHexIdAndEmail(
@@ -64,11 +67,11 @@ public class LegacyBeaconServiceUnitTest {
     )
       .willReturn(foundLegacyBeacons);
 
-    List<LegacyBeacon> matchingLegacyBeacons = legacyBeaconService
-      .findMatchingLegacyBeacons(beacon)
-      .orElseThrow();
+    Optional<List<LegacyBeacon>> matchingLegacyBeacons = legacyBeaconService.findMatchingLegacyBeacons(
+      beacon
+    );
 
-    assertThat(matchingLegacyBeacons.get(0), is(foundLegacyBeacons.get(0)));
+    assertThat(matchingLegacyBeacons, is(foundLegacyBeacons));
   }
 
   @Test
@@ -89,13 +92,13 @@ public class LegacyBeaconServiceUnitTest {
     beacon.setAccountHolderId(accountHolderId);
 
     given(legacyBeaconGateway.findAllByHexIdAndEmail(hexId, accountHolderEmail))
-      .willReturn(new ArrayList<>());
+      .willReturn(Optional.empty());
 
-    List<LegacyBeacon> matchingLegacyBeacons = legacyBeaconService
-      .findMatchingLegacyBeacons(beacon)
-      .orElseThrow();
+    Optional<List<LegacyBeacon>> matchingLegacyBeacons = legacyBeaconService.findMatchingLegacyBeacons(
+      beacon
+    );
 
-    assertThat(matchingLegacyBeacons.size(), is(0));
+    assertTrue(matchingLegacyBeacons.isEmpty());
   }
 
   @Test
@@ -116,12 +119,12 @@ public class LegacyBeaconServiceUnitTest {
     beacon.setAccountHolderId(accountHolderId);
 
     given(legacyBeaconGateway.findAllByHexIdAndEmail(hexId, accountHolderEmail))
-      .willReturn(new ArrayList<>());
+      .willReturn(Optional.empty());
 
-    List<LegacyBeacon> matchingLegacyBeacons = legacyBeaconService
-      .findMatchingLegacyBeacons(beacon)
-      .orElseThrow();
+    Optional<List<LegacyBeacon>> matchingLegacyBeacons = legacyBeaconService.findMatchingLegacyBeacons(
+      beacon
+    );
 
-    assertThat(matchingLegacyBeacons.size(), is(0));
+    assertTrue(matchingLegacyBeacons.isEmpty());
   }
 }

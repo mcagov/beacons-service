@@ -67,11 +67,9 @@ public class LegacyBeaconService {
       beacon.getAccountHolderId()
     );
 
-    return Optional.ofNullable(
-      legacyBeaconGateway.findAllByHexIdAndEmail(
-        beacon.getHexId(),
-        accountHolder.getEmail()
-      )
+    return legacyBeaconGateway.findAllByHexIdAndEmail(
+      beacon.getHexId(),
+      accountHolder.getEmail()
     );
   }
 
