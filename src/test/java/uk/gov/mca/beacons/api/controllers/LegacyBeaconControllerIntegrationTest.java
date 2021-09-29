@@ -118,7 +118,7 @@ class LegacyBeaconControllerIntegrationTest {
       .expectStatus()
       .isOk()
       .expectBody()
-      .jsonPath("$.data.attributes.beacon.isWithdrawn")
-      .isEqualTo(true);
+      .jsonPath("$.data.attributes.claimStatus")
+      .isEqualTo("CLAIMED");
   }
 }

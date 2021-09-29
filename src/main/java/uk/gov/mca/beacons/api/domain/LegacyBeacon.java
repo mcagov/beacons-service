@@ -43,7 +43,7 @@ public class LegacyBeacon {
           UUID.randomUUID(),
           OffsetDateTime.now(),
           this,
-          accountHolder
+          accountHolder.getId()
         )
       );
   }
@@ -52,5 +52,13 @@ public class LegacyBeacon {
     return history
       .stream()
       .anyMatch(event -> event instanceof LegacyBeaconClaimEvent);
+  }
+
+  public String getClaimedStatus() {
+    if (hasBeenClaimed()) {
+      return "CLAIMED";
+    }
+
+    return null;
   }
 }

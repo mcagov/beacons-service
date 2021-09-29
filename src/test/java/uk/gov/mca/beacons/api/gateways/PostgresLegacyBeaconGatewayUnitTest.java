@@ -1,14 +1,10 @@
 package uk.gov.mca.beacons.api.gateways;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,28 +42,5 @@ class PostgresLegacyBeaconGatewayUnitTest {
     legacyBeaconGateway.save(legacyBeacon);
 
     verify(legacyBeaconEntity, times(1)).setBeaconStatus(BeaconStatus.MIGRATED);
-  }
-
-  @Test
-  void findById_shouldNotCallThroughToTheMapperIfTheBeaconCannotBeFound() {
-    final var id = UUID.randomUUID();
-
-    legacyBeaconGateway.findById(id);
-
-    verify(legacyBeaconMapper, times(0)).fromJpaEntity(any());
-  }
-
-  @Test
-  void findById_shouldMapTheEntityIfItExists() {
-    final var id = UUID.randomUUID();
-    given(legacyBeaconJpaRepository.findById(id))
-      .willReturn(Optional.of(new LegacyBeaconEntity()));
-    given(legacyBeaconMapper.fromJpaEntity(any()))
-      .willReturn(new LegacyBeacon());
-
-    final var legacyBeacon = legacyBeaconGateway.findById(id);
-
-    verify(legacyBeaconMapper, times(1)).fromJpaEntity(any());
-    assertTrue(legacyBeacon.isPresent());
   }
 }

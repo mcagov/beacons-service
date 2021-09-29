@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
-import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 
@@ -28,9 +27,6 @@ public class LegacyBeaconServiceUnitTest {
 
   @Mock
   private LegacyBeaconGateway legacyBeaconGateway;
-
-  @Mock
-  private EventGateway eventGateway;
 
   @Mock
   private AccountHolderGateway accountHolderGateway;

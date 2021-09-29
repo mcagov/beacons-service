@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -82,7 +84,7 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
     final SqlParameterSource paramMap = new MapSqlParameterSource()
       .addValue("id", event.getId())
       .addValue("legacyBeaconId", event.getLegacyBeacon().getId())
-      .addValue("accountHolderId", event.getAccountHolder().getId())
+      .addValue("accountHolderId", event.getAccountHolderId())
       .addValue("dateTime", event.getWhenHappened());
 
     namedParameterJdbcTemplate.update(
@@ -114,10 +116,31 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
         paramMap,
         this::rowToLegacyBeacon
       );
-      return Optional.of(legacyBeacon);
-    } catch (DataAccessException e) {
+
+      addHistory(legacyBeacon);
+
+      return Optional.ofNullable(legacyBeacon);
+    } catch (EmptyResultDataAccessException e) {
+      log.error("Unable to find LegacyBeacon with id {}: {}", id, e);
       return Optional.empty();
     }
+  }
+
+  private void addHistory(LegacyBeacon legacyBeacon) {
+    if (legacyBeacon == null) return;
+
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("legacyBeaconId", legacyBeacon.getId());
+
+    List<LegacyBeaconEvent> events = namedParameterJdbcTemplate.query(
+      "SELECT id, legacy_beacon_id, account_holder_id, claim_event_type, when_happened " +
+      "FROM legacy_beacon_claim_event WHERE legacy_beacon_id = :legacyBeaconId",
+      paramMap,
+      (ResultSet resultSet, int rowNum) ->
+        rowToLegacyBeaconEvent(resultSet, rowNum, legacyBeacon)
+    );
+
+    legacyBeacon.setHistory(events);
   }
 
   @Override
@@ -136,39 +159,41 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
       "FROM legacy_beacon WHERE owner_email = ? " +
       "AND hex_id = ?";
 
-    List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
-      sql,
-      preparedStatement -> {
-        preparedStatement.setString(1, email);
-        preparedStatement.setString(2, hexId);
-      },
-      this::mapRow
-    );
+    try {
+      List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
+        sql,
+        preparedStatement -> {
+          preparedStatement.setString(1, email);
+          preparedStatement.setString(2, hexId);
+        },
+        this::mapRow
+      );
 
-    return legacyBeaconEntities
-      .stream()
-      .map(legacyBeaconMapper::fromJpaEntity)
-      .collect(Collectors.toList());
+      return legacyBeaconEntities
+        .stream()
+        .map(legacyBeaconMapper::fromJpaEntity)
+        .collect(Collectors.toList());
+    } catch (DataAccessException e) {
+      return List.of();
+    }
   }
 
   private LegacyBeacon rowToLegacyBeacon(ResultSet resultSet, int rowNum)
     throws SQLException {
-    ObjectMapper objectMapper = new ObjectMapper();
-
     UUID id = UUID.fromString(resultSet.getString("id"));
-    Map<String, Object> beacon = (Map<String, Object>) jsonToMap(
+    Map<String, Object> beacon = (Map<String, Object>) jsonToObject(
       resultSet.getString("beacon")
     );
-    List<Map<String, Object>> uses = (List<Map<String, Object>>) jsonToMap(
+    List<Map<String, Object>> uses = (List<Map<String, Object>>) jsonToObject(
       resultSet.getString("uses")
     );
-    Map<String, Object> owner = (Map<String, Object>) jsonToMap(
+    Map<String, Object> owner = (Map<String, Object>) jsonToObject(
       resultSet.getString("owner")
     );
-    List<Map<String, Object>> secondaryOwners = (List<Map<String, Object>>) jsonToMap(
+    List<Map<String, Object>> secondaryOwners = (List<Map<String, Object>>) jsonToObject(
       resultSet.getString("secondary_owners")
     );
-    Map<String, Object> emergencyContact = (Map<String, Object>) jsonToMap(
+    Map<String, Object> emergencyContact = (Map<String, Object>) jsonToObject(
       resultSet.getString("emergency_contact")
     );
 
@@ -183,7 +208,33 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
       .build();
   }
 
-  private Object jsonToMap(String json) {
+  private LegacyBeaconEvent rowToLegacyBeaconEvent(
+    ResultSet resultSet,
+    int rowNum,
+    LegacyBeacon legacyBeacon
+  ) throws SQLException {
+    UUID id = UUID.fromString(resultSet.getString("id"));
+    OffsetDateTime whenHappened = OffsetDateTime.ofInstant(
+      resultSet.getTimestamp("when_happened")
+    );
+    String claimEventType = resultSet.getString("claim_event_type");
+    UUID accountHolderId = UUID.fromString(
+      resultSet.getString("account_holder_id")
+    );
+
+    if (claimEventType.equals("claim")) {
+      return new LegacyBeaconClaimEvent(
+        id,
+        whenHappened,
+        legacyBeacon,
+        accountHolderId
+      );
+    }
+
+    return null;
+  }
+
+  private Object jsonToObject(String json) {
     ObjectMapper dataColumnMapper = new ObjectMapper();
 
     try {
@@ -192,9 +243,8 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
       log.error(
         "Error reading value of 'legacy_beacon' table column 'data': " + e
       );
+      return null;
     }
-
-    return null;
   }
 
   private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum)

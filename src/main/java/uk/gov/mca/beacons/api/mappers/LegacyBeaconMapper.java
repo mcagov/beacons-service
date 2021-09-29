@@ -32,18 +32,20 @@ public class LegacyBeaconMapper {
     return wrapperDTO;
   }
 
-  public LegacyBeaconDTO toDTO(LegacyBeacon beacon) {
+  public LegacyBeaconDTO toDTO(LegacyBeacon legacyBeacon) {
     final var dto = new LegacyBeaconDTO();
-    dto.setId(beacon.getId());
+    dto.setId(legacyBeacon.getId());
 
     final var attributes = LegacyBeaconDTO.Attributes
       .builder()
-      .beacon(beacon.getBeacon())
-      .uses(beacon.getUses())
-      .owner(beacon.getOwner())
-      .secondaryOwners(beacon.getSecondaryOwners())
-      .emergencyContact(beacon.getEmergencyContact())
+      .beacon(legacyBeacon.getBeacon())
+      .uses(legacyBeacon.getUses())
+      .owner(legacyBeacon.getOwner())
+      .secondaryOwners(legacyBeacon.getSecondaryOwners())
+      .emergencyContact(legacyBeacon.getEmergencyContact())
+      .claimStatus(legacyBeacon.getClaimedStatus())
       .build();
+
     dto.setAttributes(attributes);
 
     return dto;
