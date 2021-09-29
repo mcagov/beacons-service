@@ -11,7 +11,6 @@ import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.exceptions.BeaconsValidationException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
-import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.services.validation.LegacyBeaconValidator;
@@ -23,19 +22,16 @@ public class LegacyBeaconService {
   private final LegacyBeaconGateway legacyBeaconGateway;
   private final LegacyBeaconValidator legacyBeaconValidator;
   private final AccountHolderGateway accountHolderGateway;
-  private final EventGateway eventGateway;
 
   @Autowired
   public LegacyBeaconService(
     LegacyBeaconGateway legacyBeaconGateway,
     LegacyBeaconValidator legacyBeaconValidator,
-    AccountHolderGateway accountHolderGateway,
-    EventGateway eventGateway
+    AccountHolderGateway accountHolderGateway
   ) {
     this.legacyBeaconGateway = legacyBeaconGateway;
     this.legacyBeaconValidator = legacyBeaconValidator;
     this.accountHolderGateway = accountHolderGateway;
-    this.eventGateway = eventGateway;
   }
 
   public LegacyBeacon create(LegacyBeacon beacon) {
