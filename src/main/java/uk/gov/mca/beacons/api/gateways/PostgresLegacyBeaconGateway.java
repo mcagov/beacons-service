@@ -12,10 +12,15 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconEvent;
 import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
 import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
@@ -23,34 +28,68 @@ import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 @Repository
 @Transactional
 @Slf4j
-public class LegacyBeaconGatewayImpl implements LegacyBeaconGateway {
+public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
 
   private final LegacyBeaconJpaRepository legacyBeaconJpaRepository;
   private final LegacyBeaconMapper legacyBeaconMapper;
   private final JdbcTemplate jdbcTemplate;
+  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @Autowired
-  public LegacyBeaconGatewayImpl(
+  public PostgresLegacyBeaconGateway(
     LegacyBeaconJpaRepository legacyBeaconJpaRepository,
     LegacyBeaconMapper legacyBeaconMapper,
-    JdbcTemplate jdbcTemplate
+    JdbcTemplate jdbcTemplate,
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate
   ) {
     this.legacyBeaconJpaRepository = legacyBeaconJpaRepository;
     this.legacyBeaconMapper = legacyBeaconMapper;
     this.jdbcTemplate = jdbcTemplate;
+    this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
   }
 
   @Override
-  public LegacyBeacon save(LegacyBeacon beacon) {
-    final var legacyBeaconEntity = legacyBeaconMapper.toJpaEntity(beacon);
+  public LegacyBeacon save(LegacyBeacon legacyBeacon) {
+    final var legacyBeaconEntity = legacyBeaconMapper.toJpaEntity(legacyBeacon);
     legacyBeaconEntity.setBeaconStatus(BeaconStatus.MIGRATED);
 
     log.info(
       "Saving beacon record with PK {}",
-      beacon.getBeacon().get("pkBeaconId")
+      legacyBeacon.getBeacon().get("pkBeaconId")
     );
+
+    saveHistory(legacyBeacon);
+
     return legacyBeaconMapper.fromJpaEntity(
       legacyBeaconJpaRepository.save(legacyBeaconEntity)
+    );
+  }
+
+  private void saveHistory(LegacyBeacon beacon) {
+    for (LegacyBeaconEvent event : beacon.getHistory()) {
+      saveEvent(event);
+    }
+  }
+
+  private void saveEvent(LegacyBeaconEvent legacyBeaconEvent) {
+    if (legacyBeaconEvent instanceof LegacyBeaconClaimEvent) {
+      saveLegacyBeaconClaimEvent((LegacyBeaconClaimEvent) legacyBeaconEvent);
+    }
+  }
+
+  private void saveLegacyBeaconClaimEvent(LegacyBeaconClaimEvent event) {
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("id", event.getId())
+      .addValue("legacyBeaconId", event.getLegacyBeacon().getId())
+      .addValue("accountHolderId", event.getAccountHolder().getId())
+      .addValue("dateTime", event.getWhenHappened());
+
+    namedParameterJdbcTemplate.update(
+      "INSERT INTO legacy_beacon_claim_event " +
+      "(id, legacy_beacon_id, account_holder_id, claim_event_type, when_happened) " +
+      "VALUES " +
+      "(:id, :legacyBeaconId, :accountHolderId, 'claim', :dateTime)",
+      paramMap
     );
   }
 

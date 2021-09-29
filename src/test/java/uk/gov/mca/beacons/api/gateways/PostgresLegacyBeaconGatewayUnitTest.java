@@ -21,10 +21,10 @@ import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @ExtendWith(MockitoExtension.class)
-class LegacyBeaconGatewayImplUnitTest {
+class PostgresLegacyBeaconGatewayUnitTest {
 
   @InjectMocks
-  private LegacyBeaconGatewayImpl legacyBeaconGateway;
+  private PostgresLegacyBeaconGateway legacyBeaconGateway;
 
   @Mock
   private LegacyBeaconJpaRepository legacyBeaconJpaRepository;
