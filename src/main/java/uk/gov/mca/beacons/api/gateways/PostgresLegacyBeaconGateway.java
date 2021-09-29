@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.gateways;
 
+import static java.util.stream.Collectors.toList;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
@@ -9,10 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,7 +25,6 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
 import uk.gov.mca.beacons.api.domain.events.LegacyBeaconEvent;
 import uk.gov.mca.beacons.api.jpa.LegacyBeaconJpaRepository;
-import uk.gov.mca.beacons.api.jpa.entities.LegacyBeaconEntity;
 import uk.gov.mca.beacons.api.mappers.LegacyBeaconMapper;
 
 @Repository
@@ -68,15 +67,115 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
     );
   }
 
-  private void saveHistory(LegacyBeacon beacon) {
-    for (LegacyBeaconEvent event : beacon.getHistory()) {
-      saveEvent(event);
+  @Override
+  public Optional<LegacyBeacon> findById(UUID id) {
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("id", id);
+
+    try {
+      LegacyBeacon legacyBeacon = namedParameterJdbcTemplate.queryForObject(
+        "SELECT " +
+        "id, " +
+        "data->>'beacon' AS beacon, " +
+        "data->>'uses' AS uses, " +
+        "data->>'owner' AS owner, " +
+        "data->>'secondaryOwners' AS secondary_owners, " +
+        "data->>'emergencyContact' AS emergency_contact, " +
+        "hex_id, " +
+        "owner_email, " +
+        "created_date, " +
+        "last_modified_date, " +
+        "beacon_status, " +
+        "owner_name, " +
+        "use_activities " +
+        "FROM legacy_beacon " +
+        "WHERE id = :id",
+        paramMap,
+        this::legacyBeaconRowToLegacyBeacon
+      );
+
+      addHistory(legacyBeacon);
+
+      return Optional.ofNullable(legacyBeacon);
+    } catch (EmptyResultDataAccessException e) {
+      log.error("Unable to find LegacyBeacon with id {}: {}", id, e);
+      return Optional.empty();
     }
   }
 
-  private void saveEvent(LegacyBeaconEvent legacyBeaconEvent) {
-    if (legacyBeaconEvent instanceof LegacyBeaconClaimEvent) {
-      saveLegacyBeaconClaimEvent((LegacyBeaconClaimEvent) legacyBeaconEvent);
+  @Override
+  public Optional<List<LegacyBeacon>> findAllByHexIdAndEmail(
+    String hexId,
+    String email
+  ) {
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("owner_email", email)
+      .addValue("hex_id", hexId);
+
+    return Optional.of(
+      namedParameterJdbcTemplate
+        .query(
+          "SELECT " +
+          "id, " +
+          "data->>'beacon' AS beacon, " +
+          "data->>'uses' AS uses, " +
+          "data->>'owner' AS owner, " +
+          "data->>'secondaryOwners' AS secondary_owners, " +
+          "data->>'emergencyContact' AS emergency_contact, " +
+          "hex_id, " +
+          "owner_email, " +
+          "created_date, " +
+          "last_modified_date, " +
+          "beacon_status, " +
+          "owner_name, " +
+          "use_activities " +
+          "FROM legacy_beacon " +
+          "WHERE owner_email = :owner_email " +
+          "AND hex_id = :hex_id",
+          paramMap,
+          this::legacyBeaconRowToLegacyBeacon
+        )
+        .stream()
+        .map(this::addHistory)
+        .collect(toList())
+    );
+  }
+
+  @Override
+  public void deleteAll() {
+    jdbcTemplate.execute("DELETE FROM legacy_beacon");
+  }
+
+  private LegacyBeacon addHistory(LegacyBeacon legacyBeacon) {
+    if (legacyBeacon == null) return null;
+
+    legacyBeacon.setHistory(findEvents(legacyBeacon));
+
+    return legacyBeacon;
+  }
+
+  private List<LegacyBeaconEvent> findEvents(LegacyBeacon legacyBeacon) {
+    final SqlParameterSource paramMap = new MapSqlParameterSource()
+      .addValue("legacyBeaconId", legacyBeacon.getId());
+
+    return namedParameterJdbcTemplate.query(
+      "SELECT id, legacy_beacon_id, account_holder_id, claim_event_type, when_happened " +
+      "FROM legacy_beacon_claim_event WHERE legacy_beacon_id = :legacyBeaconId",
+      paramMap,
+      (ResultSet resultSet, int rowNum) ->
+        legacyBeaconClaimEventRowToLegacyBeaconEvent(
+          resultSet,
+          rowNum,
+          legacyBeacon
+        )
+    );
+  }
+
+  private void saveHistory(LegacyBeacon beacon) {
+    for (LegacyBeaconEvent event : beacon.getHistory()) {
+      if (event instanceof LegacyBeaconClaimEvent) {
+        saveLegacyBeaconClaimEvent((LegacyBeaconClaimEvent) event);
+      }
     }
   }
 
@@ -96,187 +195,61 @@ public class PostgresLegacyBeaconGateway implements LegacyBeaconGateway {
     );
   }
 
-  @Override
-  public void deleteAll() {
-    jdbcTemplate.execute("DELETE FROM legacy_beacon");
-  }
-
-  @Override
-  public Optional<LegacyBeacon> findById(UUID id) {
-    final SqlParameterSource paramMap = new MapSqlParameterSource()
-      .addValue("id", id);
-
-    try {
-      LegacyBeacon legacyBeacon = namedParameterJdbcTemplate.queryForObject(
-        "SELECT id, data->>'beacon' AS beacon, data->>'uses' AS uses, data->>'owner' AS owner, " +
-        "data->>'secondaryOwners' AS secondary_owners, data->>'emergencyContact' AS emergency_contact, " +
-        "hex_id, owner_email, created_date, last_modified_date, beacon_status, owner_name, use_activities " +
-        "FROM legacy_beacon " +
-        "WHERE id = :id",
-        paramMap,
-        this::rowToLegacyBeacon
-      );
-
-      addHistory(legacyBeacon);
-
-      return Optional.ofNullable(legacyBeacon);
-    } catch (EmptyResultDataAccessException e) {
-      log.error("Unable to find LegacyBeacon with id {}: {}", id, e);
-      return Optional.empty();
-    }
-  }
-
-  private void addHistory(LegacyBeacon legacyBeacon) {
-    if (legacyBeacon == null) return;
-
-    final SqlParameterSource paramMap = new MapSqlParameterSource()
-      .addValue("legacyBeaconId", legacyBeacon.getId());
-
-    List<LegacyBeaconEvent> events = namedParameterJdbcTemplate.query(
-      "SELECT id, legacy_beacon_id, account_holder_id, claim_event_type, when_happened " +
-      "FROM legacy_beacon_claim_event WHERE legacy_beacon_id = :legacyBeaconId",
-      paramMap,
-      (ResultSet resultSet, int rowNum) ->
-        rowToLegacyBeaconEvent(resultSet, rowNum, legacyBeacon)
-    );
-
-    legacyBeacon.setHistory(events);
-  }
-
-  @Override
-  public List<LegacyBeacon> findAllByHexIdAndEmail(String hexId, String email) {
-    final String sql =
-      "SELECT " +
-      "id, " +
-      "hex_id, " +
-      "owner_email, " +
-      "use_activities, " +
-      "owner_name, " +
-      "created_date, " +
-      "last_modified_date, " +
-      "beacon_status, " +
-      "data " +
-      "FROM legacy_beacon WHERE owner_email = ? " +
-      "AND hex_id = ?";
-
-    try {
-      List<LegacyBeaconEntity> legacyBeaconEntities = jdbcTemplate.query(
-        sql,
-        preparedStatement -> {
-          preparedStatement.setString(1, email);
-          preparedStatement.setString(2, hexId);
-        },
-        this::mapRow
-      );
-
-      return legacyBeaconEntities
-        .stream()
-        .map(legacyBeaconMapper::fromJpaEntity)
-        .collect(Collectors.toList());
-    } catch (DataAccessException e) {
-      return List.of();
-    }
-  }
-
-  private LegacyBeacon rowToLegacyBeacon(ResultSet resultSet, int rowNum)
-    throws SQLException {
-    UUID id = UUID.fromString(resultSet.getString("id"));
-    Map<String, Object> beacon = (Map<String, Object>) jsonToObject(
-      resultSet.getString("beacon")
-    );
-    List<Map<String, Object>> uses = (List<Map<String, Object>>) jsonToObject(
-      resultSet.getString("uses")
-    );
-    Map<String, Object> owner = (Map<String, Object>) jsonToObject(
-      resultSet.getString("owner")
-    );
-    List<Map<String, Object>> secondaryOwners = (List<Map<String, Object>>) jsonToObject(
-      resultSet.getString("secondary_owners")
-    );
-    Map<String, Object> emergencyContact = (Map<String, Object>) jsonToObject(
-      resultSet.getString("emergency_contact")
-    );
-
+  private LegacyBeacon legacyBeaconRowToLegacyBeacon(
+    ResultSet resultSet,
+    int rowNum
+  ) throws SQLException {
     return LegacyBeacon
       .builder()
-      .id(id)
-      .beacon(beacon)
-      .uses(uses)
-      .owner(owner)
-      .secondaryOwners(secondaryOwners)
-      .emergencyContact(emergencyContact)
+      .id(UUID.fromString(resultSet.getString("id")))
+      .beacon((Map<String, Object>) jsonToObject(resultSet.getString("beacon")))
+      .uses(
+        (List<Map<String, Object>>) jsonToObject(resultSet.getString("uses"))
+      )
+      .owner((Map<String, Object>) jsonToObject(resultSet.getString("owner")))
+      .secondaryOwners(
+        (List<Map<String, Object>>) jsonToObject(
+          resultSet.getString("secondary_owners")
+        )
+      )
+      .emergencyContact(
+        (Map<String, Object>) jsonToObject(
+          resultSet.getString("emergency_contact")
+        )
+      )
       .build();
   }
 
-  private LegacyBeaconEvent rowToLegacyBeaconEvent(
+  private LegacyBeaconEvent legacyBeaconClaimEventRowToLegacyBeaconEvent(
     ResultSet resultSet,
     int rowNum,
     LegacyBeacon legacyBeacon
   ) throws SQLException {
-    UUID id = UUID.fromString(resultSet.getString("id"));
-    OffsetDateTime whenHappened = OffsetDateTime.ofInstant(
-      resultSet.getTimestamp("when_happened")
-    );
     String claimEventType = resultSet.getString("claim_event_type");
-    UUID accountHolderId = UUID.fromString(
-      resultSet.getString("account_holder_id")
-    );
 
     if (claimEventType.equals("claim")) {
-      return new LegacyBeaconClaimEvent(
-        id,
-        whenHappened,
-        legacyBeacon,
-        accountHolderId
-      );
+      return LegacyBeaconClaimEvent
+        .builder()
+        .id(UUID.fromString(resultSet.getString("id")))
+        .whenHappened(
+          resultSet.getObject("when_happened", OffsetDateTime.class)
+        )
+        .legacyBeacon(legacyBeacon)
+        .accountHolderId(
+          UUID.fromString(resultSet.getString("account_holder_id"))
+        )
+        .build();
     }
 
     return null;
   }
 
   private Object jsonToObject(String json) {
-    ObjectMapper dataColumnMapper = new ObjectMapper();
-
     try {
-      return dataColumnMapper.readValue(json, new TypeReference<>() {});
+      return new ObjectMapper().readValue(json, new TypeReference<>() {});
     } catch (Exception e) {
-      log.error(
-        "Error reading value of 'legacy_beacon' table column 'data': " + e
-      );
+      log.error("Error reading json:" + e);
       return null;
     }
-  }
-
-  private LegacyBeaconEntity mapRow(ResultSet resultSet, int rowNum)
-    throws SQLException {
-    LegacyBeaconEntity legacyBeaconEntity = new LegacyBeaconEntity();
-
-    legacyBeaconEntity.setId(UUID.fromString(resultSet.getString("id")));
-    legacyBeaconEntity.setHexId(resultSet.getString("hex_id"));
-    legacyBeaconEntity.setOwnerEmail(resultSet.getString("owner_email"));
-    legacyBeaconEntity.setUseActivities(resultSet.getString("use_activities"));
-    legacyBeaconEntity.setOwnerName(resultSet.getString("owner_name"));
-    legacyBeaconEntity.setData(dataColumnToMap(resultSet.getString("data")));
-
-    return legacyBeaconEntity;
-  }
-
-  private Map<String, Object> dataColumnToMap(
-    String contentsOfJsonBDataColumn
-  ) {
-    ObjectMapper dataColumnMapper = new ObjectMapper();
-
-    try {
-      return dataColumnMapper.readValue(
-        contentsOfJsonBDataColumn,
-        new TypeReference<>() {}
-      );
-    } catch (Exception e) {
-      log.error(
-        "Error reading value of 'legacy_beacon' table column 'data': " + e
-      );
-    }
-
-    return null;
   }
 }
