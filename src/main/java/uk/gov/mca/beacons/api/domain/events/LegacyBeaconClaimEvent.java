@@ -11,7 +11,6 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 @Setter
 public class LegacyBeaconClaimEvent extends LegacyBeaconEvent {
 
-  private LegacyBeacon legacyBeacon;
   private AccountHolder accountHolder;
 
   public LegacyBeaconClaimEvent(
@@ -20,8 +19,7 @@ public class LegacyBeaconClaimEvent extends LegacyBeaconEvent {
     LegacyBeacon legacyBeacon,
     AccountHolder accountHolder
   ) {
-    super(id, whenHappened);
-    this.legacyBeacon = legacyBeacon;
+    super(id, whenHappened, legacyBeacon);
     this.accountHolder = accountHolder;
   }
 }
