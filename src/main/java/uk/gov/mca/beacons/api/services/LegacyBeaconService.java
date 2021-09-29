@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.api.services;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
-import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
 import uk.gov.mca.beacons.api.exceptions.BeaconsValidationException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.EventGateway;
@@ -86,13 +84,8 @@ public class LegacyBeaconService {
       legacyBeacon.getAssociatedEmailAddress()
     );
 
-    LegacyBeaconClaimEvent claimEvent = new LegacyBeaconClaimEvent(
-      UUID.randomUUID(),
-      OffsetDateTime.now(),
-      legacyBeacon,
-      accountHolder
-    );
+    legacyBeacon.claimFor(accountHolder);
 
-    eventGateway.save(claimEvent);
+    legacyBeaconGateway.save(legacyBeacon);
   }
 }

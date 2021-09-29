@@ -1,9 +1,13 @@
 package uk.gov.mca.beacons.api.domain;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.*;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconEvent;
 
 @Getter
 @Setter
@@ -20,7 +24,33 @@ public class LegacyBeacon {
   private List<Map<String, Object>> secondaryOwners;
   private Map<String, Object> emergencyContact;
 
+  @Builder.Default
+  private List<LegacyBeaconEvent> history = new ArrayList<>();
+
   public String getAssociatedEmailAddress() {
     return owner.get("email").toString();
+  }
+
+  public void claimFor(AccountHolder accountHolder) throws Exception {
+    if (!this.getAssociatedEmailAddress().equals(accountHolder.getEmail())) {
+      throw new Exception(
+        "A LegacyBeacon can only be claimed by an AccountHolder with a matching email address."
+      );
+    }
+
+    this.history.add(
+        new LegacyBeaconClaimEvent(
+          UUID.randomUUID(),
+          OffsetDateTime.now(),
+          this,
+          accountHolder
+        )
+      );
+  }
+
+  public boolean hasBeenClaimed() {
+    return history
+      .stream()
+      .anyMatch(event -> event instanceof LegacyBeaconClaimEvent);
   }
 }

@@ -9,7 +9,7 @@ import uk.gov.mca.beacons.api.domain.LegacyBeacon;
 
 @Getter
 @Setter
-public class LegacyBeaconClaimEvent extends Event {
+public class LegacyBeaconClaimEvent extends LegacyBeaconEvent {
 
   private LegacyBeacon legacyBeacon;
   private AccountHolder accountHolder;
