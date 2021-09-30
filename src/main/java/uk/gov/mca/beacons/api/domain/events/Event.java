@@ -3,8 +3,10 @@ package uk.gov.mca.beacons.api.domain.events;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
+@SuperBuilder
 public abstract class Event {
 
   protected UUID id;

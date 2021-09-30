@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.api.services;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,10 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
-import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
 import uk.gov.mca.beacons.api.exceptions.BeaconsValidationException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
-import uk.gov.mca.beacons.api.gateways.EventGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.services.validation.LegacyBeaconValidator;
@@ -25,19 +22,16 @@ public class LegacyBeaconService {
   private final LegacyBeaconGateway legacyBeaconGateway;
   private final LegacyBeaconValidator legacyBeaconValidator;
   private final AccountHolderGateway accountHolderGateway;
-  private final EventGateway eventGateway;
 
   @Autowired
   public LegacyBeaconService(
     LegacyBeaconGateway legacyBeaconGateway,
     LegacyBeaconValidator legacyBeaconValidator,
-    AccountHolderGateway accountHolderGateway,
-    EventGateway eventGateway
+    AccountHolderGateway accountHolderGateway
   ) {
     this.legacyBeaconGateway = legacyBeaconGateway;
     this.legacyBeaconValidator = legacyBeaconValidator;
     this.accountHolderGateway = accountHolderGateway;
-    this.eventGateway = eventGateway;
   }
 
   public LegacyBeacon create(LegacyBeacon beacon) {
@@ -73,11 +67,9 @@ public class LegacyBeaconService {
       beacon.getAccountHolderId()
     );
 
-    return Optional.ofNullable(
-      legacyBeaconGateway.findAllByHexIdAndEmail(
-        beacon.getHexId(),
-        accountHolder.getEmail()
-      )
+    return legacyBeaconGateway.findAllByHexIdAndEmail(
+      beacon.getHexId(),
+      accountHolder.getEmail()
     );
   }
 
@@ -86,13 +78,8 @@ public class LegacyBeaconService {
       legacyBeacon.getAssociatedEmailAddress()
     );
 
-    LegacyBeaconClaimEvent claimEvent = new LegacyBeaconClaimEvent(
-      UUID.randomUUID(),
-      OffsetDateTime.now(),
-      legacyBeacon,
-      accountHolder
-    );
+    legacyBeacon.claimFor(accountHolder);
 
-    eventGateway.save(claimEvent);
+    legacyBeaconGateway.save(legacyBeacon);
   }
 }
