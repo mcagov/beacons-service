@@ -39,12 +39,13 @@ public class LegacyBeacon {
     }
 
     this.history.add(
-        new LegacyBeaconClaimEvent(
-          UUID.randomUUID(),
-          OffsetDateTime.now(),
-          this,
-          accountHolder.getId()
-        )
+        LegacyBeaconClaimEvent
+          .builder()
+          .id(UUID.randomUUID())
+          .whenHappened(OffsetDateTime.now())
+          .legacyBeacon(this)
+          .accountHolderId(accountHolder.getId())
+          .build()
       );
   }
 
