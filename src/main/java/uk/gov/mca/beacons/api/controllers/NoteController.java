@@ -44,7 +44,6 @@ public class NoteController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  @PreAuthorize("hasAuthority('APPROLE_ADD_BEACON_NOTES')")
   public WrapperDTO<NoteDTO> createNote(
     @RequestBody @Valid WrapperDTO<NoteDTO> dto
   ) {
