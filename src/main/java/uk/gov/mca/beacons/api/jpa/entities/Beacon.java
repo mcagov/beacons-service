@@ -57,6 +57,12 @@ public class Beacon {
 
   private String csta;
 
+  private String beaconType;
+
+  private String protocol;
+
+  private String coding;
+
   @Enumerated(EnumType.STRING)
   private BeaconStatus beaconStatus;
 
