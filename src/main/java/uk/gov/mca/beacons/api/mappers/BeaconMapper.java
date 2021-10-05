@@ -48,6 +48,9 @@ public class BeaconMapper extends BaseMapper {
     attributes.put("mti", domain.getMti());
     attributes.put("svdr", domain.getSvdr());
     attributes.put("csta", domain.getCsta());
+    attributes.put("beaconType", domain.getBeaconType());
+    attributes.put("protocol", domain.getProtocol());
+    attributes.put("coding", domain.getCoding());
     dto.setAttributes(attributes);
     dto.addLinks(linkManager.getLinksFor(domain, linkStrategy));
     return dto;
@@ -78,7 +81,9 @@ public class BeaconMapper extends BaseMapper {
     beacon.setLastServicedDate(
       getDateOrNull(attributes.get("lastServicedDate"))
     );
-
+    beacon.setBeaconType((String) attributes.get("beaconType"));
+    beacon.setProtocol((String) attributes.get("protocol"));
+    beacon.setCoding((String) attributes.get("coding"));
     return beacon;
   }
 }
