@@ -30,7 +30,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.vladmihalcea:hibernate-types-55:2.12.1'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.11'
     implementation 'org.springdoc:springdoc-openapi-data-rest:1.5.10'
     implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.6.1'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
