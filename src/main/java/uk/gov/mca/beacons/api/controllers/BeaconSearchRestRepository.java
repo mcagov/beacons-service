@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
   path = "beacon-search",
   collectionResourceRel = "beaconSearch"
 )
+@Tag(name = "BeaconSearch")
 interface BeaconSearchRestRepository
   extends JpaRepository<BeaconSearchEntity, UUID> {
   @RestResource(path = "find-all", rel = "findAllBeacons")
