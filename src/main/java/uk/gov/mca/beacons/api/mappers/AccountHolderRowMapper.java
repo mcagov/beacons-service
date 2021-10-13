@@ -22,6 +22,7 @@ public class AccountHolderRowMapper implements RowMapper<AccountHolder> {
       .addressLine4(rs.getString("address_line4"))
       .postcode(rs.getString("postcode"))
       .county(rs.getString("county"))
+      .country(rs.getString("country"))
       .telephoneNumber(rs.getString("telephone_number"))
       .alternativeTelephoneNumber(rs.getString("alternative_telephone_number"))
       .townOrCity(rs.getString("town_or_city"))

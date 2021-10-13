@@ -56,6 +56,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
         "person.address_line_4 as address_line4, " +
         "person.postcode, " +
         "person.county, " +
+        "person.country, " +
         "person.telephone_number, " +
         "person.alternative_telephone_number, " +
         "person.town_or_city " +
@@ -88,6 +89,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
         "person.address_line_4 as address_line4, " +
         "person.postcode, " +
         "person.county, " +
+        "person.country, " +
         "person.telephone_number, " +
         "person.alternative_telephone_number, " +
         "person.town_or_city " +
@@ -120,6 +122,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
         "person.address_line_4 as address_line4, " +
         "person.postcode, " +
         "person.county, " +
+        "person.country, " +
         "person.telephone_number, " +
         "person.alternative_telephone_number, " +
         "person.town_or_city " +
