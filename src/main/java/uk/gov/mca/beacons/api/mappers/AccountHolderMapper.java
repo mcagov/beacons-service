@@ -31,6 +31,7 @@ public class AccountHolderMapper extends BaseMapper {
     accountHolder.setTownOrCity(attributes.getTownOrCity());
     accountHolder.setPostcode(attributes.getPostcode());
     accountHolder.setCounty(attributes.getCounty());
+    accountHolder.setCountry(attributes.getCountry());
 
     return accountHolder;
   }
@@ -54,6 +55,7 @@ public class AccountHolderMapper extends BaseMapper {
       .townOrCity(attributes.getTownOrCity())
       .postcode(attributes.getPostcode())
       .county(attributes.getCounty())
+      .country(attributes.getCountry())
       .build();
   }
 
@@ -75,6 +77,7 @@ public class AccountHolderMapper extends BaseMapper {
       .townOrCity(accountHolder.getTownOrCity())
       .postcode(accountHolder.getPostcode())
       .county(accountHolder.getCounty())
+      .country(accountHolder.getCountry())
       .build();
     dto.setAttributes(attributes);
 

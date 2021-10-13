@@ -1,11 +1,7 @@
 package uk.gov.mca.beacons.api.domain;
 
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -39,4 +35,6 @@ public class AccountHolder implements User {
   private String postcode;
 
   private String county;
+
+  private String country;
 }

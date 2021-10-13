@@ -13,7 +13,8 @@
       "addressLine4": "Testing Towers",
       "townOrCity": "Testville",
       "postcode": "TS1 23A",
-      "county": "Testershire"
+      "county": "Testershire",
+      "country": "United Kingdom"
     },
     "relationships": {}
   }

@@ -1,10 +1,6 @@
 package uk.gov.mca.beacons.api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -36,4 +32,6 @@ public class CreateAccountHolderRequest {
   private String postcode;
 
   private String county;
+
+  private String country;
 }
