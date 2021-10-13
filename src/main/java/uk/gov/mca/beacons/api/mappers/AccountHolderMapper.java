@@ -31,6 +31,7 @@ public class AccountHolderMapper extends BaseMapper {
     accountHolder.setTownOrCity(attributes.getTownOrCity());
     accountHolder.setPostcode(attributes.getPostcode());
     accountHolder.setCounty(attributes.getCounty());
+    accountHolder.setCountry(attributes.getCountry());
 
     return accountHolder;
   }

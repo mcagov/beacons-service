@@ -162,7 +162,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .addValue("addressLine4", createAccountHolderRequest.getAddressLine4())
       .addValue("townOrCity", createAccountHolderRequest.getTownOrCity())
       .addValue("postcode", createAccountHolderRequest.getPostcode())
-      .addValue("county", createAccountHolderRequest.getCounty());
+      .addValue("county", createAccountHolderRequest.getCounty())
+      .addValue("country", createAccountHolderRequest.getCountry());
 
     jdbcTemplate.update(
       "INSERT INTO person " +
@@ -180,7 +181,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       "address_line_4, " +
       "town_or_city, " +
       "postcode, " +
-      "county) " +
+      "county, " +
+      "country) " +
       "VALUES " +
       "(:id, " +
       ":fullName, " +
@@ -196,7 +198,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       ":addressLine4, " +
       ":townOrCity, " +
       ":postcode, " +
-      ":county)",
+      ":county, " +
+      ":country)",
       personParamMap
     );
 
@@ -234,6 +237,7 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .townOrCity(createAccountHolderRequest.getTownOrCity())
       .postcode(createAccountHolderRequest.getPostcode())
       .county(createAccountHolderRequest.getCounty())
+      .country(createAccountHolderRequest.getCountry())
       .build();
   }
 
@@ -271,7 +275,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       )
       .withMapping(AccountHolder::getTownOrCity, AccountHolder::setTownOrCity)
       .withMapping(AccountHolder::getPostcode, AccountHolder::setPostcode)
-      .withMapping(AccountHolder::getCounty, AccountHolder::setCounty);
+      .withMapping(AccountHolder::getCounty, AccountHolder::setCounty)
+      .withMapping(AccountHolder::getCountry, AccountHolder::setCountry);
 
     final var updatedModel = patcher.patchModel(
       accountHolder,
@@ -293,7 +298,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       .addValue("addressLine4", updatedModel.getAddressLine4())
       .addValue("townOrCity", updatedModel.getTownOrCity())
       .addValue("postcode", updatedModel.getPostcode())
-      .addValue("county", updatedModel.getCounty());
+      .addValue("county", updatedModel.getCounty())
+      .addValue("country", updatedModel.getCountry());
 
     jdbcTemplate.update(
       "UPDATE person SET " +
@@ -307,7 +313,8 @@ public class AccountHolderGatewayImpl implements AccountHolderGateway {
       "address_line_4 = :addressLine4 , " +
       "town_or_city = :townOrCity , " +
       "postcode = :postcode , " +
-      "county = :county " +
+      "county = :county ," +
+      "country = :country " +
       "FROM account_holder " +
       "WHERE person.id = account_holder.person_id " +
       "and account_holder.id = :accountId",
