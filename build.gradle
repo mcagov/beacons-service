@@ -65,7 +65,7 @@ task integrationTest(type: Test) {
 check.dependsOn 'integrationTest'
 
 /**
- * Build and package Backoffice SPA
+ * Build, package and serve the Backoffice SPA's static assets
  */
 node {
     version = '14.18.1'
