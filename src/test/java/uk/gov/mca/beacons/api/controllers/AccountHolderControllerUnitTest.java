@@ -74,7 +74,7 @@ class AccountHolderControllerUnitTest {
       given(accountHolderService.getByAuthId(authId)).willReturn(accountHolder);
 
       mvc.perform(
-        get("/account-holder/auth-id/" + authId)
+        get("/spring-api/account-holder/auth-id/" + authId)
           .contentType(MediaType.APPLICATION_JSON)
       );
 
@@ -87,7 +87,7 @@ class AccountHolderControllerUnitTest {
 
       mvc
         .perform(
-          get("/account-holder/auth-id/" + authId)
+          get("/spring-api/account-holder/auth-id/" + authId)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());
@@ -99,7 +99,7 @@ class AccountHolderControllerUnitTest {
 
       mvc
         .perform(
-          get("/account-holder/auth-id/" + authId)
+          get("/spring-api/account-holder/auth-id/" + authId)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(jsonPath("$.id", is(accountHolderId.toString())));
@@ -111,7 +111,7 @@ class AccountHolderControllerUnitTest {
 
       mvc
         .perform(
-          get("/account-holder/auth-id/" + authId)
+          get("/spring-api/account-holder/auth-id/" + authId)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isNotFound());
@@ -128,7 +128,7 @@ class AccountHolderControllerUnitTest {
         .writeValueAsString(newAccountHolderDTO);
       mvc
         .perform(
-          post("/account-holder")
+          post("/spring-api/account-holder")
             .contentType(MediaType.APPLICATION_JSON)
             .content(newAccountHolderRequest)
         )
@@ -142,7 +142,7 @@ class AccountHolderControllerUnitTest {
         .writeValueAsString(newAccountHolderDTO);
 
       mvc.perform(
-        post("/account-holder")
+        post("/spring-api/account-holder")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newAccountHolderRequest)
       );
@@ -165,7 +165,7 @@ class AccountHolderControllerUnitTest {
         .willReturn(createAccountHolderRequest);
 
       mvc.perform(
-        post("/account-holder")
+        post("/spring-api/account-holder")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newAccountHolderHttpRequestBody)
       );
@@ -183,7 +183,7 @@ class AccountHolderControllerUnitTest {
         .willReturn(accountHolder);
 
       mvc.perform(
-        get("/account-holder/" + accountHolderId)
+        get("/spring-api/account-holder/" + accountHolderId)
           .contentType(MediaType.APPLICATION_JSON)
       );
 
@@ -197,7 +197,7 @@ class AccountHolderControllerUnitTest {
 
       mvc
         .perform(
-          get("/account-holder/" + accountHolderId)
+          get("/spring-api/account-holder/" + accountHolderId)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());
@@ -209,7 +209,7 @@ class AccountHolderControllerUnitTest {
         .willReturn(accountHolder);
 
       mvc.perform(
-        get("/account-holder/" + accountHolderId)
+        get("/spring-api/account-holder/" + accountHolderId)
           .contentType(MediaType.APPLICATION_JSON)
       );
 
@@ -222,7 +222,7 @@ class AccountHolderControllerUnitTest {
 
       mvc
         .perform(
-          get("/account-holder/" + accountHolderId)
+          get("/spring-api/account-holder/" + accountHolderId)
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isNotFound());
@@ -236,7 +236,7 @@ class AccountHolderControllerUnitTest {
     void shouldReturn200ForAValidAccountHolderIdUUID() throws Exception {
       mvc
         .perform(
-          get("/account-holder/" + accountHolderId + "/beacons")
+          get("/spring-api/account-holder/" + accountHolderId + "/beacons")
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());
@@ -249,7 +249,7 @@ class AccountHolderControllerUnitTest {
         .willReturn(beacons);
 
       mvc.perform(
-        get("/account-holder/" + accountHolderId + "/beacons")
+        get("/spring-api/account-holder/" + accountHolderId + "/beacons")
           .contentType(MediaType.APPLICATION_JSON)
       );
 

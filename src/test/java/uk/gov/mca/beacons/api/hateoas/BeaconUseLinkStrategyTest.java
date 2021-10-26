@@ -51,7 +51,7 @@ class BeaconUseLinkStrategyTest {
   void buildPatchForBeaconShouldReturnExpectedLink() {
     var result = linkStrategy.getPatchPath(beaconUse);
 
-    assertThat(result, is("/beacon-uses/" + beaconUse.getId()));
+    assertThat(result, is("/spring-api/beacon-uses/" + beaconUse.getId()));
   }
 
   @Test

@@ -80,7 +80,7 @@ class NoteControllerUnitTest {
 
       mvc
         .perform(
-          post("/note")
+          post("/spring-api/note")
             .contentType(MediaType.APPLICATION_JSON)
             .content(newNoteRequest)
         )
@@ -97,7 +97,7 @@ class NoteControllerUnitTest {
       given(getUserService.getUser()).willReturn(user);
 
       mvc.perform(
-        post("/note")
+        post("/spring-api/note")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newNoteRequest)
       );
@@ -115,7 +115,7 @@ class NoteControllerUnitTest {
       given(getUserService.getUser()).willReturn(user);
 
       mvc.perform(
-        post("/note")
+        post("/spring-api/note")
           .contentType(MediaType.APPLICATION_JSON)
           .content(newNoteRequest)
       );

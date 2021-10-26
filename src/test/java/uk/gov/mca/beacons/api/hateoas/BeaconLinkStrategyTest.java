@@ -41,14 +41,14 @@ class BeaconLinkStrategyTest {
   void buildGetForBeaconShouldReturnExpectedLink() {
     var result = linkStrategy.getGetPath(beacon);
 
-    assertThat(result, is("/beacons/" + beacon.getId()));
+    assertThat(result, is("/spring-api/beacons/" + beacon.getId()));
   }
 
   @Test
   void buildPatchForBeaconShouldReturnExpectedLink() {
     var result = linkStrategy.getPatchPath(beacon);
 
-    assertThat(result, is("/beacons/" + beacon.getId()));
+    assertThat(result, is("/spring-api/beacons/" + beacon.getId()));
   }
 
   @Test
