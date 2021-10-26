@@ -60,6 +60,7 @@ public class CreateRegistrationService {
       beacon.getHexId(),
       beacon.getAccountHolderId()
     );
+    // Add MTI and other LegacyBeacon fields to new Beacon prior to registering
     registerBeacon(beacon);
 
     return beacon;
