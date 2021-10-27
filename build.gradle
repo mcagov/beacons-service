@@ -74,6 +74,10 @@ node {
     npmWorkDir = file("${project.buildDir}/npm")
 }
 
+npmInstall {
+    workingDir = file("${project.projectDir}/src/main/backoffice")
+}
+
 task backofficeSpaNpmBuild(type: NpmTask, dependsOn: 'npmInstall') {
     description = "Building production version of Backoffice SPA"
     workingDir = file("${project.projectDir}/src/main/backoffice")
@@ -86,3 +90,4 @@ task backofficeSpaCopyToStaticAssetsDirectory(type: Copy, dependsOn: 'backoffice
 }
 
 processResources.dependsOn 'backofficeSpaCopyToStaticAssetsDirectory'
+clean.delete << file('src/main/backoffice/node_modules')
