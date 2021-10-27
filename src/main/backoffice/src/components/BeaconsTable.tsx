@@ -19,6 +19,7 @@ import {
 import { IBeaconsGateway } from "gateways/beacons/IBeaconsGateway";
 import MaterialTable, { Icons, MTableBodyRow } from "material-table";
 import React, { forwardRef, FunctionComponent, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 
@@ -101,13 +102,16 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = ({
           render: (rowData: BeaconTableListRow) => {
             if (rowData.beaconType === "LEGACY_BEACON") {
               return (
-                <Link href={"/#/legacy-beacons/" + rowData.id}>
+                <Link
+                  component={RouterLink}
+                  to={"/legacy-beacons/" + rowData.id}
+                >
                   {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
                 </Link>
               );
             } else {
               return (
-                <Link href={"/#/beacons/" + rowData.id}>
+                <Link component={RouterLink} to={"/beacons/" + rowData.id}>
                   {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
                 </Link>
               );

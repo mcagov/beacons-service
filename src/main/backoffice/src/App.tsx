@@ -74,17 +74,17 @@ const App: FunctionComponent = () => {
 
   return (
     <AuthWrapper pca={pca}>
-      <Router>
+      <Router basename="/backoffice">
         <Navigation />
         <RequireAuth>
           <Switch>
             <Route exact path="/">
               <BeaconRecordsListView beaconsGateway={beaconsGateway} />
             </Route>
-            <Route path="/beacons/:id">
+            <Route path={`/beacons/:id`}>
               <SingleBeaconRecordViewWithParam />
             </Route>
-            <Route path="/legacy-beacons/:id">
+            <Route path={`/legacy-beacons/:id`}>
               <SingleLegacyBeaconRecordViewWithParam />
             </Route>
           </Switch>
