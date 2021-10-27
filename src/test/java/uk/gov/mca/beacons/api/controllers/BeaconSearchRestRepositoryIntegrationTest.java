@@ -22,10 +22,80 @@ class BeaconSearchRestRepositoryIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
+  private String readFile(String filePath) throws Exception {
+    return Files.readString(Paths.get(filePath));
+  }
+
+  private void createLegacyBeacon(Function<String, String> mapRequestObject)
+    throws Exception {
+    final var createLegacyBeaconRequest = mapRequestObject.apply(
+      readFile("src/test/resources/fixtures/createLegacyBeaconRequest.json")
+    );
+
+    webTestClient
+      .post()
+      .uri("/spring-api/migrate/legacy-beacon")
+      .bodyValue(createLegacyBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated();
+  }
+
+  private void createLegacyBeacon(String hexId) throws Exception {
+    createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
+  }
+
+  private void createBeacon(String hexId) throws Exception {
+    createBeacon(
+      request ->
+        request
+          .replace("1D0EA08C52FFBFF", hexId)
+          .replace("\"account-holder-id-placeholder\"", "null")
+    );
+  }
+
+  private void createBeacon(Function<String, String> mapRequestObject)
+    throws Exception {
+    final var createBeaconRequest = mapRequestObject.apply(
+      readFile("src/test/resources/fixtures/createBeaconRequest.json")
+    );
+
+    webTestClient
+      .post()
+      .uri("/spring-api/registrations/register")
+      .body(BodyInserters.fromValue(createBeaconRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated();
+  }
+
+  private String createAccountHolder(String testAuthId) throws Exception {
+    final String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+
+    return webTestClient
+      .post()
+      .uri("/spring-api/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody(ObjectNode.class)
+      .returnResult()
+      .getResponseBody()
+      .get("data")
+      .get("id")
+      .textValue();
+  }
+
   @Nested
   class GetBeaconSearchResults {
 
-    private static final String FIND_ALL_URI = "/beacon-search/search/find-all";
+    private static final String FIND_ALL_URI =
+      "/spring-api/beacon-search/search/find-all";
 
     @Test
     void shouldFindTheCreatedLegacyBeacon() throws Exception {
@@ -172,7 +242,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
   class GetBeaconSearchResultsForAccountHolder {
 
     private static final String FIND_BY_ACCOUNT_HOLDER =
-      "/beacon-search/search/find-all-by-account-holder-and-email";
+      "/spring-api/beacon-search/search/find-all-by-account-holder-and-email";
 
     @Test
     void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
@@ -251,74 +321,5 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("_embedded.beaconSearch[0].ownerEmail")
         .isEqualTo("nelson@royalnavy.mod.uk");
     }
-  }
-
-  private String readFile(String filePath) throws Exception {
-    return Files.readString(Paths.get(filePath));
-  }
-
-  private void createLegacyBeacon(Function<String, String> mapRequestObject)
-    throws Exception {
-    final var createLegacyBeaconRequest = mapRequestObject.apply(
-      readFile("src/test/resources/fixtures/createLegacyBeaconRequest.json")
-    );
-
-    webTestClient
-      .post()
-      .uri("/migrate/legacy-beacon")
-      .bodyValue(createLegacyBeaconRequest)
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectStatus()
-      .isCreated();
-  }
-
-  private void createLegacyBeacon(String hexId) throws Exception {
-    createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
-  }
-
-  private void createBeacon(String hexId) throws Exception {
-    createBeacon(
-      request ->
-        request
-          .replace("1D0EA08C52FFBFF", hexId)
-          .replace("\"account-holder-id-placeholder\"", "null")
-    );
-  }
-
-  private void createBeacon(Function<String, String> mapRequestObject)
-    throws Exception {
-    final var createBeaconRequest = mapRequestObject.apply(
-      readFile("src/test/resources/fixtures/createBeaconRequest.json")
-    );
-
-    webTestClient
-      .post()
-      .uri("/registrations/register")
-      .body(BodyInserters.fromValue(createBeaconRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectStatus()
-      .isCreated();
-  }
-
-  private String createAccountHolder(String testAuthId) throws Exception {
-    final String newAccountHolderRequest = readFile(
-      "src/test/resources/fixtures/createAccountHolderRequest.json"
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
-
-    return webTestClient
-      .post()
-      .uri("/account-holder")
-      .body(BodyInserters.fromValue(newAccountHolderRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectBody(ObjectNode.class)
-      .returnResult()
-      .getResponseBody()
-      .get("data")
-      .get("id")
-      .textValue();
   }
 }

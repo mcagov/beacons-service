@@ -21,12 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.domain.Activity;
-import uk.gov.mca.beacons.api.domain.BackOfficeUser;
-import uk.gov.mca.beacons.api.domain.BeaconStatus;
-import uk.gov.mca.beacons.api.domain.Environment;
-import uk.gov.mca.beacons.api.domain.Purpose;
-import uk.gov.mca.beacons.api.domain.User;
+import uk.gov.mca.beacons.api.domain.*;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
@@ -103,7 +98,9 @@ class BeaconsControllerIntegrationTest {
   @Test
   void requestBeaconControllerShouldReturnBeaconByUuid() {
     String uuidAsString = uuid.toString();
-    var request = makeGetRequest(String.format("/beacons/%s", uuidAsString));
+    var request = makeGetRequest(
+      String.format("/spring-api/beacons/%s", uuidAsString)
+    );
 
     request.jsonPath("$.data").exists();
     request.jsonPath("$.data.type").isEqualTo("beacon");
@@ -167,7 +164,7 @@ class BeaconsControllerIntegrationTest {
 
     final var response = webTestClient
       .get()
-      .uri("/beacons/" + beaconId + "/notes")
+      .uri("/spring-api/beacons/" + beaconId + "/notes")
       .exchange()
       .expectBody();
 
@@ -198,7 +195,7 @@ class BeaconsControllerIntegrationTest {
 
     final var createNoteResponse = webTestClient
       .post()
-      .uri("/note")
+      .uri("/spring-api/note")
       .body(BodyInserters.fromValue(createNoteRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()

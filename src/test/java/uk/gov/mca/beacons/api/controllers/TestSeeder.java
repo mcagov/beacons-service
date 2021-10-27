@@ -13,7 +13,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -39,7 +38,7 @@ public class TestSeeder {
 
     return webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .body(BodyInserters.fromValue(createBeaconRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
@@ -61,7 +60,7 @@ public class TestSeeder {
 
     return webTestClient
       .post()
-      .uri("/migrate/legacy-beacon")
+      .uri("/spring-api/migrate/legacy-beacon")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(createLegacyBeaconRequest)
       .exchange()
@@ -80,7 +79,7 @@ public class TestSeeder {
 
     return webTestClient
       .post()
-      .uri("/account-holder")
+      .uri("/spring-api/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
@@ -97,7 +96,7 @@ public class TestSeeder {
 
     return webTestClient
       .post()
-      .uri("/account-holder")
+      .uri("/spring-api/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()

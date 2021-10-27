@@ -17,11 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.domain.Activity;
-import uk.gov.mca.beacons.api.domain.BackOfficeUser;
-import uk.gov.mca.beacons.api.domain.Environment;
-import uk.gov.mca.beacons.api.domain.Purpose;
-import uk.gov.mca.beacons.api.domain.User;
+import uk.gov.mca.beacons.api.domain.*;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
 import uk.gov.mca.beacons.api.jpa.entities.Person;
@@ -99,7 +95,7 @@ class NoteControllerIntegrationTest {
 
     var response = webTestClient
       .post()
-      .uri("/note")
+      .uri("/spring-api/note")
       .body(BodyInserters.fromValue(createNoteRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()

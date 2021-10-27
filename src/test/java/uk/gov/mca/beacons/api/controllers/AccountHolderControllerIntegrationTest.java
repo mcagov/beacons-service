@@ -23,6 +23,55 @@ class AccountHolderControllerIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
+  private String readFile(String filePath) throws IOException {
+    return Files.readString(Paths.get(filePath));
+  }
+
+  private String createAccountHolder() throws Exception {
+    return createAccountHolder(UUID.randomUUID().toString());
+  }
+
+  private String createAccountHolder(String testAuthId) throws Exception {
+    final String newAccountHolderRequest = readFile(
+      "src/test/resources/fixtures/createAccountHolderRequest.json"
+    )
+      .replace("replace-with-test-auth-id", testAuthId);
+
+    return webTestClient
+      .post()
+      .uri("/spring-api/account-holder")
+      .body(BodyInserters.fromValue(newAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectBody(ObjectNode.class)
+      .returnResult()
+      .getResponseBody()
+      .get("data")
+      .get("id")
+      .textValue();
+  }
+
+  private String createBeacon(String accountHolderId) throws Exception {
+    final String createBeaconRequest = readFile(
+      "src/test/resources/fixtures/createBeaconRequest.json"
+    )
+      .replace("account-holder-id-placeholder", accountHolderId);
+
+    return webTestClient
+      .post()
+      .uri("/spring-api/registrations/register")
+      .bodyValue(createBeaconRequest)
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isCreated()
+      .expectBody(ObjectNode.class)
+      .returnResult()
+      .getResponseBody()
+      .get("id")
+      .textValue();
+  }
+
   @Nested
   class CreateAccountHolder {
 
@@ -40,7 +89,7 @@ class AccountHolderControllerIntegrationTest {
 
       var response = webTestClient
         .post()
-        .uri("/account-holder")
+        .uri("/spring-api/account-holder")
         .body(BodyInserters.fromValue(newAccountHolderRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -61,7 +110,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/account-holder/auth-id/" + authId)
+        .uri("/spring-api/account-holder/auth-id/" + authId)
         .exchange()
         .expectStatus()
         .isOk()
@@ -75,7 +124,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/account-holder/auth-id/" + nonExistentAuthId)
+        .uri("/spring-api/account-holder/auth-id/" + nonExistentAuthId)
         .exchange()
         .expectStatus()
         .isNotFound();
@@ -96,7 +145,7 @@ class AccountHolderControllerIntegrationTest {
 
       var response = webTestClient
         .get()
-        .uri("/account-holder/" + createdAccountHolderId)
+        .uri("/spring-api/account-holder/" + createdAccountHolderId)
         .exchange()
         .expectBody();
 
@@ -110,7 +159,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/account-holder/" + nonExistentAuthId)
+        .uri("/spring-api/account-holder/" + nonExistentAuthId)
         .exchange()
         .expectStatus()
         .isNotFound();
@@ -130,7 +179,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/account-holder/" + accountHolderId + "/beacons")
+        .uri("/spring-api/account-holder/" + accountHolderId + "/beacons")
         .exchange()
         .expectBody()
         .json(expectedResponse);
@@ -147,7 +196,9 @@ class AccountHolderControllerIntegrationTest {
       );
       webTestClient
         .get()
-        .uri("/account-holder/" + createdAccountHolderId + "/beacons")
+        .uri(
+          "/spring-api/account-holder/" + createdAccountHolderId + "/beacons"
+        )
         .exchange()
         .expectBody()
         .json(expectedResponse);
@@ -167,7 +218,7 @@ class AccountHolderControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/beacons/" + beaconId + "/delete")
+        .uri("/spring-api/beacons/" + beaconId + "/delete")
         .body(BodyInserters.fromValue(deleteBeaconRequest))
         .exchange()
         .expectStatus()
@@ -178,7 +229,9 @@ class AccountHolderControllerIntegrationTest {
       );
       webTestClient
         .get()
-        .uri("/account-holder/" + createdAccountHolderId + "/beacons")
+        .uri(
+          "/spring-api/account-holder/" + createdAccountHolderId + "/beacons"
+        )
         .exchange()
         .expectBody()
         .json(expectedResponse);
@@ -204,7 +257,7 @@ class AccountHolderControllerIntegrationTest {
 
       var response = webTestClient
         .patch()
-        .uri("/account-holder/" + accountHolderId)
+        .uri("/spring-api/account-holder/" + accountHolderId)
         .body(BodyInserters.fromValue(updateRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -213,54 +266,5 @@ class AccountHolderControllerIntegrationTest {
       response.json(expectedResponse);
       response.jsonPath("$.data.id").isNotEmpty();
     }
-  }
-
-  private String readFile(String filePath) throws IOException {
-    return Files.readString(Paths.get(filePath));
-  }
-
-  private String createAccountHolder() throws Exception {
-    return createAccountHolder(UUID.randomUUID().toString());
-  }
-
-  private String createAccountHolder(String testAuthId) throws Exception {
-    final String newAccountHolderRequest = readFile(
-      "src/test/resources/fixtures/createAccountHolderRequest.json"
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
-
-    return webTestClient
-      .post()
-      .uri("/account-holder")
-      .body(BodyInserters.fromValue(newAccountHolderRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectBody(ObjectNode.class)
-      .returnResult()
-      .getResponseBody()
-      .get("data")
-      .get("id")
-      .textValue();
-  }
-
-  private String createBeacon(String accountHolderId) throws Exception {
-    final String createBeaconRequest = readFile(
-      "src/test/resources/fixtures/createBeaconRequest.json"
-    )
-      .replace("account-holder-id-placeholder", accountHolderId);
-
-    return webTestClient
-      .post()
-      .uri("/registrations/register")
-      .bodyValue(createBeaconRequest)
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectStatus()
-      .isCreated()
-      .expectBody(ObjectNode.class)
-      .returnResult()
-      .getResponseBody()
-      .get("id")
-      .textValue();
   }
 }
