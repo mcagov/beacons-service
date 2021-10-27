@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-To run the app in local development mode without an API stub, run `npm run start:no-api-stub`.  Doing this will require 
+To run the app in local development mode without an API stub, run `npm run start:no-api-stub`. Doing this will require
 setting the `REACT_APP_API_URL` environment variable.
 
 ### `npm test`
@@ -59,5 +59,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Deployment
 
-This application is deployed as a static website to AWS S3 via Github actions per push into main branch for developement. Staging and production must be deployed manually via clicking deploy on the Github actions page. 
-
+This application is deployed as a static website to AWS S3 via Github actions per push into main branch for developement. Staging and production must be deployed manually via clicking deploy on the Github actions page.
