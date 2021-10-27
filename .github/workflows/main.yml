@@ -3,8 +3,24 @@ name: CI/CD Pipeline
 on: push
 
 jobs:
-  unit_test:
-    name: Unit test
+  unit_test_backoffice_spa:
+    name: Unit test (Backoffice SPA using NPM)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.4.0
+        with:
+          node-version: "14"
+      - name: Install npm dependencies
+        working-directory: "src/main/backoffice"
+        run: npm ci
+      - name: Run unit tests
+        working-directory: "src/main/backoffice"
+        run: npm test
+
+  unit_test_spring_boot:
+    name: Unit test (Spring Boot application)
     runs-on: ubuntu-latest
 
     steps:
@@ -111,12 +127,12 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       [
-        unit_test,
-        integration_test,
-        prettier_check,
-        docker_lint,
-        docker_build,
-        codeql_check,
+          unit_test,
+          integration_test,
+          prettier_check,
+          docker_lint,
+          docker_build,
+          codeql_check,
       ]
 
     steps:
