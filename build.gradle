@@ -95,5 +95,5 @@ task backofficeSpaCopyToStaticAssetsDirectory(type: Copy, dependsOn: 'backoffice
     into 'build/resources/main/static/backoffice/.'
 }
 
-processResources.dependsOn 'backofficeSpaCopyToStaticAssetsDirectory'
+bootRun.dependsOn 'backofficeSpaCopyToStaticAssetsDirectory'
 clean.delete << file('src/main/backoffice/node_modules')
