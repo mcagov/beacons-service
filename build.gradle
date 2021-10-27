@@ -84,6 +84,12 @@ task backofficeSpaNpmBuild(type: NpmTask, dependsOn: 'npmInstall') {
     args = ["run", "build"]
 }
 
+task backofficeSpaUnitTest(type: NpmTask) {
+    description = "Run the unit tests for the Backoffice SPA"
+    workingDir = file("${project.projectDir}/src/main/backoffice")
+    args = ["run", "test"]
+}
+
 task backofficeSpaCopyToStaticAssetsDirectory(type: Copy, dependsOn: 'backofficeSpaNpmBuild') {
     from 'src/main/backoffice/build'
     into 'build/resources/main/static/backoffice/.'
