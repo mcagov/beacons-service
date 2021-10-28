@@ -151,13 +151,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
     @Test
     void shouldFindTheCreatedLegacyBeaconBySerialNumber() throws Exception {
       var legacyBeaconFixtureSerialNumberValue = 1763;
-      var uniqueLegacyBeaconSerialNumber = new Random()
+      var pseudoUniqueLegacyBeaconSerialNumber = new Random()
         .nextInt(Integer.MAX_VALUE);
       createLegacyBeacon(
         request ->
           request.replace(
             Integer.toString(legacyBeaconFixtureSerialNumberValue),
-            Integer.toString(uniqueLegacyBeaconSerialNumber)
+            Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
           )
       );
 
@@ -167,7 +167,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
           uriBuilder ->
             uriBuilder
               .path(FIND_ALL_URI)
-              .queryParam("term", uniqueLegacyBeaconSerialNumber)
+              .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
               .queryParam("status", "")
               .queryParam("uses", "")
               .build()
@@ -179,7 +179,42 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("page.totalElements")
         .isEqualTo(1)
         .jsonPath("_embedded.beaconSearch[0].serialNumber")
-        .isEqualTo(uniqueLegacyBeaconSerialNumber);
+        .isEqualTo(pseudoUniqueLegacyBeaconSerialNumber);
+    }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconByCospasSarsatNumber()
+      throws Exception {
+      var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
+      var pseudoUniqueLegacyBeaconCospasSarsatNumber = new Random()
+        .nextInt(Integer.MAX_VALUE);
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
+            Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
+          )
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", pseudoUniqueLegacyBeaconCospasSarsatNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].cospasSarsatNumber")
+        .isEqualTo(pseudoUniqueLegacyBeaconCospasSarsatNumber);
     }
 
     @Test
