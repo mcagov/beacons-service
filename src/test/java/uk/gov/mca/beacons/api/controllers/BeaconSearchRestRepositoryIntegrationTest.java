@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
 import org.junit.jupiter.api.Nested;
@@ -145,6 +146,40 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .isEqualTo(1)
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(legacyBeaconHexId);
+    }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconBySerialNumber() throws Exception {
+      var legacyBeaconFixtureSerialNumberValue = 1763;
+      var uniqueLegacyBeaconSerialNumber = new Random()
+        .nextInt(Integer.MAX_VALUE);
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureSerialNumberValue),
+            Integer.toString(uniqueLegacyBeaconSerialNumber)
+          )
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", uniqueLegacyBeaconSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].serialNumber")
+        .isEqualTo(uniqueLegacyBeaconSerialNumber);
     }
 
     @Test
