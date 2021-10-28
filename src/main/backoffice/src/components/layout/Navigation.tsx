@@ -3,6 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import React, { FunctionComponent } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { UserMenu } from "../auth/UserMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +27,7 @@ export const Navigation: FunctionComponent = (): JSX.Element => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit" href="/">
+          <Button color="inherit" component={RouterLink} to="/">
             Beacon records
           </Button>
           <Box ml="auto">
