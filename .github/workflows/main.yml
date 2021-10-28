@@ -3,7 +3,23 @@ name: CI/CD Pipeline
 on: push
 
 jobs:
-  unit_test_backoffice_spa:
+  backoffice_spa_lint:
+    name: Backoffice SPA - lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.4.0
+        with:
+          node-version: "14"
+      - name: Install npm dependencies
+        working-directory: "src/main/backoffice"
+        run: npm ci
+      - name: Run linter
+        working-directory: "src/main/backoffice"
+        run: npm run lint
+
+  backoffice_spa_unit_test:
     name: Unit test (Backoffice SPA using NPM)
     runs-on: ubuntu-latest
 
@@ -19,7 +35,7 @@ jobs:
         working-directory: "src/main/backoffice"
         run: npm test
 
-  unit_test_spring_boot:
+  spring_boot_unit_test:
     name: Unit test (Spring Boot)
     runs-on: ubuntu-latest
 
@@ -32,7 +48,7 @@ jobs:
       - name: Unit tests
         run: ./gradlew clean test
 
-  integration_test:
+  spring_boot_integration_test:
     name: Integration test
     runs-on: ubuntu-latest
 
@@ -127,9 +143,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       [
-        unit_test_backoffice_spa,
-        unit_test_spring_boot,
-        integration_test,
+        backoffice_spa_lint,
+        backoffice_spa_unit_test,
+        spring_boot_unit_test,
+        spring_boot_integration_test,
         prettier_check,
         docker_lint,
         docker_build,
