@@ -8,6 +8,9 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+  data:
+    rest:
+      basePath: spring-api
 
 management:
   endpoints:
