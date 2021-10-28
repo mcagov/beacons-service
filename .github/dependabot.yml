@@ -17,11 +17,19 @@ updates:
     pull-request-branch-name:
       separator: "-"
 
-  # Maintain package.json dependencies
+  # Maintain root package.json dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Maintain Backoffice SPA package.json dependencies
+  - package-ecosystem: "npm"
+    directory: "/src/main/backoffice"
+    schedule:
+      interval: "weekly"
     pull-request-branch-name:
       separator: "-"
 
