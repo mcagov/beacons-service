@@ -121,7 +121,10 @@ class BeaconSearchRestRepositoryIntegrationTest {
       throws Exception {
       final var manufacturerSerialNumber = UUID.randomUUID().toString();
       final var legacyBeaconHexId = UUID.randomUUID().toString();
-      createLegacyBeacon(legacyBeaconHexId);
+      createLegacyBeaconWithManufacturerSerialNumber(
+        legacyBeaconHexId,
+        manufacturerSerialNumber
+      );
 
       webTestClient
         .get()
@@ -130,16 +133,18 @@ class BeaconSearchRestRepositoryIntegrationTest {
             uriBuilder
               .path(FIND_ALL_URI)
               .queryParam("term", manufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
               .build()
         )
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("_embedded.beaconSearch[0].hexId")
-        .isEqualTo(legacyBeaconHexId)
         .jsonPath("page.totalElements")
-        .isEqualTo(1);
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].hexId")
+        .isEqualTo(legacyBeaconHexId);
     }
 
     @Test
@@ -318,6 +323,18 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
   private void createLegacyBeacon(String hexId) throws Exception {
     createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
+  }
+
+  private void createLegacyBeaconWithManufacturerSerialNumber(
+    String hexId,
+    String manufacturerSerialNumber
+  ) throws Exception {
+    createLegacyBeacon(
+      request ->
+        request
+          .replace("9D0E1D1B8C00001", hexId)
+          .replace("manufacturer_serial_number_value", manufacturerSerialNumber)
+    );
   }
 
   private void createBeacon(String hexId) throws Exception {
