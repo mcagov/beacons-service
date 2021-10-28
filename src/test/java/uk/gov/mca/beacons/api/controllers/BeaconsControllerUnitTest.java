@@ -5,9 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -100,7 +98,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          patch("/beacons/" + beaconId)
+          patch("/spring-api/beacons/" + beaconId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(dto))
         )
@@ -118,7 +116,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          patch("/beacons/" + beaconId)
+          patch("/spring-api/beacons/" + beaconId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(dto))
         )
@@ -151,7 +149,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          patch("/beacons/" + beaconId + "/delete")
+          patch("/spring-api/beacons/" + beaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
@@ -182,7 +180,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          patch("/beacons/" + beaconId + "/delete")
+          patch("/spring-api/beacons/" + beaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
@@ -211,7 +209,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          patch("/beacons/" + differentBeaconId + "/delete")
+          patch("/spring-api/beacons/" + differentBeaconId + "/delete")
             .contentType(MediaType.APPLICATION_JSON)
             .content(OBJECT_MAPPER.writeValueAsString(deleteBeaconRequest))
         )
@@ -235,7 +233,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          get("/beacons/" + beaconId + "/notes")
+          get("/spring-api/beacons/" + beaconId + "/notes")
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andReturn();
@@ -255,7 +253,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          get("/beacons/" + beaconId + "/notes")
+          get("/spring-api/beacons/" + beaconId + "/notes")
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());
@@ -270,7 +268,7 @@ class BeaconsControllerUnitTest {
 
       mockMvc
         .perform(
-          get("/beacons/" + beaconId + "/notes")
+          get("/spring-api/beacons/" + beaconId + "/notes")
             .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk());

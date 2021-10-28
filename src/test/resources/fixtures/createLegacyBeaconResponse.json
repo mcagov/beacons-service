@@ -16,7 +16,7 @@
         "protocol": "None",
         "serialNumber": 1763,
         "cospasSarsatNumber": 476899,
-        "manufacturerSerialNumber": "None",
+        "manufacturerSerialNumber": "manufacturer_serial_number_value",
         "coding": "None",
         "firstRegistrationDate": "2004-10-28 00:00:00",
         "lastServiceDate": "None",

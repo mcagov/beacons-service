@@ -19,7 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfiguration {
 
   /**
-   * Custom Security configuration that secures migration endpoints over basic auth rather than Azure AD.
+   * Secure the migration endpoints behind HTTP Basic Auth.
    */
   @Order(1)
   @Configuration
@@ -35,7 +35,7 @@ public class SecurityConfiguration {
 
     /**
      * Creates a HTTP basic auth security filter for the migration endpoints.
-     *
+     * <p>
      * NOTE: The HTTP session has to be stateless for the basic auth security filter.
      * Otherwise Spring allows access to Azure authenticated endpoints if a user
      * has a session through authenticating via basic auth.
@@ -45,7 +45,7 @@ public class SecurityConfiguration {
       http
         .cors()
         .and()
-        .antMatcher("/migrate/**")
+        .antMatcher("/spring-api/migrate/**")
         .csrf()
         .disable()
         .authorizeRequests()
@@ -69,6 +69,9 @@ public class SecurityConfiguration {
     }
   }
 
+  /**
+   * Secure the operational API endpoints behind a confidential client grant flow with Azure AD (AAD)
+   */
   @Order(2)
   @Configuration
   @Profile("default")
@@ -90,7 +93,15 @@ public class SecurityConfiguration {
           "/actuator/info",
           "/swagger-ui.html",
           "/swagger-ui/**",
-          "/v3/api-docs/**"
+          "/v3/api-docs/**",
+          /*
+           * Permit global access to Backoffice SPA static assets because the user is required to sign in with Azure AD
+           * prior to accessing protected data in any case.  There is no security benefit from securing the application
+           * itself.
+           *
+           * The path to the Backoffice SPA's static assets is configured in build.gradle.
+           */
+          "/backoffice/**"
         );
     }
   }

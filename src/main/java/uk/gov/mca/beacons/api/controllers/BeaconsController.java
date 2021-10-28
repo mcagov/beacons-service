@@ -8,12 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.dto.BeaconDTO;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
@@ -29,7 +24,7 @@ import uk.gov.mca.beacons.api.services.DeleteBeaconService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController
-@RequestMapping("/beacons")
+@RequestMapping("/spring-api/beacons")
 @Tag(name = "Beacons Controller")
 public class BeaconsController {
 

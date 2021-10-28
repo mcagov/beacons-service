@@ -28,6 +28,10 @@ class MigrationControllerIntegrationTest {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
+  private String readFile(String filePath) throws IOException {
+    return Files.readString(Paths.get(filePath));
+  }
+
   @Nested
   class CreateLegacyBeacon {
 
@@ -39,7 +43,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate/legacy-beacon")
+        .uri("/spring-api/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -59,7 +63,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate/legacy-beacon")
+        .uri("/spring-api/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -79,7 +83,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate/legacy-beacon")
+        .uri("/spring-api/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconInvalidRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -104,7 +108,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/migrate/legacy-beacon")
+        .uri("/spring-api/migrate/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -113,7 +117,7 @@ class MigrationControllerIntegrationTest {
 
       webTestClient
         .get()
-        .uri("/migrate/delete-all-legacy-beacons")
+        .uri("/spring-api/migrate/delete-all-legacy-beacons")
         .exchange()
         .expectStatus()
         .isOk();
@@ -129,14 +133,10 @@ class MigrationControllerIntegrationTest {
     void shouldRespondWithOKStatusIfLegacyBeaconsDeleted() {
       webTestClient
         .get()
-        .uri("/migrate/delete-all-legacy-beacons")
+        .uri("/spring-api/migrate/delete-all-legacy-beacons")
         .exchange()
         .expectStatus()
         .isOk();
     }
-  }
-
-  private String readFile(String filePath) throws IOException {
-    return Files.readString(Paths.get(filePath));
   }
 }

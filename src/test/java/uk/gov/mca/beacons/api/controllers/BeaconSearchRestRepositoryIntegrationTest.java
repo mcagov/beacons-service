@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
 import org.junit.jupiter.api.Nested;
@@ -25,7 +26,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
   @Nested
   class GetBeaconSearchResults {
 
-    private static final String FIND_ALL_URI = "/beacon-search/search/find-all";
+    private static final String FIND_ALL_URI =
+      "/spring-api/beacon-search/search/find-all";
 
     @Test
     void shouldFindTheCreatedLegacyBeacon() throws Exception {
@@ -44,6 +46,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch[0].id")
         .isNotEmpty()
@@ -78,6 +82,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(randomHexId)
@@ -102,11 +108,113 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(randomHexId)
         .jsonPath("page.totalElements")
         .isEqualTo(1);
+    }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconByManufacturerSerialNumber()
+      throws Exception {
+      final var manufacturerSerialNumber = UUID.randomUUID().toString();
+      final var legacyBeaconHexId = UUID.randomUUID().toString();
+      createLegacyBeaconWithManufacturerSerialNumber(
+        legacyBeaconHexId,
+        manufacturerSerialNumber
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", manufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].hexId")
+        .isEqualTo(legacyBeaconHexId);
+    }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconBySerialNumber() throws Exception {
+      var legacyBeaconFixtureSerialNumberValue = 1763;
+      var pseudoUniqueLegacyBeaconSerialNumber = new Random()
+        .nextInt(Integer.MAX_VALUE);
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureSerialNumberValue),
+            Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
+          )
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].serialNumber")
+        .isEqualTo(pseudoUniqueLegacyBeaconSerialNumber);
+    }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconByCospasSarsatNumber()
+      throws Exception {
+      var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
+      var pseudoUniqueLegacyBeaconCospasSarsatNumber = new Random()
+        .nextInt(Integer.MAX_VALUE);
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
+            Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
+          )
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", pseudoUniqueLegacyBeaconCospasSarsatNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].cospasSarsatNumber")
+        .isEqualTo(pseudoUniqueLegacyBeaconCospasSarsatNumber);
     }
 
     @Test
@@ -126,6 +234,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch[0].id")
         .isNotEmpty()
@@ -160,11 +270,48 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(randomHexId)
         .jsonPath("page.totalElements")
         .isEqualTo(1);
+    }
+
+    @Test
+    void shouldFindTheCreatedBeaconByManufacturerSerialNumber()
+      throws Exception {
+      var uniqueBeaconManufacturerSerialNumber = UUID.randomUUID().toString();
+      createBeacon(
+        request ->
+          request
+            .replace(
+              "manufacturer-serial-number-placeholder",
+              uniqueBeaconManufacturerSerialNumber
+            )
+            .replace("\"account-holder-id-placeholder\"", "null")
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", uniqueBeaconManufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].manufacturerSerialNumber")
+        .isEqualTo(uniqueBeaconManufacturerSerialNumber);
     }
   }
 
@@ -172,7 +319,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
   class GetBeaconSearchResultsForAccountHolder {
 
     private static final String FIND_BY_ACCOUNT_HOLDER =
-      "/beacon-search/search/find-all-by-account-holder-and-email";
+      "/spring-api/beacon-search/search/find-all-by-account-holder-and-email";
 
     @Test
     void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
@@ -191,6 +338,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch.length()")
         .isEqualTo(0);
@@ -215,6 +364,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch.length()")
         .isEqualTo(1)
@@ -243,6 +394,8 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .build()
         )
         .exchange()
+        .expectStatus()
+        .isOk()
         .expectBody()
         .jsonPath("_embedded.beaconSearch.length()")
         .isEqualTo(1)
@@ -265,7 +418,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/migrate/legacy-beacon")
+      .uri("/spring-api/migrate/legacy-beacon")
       .bodyValue(createLegacyBeaconRequest)
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
@@ -275,6 +428,18 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
   private void createLegacyBeacon(String hexId) throws Exception {
     createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
+  }
+
+  private void createLegacyBeaconWithManufacturerSerialNumber(
+    String hexId,
+    String manufacturerSerialNumber
+  ) throws Exception {
+    createLegacyBeacon(
+      request ->
+        request
+          .replace("9D0E1D1B8C00001", hexId)
+          .replace("manufacturer_serial_number_value", manufacturerSerialNumber)
+    );
   }
 
   private void createBeacon(String hexId) throws Exception {
@@ -294,7 +459,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .body(BodyInserters.fromValue(createBeaconRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
@@ -310,7 +475,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
     return webTestClient
       .post()
-      .uri("/account-holder")
+      .uri("/spring-api/account-holder")
       .body(BodyInserters.fromValue(newAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()

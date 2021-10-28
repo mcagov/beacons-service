@@ -28,7 +28,7 @@ class OwnerControllerIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/owner")
+      .uri("/spring-api/owner")
       .bodyValue(createOwnerRequest)
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()

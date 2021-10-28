@@ -51,7 +51,7 @@ class RegistrationsControllerIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestBody)
       .exchange()
@@ -78,7 +78,7 @@ class RegistrationsControllerIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestBody)
       .exchange()
@@ -114,7 +114,7 @@ class RegistrationsControllerIntegrationTest {
 
     webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestBody)
       .exchange()
@@ -173,7 +173,7 @@ class RegistrationsControllerIntegrationTest {
 
       final var responseBody = webTestClient
         .post()
-        .uri("/registrations/register")
+        .uri("/spring-api/registrations/register")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestBody)
         .exchange()
@@ -198,7 +198,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -232,7 +232,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -260,7 +260,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -287,7 +287,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -312,7 +312,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -347,7 +347,7 @@ class RegistrationsControllerIntegrationTest {
 
       webTestClient
         .patch()
-        .uri("/registrations/register/" + beaconId)
+        .uri("/spring-api/registrations/register/" + beaconId)
         .bodyValue(updateRequestBody)
         .exchange()
         .expectStatus()
@@ -391,7 +391,7 @@ class RegistrationsControllerIntegrationTest {
       // assertions
       webTestClient
         .post()
-        .uri("/registrations/register")
+        .uri("/spring-api/registrations/register")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestBody)
         .exchange()
@@ -401,7 +401,7 @@ class RegistrationsControllerIntegrationTest {
       webTestClient
         .get()
         .uri(
-          "/beacon-search/search/find-all-by-account-holder-and-email?email=" +
+          "/spring-api/beacon-search/search/find-all-by-account-holder-and-email?email=" +
           email +
           "&accountHolderId=" +
           accountHolderId

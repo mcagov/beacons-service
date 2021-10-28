@@ -34,7 +34,10 @@ class HateoasLinkManagerTest {
 
     assertThat(result.size(), is(1));
     assertThat(result.get(0).getVerb(), is("GET"));
-    assertThat(result.get(0).getPath(), is("/beacons/" + beacon.getId()));
+    assertThat(
+      result.get(0).getPath(),
+      is("/spring-api/beacons/" + beacon.getId())
+    );
   }
 
   @Test
@@ -56,8 +59,14 @@ class HateoasLinkManagerTest {
 
     assertThat(result.size(), is(2));
     assertThat(result.get(0).getVerb(), is("GET"));
-    assertThat(result.get(0).getPath(), is("/beacons/" + beacon.getId()));
+    assertThat(
+      result.get(0).getPath(),
+      is("/spring-api/beacons/" + beacon.getId())
+    );
     assertThat(result.get(1).getVerb(), is("PATCH"));
-    assertThat(result.get(1).getPath(), is("/beacons/" + beacon.getId()));
+    assertThat(
+      result.get(1).getPath(),
+      is("/spring-api/beacons/" + beacon.getId())
+    );
   }
 }

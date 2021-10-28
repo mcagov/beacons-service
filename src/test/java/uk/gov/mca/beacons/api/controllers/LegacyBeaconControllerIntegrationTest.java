@@ -27,7 +27,7 @@ class LegacyBeaconControllerIntegrationTest {
 
     webTestClient
       .get()
-      .uri("/legacy-beacon/" + legacyBeaconId)
+      .uri("/spring-api/legacy-beacon/" + legacyBeaconId)
       .exchange()
       .expectStatus()
       .isOk()
@@ -43,7 +43,7 @@ class LegacyBeaconControllerIntegrationTest {
 
     webTestClient
       .get()
-      .uri("/legacy-beacon/" + legacyBeaconId)
+      .uri("/spring-api/legacy-beacon/" + legacyBeaconId)
       .exchange()
       .expectStatus()
       .isNotFound();
@@ -56,7 +56,7 @@ class LegacyBeaconControllerIntegrationTest {
 
     return webTestClient
       .post()
-      .uri("/migrate/legacy-beacon")
+      .uri("/spring-api/migrate/legacy-beacon")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(createLegacyBeaconRequest)
       .exchange()
@@ -103,7 +103,7 @@ class LegacyBeaconControllerIntegrationTest {
     // assertions
     webTestClient
       .post()
-      .uri("/registrations/register")
+      .uri("/spring-api/registrations/register")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestBody)
       .exchange()
@@ -113,7 +113,7 @@ class LegacyBeaconControllerIntegrationTest {
     // Act
     webTestClient
       .get()
-      .uri("/legacy-beacon/" + legacyBeaconId)
+      .uri("/spring-api/legacy-beacon/" + legacyBeaconId)
       .exchange()
       .expectStatus()
       .isOk()

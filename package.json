@@ -1,8 +1,8 @@
 {
   "description": "Beacons Registration Service Prettier Formatting Dependencies",
   "scripts": {
-    "format": "prettier --write './**/*.{java,md,json,yml}'",
-    "format:check": "prettier --check './**/*.{java,md,json,yml}'"
+    "format": "prettier --write './**/*.{java,md,json,yml,js,jsx,json,ts,tsx,yml,md,html,scss,css}'",
+    "format:check": "prettier --check './**/*.{java,md,json,yml,js,jsx,json,ts,tsx,yml,md,html,scss,css}'"
   },
   "husky": {
     "hooks": {
