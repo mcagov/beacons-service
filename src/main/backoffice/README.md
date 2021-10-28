@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the Backoffice SPA sub-directory, you can run:
 
 ### `npm start`
 
@@ -44,19 +44,17 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Environment
 
-For logging into to the Beacons Registry Back Office you will need to be added as a guest to the following:
+For logging into to the Beacons Registry Back Office, you will need to be added as a guest to the following:
 
-- MCA Azure AD test directory, `testmcga.onmicrosoft.com`
+- MCA Azure AD test directory, `mcga.onmicrosoft.com`
 - Relevant Azure Security Groups within Azure AD to access the application
 
 Please ask a member of the development team who has permission to do this.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
 ## Deployment
 
-This application is deployed as a static website to AWS S3 via Github actions per push into main branch for developement. Staging and production must be deployed manually via clicking deploy on the Github actions page.
+This application is bundled and served with the parent Spring Boot application at "/backoffice".
+
+## Why serve an SPA from within Spring Boot?
+
+See [ADR](https://github.com/mcagov/beacons-integration/blob/main/docs/adr/0007-2021-10-25-serve-backoffice-spa-from-spring.md).
