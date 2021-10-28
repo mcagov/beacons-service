@@ -89,8 +89,8 @@ public class SecurityConfiguration {
       web
         .ignoring()
         .antMatchers(
-          "/actuator/health",
-          "/actuator/info",
+          "/spring-api/actuator/health",
+          "/spring-api/actuator/info",
           "/swagger-ui.html",
           "/swagger-ui/**",
           "/v3/api-docs/**",

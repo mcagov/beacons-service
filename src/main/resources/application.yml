@@ -25,6 +25,7 @@ management:
         include:
           - info
           - health
+      base-path: /spring-api/actuator
 
 beacons:
   openapi:

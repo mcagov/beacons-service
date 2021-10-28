@@ -14,5 +14,3 @@ public class WebConfiguration implements WebMvcConfigurer {
       .setViewName("forward:/backoffice/index.html");
   }
 }
-// https://localhost/
-// https://localhost/backoffice
