@@ -278,6 +278,41 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("page.totalElements")
         .isEqualTo(1);
     }
+
+    @Test
+    void shouldFindTheCreatedBeaconByManufacturerSerialNumber()
+      throws Exception {
+      var uniqueBeaconManufacturerSerialNumber = UUID.randomUUID().toString();
+      createBeacon(
+        request ->
+          request
+            .replace(
+              "manufacturer-serial-number-placeholder",
+              uniqueBeaconManufacturerSerialNumber
+            )
+            .replace("\"account-holder-id-placeholder\"", "null")
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", uniqueBeaconManufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].manufacturerSerialNumber")
+        .isEqualTo(uniqueBeaconManufacturerSerialNumber);
+    }
   }
 
   @Nested
