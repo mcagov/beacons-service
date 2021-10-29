@@ -51,12 +51,10 @@ public class UpdateRegistrationService {
 
   private void replaceUses(UUID beaconId, List<BeaconUse> uses) {
     useGateway.deleteAllByBeaconId(beaconId);
-    uses.forEach(
-      use -> {
-        use.setBeaconId(beaconId);
-        useGateway.save(use);
-      }
-    );
+    uses.forEach(use -> {
+      use.setBeaconId(beaconId);
+      useGateway.save(use);
+    });
   }
 
   private void replaceOwner(UUID beaconId, Person owner) {
@@ -75,14 +73,12 @@ public class UpdateRegistrationService {
   ) {
     emergencyContactGateway.deleteAllByBeaconId(beaconId);
 
-    emergencyContacts.forEach(
-      emergencyContact -> {
-        final var createEmergencyContactRequest = CreateEmergencyContactRequestMapper.fromBeaconPerson(
-          emergencyContact,
-          beaconId
-        );
-        emergencyContactGateway.save(createEmergencyContactRequest);
-      }
-    );
+    emergencyContacts.forEach(emergencyContact -> {
+      final var createEmergencyContactRequest = CreateEmergencyContactRequestMapper.fromBeaconPerson(
+        emergencyContact,
+        beaconId
+      );
+      emergencyContactGateway.save(createEmergencyContactRequest);
+    });
   }
 }

@@ -56,19 +56,17 @@ public class BeaconsResponseFactory {
     final var wrapper = new WrapperDTO<List<BeaconDTO>>();
     final List<BeaconDTO> beaconDTOs = new ArrayList<>();
 
-    beacons.forEach(
-      beacon -> {
-        final var beaconDTO = getBeaconDTO(beacon);
-        final var useDTOs = getUseDTOs(beacon);
-        final var ownerDTO = getOwnerDTO(beacon);
-        final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
+    beacons.forEach(beacon -> {
+      final var beaconDTO = getBeaconDTO(beacon);
+      final var useDTOs = getUseDTOs(beacon);
+      final var ownerDTO = getOwnerDTO(beacon);
+      final var emergencyContactDTOs = getEmergencyContactDTOs(beacon);
 
-        useDTOs.forEach(wrapper::addIncluded);
-        wrapper.addIncluded(ownerDTO);
-        emergencyContactDTOs.forEach(wrapper::addIncluded);
-        beaconDTOs.add(beaconDTO);
-      }
-    );
+      useDTOs.forEach(wrapper::addIncluded);
+      wrapper.addIncluded(ownerDTO);
+      emergencyContactDTOs.forEach(wrapper::addIncluded);
+      beaconDTOs.add(beaconDTO);
+    });
 
     wrapper.setData(beaconDTOs);
     wrapper.addMeta("count", beaconDTOs.size());

@@ -47,9 +47,11 @@ describe("BeaconSummaryEditing", () => {
     userEvent.type(editableField, "ACME Inc.");
 
     expect(await screen.findByDisplayValue("ACME Inc.")).toBeVisible();
-    userEvent.click(screen.getByRole("button", { name: "Save"}));
+    userEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() => {
-      expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ manufacturer: "ACME Inc." }))
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ manufacturer: "ACME Inc." })
+      );
     });
   });
 
@@ -67,11 +69,13 @@ describe("BeaconSummaryEditing", () => {
     const dropdownField = await screen.findByLabelText(/mti/i);
 
     userEvent.selectOptions(dropdownField, "TEST_EPIRB");
-    userEvent.click(screen.getByRole("button", { name: "Save"}));
+    userEvent.click(screen.getByRole("button", { name: "Save" }));
     await waitFor(() => {
-      expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ mti: "TEST_EPIRB" }))
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ mti: "TEST_EPIRB" })
+      );
     });
-  })
+  });
 
   it("calls the onSave() callback to save the edited beacon", async () => {
     const onSave = jest.fn();
