@@ -55,7 +55,7 @@ describe("BeaconSummaryEditing", () => {
     });
   });
 
-  it("user can select item from dropdown fields", async () => {
+  it("user can use dropdown to update mti", async () => {
     const onSave = jest.fn();
 
     render(
@@ -73,6 +73,29 @@ describe("BeaconSummaryEditing", () => {
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledWith(
         expect.objectContaining({ mti: "TEST_EPIRB" })
+      );
+    });
+  });
+
+  it("user can use dropdown to update protocol", async () => {
+    const onSave = jest.fn();
+
+    render(
+      <BeaconSummaryEditing
+        beacon={beaconFixture}
+        onSave={onSave}
+        onCancel={jest.fn()}
+      />
+    );
+
+    const dropdownField = await screen.findByLabelText(/protocol/i);
+    const protocol = "EPIRB non-GPS, non-CSTA, UK Serialised";
+
+    userEvent.selectOptions(dropdownField, protocol);
+    userEvent.click(screen.getByRole("button", { name: "Save" }));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ protocol })
       );
     });
   });

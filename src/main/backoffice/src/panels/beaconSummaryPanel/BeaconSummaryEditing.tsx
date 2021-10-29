@@ -22,6 +22,7 @@ import {
   WritingStyle,
 } from "../../utils/writingStyle";
 import mtiJson from "../../lib/mti/mtis.json";
+import protocolJson from "../../lib/protocol/protocols.json";
 
 export const BeaconSummaryEditing: FunctionComponent<{
   beacon: IBeacon;
@@ -137,9 +138,13 @@ export const BeaconSummaryEditing: FunctionComponent<{
                         <Field as="select" name="beaconType">
                           <option value="" label={Placeholders.NoData} />
                           {Object.values(BeaconTypes).map(
-                            (beaconType: string) => {
+                            (beaconType: string, index) => {
                               return (
-                                <option value={beaconType} label={beaconType} />
+                                <option
+                                  key={index}
+                                  value={beaconType}
+                                  label={beaconType}
+                                />
                               );
                             }
                           )}
@@ -149,19 +154,32 @@ export const BeaconSummaryEditing: FunctionComponent<{
 
                     <TabulatedRow
                       displayKey={
-                        <Typography>
-                          {"Protocol" + WritingStyle.KeyValueSeparator}
-                        </Typography>
+                        <label htmlFor="protocol">
+                          <Typography>
+                            {"Protocol" + WritingStyle.KeyValueSeparator}
+                          </Typography>
+                        </label>
                       }
                       value={
                         <Field
-                          as={Input}
                           id="protocol"
+                          as="select"
                           name="protocol"
-                          type="string"
-                          fullWidth
-                          placeholder={Placeholders.NoData}
-                        />
+                          style={{ minWidth: 330 }}
+                        >
+                          <option value="" label={Placeholders.NoData} />
+                          {Object.values(protocolJson).map(
+                            (protocol: string, index) => {
+                              return (
+                                <option
+                                  key={index}
+                                  value={protocol}
+                                  label={protocol}
+                                />
+                              );
+                            }
+                          )}
+                        </Field>
                       }
                     />
 
