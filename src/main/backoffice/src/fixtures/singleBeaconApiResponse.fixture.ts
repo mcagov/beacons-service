@@ -63,7 +63,7 @@ export const singleBeaconApiResponseFixture: IBeaconResponse =
         coding: "Coding method to be derived from Hex ID",
         manufacturer: "Ocean Signal",
         createdDate: "2018-06-08T00:00",
-        model: "Excelsior",
+        model: "CSTA 282, SafeSea E100G EPIRB",
         mti: "EXAMPLE MTI",
         svdr: true,
         csta: "CSTA EXAMPLE",

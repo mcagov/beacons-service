@@ -18,7 +18,7 @@ export const beaconFixture = deepFreeze<IBeacon>({
   mti: "EXAMPLE MTI",
   svdr: "true",
   csta: "CSTA EXAMPLE",
-  model: "Excelsior",
+  model: "CSTA 282, SafeSea E100G EPIRB",
   manufacturerSerialNumber: "1407312904",
   chkCode: "456QWE",
   batteryExpiryDate: "01/02/2020",
