@@ -23,6 +23,7 @@ import {
 } from "../../utils/writingStyle";
 import mtiJson from "../../lib/mti/mtis.json";
 import protocolJson from "../../lib/protocol/protocols.json";
+import manufacturerModelJson from "../../lib/manufacturerModel/manufacturerModel.json";
 
 export const BeaconSummaryEditing: FunctionComponent<{
   beacon: IBeacon;
@@ -40,7 +41,7 @@ export const BeaconSummaryEditing: FunctionComponent<{
         setSubmitting(false);
       }}
     >
-      {() => (
+      {({ values, setValues }) => (
         <Form>
           <Grid container direction="row" justifyContent={"flex-start"}>
             <Grid item xs={12} sm={6}>
@@ -57,13 +58,30 @@ export const BeaconSummaryEditing: FunctionComponent<{
                       }
                       value={
                         <Field
-                          as={Input}
                           id="manufacturer"
                           name="manufacturer"
-                          type="string"
-                          fullWidth
-                          placeholder={Placeholders.NoData}
-                        />
+                          as="select"
+                          onChange={(
+                            e: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setValues((values) => ({
+                              ...values,
+                              model: "",
+                              manufacturer: e.target.value,
+                            }));
+                          }}
+                        >
+                          <option value="">{Placeholders.NoData}</option>
+                          {Object.keys(manufacturerModelJson).map(
+                            (manufacturer: string) => {
+                              return (
+                                <option key={manufacturer} value={manufacturer}>
+                                  {manufacturer}
+                                </option>
+                              );
+                            }
+                          )}
+                        </Field>
                       }
                     />
                     <TabulatedRow
@@ -75,14 +93,18 @@ export const BeaconSummaryEditing: FunctionComponent<{
                         </label>
                       }
                       value={
-                        <Field
-                          as={Input}
-                          id="model"
-                          name="model"
-                          type="string"
-                          fullWidth
-                          placeholder={Placeholders.NoData}
-                        />
+                        <Field id="model" name="model" as="select">
+                          <option value="">{Placeholders.NoData}</option>
+                          {(manufacturerModelJson as Record<string, string[]>)[
+                            values.manufacturer as string
+                          ]?.map((model: string) => {
+                            return (
+                              <option key={model} value={model}>
+                                {model}
+                              </option>
+                            );
+                          })}
+                        </Field>
                       }
                     />
 
@@ -136,15 +158,13 @@ export const BeaconSummaryEditing: FunctionComponent<{
                       }
                       value={
                         <Field as="select" name="beaconType">
-                          <option value="" label={Placeholders.NoData} />
+                          <option value="">{Placeholders.NoData}</option>
                           {Object.values(BeaconTypes).map(
                             (beaconType: string, index) => {
                               return (
-                                <option
-                                  key={index}
-                                  value={beaconType}
-                                  label={beaconType}
-                                />
+                                <option key={index} value={beaconType}>
+                                  {beaconType}
+                                </option>
                               );
                             }
                           )}
@@ -167,15 +187,13 @@ export const BeaconSummaryEditing: FunctionComponent<{
                           name="protocol"
                           style={{ minWidth: 330 }}
                         >
-                          <option value="" label={Placeholders.NoData} />
+                          <option value="">{Placeholders.NoData}</option>
                           {Object.values(protocolJson).map(
                             (protocol: string, index) => {
                               return (
-                                <option
-                                  key={index}
-                                  value={protocol}
-                                  label={protocol}
-                                />
+                                <option key={index} value={protocol}>
+                                  {protocol}
+                                </option>
                               );
                             }
                           )}
@@ -236,15 +254,13 @@ export const BeaconSummaryEditing: FunctionComponent<{
                           name="mti"
                           style={{ minWidth: 330 }}
                         >
-                          <option value="" label={Placeholders.NoData} />
+                          <option value="">{Placeholders.NoData}</option>
                           {Object.values(mtiJson).map(
                             (protocol: string, index) => {
                               return (
-                                <option
-                                  key={index}
-                                  value={protocol}
-                                  label={protocol}
-                                />
+                                <option key={index} value={protocol}>
+                                  {protocol}
+                                </option>
                               );
                             }
                           )}
