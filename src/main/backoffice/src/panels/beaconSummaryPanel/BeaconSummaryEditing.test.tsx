@@ -30,10 +30,12 @@ describe("BeaconSummaryEditing", () => {
   });
 
   it("user can type text in basic string input fields", async () => {
+    const onSave = jest.fn();
+
     render(
       <BeaconSummaryEditing
         beacon={beaconFixture}
-        onSave={jest.fn()}
+        onSave={onSave}
         onCancel={jest.fn()}
       />
     );
@@ -45,6 +47,10 @@ describe("BeaconSummaryEditing", () => {
     userEvent.type(editableField, "ACME Inc.");
 
     expect(await screen.findByDisplayValue("ACME Inc.")).toBeVisible();
+    userEvent.click(screen.getByRole("button", { name: "Save"}));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ manufacturer: "ACME Inc." }))
+    });
   });
 
   it("user can select item from dropdown fields", async () => {
