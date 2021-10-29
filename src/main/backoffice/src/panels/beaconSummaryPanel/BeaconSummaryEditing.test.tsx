@@ -2,6 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beaconFixture } from "../../fixtures/beacons.fixture";
 import { BeaconSummaryEditing } from "./BeaconSummaryEditing";
+import { cloneDeep } from "lodash";
+import { IBeacon } from "../../entities/IBeacon";
 
 describe("BeaconSummaryEditing", () => {
   it("user can type text in basic string input fields", async () => {
@@ -155,6 +157,35 @@ describe("BeaconSummaryEditing", () => {
             manufacturer,
             model: "",
           })
+        );
+      });
+    });
+
+    describe("beacon has manufacturer and model that are not in model & manufacturer json", () => {
+      it("should display the initial manufacturer and model in the select options", async () => {
+        const onSave = jest.fn();
+        const manufacturerValue = "Not a manufacturer";
+        const modelValue = "Not a model";
+
+        const beaconFixtureWithFreeManufacturerAndModel: IBeacon = {
+          ...cloneDeep(beaconFixture),
+          manufacturer: manufacturerValue,
+          model: modelValue,
+        };
+
+        render(
+          <BeaconSummaryEditing
+            beacon={beaconFixtureWithFreeManufacturerAndModel}
+            onSave={onSave}
+            onCancel={jest.fn()}
+          />
+        );
+
+        expect(
+          await screen.findByLabelText(/manufacturer/i)
+        ).toHaveDisplayValue(manufacturerValue);
+        expect(await screen.findByLabelText(/model/i)).toHaveDisplayValue(
+          modelValue
         );
       });
     });

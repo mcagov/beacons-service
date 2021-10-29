@@ -41,7 +41,7 @@ export const BeaconSummaryEditing: FunctionComponent<{
         setSubmitting(false);
       }}
     >
-      {({ values, setValues }) => (
+      {({ values, setValues, initialValues }) => (
         <Form>
           <Grid container direction="row" justifyContent={"flex-start"}>
             <Grid item xs={12} sm={6}>
@@ -71,6 +71,12 @@ export const BeaconSummaryEditing: FunctionComponent<{
                             }));
                           }}
                         >
+                          {values.manufacturer ===
+                            initialValues.manufacturer && (
+                            <option value={initialValues.manufacturer}>
+                              {initialValues.manufacturer}
+                            </option>
+                          )}
                           <option value="">{Placeholders.NoData}</option>
                           {Object.keys(manufacturerModelJson).map(
                             (manufacturer: string) => {
@@ -94,6 +100,11 @@ export const BeaconSummaryEditing: FunctionComponent<{
                       }
                       value={
                         <Field id="model" name="model" as="select">
+                          {values.model === initialValues.model && (
+                            <option value={initialValues.model}>
+                              {initialValues.model}
+                            </option>
+                          )}
                           <option value="">{Placeholders.NoData}</option>
                           {(manufacturerModelJson as Record<string, string[]>)[
                             values.manufacturer as string
