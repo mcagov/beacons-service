@@ -56,12 +56,14 @@ public class BeaconsRelationshipMapper {
   ) {
     return allBeacons
       .stream()
-      .map(beacon -> {
-        setUsesOnBeacon(usesGroupedByBeaconId, beacon);
-        setOwnerOnBeacon(ownersGroupedByBeaconId, beacon);
-        setContactsOnBeacon(emergencyContactsGroupedByBeaconId, beacon);
-        return beacon;
-      })
+      .map(
+        beacon -> {
+          setUsesOnBeacon(usesGroupedByBeaconId, beacon);
+          setOwnerOnBeacon(ownersGroupedByBeaconId, beacon);
+          setContactsOnBeacon(emergencyContactsGroupedByBeaconId, beacon);
+          return beacon;
+        }
+      )
       .collect(Collectors.toList());
   }
 

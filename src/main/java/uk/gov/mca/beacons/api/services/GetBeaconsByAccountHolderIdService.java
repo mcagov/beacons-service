@@ -41,19 +41,21 @@ public class GetBeaconsByAccountHolderIdService {
     );
     if (beacons.isEmpty()) return emptyList();
 
-    beacons.forEach(beacon -> {
-      final UUID beaconId = beacon.getId();
-      final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
-      beacon.setUses(uses);
+    beacons.forEach(
+      beacon -> {
+        final UUID beaconId = beacon.getId();
+        final List<BeaconUse> uses = useGateway.findAllByBeaconId(beaconId);
+        beacon.setUses(uses);
 
-      final Person owner = ownerGateway.findByBeaconId(beaconId);
-      beacon.setOwner(owner);
+        final Person owner = ownerGateway.findByBeaconId(beaconId);
+        beacon.setOwner(owner);
 
-      final List<Person> emergencyContacts = emergencyContactGateway.findAllByBeaconId(
-        beaconId
-      );
-      beacon.setEmergencyContacts(emergencyContacts);
-    });
+        final List<Person> emergencyContacts = emergencyContactGateway.findAllByBeaconId(
+          beaconId
+        );
+        beacon.setEmergencyContacts(emergencyContacts);
+      }
+    );
 
     return beacons;
   }

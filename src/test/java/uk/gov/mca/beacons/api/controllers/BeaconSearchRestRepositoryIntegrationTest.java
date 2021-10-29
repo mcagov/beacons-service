@@ -36,13 +36,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", randomHexId)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -71,13 +72,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", randomHexId.toUpperCase())
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId.toUpperCase())
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -96,13 +98,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", randomHexId)
-            .queryParam("status", "migrated")
-            .queryParam("uses", "maritime")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "migrated")
+              .queryParam("uses", "maritime")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -126,13 +129,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", manufacturerSerialNumber)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", manufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -149,22 +153,24 @@ class BeaconSearchRestRepositoryIntegrationTest {
       var legacyBeaconFixtureSerialNumberValue = 1763;
       var pseudoUniqueLegacyBeaconSerialNumber = new Random()
         .nextInt(Integer.MAX_VALUE);
-      createLegacyBeacon(request ->
-        request.replace(
-          Integer.toString(legacyBeaconFixtureSerialNumberValue),
-          Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
-        )
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureSerialNumberValue),
+            Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
+          )
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -182,22 +188,24 @@ class BeaconSearchRestRepositoryIntegrationTest {
       var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
       var pseudoUniqueLegacyBeaconCospasSarsatNumber = new Random()
         .nextInt(Integer.MAX_VALUE);
-      createLegacyBeacon(request ->
-        request.replace(
-          Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
-          Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
-        )
+      createLegacyBeacon(
+        request ->
+          request.replace(
+            Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
+            Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
+          )
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", pseudoUniqueLegacyBeaconCospasSarsatNumber)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", pseudoUniqueLegacyBeaconCospasSarsatNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -216,13 +224,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", randomHexId)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -251,13 +260,14 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", randomHexId)
-            .queryParam("status", "new")
-            .queryParam("uses", "fishing vessel")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", randomHexId)
+              .queryParam("status", "new")
+              .queryParam("uses", "fishing vessel")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -273,24 +283,26 @@ class BeaconSearchRestRepositoryIntegrationTest {
     void shouldFindTheCreatedBeaconByManufacturerSerialNumber()
       throws Exception {
       var uniqueBeaconManufacturerSerialNumber = UUID.randomUUID().toString();
-      createBeacon(request ->
-        request
-          .replace(
-            "manufacturer-serial-number-placeholder",
-            uniqueBeaconManufacturerSerialNumber
-          )
-          .replace("\"account-holder-id-placeholder\"", "null")
+      createBeacon(
+        request ->
+          request
+            .replace(
+              "manufacturer-serial-number-placeholder",
+              uniqueBeaconManufacturerSerialNumber
+            )
+            .replace("\"account-holder-id-placeholder\"", "null")
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_ALL_URI)
-            .queryParam("term", uniqueBeaconManufacturerSerialNumber)
-            .queryParam("status", "")
-            .queryParam("uses", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term", uniqueBeaconManufacturerSerialNumber)
+              .queryParam("status", "")
+              .queryParam("uses", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -311,18 +323,19 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
     @Test
     void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
-      createBeacon(request ->
-        request.replace("\"account-holder-id-placeholder\"", "null")
+      createBeacon(
+        request -> request.replace("\"account-holder-id-placeholder\"", "null")
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_BY_ACCOUNT_HOLDER)
-            .queryParam("email", "")
-            .queryParam("accountHolderId", "")
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", "")
+              .queryParam("accountHolderId", "")
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -335,18 +348,20 @@ class BeaconSearchRestRepositoryIntegrationTest {
     @Test
     void shouldFindTheLegacyBeaconByEmail() throws Exception {
       final var randomEmailAddress = UUID.randomUUID().toString();
-      createLegacyBeacon(request ->
-        request.replace("ownerbeacon@beacons.com", randomEmailAddress)
+      createLegacyBeacon(
+        request ->
+          request.replace("ownerbeacon@beacons.com", randomEmailAddress)
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_BY_ACCOUNT_HOLDER)
-            .queryParam("email", randomEmailAddress)
-            .queryParam("accountHolderId", UUID.randomUUID().toString())
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", randomEmailAddress)
+              .queryParam("accountHolderId", UUID.randomUUID().toString())
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -363,18 +378,20 @@ class BeaconSearchRestRepositoryIntegrationTest {
       final var accountHolderId = createAccountHolder(
         UUID.randomUUID().toString()
       );
-      createBeacon(request ->
-        request.replace("account-holder-id-placeholder", accountHolderId)
+      createBeacon(
+        request ->
+          request.replace("account-holder-id-placeholder", accountHolderId)
       );
 
       webTestClient
         .get()
-        .uri(uriBuilder ->
-          uriBuilder
-            .path(FIND_BY_ACCOUNT_HOLDER)
-            .queryParam("email", "")
-            .queryParam("accountHolderId", accountHolderId)
-            .build()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_BY_ACCOUNT_HOLDER)
+              .queryParam("email", "")
+              .queryParam("accountHolderId", accountHolderId)
+              .build()
         )
         .exchange()
         .expectStatus()
@@ -417,18 +434,20 @@ class BeaconSearchRestRepositoryIntegrationTest {
     String hexId,
     String manufacturerSerialNumber
   ) throws Exception {
-    createLegacyBeacon(request ->
-      request
-        .replace("9D0E1D1B8C00001", hexId)
-        .replace("manufacturer_serial_number_value", manufacturerSerialNumber)
+    createLegacyBeacon(
+      request ->
+        request
+          .replace("9D0E1D1B8C00001", hexId)
+          .replace("manufacturer_serial_number_value", manufacturerSerialNumber)
     );
   }
 
   private void createBeacon(String hexId) throws Exception {
-    createBeacon(request ->
-      request
-        .replace("1D0EA08C52FFBFF", hexId)
-        .replace("\"account-holder-id-placeholder\"", "null")
+    createBeacon(
+      request ->
+        request
+          .replace("1D0EA08C52FFBFF", hexId)
+          .replace("\"account-holder-id-placeholder\"", "null")
     );
   }
 
