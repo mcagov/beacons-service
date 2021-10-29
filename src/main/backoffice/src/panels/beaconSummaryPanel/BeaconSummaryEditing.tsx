@@ -21,6 +21,7 @@ import {
   Placeholders,
   WritingStyle,
 } from "../../utils/writingStyle";
+import mtiJson from "../../lib/mti/mtis.json";
 
 export const BeaconSummaryEditing: FunctionComponent<{
   beacon: IBeacon;
@@ -212,13 +213,24 @@ export const BeaconSummaryEditing: FunctionComponent<{
                       }
                       value={
                         <Field
-                          as={Input}
                           id="mti"
+                          as="select"
                           name="mti"
-                          type="string"
-                          fullWidth
-                          placeholder={Placeholders.NoData}
-                        />
+                          style={{ minWidth: 330 }}
+                        >
+                          <option value="" label={Placeholders.NoData} />
+                          {Object.values(mtiJson).map(
+                            (protocol: string, index) => {
+                              return (
+                                <option
+                                  key={index}
+                                  value={protocol}
+                                  label={protocol}
+                                />
+                              );
+                            }
+                          )}
+                        </Field>
                       }
                     />
 
