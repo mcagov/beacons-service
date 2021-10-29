@@ -123,6 +123,9 @@ jobs:
   codeql_check:
     name: CodeQL check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: ["java"]
 
     steps:
       - uses: actions/checkout@v2.3.4
