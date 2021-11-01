@@ -27,6 +27,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 import { replaceNone } from "../lib/legacyData/replaceNone";
+import { TextFilter } from "./tableComponents/TextFilter";
 
 interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
@@ -127,6 +128,15 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
         {
           title: "Beacon use",
           field: "useActivities",
+          filterComponent: ({ columnDef, onFilterChanged }) => (
+            <TextFilter
+              key="Beacon uses"
+              columnDef={columnDef}
+              onFilterChanged={onFilterChanged}
+              icons={tableIcons}
+              filterTooltip="Beacon uses"
+            />
+          ),
           render: (rowData: BeaconTableListRow) => {
             return rowData.useActivities
               ? rowData.useActivities.toUpperCase()
