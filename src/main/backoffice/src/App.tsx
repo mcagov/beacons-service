@@ -74,7 +74,7 @@ const App: FunctionComponent = () => {
 
   return (
     <AuthWrapper pca={pca}>
-      <Router basename="/backoffice">
+      <Router>
         <Navigation />
         <RequireAuth>
           <Switch>
