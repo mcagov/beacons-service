@@ -33,7 +33,7 @@ interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
 }
 
-interface BeaconTableListRow {
+export interface BeaconTableListRow {
   hexId: string;
   ownerName: string;
   useActivities: string;
@@ -70,101 +70,115 @@ const tableIcons: Icons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
+const columns: Column<BeaconTableListRow>[] = [
+  {
+    title: "Last modified date",
+    field: "lastModifiedDate",
+    filtering: false,
+    defaultSort: "desc",
+    type: "datetime",
+    dateSetting: { format: "dd MM yyyy", locale: "en-GB" },
+  },
+  {
+    title: "Status",
+    field: "beaconStatus",
+    lookup: { NEW: "NEW", MIGRATED: "MIGRATED", DELETED: "DELETED" },
+    render: (rowData: BeaconTableListRow) => {
+      if (rowData.beaconStatus === "MIGRATED") {
+        return <Chip label={rowData.beaconStatus} color="secondary" />;
+      } else {
+        return <Chip label={rowData.beaconStatus} color="primary" />;
+      }
+    },
+  },
+  {
+    title: "Hex ID",
+    field: "hexId",
+    filtering: false,
+    render: (rowData: BeaconTableListRow) => {
+      if (rowData.beaconType === "LEGACY_BEACON") {
+        return (
+          <Link component={RouterLink} to={"/legacy-beacons/" + rowData.id}>
+            {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
+          </Link>
+        );
+      } else {
+        return (
+          <Link component={RouterLink} to={"/beacons/" + rowData.id}>
+            {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
+          </Link>
+        );
+      }
+    },
+  },
+  {
+    title: "Owner details",
+    field: "ownerName",
+    filtering: false,
+    render: (rowData: BeaconTableListRow) => {
+      return rowData.ownerName ? rowData.ownerName.toUpperCase() : "";
+    },
+  },
+  {
+    title: "Beacon use",
+    field: "useActivities",
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter beacon uses"
+      />
+    ),
+    render: (rowData: BeaconTableListRow) => {
+      return rowData.useActivities ? rowData.useActivities.toUpperCase() : "";
+    },
+  },
+  {
+    title: "Manufacturer serial number",
+    field: "manufacturerSerialNumber",
+    render: (rowData: BeaconTableListRow) =>
+      replaceNone(rowData.manufacturerSerialNumber),
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter manufacturer serial number"
+      />
+    ),
+  },
+  {
+    title: "Cospas-Sarsat number",
+    field: "cospasSarsatNumber",
+    render: (rowData: BeaconTableListRow) =>
+      replaceNone(rowData.cospasSarsatNumber),
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter cospas-sarsat number"
+      />
+    ),
+  },
+  {
+    title: "Serial number",
+    field: "serialNumber",
+    render: (rowData: BeaconTableListRow) => replaceNone(rowData.serialNumber),
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter serial number"
+      />
+    ),
+  },
+];
+
 export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
   function ({ beaconsGateway }): JSX.Element {
-    const columns: Column<BeaconTableListRow>[] = React.useMemo(
-      () => [
-        {
-          title: "Last modified date",
-          field: "lastModifiedDate",
-          filtering: false,
-          defaultSort: "desc",
-          type: "datetime",
-          dateSetting: { format: "dd MM yyyy", locale: "en-GB" },
-        },
-        {
-          title: "Status",
-          field: "beaconStatus",
-          lookup: { NEW: "NEW", MIGRATED: "MIGRATED", DELETED: "DELETED" },
-          render: (rowData: BeaconTableListRow) => {
-            if (rowData.beaconStatus === "MIGRATED") {
-              return <Chip label={rowData.beaconStatus} color="secondary" />;
-            } else {
-              return <Chip label={rowData.beaconStatus} color="primary" />;
-            }
-          },
-        },
-        {
-          title: "Hex ID",
-          field: "hexId",
-          filtering: false,
-          render: (rowData: BeaconTableListRow) => {
-            if (rowData.beaconType === "LEGACY_BEACON") {
-              return (
-                <Link
-                  component={RouterLink}
-                  to={"/legacy-beacons/" + rowData.id}
-                >
-                  {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
-                </Link>
-              );
-            } else {
-              return (
-                <Link component={RouterLink} to={"/beacons/" + rowData.id}>
-                  {rowData.hexId ? rowData.hexId : <i>{Placeholders.NoData}</i>}
-                </Link>
-              );
-            }
-          },
-        },
-        {
-          title: "Owner details",
-          field: "ownerName",
-          filtering: false,
-          render: (rowData: BeaconTableListRow) => {
-            return rowData.ownerName ? rowData.ownerName.toUpperCase() : "";
-          },
-        },
-        {
-          title: "Beacon use",
-          field: "useActivities",
-          filterComponent: ({ columnDef, onFilterChanged }) => (
-            <TextFilter
-              key="Beacon uses"
-              columnDef={columnDef}
-              onFilterChanged={onFilterChanged}
-              icons={tableIcons}
-              filterTooltip="Beacon uses"
-            />
-          ),
-          render: (rowData: BeaconTableListRow) => {
-            return rowData.useActivities
-              ? rowData.useActivities.toUpperCase()
-              : "";
-          },
-        },
-        {
-          title: "Manufacturer Serial Number",
-          field: "manufacturerSerialNumber",
-          render: (rowData: BeaconTableListRow) =>
-            replaceNone(rowData.manufacturerSerialNumber),
-        },
-        {
-          title: "Cospas Sarsat Number",
-          field: "cospasSarsatNumber",
-          render: (rowData: BeaconTableListRow) =>
-            replaceNone(rowData.cospasSarsatNumber),
-        },
-        {
-          title: "Serial Number",
-          field: "serialNumber",
-          render: (rowData: BeaconTableListRow) =>
-            replaceNone(rowData.serialNumber),
-        },
-      ],
-      []
-    );
-
     return (
       <MaterialTable
         icons={tableIcons}

@@ -5,7 +5,7 @@ import {
   setEditing,
   setInternalValue,
   useInternalValue,
-} from "./useInternalValue";
+} from "../hooks/useInternalValue";
 
 type ColumnDef<T extends Record<string, any>> = Column<T> & {
   tableData: any;
