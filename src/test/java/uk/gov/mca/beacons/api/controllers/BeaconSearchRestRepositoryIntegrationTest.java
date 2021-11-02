@@ -313,6 +313,79 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .jsonPath("_embedded.beaconSearch[0].manufacturerSerialNumber")
         .isEqualTo(uniqueBeaconManufacturerSerialNumber);
     }
+
+    @Test
+    void shouldFindTheCreatedLegacyBeaconWithAllFiltersSet() throws Exception {
+      var legacyBeaconFixtureHexId = "9D0E1D1B8C00001";
+      var legacyBeaconFixtureOwnerName = "Mr Beacon";
+      var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
+      var legacyBeaconFixtureManufacturerSerialNumber =
+        "manufacturer_serial_number_value";
+      var legacyBeaconFixtureSerialNumber = 1763;
+
+      var random = new Random();
+      var uniqueLegacyBeaconHexId = UUID.randomUUID().toString();
+      var uniqueLegacyBeaconOwnerName = UUID.randomUUID().toString();
+      var pseudoUniqueLegacyBeaconCospasSarsatNumber = random.nextInt(
+        Integer.MAX_VALUE
+      );
+      var uniqueLegacyBeaconManufacturerSerialNumber = UUID
+        .randomUUID()
+        .toString();
+      var pseudoUniqueLegacyBeaconSerialNumber = random.nextInt(
+        Integer.MAX_VALUE
+      );
+
+      createLegacyBeacon(
+        request ->
+          request
+            .replace(legacyBeaconFixtureHexId, uniqueLegacyBeaconHexId)
+            .replace(legacyBeaconFixtureOwnerName, uniqueLegacyBeaconOwnerName)
+            .replace(
+              Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
+              Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
+            )
+            .replace(
+              Integer.toString(legacyBeaconFixtureSerialNumber),
+              Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
+            )
+            .replace(
+              legacyBeaconFixtureManufacturerSerialNumber,
+              uniqueLegacyBeaconManufacturerSerialNumber
+            )
+      );
+
+      webTestClient
+        .get()
+        .uri(
+          uriBuilder ->
+            uriBuilder
+              .path(FIND_ALL_URI)
+              .queryParam("term")
+              .queryParam("status", "MIGRATED")
+              .queryParam("uses", "MARITIME")
+              .queryParam("hexId", uniqueLegacyBeaconHexId)
+              .queryParam("ownerName", uniqueLegacyBeaconOwnerName)
+              .queryParam(
+                "cospasSarsatNumber",
+                pseudoUniqueLegacyBeaconCospasSarsatNumber
+              )
+              .queryParam(
+                "manufacturerSerialNumber",
+                uniqueLegacyBeaconManufacturerSerialNumber
+              )
+              .queryParam("serialNumber", pseudoUniqueLegacyBeaconSerialNumber)
+              .build()
+        )
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("page.totalElements")
+        .isEqualTo(1)
+        .jsonPath("_embedded.beaconSearch[0].hexId")
+        .isEqualTo(uniqueLegacyBeaconHexId);
+    }
   }
 
   @Nested
