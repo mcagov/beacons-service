@@ -11,6 +11,7 @@ type ColumnDef<T extends Record<string, any>> = Column<T> & {
   tableData: any;
 };
 
+// columnDef, onFilterChanged, and icons are types defined by @material-table/core
 interface TextFilterProps<T extends Record<string, any>> {
   columnDef: Column<T>;
   onFilterChanged: (rowId: string, value: any) => void;
@@ -26,7 +27,7 @@ export function TextFilter<T extends Record<string, any>>({
 }: TextFilterProps<T>) {
   const FilterIcon = icons.Filter as NonNullable<typeof icons.Filter>;
   const inputRef = React.useRef<HTMLInputElement>(null);
-  // Have to use type coercion due to incorrect types provided by material-table
+  // Have to use type coercion due to incorrect types provided by @material-table/core
   const filterValue = (columnDef as ColumnDef<T>).tableData.filterValue || "";
   const [{ internalValue, editing }, dispatch] = useInternalValue(filterValue);
 

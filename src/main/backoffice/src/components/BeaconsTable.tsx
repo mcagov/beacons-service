@@ -16,13 +16,18 @@ import {
   Search,
   ViewColumn,
 } from "@material-ui/icons";
-import { IBeaconsGateway } from "gateways/beacons/IBeaconsGateway";
+import {
+  GetAllBeaconsFilters,
+  GetAllBeaconsSort,
+  IBeaconsGateway,
+} from "gateways/beacons/IBeaconsGateway";
 import MaterialTable, {
   Column,
   Icons,
   MTableBodyRow,
+  Query,
 } from "@material-table/core";
-import React, { forwardRef, FunctionComponent, useState } from "react";
+import React, { forwardRef, FunctionComponent } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
@@ -33,18 +38,22 @@ interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
 }
 
-export interface BeaconTableListRow {
-  hexId: string;
-  ownerName: string;
-  useActivities: string;
-  id: string;
-  lastModifiedDate: string;
-  beaconStatus: string;
-  beaconType: string;
-  cospasSarsatNumber: string;
-  manufacturerSerialNumber: string;
-  serialNumber: string;
-}
+export type BeaconRowData = Record<
+  keyof Pick<
+    IBeaconSearchResultData,
+    | "hexId"
+    | "ownerName"
+    | "useActivities"
+    | "id"
+    | "lastModifiedDate"
+    | "beaconStatus"
+    | "beaconType"
+    | "cospasSarsatNumber"
+    | "manufacturerSerialNumber"
+    | "serialNumber"
+  >,
+  string
+>;
 
 const tableIcons: Icons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -70,7 +79,7 @@ const tableIcons: Icons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const columns: Column<BeaconTableListRow>[] = [
+const columns: Column<BeaconRowData>[] = [
   {
     title: "Last modified date",
     field: "lastModifiedDate",
@@ -83,7 +92,7 @@ const columns: Column<BeaconTableListRow>[] = [
     title: "Status",
     field: "beaconStatus",
     lookup: { NEW: "NEW", MIGRATED: "MIGRATED", DELETED: "DELETED" },
-    render: (rowData: BeaconTableListRow) => {
+    render: (rowData: BeaconRowData) => {
       if (rowData.beaconStatus === "MIGRATED") {
         return <Chip label={rowData.beaconStatus} color="secondary" />;
       } else {
@@ -95,7 +104,7 @@ const columns: Column<BeaconTableListRow>[] = [
     title: "Hex ID",
     field: "hexId",
     filtering: false,
-    render: (rowData: BeaconTableListRow) => {
+    render: (rowData: BeaconRowData) => {
       if (rowData.beaconType === "LEGACY_BEACON") {
         return (
           <Link component={RouterLink} to={"/legacy-beacons/" + rowData.id}>
@@ -115,7 +124,7 @@ const columns: Column<BeaconTableListRow>[] = [
     title: "Owner details",
     field: "ownerName",
     filtering: false,
-    render: (rowData: BeaconTableListRow) => {
+    render: (rowData: BeaconRowData) => {
       return rowData.ownerName ? rowData.ownerName.toUpperCase() : "";
     },
   },
@@ -130,14 +139,14 @@ const columns: Column<BeaconTableListRow>[] = [
         filterTooltip="Filter beacon uses"
       />
     ),
-    render: (rowData: BeaconTableListRow) => {
+    render: (rowData: BeaconRowData) => {
       return rowData.useActivities ? rowData.useActivities.toUpperCase() : "";
     },
   },
   {
     title: "Manufacturer serial number",
     field: "manufacturerSerialNumber",
-    render: (rowData: BeaconTableListRow) =>
+    render: (rowData: BeaconRowData) =>
       replaceNone(rowData.manufacturerSerialNumber),
     filterComponent: ({ columnDef, onFilterChanged }) => (
       <TextFilter
@@ -151,8 +160,7 @@ const columns: Column<BeaconTableListRow>[] = [
   {
     title: "Cospas-Sarsat number",
     field: "cospasSarsatNumber",
-    render: (rowData: BeaconTableListRow) =>
-      replaceNone(rowData.cospasSarsatNumber),
+    render: (rowData: BeaconRowData) => replaceNone(rowData.cospasSarsatNumber),
     filterComponent: ({ columnDef, onFilterChanged }) => (
       <TextFilter
         columnDef={columnDef}
@@ -165,7 +173,7 @@ const columns: Column<BeaconTableListRow>[] = [
   {
     title: "Serial number",
     field: "serialNumber",
-    render: (rowData: BeaconTableListRow) => replaceNone(rowData.serialNumber),
+    render: (rowData: BeaconRowData) => replaceNone(rowData.serialNumber),
     filterComponent: ({ columnDef, onFilterChanged }) => (
       <TextFilter
         columnDef={columnDef}
@@ -184,35 +192,13 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
         icons={tableIcons}
         columns={columns}
         data={(query) =>
-          new Promise(async (resolve, reject) => {
-            const term = query.search;
-            let statusFilterValue = "";
-            let useFilterValue = "";
-            let sortValue = "";
-            query.filters.forEach((filter) => {
-              if (filter.column.field === "beaconStatus")
-                statusFilterValue = filter.value;
-              if (filter.column.field === "useActivities")
-                useFilterValue = filter.value;
-            });
-            if (query.orderBy) {
-              const sortField = query.orderBy.field;
-              const sortDirection = query.orderDirection;
-              if (sortField && sortDirection) {
-                sortValue = `${sortField},${sortDirection}`;
-              }
-            }
+          new Promise(async (resolve, _reject) => {
             try {
               const response = await beaconsGateway.getAllBeacons(
-                term,
-                statusFilterValue,
-                useFilterValue,
-                query.page,
-                query.pageSize,
-                sortValue
+                ...buildTableQuery(query)
               );
               const beacons = response._embedded.beaconSearch.map(
-                (item: IBeaconSearchResultData): BeaconTableListRow => ({
+                (item: IBeaconSearchResultData): BeaconRowData => ({
                   lastModifiedDate: item.lastModifiedDate,
                   beaconStatus: item.beaconStatus,
                   hexId: item.hexId,
@@ -254,3 +240,29 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
     );
   }
 );
+
+function buildTableQuery(
+  query: Query<BeaconRowData>
+): Parameters<IBeaconsGateway["getAllBeacons"]> {
+  const term = query.search;
+
+  const filters: Partial<Record<keyof BeaconRowData, string>> = {};
+  query.filters.forEach((filter) => {
+    if (filter.column.field) {
+      filters[filter.column.field as keyof BeaconRowData] = filter.value;
+    }
+  });
+
+  let sort: GetAllBeaconsSort = null;
+  if (query.orderBy && query.orderBy.field && query.orderDirection) {
+    sort = [query.orderBy.field as keyof BeaconRowData, query.orderDirection];
+  }
+
+  return [
+    term,
+    filters as GetAllBeaconsFilters,
+    query.page,
+    query.pageSize,
+    sort,
+  ];
+}
