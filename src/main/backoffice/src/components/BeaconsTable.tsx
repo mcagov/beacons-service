@@ -103,7 +103,14 @@ const columns: Column<BeaconRowData>[] = [
   {
     title: "Hex ID",
     field: "hexId",
-    filtering: false,
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter hex id"
+      />
+    ),
     render: (rowData: BeaconRowData) => {
       if (rowData.beaconType === "LEGACY_BEACON") {
         return (
@@ -123,7 +130,14 @@ const columns: Column<BeaconRowData>[] = [
   {
     title: "Owner details",
     field: "ownerName",
-    filtering: false,
+    filterComponent: ({ columnDef, onFilterChanged }) => (
+      <TextFilter
+        columnDef={columnDef}
+        onFilterChanged={onFilterChanged}
+        icons={tableIcons}
+        filterTooltip="Filter owner name"
+      />
+    ),
     render: (rowData: BeaconRowData) => {
       return rowData.ownerName ? rowData.ownerName.toUpperCase() : "";
     },
@@ -246,6 +260,8 @@ function buildTableQuery(
 ): Parameters<IBeaconsGateway["getAllBeacons"]> {
   const term = query.search;
 
+  // typeof filters could be wider than GetAllBeaconsFilter but that's ok here
+  // This is necessary due to weaker type definitions from @material-table/core
   const filters: Partial<Record<keyof BeaconRowData, string>> = {};
   query.filters.forEach((filter) => {
     if (filter.column.field) {

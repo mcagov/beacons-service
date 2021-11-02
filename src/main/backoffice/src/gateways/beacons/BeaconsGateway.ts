@@ -130,10 +130,8 @@ export class BeaconsGateway implements IBeaconsGateway {
 
     const sortString = sort ? `${sort[0]},${sort[1]}` : "";
 
-    return `/beacon-search/search/find-all?term=${term}&status=${status}&uses=${uses}\
-&hex-id=${hexId}&owner-name=${ownerName}&serial-number=${serialNumber}\
-&cospas-sarsat-number=${cospasSarsatNumber}\
-&manufacturer-serial-number=${manufacturerSerialNumber}&page=${page}&size=${size}\
-&sort=${sortString}`;
+    return `/beacon-search/search/find-all?term=${term}&status=${status}&uses=${uses}&hexId=${hexId}\
+&ownerName=${ownerName}&serialNumber=${serialNumber}&cospasSarsatNumber=${cospasSarsatNumber}\
+&manufacturerSerialNumber=${manufacturerSerialNumber}&page=${page}&size=${size}&sort=${sortString}`;
   }
 }
