@@ -12,7 +12,7 @@ type ColumnDef<T extends Record<string, any>> = Column<T> & {
 };
 
 // columnDef, onFilterChanged, and icons are types defined by @material-table/core
-interface TextFilterProps<T extends Record<string, any>> {
+export interface TextFilterProps<T extends Record<string, any>> {
   columnDef: Column<T>;
   onFilterChanged: (rowId: string, value: any) => void;
   icons: Icons;
@@ -64,7 +64,10 @@ export function TextFilter<T extends Record<string, any>>({
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      inputProps={{ "aria-label": `filter data by ${columnDef.title}` }}
+      inputProps={{
+        "aria-label": `filter data by ${columnDef.title}`,
+        "data-testid": "text-filter-input",
+      }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
