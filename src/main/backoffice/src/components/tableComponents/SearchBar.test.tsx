@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { getByTestId, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SearchBar, SearchbarProps } from "./SearchBar";
 import { Icons } from "@material-table/core";

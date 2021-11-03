@@ -2,17 +2,17 @@
  * Here be dragons:
  *
  * Most of this file is taken from @material-table/core with the addition of our
- * own types. It is not possible to replace the Searchbar in MTableToolbar so we have to
- * tell MTableToolbar to not render a Searchbar and replace it with our reimplementation
+ * own types. It is not possible to replace the SearchBar in MTableToolbar so we have to
+ * tell MTableToolbar to not render a SearchBar and replace it with our reimplementation
  *
  * Unfortunately the "source of truth" for the current search text is handled rather strangely
  * in material-table so we have to be careful to make sure our current search is synchronised
  * with what material-table thinks the current search is, the handlers are carefully orchestrated
  * so that:
  *
- * - When a user is typing the value shown to them is tracked internally.
+ * - When a user is typing the value shown to them is the internal value.
  * - When a user clicks away or presses enter a blur event is fired which will tell material-table
- *   what the internal state is.
+ *   what the internal value is.
  * - When a user clicks on the X button the internal value is cleared and material-table is
  *   notified. Clicking the X will also trigger a blur event so handleBlur must allow handleClick
  *   to take precedence.
