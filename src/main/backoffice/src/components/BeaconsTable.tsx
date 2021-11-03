@@ -25,6 +25,7 @@ import MaterialTable, {
   Column,
   Icons,
   MTableBodyRow,
+  MTableToolbar,
   Query,
 } from "@material-table/core";
 import React, { forwardRef, FunctionComponent } from "react";
@@ -33,6 +34,7 @@ import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 import { replaceNone } from "../lib/legacyData/replaceNone";
 import { TextFilter } from "./tableComponents/TextFilter";
+import { Searchbar } from "./tableComponents/Searchbar";
 
 interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
@@ -241,13 +243,34 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
           filtering: true,
           search: true,
           searchFieldVariant: "outlined",
-          debounceInterval: 1000,
           pageSize: 20,
         }}
         components={{
           Container: (props) => <Paper {...props} elevation={0} />,
           Row: (props) => (
             <MTableBodyRow {...props} data-testid="beacons-table-row" />
+          ),
+          Toolbar: (props) => (
+            // We are overriding the MTableToolbar search with our own search component
+            // Therefore we set search on MTableToolbar to false and use our own implementation
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <MTableToolbar {...props} search={false} />
+              <Searchbar
+                searchFieldVariant={props.searchFieldVariant}
+                searchAutoFocus={props.searchAutoFocus}
+                searchFieldStyle={props.searchFieldStyle}
+                searchText={props.searchText}
+                onSearchChanged={props.onSearchChanged}
+                dataManager={props.dataManager}
+                icons={props.icons}
+              />
+            </div>
           ),
         }}
       />
