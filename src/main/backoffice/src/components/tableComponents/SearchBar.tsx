@@ -1,20 +1,3 @@
-import React from "react";
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  Theme,
-  withStyles,
-} from "@material-ui/core";
-import { Icons } from "@material-table/core";
-import {
-  clearInternalValue,
-  setEditing,
-  setInternalValue,
-  useInternalValue,
-} from "../hooks/useInternalValue";
-
 /**
  * Here be dragons:
  *
@@ -34,6 +17,22 @@ import {
  *   notified. Clicking the X will also trigger a blur event so handleBlur must allow handleClick
  *   to take precedence.
  */
+import React from "react";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+  Theme,
+  withStyles,
+} from "@material-ui/core";
+import { Icons } from "@material-table/core";
+import {
+  clearInternalValue,
+  setEditing,
+  setInternalValue,
+  useInternalValue,
+} from "../hooks/useInternalValue";
 
 const localization = {
   searchTooltip: "Search",
@@ -50,7 +49,7 @@ const styles = (theme: Theme) => ({
   },
 });
 
-interface SearchProps {
+export interface SearchbarProps {
   searchText: string;
   searchAutoFocus: boolean;
   searchFieldVariant: "standard" | "filled" | "outlined";
@@ -61,7 +60,7 @@ interface SearchProps {
   classes: Record<keyof ReturnType<typeof styles>, string>;
 }
 
-export const Searchbar = withStyles(styles)(function ({
+export const SearchBar = withStyles(styles)(function ({
   searchAutoFocus,
   searchFieldStyle,
   searchFieldVariant,
@@ -70,7 +69,7 @@ export const Searchbar = withStyles(styles)(function ({
   dataManager,
   icons,
   classes,
-}: SearchProps) {
+}: SearchbarProps) {
   const [{ internalValue }, dispatch] = useInternalValue(searchText);
   const SearchIcon = icons.Search as NonNullable<typeof icons.Search>;
   const ResetSearchIcon = icons.ResetSearch as NonNullable<
@@ -140,6 +139,7 @@ export const Searchbar = withStyles(styles)(function ({
               onClick={handleClick}
               ref={buttonRef}
               aria-label={localization.clearSearchAriaLabel}
+              data-testid="reset-search"
             >
               <ResetSearchIcon fontSize="small" aria-label="clear" />
             </IconButton>

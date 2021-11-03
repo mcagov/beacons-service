@@ -34,7 +34,7 @@ import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 import { replaceNone } from "../lib/legacyData/replaceNone";
 import { TextFilter } from "./tableComponents/TextFilter";
-import { Searchbar } from "./tableComponents/Searchbar";
+import { SearchBar } from "./tableComponents/SearchBar";
 
 interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
@@ -261,7 +261,7 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
               }}
             >
               <MTableToolbar {...props} search={false} />
-              <Searchbar
+              <SearchBar
                 searchFieldVariant={props.searchFieldVariant}
                 searchAutoFocus={props.searchAutoFocus}
                 searchFieldStyle={props.searchFieldStyle}
