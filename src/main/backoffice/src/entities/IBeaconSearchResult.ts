@@ -20,6 +20,9 @@ export interface IBeaconSearchResultData {
   ownerEmail: string | null;
   accountHolderId: string | null;
   useActivities: string | null;
+  cospasSarsatNumber: string | null;
+  manufacturerSerialNumber: string | null;
+  serialNumber: string | null;
   _links: {
     self: {
       href: string;

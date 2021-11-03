@@ -56,10 +56,11 @@ describe("BeaconsGateway", () => {
       // @ts-ignore
       axios.get.mockImplementationOnce(() => Promise.resolve({ data: {} }));
 
-      await gateway.getAllBeacons("", "", "", 0, 20, "");
+      await gateway.getAllBeacons("", {}, 0, 20, null);
 
       expect(axios.get).toHaveBeenCalledWith(
-        `${applicationConfig.apiUrl}/beacon-search/search/find-all?term=&status=&uses=&page=0&size=20&sort=`,
+        `${applicationConfig.apiUrl}/beacon-search/search/find-all?term=&status=&uses=\
+&hexId=&ownerName=&serialNumber=&cospasSarsatNumber=&manufacturerSerialNumber=&page=0&size=20&sort=`,
         config
       );
     });

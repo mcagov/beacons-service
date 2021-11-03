@@ -7,7 +7,11 @@ import { IAuthGateway } from "gateways/auth/IAuthGateway";
 import { IBeaconRequestMapper } from "gateways/mappers/BeaconRequestMapper";
 import { IBeaconResponseMapper } from "gateways/mappers/BeaconResponseMapper";
 import { ILegacyBeaconResponseMapper } from "gateways/mappers/LegacyBeaconResponseMapper";
-import { IBeaconsGateway } from "./IBeaconsGateway";
+import {
+  GetAllBeaconsFilters,
+  GetAllBeaconsSort,
+  IBeaconsGateway,
+} from "./IBeaconsGateway";
 
 export class BeaconsGateway implements IBeaconsGateway {
   private _beaconResponseMapper;
@@ -29,15 +33,14 @@ export class BeaconsGateway implements IBeaconsGateway {
 
   public async getAllBeacons(
     term: string = "",
-    status: string = "",
-    uses: string = "",
+    filters: GetAllBeaconsFilters = {},
     page: number = 0,
     size: number = 20,
-    sort: string = ""
+    sort: GetAllBeaconsSort = null
   ): Promise<IBeaconSearchResult> {
     try {
       const response = await this._makeGetRequest(
-        `/beacon-search/search/find-all?term=${term}&status=${status}&uses=${uses}&page=${page}&size=${size}&sort=${sort}`
+        BeaconsGateway._makeGetAllBeaconsQuery(term, filters, page, size, sort)
       );
       return response.data;
     } catch (e) {
@@ -106,5 +109,29 @@ export class BeaconsGateway implements IBeaconsGateway {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
+  }
+
+  private static _makeGetAllBeaconsQuery(
+    term: string = "",
+    filters: GetAllBeaconsFilters,
+    page: number = 0,
+    size: number = 20,
+    sort: GetAllBeaconsSort
+  ): string {
+    const {
+      hexId = "",
+      ownerName = "",
+      useActivities: uses = "",
+      beaconStatus: status = "",
+      serialNumber = "",
+      cospasSarsatNumber = "",
+      manufacturerSerialNumber = "",
+    } = filters;
+
+    const sortString = sort ? `${sort[0]},${sort[1]}` : "";
+
+    return `/beacon-search/search/find-all?term=${term}&status=${status}&uses=${uses}&hexId=${hexId}\
+&ownerName=${ownerName}&serialNumber=${serialNumber}&cospasSarsatNumber=${cospasSarsatNumber}\
+&manufacturerSerialNumber=${manufacturerSerialNumber}&page=${page}&size=${size}&sort=${sortString}`;
   }
 }

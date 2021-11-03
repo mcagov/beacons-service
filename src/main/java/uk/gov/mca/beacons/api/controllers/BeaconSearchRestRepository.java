@@ -38,12 +38,22 @@ interface BeaconSearchRestRepository
     "COALESCE(LOWER(b.cospasSarsatNumber), '') LIKE LOWER(CONCAT('%', :term, '%')) " +
     ") " +
     "AND (COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :status, '%'))) " +
-    "AND (COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :uses, '%')))"
+    "AND (COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :uses, '%'))) " +
+    "AND (COALESCE(LOWER(b.hexId), '') LIKE LOWER(CONCAT('%', :hexId, '%'))) " +
+    "AND (COALESCE(LOWER(b.ownerName), '') LIKE LOWER(CONCAT('%', :ownerName, '%'))) " +
+    "AND (COALESCE(LOWER(b.cospasSarsatNumber), '') LIKE LOWER(CONCAT('%', :cospasSarsatNumber, '%'))) " +
+    "AND (COALESCE(LOWER(b.serialNumber), '') LIKE LOWER(CONCAT('%', :serialNumber, '%'))) " +
+    "AND (COALESCE(LOWER(b.manufacturerSerialNumber), '') LIKE LOWER(CONCAT('%', :manufacturerSerialNumber, '%')))"
   )
   Page<BeaconSearchEntity> findALl(
     @Param("term") String term,
     @Param("status") String status,
     @Param("uses") String uses,
+    @Param("hexId") String hexId,
+    @Param("ownerName") String ownerName,
+    @Param("cospasSarsatNumber") String cospasSarsatNumber,
+    @Param("manufacturerSerialNumber") String manufacturerSerialNumber,
+    @Param("serialNumber") String serialNumber,
     Pageable page
   );
 
