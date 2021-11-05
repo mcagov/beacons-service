@@ -43,11 +43,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("term", randomHexId)
               .queryParam("status", "")
               .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -84,11 +79,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("term", randomHexId.toUpperCase())
               .queryParam("status", "")
               .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -115,11 +105,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("term", randomHexId)
               .queryParam("status", "migrated")
               .queryParam("uses", "maritime")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -130,121 +115,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .isEqualTo(randomHexId)
         .jsonPath("page.totalElements")
         .isEqualTo(1);
-    }
-
-    @Test
-    void shouldFindTheCreatedLegacyBeaconByManufacturerSerialNumber()
-      throws Exception {
-      final var manufacturerSerialNumber = UUID.randomUUID().toString();
-      final var legacyBeaconHexId = UUID.randomUUID().toString();
-      createLegacyBeaconWithManufacturerSerialNumber(
-        legacyBeaconHexId,
-        manufacturerSerialNumber
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", manufacturerSerialNumber)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].hexId")
-        .isEqualTo(legacyBeaconHexId);
-    }
-
-    @Test
-    void shouldFindTheCreatedLegacyBeaconBySerialNumber() throws Exception {
-      var legacyBeaconFixtureSerialNumberValue = 1763;
-      var pseudoUniqueLegacyBeaconSerialNumber = new Random()
-        .nextInt(Integer.MAX_VALUE);
-      createLegacyBeacon(
-        request ->
-          request.replace(
-            Integer.toString(legacyBeaconFixtureSerialNumberValue),
-            Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
-          )
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].serialNumber")
-        .isEqualTo(pseudoUniqueLegacyBeaconSerialNumber);
-    }
-
-    @Test
-    void shouldFindTheCreatedLegacyBeaconByCospasSarsatNumber()
-      throws Exception {
-      var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
-      var pseudoUniqueLegacyBeaconCospasSarsatNumber = new Random()
-        .nextInt(Integer.MAX_VALUE);
-      createLegacyBeacon(
-        request ->
-          request.replace(
-            Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
-            Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
-          )
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", pseudoUniqueLegacyBeaconCospasSarsatNumber)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].cospasSarsatNumber")
-        .isEqualTo(pseudoUniqueLegacyBeaconCospasSarsatNumber);
     }
 
     @Test
@@ -261,11 +131,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("term", randomHexId)
               .queryParam("status", "")
               .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -302,11 +167,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("term", randomHexId)
               .queryParam("status", "new")
               .queryParam("uses", "fishing vessel")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -319,289 +179,181 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .isEqualTo(1);
     }
 
-    @Test
-    void shouldFindTheCreatedBeaconByManufacturerSerialNumber()
+    @Nested
+    class GetBeaconSearchResultsForAccountHolder {
+
+      private static final String FIND_BY_ACCOUNT_HOLDER =
+        "/spring-api/beacon-search/search/find-all-by-account-holder-and-email";
+
+      @Test
+      void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted()
+        throws Exception {
+        createBeacon(
+          request ->
+            request.replace("\"account-holder-id-placeholder\"", "null")
+        );
+
+        webTestClient
+          .get()
+          .uri(
+            uriBuilder ->
+              uriBuilder
+                .path(FIND_BY_ACCOUNT_HOLDER)
+                .queryParam("email", "")
+                .queryParam("accountHolderId", "")
+                .build()
+          )
+          .exchange()
+          .expectStatus()
+          .isOk()
+          .expectBody()
+          .jsonPath("_embedded.beaconSearch.length()")
+          .isEqualTo(0);
+      }
+
+      @Test
+      void shouldFindTheLegacyBeaconByEmail() throws Exception {
+        final var randomEmailAddress = UUID.randomUUID().toString();
+        createLegacyBeacon(
+          request ->
+            request.replace("ownerbeacon@beacons.com", randomEmailAddress)
+        );
+
+        webTestClient
+          .get()
+          .uri(
+            uriBuilder ->
+              uriBuilder
+                .path(FIND_BY_ACCOUNT_HOLDER)
+                .queryParam("email", randomEmailAddress)
+                .queryParam("accountHolderId", UUID.randomUUID().toString())
+                .build()
+          )
+          .exchange()
+          .expectStatus()
+          .isOk()
+          .expectBody()
+          .jsonPath("_embedded.beaconSearch.length()")
+          .isEqualTo(1)
+          .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+          .isEqualTo(randomEmailAddress);
+      }
+
+      @Test
+      void shouldFindTheBeaconByAccountHolderId() throws Exception {
+        final var accountHolderId = createAccountHolder(
+          UUID.randomUUID().toString()
+        );
+        createBeacon(
+          request ->
+            request.replace("account-holder-id-placeholder", accountHolderId)
+        );
+
+        webTestClient
+          .get()
+          .uri(
+            uriBuilder ->
+              uriBuilder
+                .path(FIND_BY_ACCOUNT_HOLDER)
+                .queryParam("email", "")
+                .queryParam("accountHolderId", accountHolderId)
+                .build()
+          )
+          .exchange()
+          .expectStatus()
+          .isOk()
+          .expectBody()
+          .jsonPath("_embedded.beaconSearch.length()")
+          .isEqualTo(1)
+          .jsonPath("_embedded.beaconSearch[0].accountHolderId")
+          .isEqualTo(accountHolderId)
+          .jsonPath("_embedded.beaconSearch[0].ownerEmail")
+          .isEqualTo("nelson@royalnavy.mod.uk");
+      }
+    }
+
+    private String readFile(String filePath) throws Exception {
+      return Files.readString(Paths.get(filePath));
+    }
+
+    private void createLegacyBeacon(Function<String, String> mapRequestObject)
       throws Exception {
-      var uniqueBeaconManufacturerSerialNumber = UUID.randomUUID().toString();
+      final var createLegacyBeaconRequest = mapRequestObject.apply(
+        readFile("src/test/resources/fixtures/createLegacyBeaconRequest.json")
+      );
+
+      webTestClient
+        .post()
+        .uri("/spring-api/migrate/legacy-beacon")
+        .bodyValue(createLegacyBeaconRequest)
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isCreated();
+    }
+
+    private void createLegacyBeacon(String hexId) throws Exception {
+      createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
+    }
+
+    private void createLegacyBeaconWithManufacturerSerialNumber(
+      String hexId,
+      String manufacturerSerialNumber
+    ) throws Exception {
+      createLegacyBeacon(
+        request ->
+          request
+            .replace("9D0E1D1B8C00001", hexId)
+            .replace(
+              "manufacturer_serial_number_value",
+              manufacturerSerialNumber
+            )
+      );
+    }
+
+    private void createBeacon(String hexId) throws Exception {
       createBeacon(
         request ->
           request
-            .replace(
-              "manufacturer-serial-number-placeholder",
-              uniqueBeaconManufacturerSerialNumber
-            )
+            .replace("1D0EA08C52FFBFF", hexId)
             .replace("\"account-holder-id-placeholder\"", "null")
       );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", uniqueBeaconManufacturerSerialNumber)
-              .queryParam("status", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
-              .queryParam("uses", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].manufacturerSerialNumber")
-        .isEqualTo(uniqueBeaconManufacturerSerialNumber);
     }
 
-    @Test
-    void shouldFindTheCreatedLegacyBeaconWithAllFiltersSet() throws Exception {
-      var legacyBeaconFixtureHexId = "9D0E1D1B8C00001";
-      var legacyBeaconFixtureOwnerName = "Mr Beacon";
-      var legacyBeaconFixtureCospasSarsatNumberValue = 476899;
-      var legacyBeaconFixtureManufacturerSerialNumber =
-        "manufacturer_serial_number_value";
-      var legacyBeaconFixtureSerialNumber = 1763;
-
-      var random = new Random();
-      var uniqueLegacyBeaconHexId = UUID.randomUUID().toString();
-      var uniqueLegacyBeaconOwnerName = UUID.randomUUID().toString();
-      var pseudoUniqueLegacyBeaconCospasSarsatNumber = random.nextInt(
-        Integer.MAX_VALUE
-      );
-      var uniqueLegacyBeaconManufacturerSerialNumber = UUID
-        .randomUUID()
-        .toString();
-      var pseudoUniqueLegacyBeaconSerialNumber = random.nextInt(
-        Integer.MAX_VALUE
-      );
-
-      createLegacyBeacon(
-        request ->
-          request
-            .replace(legacyBeaconFixtureHexId, uniqueLegacyBeaconHexId)
-            .replace(legacyBeaconFixtureOwnerName, uniqueLegacyBeaconOwnerName)
-            .replace(
-              Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
-              Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
-            )
-            .replace(
-              Integer.toString(legacyBeaconFixtureSerialNumber),
-              Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
-            )
-            .replace(
-              legacyBeaconFixtureManufacturerSerialNumber,
-              uniqueLegacyBeaconManufacturerSerialNumber
-            )
+    private void createBeacon(Function<String, String> mapRequestObject)
+      throws Exception {
+      final var createBeaconRequest = mapRequestObject.apply(
+        readFile("src/test/resources/fixtures/createBeaconRequest.json")
       );
 
       webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term")
-              .queryParam("status", "MIGRATED")
-              .queryParam("uses", "MARITIME")
-              .queryParam("hexId", uniqueLegacyBeaconHexId)
-              .queryParam("ownerName", uniqueLegacyBeaconOwnerName)
-              .queryParam(
-                "cospasSarsatNumber",
-                pseudoUniqueLegacyBeaconCospasSarsatNumber
-              )
-              .queryParam(
-                "manufacturerSerialNumber",
-                uniqueLegacyBeaconManufacturerSerialNumber
-              )
-              .queryParam("serialNumber", pseudoUniqueLegacyBeaconSerialNumber)
-              .build()
-        )
+        .post()
+        .uri("/spring-api/registrations/register")
+        .body(BodyInserters.fromValue(createBeaconRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
         .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].hexId")
-        .isEqualTo(uniqueLegacyBeaconHexId);
+        .isCreated();
     }
-  }
 
-  @Nested
-  class GetBeaconSearchResultsForAccountHolder {
+    private String createAccountHolder(String testAuthId) throws Exception {
+      final String newAccountHolderRequest = readFile(
+        "src/test/resources/fixtures/createAccountHolderRequest.json"
+      )
+        .replace("replace-with-test-auth-id", testAuthId);
 
-    private static final String FIND_BY_ACCOUNT_HOLDER =
-      "/spring-api/beacon-search/search/find-all-by-account-holder-and-email";
-
-    @Test
-    void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
-      createBeacon(
-        request -> request.replace("\"account-holder-id-placeholder\"", "null")
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_BY_ACCOUNT_HOLDER)
-              .queryParam("email", "")
-              .queryParam("accountHolderId", "")
-              .build()
-        )
+      return webTestClient
+        .post()
+        .uri("/spring-api/account-holder")
+        .body(BodyInserters.fromValue(newAccountHolderRequest))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("_embedded.beaconSearch.length()")
-        .isEqualTo(0);
+        .expectBody(ObjectNode.class)
+        .returnResult()
+        .getResponseBody()
+        .get("data")
+        .get("id")
+        .textValue();
     }
-
-    @Test
-    void shouldFindTheLegacyBeaconByEmail() throws Exception {
-      final var randomEmailAddress = UUID.randomUUID().toString();
-      createLegacyBeacon(
-        request ->
-          request.replace("ownerbeacon@beacons.com", randomEmailAddress)
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_BY_ACCOUNT_HOLDER)
-              .queryParam("email", randomEmailAddress)
-              .queryParam("accountHolderId", UUID.randomUUID().toString())
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("_embedded.beaconSearch.length()")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
-        .isEqualTo(randomEmailAddress);
-    }
-
-    @Test
-    void shouldFindTheBeaconByAccountHolderId() throws Exception {
-      final var accountHolderId = createAccountHolder(
-        UUID.randomUUID().toString()
-      );
-      createBeacon(
-        request ->
-          request.replace("account-holder-id-placeholder", accountHolderId)
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_BY_ACCOUNT_HOLDER)
-              .queryParam("email", "")
-              .queryParam("accountHolderId", accountHolderId)
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("_embedded.beaconSearch.length()")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].accountHolderId")
-        .isEqualTo(accountHolderId)
-        .jsonPath("_embedded.beaconSearch[0].ownerEmail")
-        .isEqualTo("nelson@royalnavy.mod.uk");
-    }
-  }
-
-  private String readFile(String filePath) throws Exception {
-    return Files.readString(Paths.get(filePath));
-  }
-
-  private void createLegacyBeacon(Function<String, String> mapRequestObject)
-    throws Exception {
-    final var createLegacyBeaconRequest = mapRequestObject.apply(
-      readFile("src/test/resources/fixtures/createLegacyBeaconRequest.json")
-    );
-
-    webTestClient
-      .post()
-      .uri("/spring-api/migrate/legacy-beacon")
-      .bodyValue(createLegacyBeaconRequest)
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectStatus()
-      .isCreated();
-  }
-
-  private void createLegacyBeacon(String hexId) throws Exception {
-    createLegacyBeacon(request -> request.replace("9D0E1D1B8C00001", hexId));
-  }
-
-  private void createLegacyBeaconWithManufacturerSerialNumber(
-    String hexId,
-    String manufacturerSerialNumber
-  ) throws Exception {
-    createLegacyBeacon(
-      request ->
-        request
-          .replace("9D0E1D1B8C00001", hexId)
-          .replace("manufacturer_serial_number_value", manufacturerSerialNumber)
-    );
-  }
-
-  private void createBeacon(String hexId) throws Exception {
-    createBeacon(
-      request ->
-        request
-          .replace("1D0EA08C52FFBFF", hexId)
-          .replace("\"account-holder-id-placeholder\"", "null")
-    );
-  }
-
-  private void createBeacon(Function<String, String> mapRequestObject)
-    throws Exception {
-    final var createBeaconRequest = mapRequestObject.apply(
-      readFile("src/test/resources/fixtures/createBeaconRequest.json")
-    );
-
-    webTestClient
-      .post()
-      .uri("/spring-api/registrations/register")
-      .body(BodyInserters.fromValue(createBeaconRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectStatus()
-      .isCreated();
-  }
-
-  private String createAccountHolder(String testAuthId) throws Exception {
-    final String newAccountHolderRequest = readFile(
-      "src/test/resources/fixtures/createAccountHolderRequest.json"
-    )
-      .replace("replace-with-test-auth-id", testAuthId);
-
-    return webTestClient
-      .post()
-      .uri("/spring-api/account-holder")
-      .body(BodyInserters.fromValue(newAccountHolderRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .expectBody(ObjectNode.class)
-      .returnResult()
-      .getResponseBody()
-      .get("data")
-      .get("id")
-      .textValue();
   }
 }
