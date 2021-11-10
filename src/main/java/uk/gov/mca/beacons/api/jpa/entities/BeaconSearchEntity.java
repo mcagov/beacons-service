@@ -27,6 +27,5 @@ public class BeaconSearchEntity {
   private String useActivities;
   private String beaconType;
   private String manufacturerSerialNumber;
-  private String serialNumber;
   private String cospasSarsatNumber;
 }

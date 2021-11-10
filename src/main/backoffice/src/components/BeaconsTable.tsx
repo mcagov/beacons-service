@@ -52,7 +52,6 @@ export type BeaconRowData = Record<
     | "beaconType"
     | "cospasSarsatNumber"
     | "manufacturerSerialNumber"
-    | "serialNumber"
   >,
   string
 >;
@@ -186,19 +185,6 @@ const columns: Column<BeaconRowData>[] = [
       />
     ),
   },
-  {
-    title: "Serial number",
-    field: "serialNumber",
-    render: (rowData: BeaconRowData) => replaceNone(rowData.serialNumber),
-    filterComponent: ({ columnDef, onFilterChanged }) => (
-      <TextFilter
-        columnDef={columnDef}
-        onFilterChanged={onFilterChanged}
-        icons={tableIcons}
-        filterTooltip="Filter serial number"
-      />
-    ),
-  },
 ];
 
 export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
@@ -225,7 +211,6 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
                   cospasSarsatNumber: item.cospasSarsatNumber ?? "N/A",
                   manufacturerSerialNumber:
                     item.manufacturerSerialNumber ?? "N/A",
-                  serialNumber: item.serialNumber ?? "N/A",
                 })
               );
               resolve({

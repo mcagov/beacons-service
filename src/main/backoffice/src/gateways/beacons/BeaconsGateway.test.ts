@@ -60,7 +60,7 @@ describe("BeaconsGateway", () => {
 
       expect(axios.get).toHaveBeenCalledWith(
         `${applicationConfig.apiUrl}/beacon-search/search/find-allv2?term=&status=&uses=\
-&hexId=&ownerName=&serialNumber=&cospasSarsatNumber=&manufacturerSerialNumber=&page=0&size=20&sort=`,
+&hexId=&ownerName=&cospasSarsatNumber=&manufacturerSerialNumber=&page=0&size=20&sort=`,
         config
       );
     });

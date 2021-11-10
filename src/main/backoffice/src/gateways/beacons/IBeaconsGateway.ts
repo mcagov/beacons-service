@@ -10,7 +10,6 @@ export type GetAllBeaconsFilters = Partial<
     | "hexId"
     | "ownerName"
     | "useActivities"
-    | "serialNumber"
     | "cospasSarsatNumber"
     | "manufacturerSerialNumber"
   >

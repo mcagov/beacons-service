@@ -83,7 +83,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -124,7 +123,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -155,7 +153,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -191,7 +188,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -202,45 +198,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
         .isEqualTo(1)
         .jsonPath("_embedded.beaconSearch[0].hexId")
         .isEqualTo(legacyBeaconHexId);
-    }
-
-    @Test
-    void shouldFindTheCreatedLegacyBeaconBySerialNumber() throws Exception {
-      var legacyBeaconFixtureSerialNumberValue = 1763;
-      var pseudoUniqueLegacyBeaconSerialNumber = new Random()
-        .nextInt(Integer.MAX_VALUE);
-      createLegacyBeacon(
-        request ->
-          request.replace(
-            Integer.toString(legacyBeaconFixtureSerialNumberValue),
-            Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
-          )
-      );
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path(FIND_ALL_URI)
-              .queryParam("term", pseudoUniqueLegacyBeaconSerialNumber)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .queryParam("hexId", "")
-              .queryParam("ownerName", "")
-              .queryParam("cospasSarsatNumber", "")
-              .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("page.totalElements")
-        .isEqualTo(1)
-        .jsonPath("_embedded.beaconSearch[0].serialNumber")
-        .isEqualTo(pseudoUniqueLegacyBeaconSerialNumber);
     }
 
     @Test
@@ -270,7 +227,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -301,7 +257,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -342,7 +297,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .build()
         )
         .exchange()
@@ -381,7 +335,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
               .queryParam("ownerName", "")
               .queryParam("cospasSarsatNumber", "")
               .queryParam("manufacturerSerialNumber", "")
-              .queryParam("serialNumber", "")
               .queryParam("uses", "")
               .build()
         )
@@ -413,9 +366,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
       var uniqueLegacyBeaconManufacturerSerialNumber = UUID
         .randomUUID()
         .toString();
-      var pseudoUniqueLegacyBeaconSerialNumber = random.nextInt(
-        Integer.MAX_VALUE
-      );
 
       createLegacyBeacon(
         request ->
@@ -425,10 +375,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
             .replace(
               Integer.toString(legacyBeaconFixtureCospasSarsatNumberValue),
               Integer.toString(pseudoUniqueLegacyBeaconCospasSarsatNumber)
-            )
-            .replace(
-              Integer.toString(legacyBeaconFixtureSerialNumber),
-              Integer.toString(pseudoUniqueLegacyBeaconSerialNumber)
             )
             .replace(
               legacyBeaconFixtureManufacturerSerialNumber,
@@ -455,7 +401,6 @@ class BeaconSearchRestRepositoryIntegrationTest {
                 "manufacturerSerialNumber",
                 uniqueLegacyBeaconManufacturerSerialNumber
               )
-              .queryParam("serialNumber", pseudoUniqueLegacyBeaconSerialNumber)
               .build()
         )
         .exchange()
