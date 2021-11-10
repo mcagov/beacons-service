@@ -63,9 +63,10 @@ interface BeaconSearchRestRepository
   @Query(
     "SELECT b FROM BeaconSearchEntity b WHERE " +
     "(" +
+    "COALESCE(LOWER(b.hexId), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
     "COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
     "COALESCE(LOWER(b.ownerName), '') LIKE LOWER(CONCAT('%', :term, '%')) OR " +
-    "COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :term, '%')) " +
+    "COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :term, '%'))" +
     ") " +
     "AND (COALESCE(LOWER(b.beaconStatus), '') LIKE LOWER(CONCAT('%', :status, '%'))) " +
     "AND (COALESCE(LOWER(b.useActivities), '') LIKE LOWER(CONCAT('%', :uses, '%'))) " +
