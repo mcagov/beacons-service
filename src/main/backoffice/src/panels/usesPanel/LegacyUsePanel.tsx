@@ -37,6 +37,7 @@ const getFields = (use: ILegacyUse): IField[] => [
 
   { key: "Vessel name", value: use?.vesselName },
   { key: "Vessel type", value: use?.vesselType },
+  { key: "MMSI", value: use?.mmsiNumber.toString() },
   { key: "Port Letter and Number (PLN)", value: use?.fishingVesselPln },
   { key: "Homeport", value: use?.homePort },
   { key: "Area of operation", value: use?.areaOfUse },

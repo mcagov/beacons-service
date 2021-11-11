@@ -17,7 +17,6 @@ export const legacyBeaconFixture = deepFreeze<ILegacyBeacon>({
   cospasSarsatNumber: 476899,
   manufacturerSerialNumber: "None",
   coding: "None",
-  mmsi: "1234",
   firstRegistrationDate: "2004-10-28 00:00:00",
   lastServiceDate: "None",
   batteryExpiryDate: "None",

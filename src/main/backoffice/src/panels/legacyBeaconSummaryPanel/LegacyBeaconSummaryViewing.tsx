@@ -53,10 +53,6 @@ export const LegacyBeaconSummaryViewing: FunctionComponent<{
       value: legacyBeacon?.mti,
     },
     {
-      key: "MMSI",
-      value: legacyBeacon?.mmsi,
-    },
-    {
       key: "Battery expiry date",
       value: legacyBeacon?.batteryExpiryDate,
     },
