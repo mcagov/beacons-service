@@ -22,7 +22,6 @@ export interface IBeaconSearchResultData {
   useActivities: string | null;
   cospasSarsatNumber: string | null;
   manufacturerSerialNumber: string | null;
-  serialNumber: string | null;
   _links: {
     self: {
       href: string;

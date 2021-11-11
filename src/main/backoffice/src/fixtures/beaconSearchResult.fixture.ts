@@ -23,7 +23,6 @@ export const beaconSearchResultFixture = deepFreeze<IBeaconSearchResult>({
         beaconType: "BEACON",
         cospasSarsatNumber: null,
         manufacturerSerialNumber: null,
-        serialNumber: null,
         _links: {
           self: {
             href: "/97b306aa-cbd0-4f09-aa24-2d876b983efb",
@@ -46,7 +45,6 @@ export const beaconSearchResultFixture = deepFreeze<IBeaconSearchResult>({
         beaconType: "BEACON",
         cospasSarsatNumber: null,
         manufacturerSerialNumber: null,
-        serialNumber: null,
         _links: {
           self: {
             href: "/97b306aa-cbd0-4f09-aa24-2d876b983efc",
@@ -69,7 +67,6 @@ export const beaconSearchResultFixture = deepFreeze<IBeaconSearchResult>({
         beaconType: "BEACON",
         cospasSarsatNumber: null,
         manufacturerSerialNumber: null,
-        serialNumber: null,
         _links: {
           self: {
             href: "/97b306aa-cbd0-4f09-aa24-2d876b983efd",
@@ -92,7 +89,6 @@ export const beaconSearchResultFixture = deepFreeze<IBeaconSearchResult>({
         beaconType: "LEGACY_BEACON",
         cospasSarsatNumber: null,
         manufacturerSerialNumber: null,
-        serialNumber: null,
         _links: {
           self: {
             href: "/efeea9c2-85fc-4d3a-90ba-299e95f8114e",
