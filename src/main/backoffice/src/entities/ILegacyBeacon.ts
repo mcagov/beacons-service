@@ -33,6 +33,7 @@ export interface ILegacyBeacon {
   beaconStatus: BeaconStatuses;
   csta: string;
   mti: string;
+  mmsi: string;
 }
 
 export interface ILegacyUse {

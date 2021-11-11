@@ -59,6 +59,7 @@ export class LegacyBeaconResponseMapper implements ILegacyBeaconResponseMapper {
       uses: this.mapUses(beaconApiResponse),
       csta: beaconApiResponse.data.attributes.beacon.csta,
       mti: beaconApiResponse.data.attributes.beacon.mti,
+      mmsi: beaconApiResponse.data.attributes.beacon.mmsi,
     };
   }
 
