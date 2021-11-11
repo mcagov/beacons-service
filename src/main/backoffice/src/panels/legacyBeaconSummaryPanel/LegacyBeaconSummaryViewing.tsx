@@ -53,6 +53,10 @@ export const LegacyBeaconSummaryViewing: FunctionComponent<{
       value: legacyBeacon?.mti,
     },
     {
+      key: "MMSI",
+      value: legacyBeacon?.mmsiNumber,
+    },
+    {
       key: "Battery expiry date",
       value: legacyBeacon?.batteryExpiryDate,
     },
@@ -109,5 +113,5 @@ export const LegacyBeaconSummaryViewing: FunctionComponent<{
     },
   ];
 
-  return <PanelViewingState fields={fields} columns={2} splitAfter={19} />;
+  return <PanelViewingState fields={fields} columns={2} splitAfter={20} />;
 };
