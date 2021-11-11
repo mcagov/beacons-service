@@ -19,6 +19,7 @@ export interface IBeacon {
   batteryExpiryDate: string;
   lastServicedDate: string;
   mti: string;
+  referenceNumber: string;
   svdr: string;
   csta: string;
   uses: IUse[];

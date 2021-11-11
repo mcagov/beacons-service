@@ -21,6 +21,7 @@ export interface IBeaconResponse extends IApiResponse {
       coding?: string;
       batteryExpiryDate?: string;
       lastServicedDate?: string;
+      referenceNumber: string;
     };
     links: { verb: string; path: string }[];
     relationships: {

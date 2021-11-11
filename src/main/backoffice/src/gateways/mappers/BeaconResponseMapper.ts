@@ -30,6 +30,7 @@ export class BeaconResponseMapper implements IBeaconResponseMapper {
       ),
       chkCode: beaconApiResponse.data.attributes.chkCode || "",
       mti: beaconApiResponse.data.attributes.mti || "",
+      referenceNumber: beaconApiResponse.data.attributes.referenceNumber,
       svdr:
         beaconApiResponse.data.attributes.svdr == null
           ? ""
