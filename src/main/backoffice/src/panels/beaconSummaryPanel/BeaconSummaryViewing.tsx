@@ -75,6 +75,10 @@ export const BeaconSummaryViewing: FunctionComponent<{
       value: beacon?.lastModifiedDate,
     },
     {
+      key: "Reference",
+      value: beacon?.referenceNumber,
+    },
+    {
       key: "Owner(s)",
       value: formatOwners(beacon?.owners || []),
     },
@@ -88,5 +92,5 @@ export const BeaconSummaryViewing: FunctionComponent<{
     },
   ];
 
-  return <PanelViewingState fields={fields} columns={2} splitAfter={15} />;
+  return <PanelViewingState fields={fields} columns={2} splitAfter={16} />;
 };

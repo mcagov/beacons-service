@@ -109,5 +109,5 @@ export const LegacyBeaconSummaryViewing: FunctionComponent<{
     },
   ];
 
-  return <PanelViewingState fields={fields} columns={2} splitAfter={19} />;
+  return <PanelViewingState fields={fields} columns={2} splitAfter={20} />;
 };
