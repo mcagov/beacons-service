@@ -31,22 +31,33 @@ public class LegacyBeacon {
     return owner.get("email").toString();
   }
 
-  public void claimFor(AccountHolder accountHolder) throws Exception {
+  /**
+   * @param accountHolder AccountHolder that is claiming the beacon
+   * @return true if a claim event is added, false otherwise
+   * @throws Exception if the AccountHolder's email does not match the associated of
+   * the LegacyBeacon
+   */
+  public boolean claimFor(AccountHolder accountHolder) throws Exception {
     if (!this.getAssociatedEmailAddress().equals(accountHolder.getEmail())) {
       throw new Exception(
         "A LegacyBeacon can only be claimed by an AccountHolder with a matching email address."
       );
     }
 
-    this.history.add(
-        LegacyBeaconClaimEvent
-          .builder()
-          .id(UUID.randomUUID())
-          .whenHappened(OffsetDateTime.now())
-          .legacyBeacon(this)
-          .accountHolderId(accountHolder.getId())
-          .build()
-      );
+    if (this.hasBeenClaimed()) {
+      return false;
+    } else {
+      this.history.add(
+          LegacyBeaconClaimEvent
+            .builder()
+            .id(UUID.randomUUID())
+            .whenHappened(OffsetDateTime.now())
+            .legacyBeacon(this)
+            .accountHolderId(accountHolder.getId())
+            .build()
+        );
+      return true;
+    }
   }
 
   public boolean hasBeenClaimed() {

@@ -4,11 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.domain.AccountHolder;
 import uk.gov.mca.beacons.api.domain.LegacyBeacon;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconClaimEvent;
+import uk.gov.mca.beacons.api.domain.events.LegacyBeaconEvent;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
 import uk.gov.mca.beacons.api.gateways.LegacyBeaconGateway;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
@@ -126,5 +127,28 @@ public class LegacyBeaconServiceUnitTest {
     );
 
     assertTrue(matchingLegacyBeacons.isEmpty());
+  }
+
+  @Test
+  void whenTheLegacyBeaconHasAlreadyBeenClaimed_DoNotClaimAgain()
+    throws Exception {
+    AccountHolder accountHolder = AccountHolder
+      .builder()
+      .email("test@test.com")
+      .id(UUID.randomUUID())
+      .build();
+
+    LegacyBeacon legacyBeacon = LegacyBeacon
+      .builder()
+      .owner(Map.of("email", "test@test.com"))
+      .build();
+    legacyBeacon.claimFor(accountHolder);
+
+    given(accountHolderGateway.getByEmail("test@test.com"))
+      .willReturn(accountHolder);
+
+    legacyBeaconService.claim(legacyBeacon);
+
+    verify(legacyBeaconGateway, never()).save(legacyBeacon);
   }
 }
