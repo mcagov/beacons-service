@@ -78,8 +78,8 @@ public class LegacyBeaconService {
       legacyBeacon.getAssociatedEmailAddress()
     );
 
-    legacyBeacon.claimFor(accountHolder);
-
-    legacyBeaconGateway.save(legacyBeacon);
+    if (legacyBeacon.claimFor(accountHolder)) {
+      legacyBeaconGateway.save(legacyBeacon);
+    }
   }
 }
