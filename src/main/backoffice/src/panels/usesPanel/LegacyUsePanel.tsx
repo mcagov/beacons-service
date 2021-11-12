@@ -44,7 +44,7 @@ const getFields = (use: ILegacyUse): IField[] => [
   { key: "SSR / RSS number", value: use?.rssSsrNumber },
   { key: "Hull ID number", value: use?.hullIdNumber },
   { key: "Official number", value: use?.officialNumber },
-  { key: "MMSI", value: use?.mmsiNumber.toString() },
+  { key: "MMSI", value: use?.mmsiNumber?.toString() },
   { key: "Call sign", value: use?.callSign },
 
   { key: "AOD serial number", value: use?.aodSerialNumber },

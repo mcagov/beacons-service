@@ -45,7 +45,7 @@ export interface ILegacyUse {
   rssSsrNumber: string;
   callSign: string;
   imoNumber: string;
-  mmsiNumber: number;
+  mmsiNumber: number | null;
   fishingVesselPln: string;
   hullIdNumber: string;
   cg66RefNumber: string;
