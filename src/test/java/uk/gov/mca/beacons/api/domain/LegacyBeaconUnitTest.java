@@ -51,4 +51,23 @@ public class LegacyBeaconUnitTest {
 
     Assertions.assertFalse(legacyBeacon.hasBeenClaimed());
   }
+
+  @Test
+  public void givenTheLegacyBeaconHasBeenClaimed_claimForReturnsFalse()
+    throws Exception {
+    LegacyBeacon legacyBeacon = LegacyBeacon
+      .builder()
+      .owner(Map.of("email", "matching_owner@beacons.com"))
+      .build();
+
+    AccountHolder accountHolder = AccountHolder
+      .builder()
+      .email("matching_owner@beacons.com")
+      .build();
+
+    Assertions.assertTrue(legacyBeacon.claimFor(accountHolder));
+
+    Assertions.assertFalse(legacyBeacon.claimFor(accountHolder));
+    Assertions.assertEquals(1, legacyBeacon.getHistory().size());
+  }
 }
