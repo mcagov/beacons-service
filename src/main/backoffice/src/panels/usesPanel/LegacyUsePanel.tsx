@@ -37,7 +37,6 @@ const getFields = (use: ILegacyUse): IField[] => [
 
   { key: "Vessel name", value: use?.vesselName },
   { key: "Vessel type", value: use?.vesselType },
-  { key: "MMSI", value: use?.mmsiNumber.toString() },
   { key: "Port Letter and Number (PLN)", value: use?.fishingVesselPln },
   { key: "Homeport", value: use?.homePort },
   { key: "Area of operation", value: use?.areaOfUse },
@@ -45,6 +44,8 @@ const getFields = (use: ILegacyUse): IField[] => [
   { key: "SSR / RSS number", value: use?.rssSsrNumber },
   { key: "Hull ID number", value: use?.hullIdNumber },
   { key: "Official number", value: use?.officialNumber },
+  { key: "MMSI", value: use?.mmsiNumber.toString() },
+  { key: "Call sign", value: use?.callSign },
 
   { key: "AOD serial number", value: use?.aodSerialNumber },
 
@@ -62,7 +63,6 @@ const getFields = (use: ILegacyUse): IField[] => [
   { key: "MOD Variant", value: use?.modVariant },
   { key: "Activation mode", value: use?.activationMode },
 
-  { key: "Call sign", value: use?.callSign },
   { key: "Survival craft type", value: use?.survivalCraftType },
   { key: "Bit 24 address hex", value: use?.bit24AddressHex },
 
