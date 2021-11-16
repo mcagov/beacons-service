@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.jetbrains:annotations:21.0.1'
 
+    implementation 'org.opensearch.client:opensearch-rest-client:1.1.0'
+    implementation 'org.opensearch.client:opensearch-java:0.1.0'
+
     runtimeOnly 'org.postgresql:postgresql'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
