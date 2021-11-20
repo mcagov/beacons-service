@@ -62,6 +62,17 @@ test {
     }
 }
 
+task e2eTest(type: Test) {
+    description = 'Runs end-to-end tests using Cypress.'
+    group = 'verification'
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'BeaconsEndToEndTests'
+    }
+
+    shouldRunAfter test
+}
+
 task integrationTest(type: Test) {
     description = 'Runs integration tests.'
     group = 'verification'

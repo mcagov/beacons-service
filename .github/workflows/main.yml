@@ -71,6 +71,19 @@ jobs:
       - name: Integration tests
         run: ./gradlew clean integrationTest
 
+  end_to_end_test:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "adopt"
+          java-version: 11
+      - name: Run end-to-end tests
+        run: ./gradlew clean e2eTest
+
   prettier_check:
     name: Prettier check
     runs-on: ubuntu-latest
@@ -152,6 +165,7 @@ jobs:
         backoffice_spa_unit_test,
         spring_boot_unit_test,
         spring_boot_integration_test,
+        end_to_end_test,
         prettier_check,
         docker_lint,
         docker_build,

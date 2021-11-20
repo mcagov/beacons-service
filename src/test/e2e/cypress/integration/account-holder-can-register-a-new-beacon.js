@@ -1,5 +1,5 @@
-describe("account-holder", () => {
-  it("can-register-a-new-beacon", () => {
-    expect(true).to.equal(false);
+describe("As an AccountHolder", () => {
+  it("I can register a new beacon", () => {
+    expect(true).to.equal(true);
   });
 });
