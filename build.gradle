@@ -59,18 +59,8 @@ test {
     useJUnitPlatform()
     filter {
         excludeTestsMatching '*IntegrationTest'
+        excludeTestsMatching 'BeaconsEndToEndTests'
     }
-}
-
-task e2eTest(type: Test) {
-    description = 'Runs end-to-end tests using Cypress.'
-    group = 'verification'
-    useJUnitPlatform()
-    filter {
-        includeTestsMatching 'BeaconsEndToEndTests'
-    }
-
-    shouldRunAfter test
 }
 
 task integrationTest(type: Test) {
@@ -84,7 +74,19 @@ task integrationTest(type: Test) {
     shouldRunAfter test
 }
 
-check.dependsOn 'integrationTest'
+task e2eTest(type: Test) {
+    description = 'Runs end-to-end tests using Cypress.'
+    group = 'verification'
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'BeaconsEndToEndTests'
+    }
+
+    shouldRunAfter test
+    shouldRunAfter integrationTest
+}
+
+check.dependsOn 'e2eTest'
 
 /**
  * Build, package and serve the Backoffice SPA's static assets
