@@ -81,7 +81,12 @@ public class SecurityConfiguration {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
       super.configure(http);
-      http.cors().and().authorizeRequests().antMatchers("/**").authenticated();
+      http
+        .cors()
+        .and()
+        .authorizeRequests()
+        .antMatchers("/spring-api/**")
+        .authenticated();
     }
 
     @Override
@@ -90,18 +95,7 @@ public class SecurityConfiguration {
         .ignoring()
         .antMatchers(
           "/spring-api/actuator/health",
-          "/spring-api/actuator/info",
-          "/swagger-ui.html",
-          "/swagger-ui/**",
-          "/v3/api-docs/**",
-          /*
-           * Permit global access to Backoffice SPA static assets because the user is required to sign in with Azure AD
-           * prior to accessing protected data in any case.  There is no security benefit from securing the application
-           * itself.
-           *
-           * The path to the Backoffice SPA's static assets is configured in build.gradle.
-           */
-          "/backoffice/**"
+          "/spring-api/actuator/info"
         );
     }
   }
