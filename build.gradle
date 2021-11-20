@@ -42,6 +42,17 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.testcontainers:testcontainers:1.16.2"
+    testImplementation "org.testcontainers:junit-jupiter:1.16.2"
+    testImplementation "org.testcontainers:postgresql:1.16.2"
+    testImplementation 'io.github.wimdeblauwe:testcontainers-cypress:1.3.0'
+}
+
+processTestResources {
+    from("src/test/e2e") {
+        exclude 'node_modules'
+        into("e2e")
+    }
 }
 
 test {
