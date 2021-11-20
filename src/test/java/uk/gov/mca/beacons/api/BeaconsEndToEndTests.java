@@ -25,6 +25,15 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+/**
+ * Enable JUnit to run end-to-end tests using Cypress.
+ *
+ * Makes use of Testcontainers to run both Cypress and Postgres.  This makes tests deterministic and independent of the
+ * environment (e.g. if a developer's Postgres instance is filled with state).
+ *
+ * @link src/main/test/e2e <-- The Cypress tests themselves go here
+ * @link https://github.com/wimdeblauwe/testcontainers-cypress <-- The testcontainers-cypress package documentation
+ */
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(

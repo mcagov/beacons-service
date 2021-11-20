@@ -41,12 +41,15 @@ Integration tests use the naming convention `<name>IntegrationTest`.
 
 Unit tests use the naming convention `<name>UnitTest`.
 
-Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service](src/test/java/uk/gov/mca/beacons/service).
+Both unit and integration tests go in [src/test/java/uk/gov/mca/beacons/service`](src/test/java/uk/gov/mca/beacons/service)`.
+
+End-to-end tests use [Cypress](https://www.cypress.io/) and are located in [src/test/e2e/cypress/integration](src/test/e2e/cypress/integration).
 
 ### Running tests
 
 - `./gradlew test` runs unit tests
-- `./gradlew integrationTest` runs integration tests
+- `./gradlew integrationTest` runs integration tests (requires `docker compose up postgres` first)
+- `./gradlew e2eTest` runs end-to-end tests using Cypress
 - `./gradlew check` runs both unit and integration tests
 
 ## Building
