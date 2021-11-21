@@ -22,9 +22,19 @@
         </div>
         <div class="govuk-button-group">
           <a th:href="@{/help/cookies}" class="govuk-link">View cookies</a>
-          <button class="govuk-button" data-module="govuk-button" role="button">
-            Hide this message about essential cookies
-          </button>
+          <form
+            th:action="@{/help/cookies/hide-banner}"
+            method="post"
+            novalidate
+          >
+            <button
+              class="govuk-button"
+              data-module="govuk-button"
+              role="button"
+            >
+              Hide this message about essential cookies
+            </button>
+          </form>
         </div>
       </div>
     </div>
