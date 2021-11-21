@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
 
-@WebMvcTest(ServiceStartController.class)
+@WebMvcTest(controllers = ServiceStartController.class)
 @AutoConfigureMockMvc
 @Import(WebMvcTestConfiguration.class)
-public class ServiceStartControllerTest {
+public class ServiceStartControllerUnitTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -23,7 +23,7 @@ public class ServiceStartControllerTest {
   @Test
   public void testServiceStartPage() throws Exception {
     mockMvc
-      .perform(get("/public"))
+      .perform(get("/"))
       .andExpect(status().isOk())
       .andExpect(view().name("service-start"))
       .andExpect(
