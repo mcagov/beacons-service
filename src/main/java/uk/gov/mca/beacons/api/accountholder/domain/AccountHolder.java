@@ -28,6 +28,10 @@ public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
   AccountHolderId id;
 
   @Setter
+  @NotNull
+  private String authId;
+
+  @Setter
   private String fullName;
 
   @Setter

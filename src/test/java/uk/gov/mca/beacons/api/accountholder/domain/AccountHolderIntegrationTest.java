@@ -1,11 +1,11 @@
-package uk.gov.mca.beacons.api.accountholder;
+package uk.gov.mca.beacons.api.accountholder.domain;
 
+import java.util.UUID;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
-import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderRepository;
+import uk.gov.mca.beacons.api.accountholder.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
 @SpringBootTest
@@ -13,6 +13,9 @@ public class AccountHolderIntegrationTest {
 
   @Autowired
   AccountHolderRepository accountHolderRepository;
+
+  @Autowired
+  AccountHolderMapper accountHolderMapper;
 
   @Transactional
   @Test
@@ -23,6 +26,7 @@ public class AccountHolderIntegrationTest {
       Address.builder().addressLine1("Something").build()
     );
     accountHolder.setEmail("test@test.com");
+    accountHolder.setAuthId(UUID.randomUUID().toString());
 
     AccountHolder savedAccountHolder = accountHolderRepository.saveAndFlush(
       accountHolder
