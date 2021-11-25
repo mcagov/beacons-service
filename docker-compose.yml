@@ -21,6 +21,15 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: beacons
 
+  postgres-test:
+    image: library/postgres:12
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: beacons_service
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: beacons
+
   schemacrawler:
     image: schemacrawler/schemacrawler
     depends_on:
