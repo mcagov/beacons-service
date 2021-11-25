@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.mca.beacons.api.accountholder.application.AccountHolderService;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
@@ -62,6 +63,24 @@ public class AccountHolderController {
   ) {
     final AccountHolder accountHolder = accountHolderService
       .getAccountHolderByAuthId(authId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    return accountHolderMapper.toWrapperDTO(accountHolder);
+  }
+
+  @PatchMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('APPROLE_UPDATE_RECORDS')")
+  public WrapperDTO<AccountHolderDTO> updateAccountHolderDetails(
+    @PathVariable UUID id,
+    @RequestBody WrapperDTO<UpdateAccountHolderDTO> wrapperDTO
+  ) {
+    final AccountHolder accountHolderUpdate = accountHolderMapper.fromDTO(
+      wrapperDTO.getData()
+    );
+
+    final AccountHolder accountHolder = accountHolderService
+      .updateAccountHolder(new AccountHolderId(id), accountHolderUpdate)
       .orElseThrow(ResourceNotFoundException::new);
 
     return accountHolderMapper.toWrapperDTO(accountHolder);
