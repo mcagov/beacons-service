@@ -46,7 +46,6 @@ public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
 
   @Embedded
   @Setter
-  @NotNull(message = "Address must not be null")
   private Address address;
 
   @CreatedDate

@@ -16,7 +16,6 @@ import uk.gov.mca.beacons.api.shared.domain.base.ValueObject;
 @AllArgsConstructor
 public class Address implements ValueObject {
 
-  @NotNull(message = "Address Line 1 must not be null")
   @Column(name = "address_line_1")
   private String addressLine1;
 

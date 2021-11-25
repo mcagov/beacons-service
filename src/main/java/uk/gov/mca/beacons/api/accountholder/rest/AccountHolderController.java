@@ -55,4 +55,15 @@ public class AccountHolderController {
 
     return accountHolderMapper.toWrapperDTO(accountHolder);
   }
+
+  @GetMapping
+  public WrapperDTO<AccountHolderDTO> getAccountHolderByAuthId(
+    @RequestParam(name = "authId") String authId
+  ) {
+    final AccountHolder accountHolder = accountHolderService
+      .getAccountHolderByAuthId(authId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    return accountHolderMapper.toWrapperDTO(accountHolder);
+  }
 }
