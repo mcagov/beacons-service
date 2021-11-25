@@ -4,17 +4,22 @@ import com.jayway.jsonpath.JsonPath;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
-import javax.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.api.DatabaseCleaner;
+import uk.gov.mca.beacons.api.DatabaseCleanerConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(DatabaseCleanerConfiguration.class)
 @AutoConfigureWebTestClient
 public class AccountHolderControllerIntegrationTest {
 
@@ -23,7 +28,14 @@ public class AccountHolderControllerIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
-  @Transactional
+  @Autowired
+  private DatabaseCleaner databaseCleaner;
+
+  @BeforeEach
+  public void init() {
+    databaseCleaner.clean();
+  }
+
   @Test
   public void shouldRespondWithTheCreatedAccountHolder() throws Exception {
     final UUID authId = UUID.randomUUID();
@@ -38,7 +50,6 @@ public class AccountHolderControllerIntegrationTest {
       .isNotEmpty();
   }
 
-  @Transactional
   @Test
   public void shouldFindTheCreatedAccountHolderById() throws Exception {
     final UUID authId = UUID.randomUUID();
@@ -54,6 +65,23 @@ public class AccountHolderControllerIntegrationTest {
     webTestClient
       .get()
       .uri(accountHolderEndpoint + "/" + id)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(createAccountHolderResponse);
+  }
+
+  @Test
+  public void shouldFindTheAccountHolderByAuthId() throws Exception {
+    final UUID authId = UUID.randomUUID();
+    final var createAccountHolderResponse = createAccountHolderResponse(authId);
+
+    createAccountHolder(authId).expectStatus().isCreated();
+
+    webTestClient
+      .get()
+      .uri(accountHolderEndpoint + "?authId=" + authId)
       .exchange()
       .expectStatus()
       .isOk()

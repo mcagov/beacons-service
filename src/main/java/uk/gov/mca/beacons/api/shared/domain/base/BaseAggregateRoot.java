@@ -1,6 +1,5 @@
 package uk.gov.mca.beacons.api.shared.domain.base;
 
-import java.io.Serializable;
 import java.util.*;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
