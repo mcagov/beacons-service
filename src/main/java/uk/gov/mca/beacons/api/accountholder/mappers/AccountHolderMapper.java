@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.accountholder.rest.AccountHolderDTO;
+import uk.gov.mca.beacons.api.accountholder.rest.UpdateAccountHolderDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.shared.mappers.person.AddressMapper;
 
@@ -25,6 +26,20 @@ public class AccountHolderMapper {
     accountHolder.setAuthId(attributes.getAuthId());
     accountHolder.setEmail(attributes.getEmail());
     accountHolder.setFullName(attributes.getFullName());
+    accountHolder.setTelephoneNumber(attributes.getTelephoneNumber());
+    accountHolder.setAlternativeTelephoneNumber(
+      attributes.getAlternativeTelephoneNumber()
+    );
+    accountHolder.setAddress(addressMapper.fromDTO(attributes.getAddressDTO()));
+
+    return accountHolder;
+  }
+
+  public AccountHolder fromDTO(UpdateAccountHolderDTO dto) {
+    final var attributes = dto.getAttributes();
+    AccountHolder accountHolder = new AccountHolder();
+    accountHolder.setFullName(attributes.getFullName());
+    accountHolder.setEmail(attributes.getEmail());
     accountHolder.setTelephoneNumber(attributes.getTelephoneNumber());
     accountHolder.setAlternativeTelephoneNumber(
       attributes.getAlternativeTelephoneNumber()

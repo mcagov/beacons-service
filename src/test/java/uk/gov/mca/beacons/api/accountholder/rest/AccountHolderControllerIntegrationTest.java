@@ -4,7 +4,6 @@ import com.jayway.jsonpath.JsonPath;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.DatabaseCleaner;
 import uk.gov.mca.beacons.api.DatabaseCleanerConfiguration;
+import uk.gov.mca.beacons.api.FixtureHelper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(DatabaseCleanerConfiguration.class)
@@ -31,6 +31,9 @@ public class AccountHolderControllerIntegrationTest {
   @Autowired
   private DatabaseCleaner databaseCleaner;
 
+  @Autowired
+  private FixtureHelper fixtureHelper;
+
   @BeforeEach
   public void init() {
     databaseCleaner.clean();
@@ -38,7 +41,7 @@ public class AccountHolderControllerIntegrationTest {
 
   @Test
   public void shouldRespondWithTheCreatedAccountHolder() throws Exception {
-    final UUID authId = UUID.randomUUID();
+    final String authId = UUID.randomUUID().toString();
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
 
     createAccountHolder(authId)
@@ -52,7 +55,7 @@ public class AccountHolderControllerIntegrationTest {
 
   @Test
   public void shouldFindTheCreatedAccountHolderById() throws Exception {
-    final UUID authId = UUID.randomUUID();
+    final String authId = UUID.randomUUID().toString();
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
 
     String responseBody = createAccountHolder(authId)
@@ -74,7 +77,7 @@ public class AccountHolderControllerIntegrationTest {
 
   @Test
   public void shouldFindTheAccountHolderByAuthId() throws Exception {
-    final UUID authId = UUID.randomUUID();
+    final String authId = UUID.randomUUID().toString();
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
 
     createAccountHolder(authId).expectStatus().isCreated();
@@ -89,7 +92,34 @@ public class AccountHolderControllerIntegrationTest {
       .json(createAccountHolderResponse);
   }
 
-  private WebTestClient.ResponseSpec createAccountHolder(UUID authId)
+  @Test
+  public void shouldRespondWithTheUpdateAccountHolderDetails()
+    throws Exception {
+    final String authId = UUID.randomUUID().toString();
+
+    String responseBody = createAccountHolder(authId)
+      .returnResult(String.class)
+      .getResponseBody()
+      .blockFirst();
+
+    String id = JsonPath.read(responseBody, "$.data.id");
+
+    String updateAccountHolderRequest = updateAccountHolderRequest(id);
+    String updateAccountHolderResponse = updateAccountHolderResponse(id);
+
+    webTestClient
+      .patch()
+      .uri(accountHolderEndpoint + "/" + id)
+      .body(BodyInserters.fromValue(updateAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(updateAccountHolderResponse);
+  }
+
+  private WebTestClient.ResponseSpec createAccountHolder(String authId)
     throws Exception {
     final var createAccountHolderRequest = createAccountHolderRequest(authId);
 
@@ -101,21 +131,31 @@ public class AccountHolderControllerIntegrationTest {
       .exchange();
   }
 
-  private String createAccountHolderRequest(UUID authId) throws Exception {
-    return Files
-      .readString(
-        Paths.get("src/test/resources/fixtures/createAccountHolderRequest.json")
-      )
-      .replace("replace-with-test-auth-id", authId.toString());
+  private String createAccountHolderRequest(String authId) throws Exception {
+    return fixtureHelper.getFixture(
+      "src/test/resources/fixtures/createAccountHolderRequest.json",
+      fixture -> fixture.replace("replace-with-test-auth-id", authId)
+    );
   }
 
-  private String createAccountHolderResponse(UUID authId) throws Exception {
-    return Files
-      .readString(
-        Paths.get(
-          "src/test/resources/fixtures/createAccountHolderResponse.json"
-        )
-      )
-      .replace("replace-with-test-auth-id", authId.toString());
+  private String createAccountHolderResponse(String authId) throws Exception {
+    return fixtureHelper.getFixture(
+      "src/test/resources/fixtures/createAccountHolderResponse.json",
+      fixture -> fixture.replace("replace-with-test-auth-id", authId)
+    );
+  }
+
+  private String updateAccountHolderRequest(String id) throws Exception {
+    return fixtureHelper.getFixture(
+      "src/test/resources/fixtures/updateAccountHolderResponse.json",
+      fixture -> fixture.replace("replace-with-test-account-id", id)
+    );
+  }
+
+  private String updateAccountHolderResponse(String id) throws Exception {
+    return fixtureHelper.getFixture(
+      "src/test/resources/fixtures/updateAccountHolderResponse.json",
+      fixture -> fixture.replace("replace-with-test-account-id", id)
+    );
   }
 }
