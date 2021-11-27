@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
   layout:decorate="~{layout.html}"
 >
   <head>
@@ -10,7 +11,12 @@
     <main>
       <h1 layout:fragment="heading">Give feedback on Register a beacon</h1>
       <div layout:fragment="content">
-        <form method="POST" novalidate="">
+        <form
+          th:object="${feedback}"
+          th:action="@{/help/feedback}"
+          method="post"
+          novalidate
+        >
           <div class="govuk-form-group">
             <div class="govuk-form-group">
               <fieldset class="govuk-fieldset">
@@ -18,70 +24,22 @@
                   Overall, how do you feel about the service you received today?
                 </legend>
                 <div class="govuk-radios">
-                  <div class="govuk-radios__item">
+                  <div
+                    class="govuk-radios__item"
+                    th:each="satisfactionRating : ${T(uk.gov.mca.beacons.api.webapp.SatisfactionRating).values()}"
+                  >
                     <input
                       type="radio"
                       class="govuk-radios__input"
-                      id="verySatisfied"
-                      name="satisfactionRating"
-                      value="verySatisfied"
-                    /><label
+                      th:field="${feedback.satisfactionRating}"
+                      th:value="${satisfactionRating}"
+                    />
+                    <label
                       class="govuk-label govuk-radios__label"
-                      for="verySatisfied"
-                      >Very satisfied</label
+                      th:text="${satisfactionRating.displayValue}"
+                      th:for="${feedback.satisfactionRating}"
                     >
-                  </div>
-                  <div class="govuk-radios__item">
-                    <input
-                      type="radio"
-                      class="govuk-radios__input"
-                      id="satisfied"
-                      name="satisfactionRating"
-                      value="satisfied"
-                    /><label
-                      class="govuk-label govuk-radios__label"
-                      for="satisfied"
-                      >Satisfied</label
-                    >
-                  </div>
-                  <div class="govuk-radios__item">
-                    <input
-                      type="radio"
-                      class="govuk-radios__input"
-                      id="neitherSatisfiedOrDissatisfied"
-                      name="satisfactionRating"
-                      value="neitherSatisfiedOrDissatisfied"
-                    /><label
-                      class="govuk-label govuk-radios__label"
-                      for="neitherSatisfiedOrDissatisfied"
-                      >Neither satisfied or dissatisfied</label
-                    >
-                  </div>
-                  <div class="govuk-radios__item">
-                    <input
-                      type="radio"
-                      class="govuk-radios__input"
-                      id="dissatisfied"
-                      name="satisfactionRating"
-                      value="dissatisfied"
-                    /><label
-                      class="govuk-label govuk-radios__label"
-                      for="dissatisfied"
-                      >Dissatisfied</label
-                    >
-                  </div>
-                  <div class="govuk-radios__item">
-                    <input
-                      type="radio"
-                      class="govuk-radios__input"
-                      id="veryDissatisfied"
-                      name="satisfactionRating"
-                      value="veryDissatisfied"
-                    /><label
-                      class="govuk-label govuk-radios__label"
-                      for="veryDissatisfied"
-                      >Very dissatisfied</label
-                    >
+                    </label>
                   </div>
                 </div>
               </fieldset>
@@ -105,6 +63,7 @@
                   name="howCouldWeImproveThisService"
                   rows="4"
                   aria-describedby="howCouldWeImproveThisService-hint howCouldWeImproveThisService-info"
+                  th:field="*{howCouldWeImproveThisService}"
                 ></textarea>
               </div>
               <div
