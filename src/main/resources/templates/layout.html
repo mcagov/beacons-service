@@ -76,25 +76,6 @@
         : "js-enabled";
     </script>
 
-    <ul th:each="cookie : ${#httpServletRequest.cookies}">
-      <li th:text="${cookie.getName()}"></li>
-    </ul>
-
-    <div
-      th:replace="@{/fragments/cookie-banner}"
-      th:if="#{#request.cookies.?[name == 'hide-cookie-banner'].isEmpty()}"
-    ></div>
-
-    <p
-      th:text="#{#request.cookies.?[name == 'hide-cookie-banner'].isEmpty()"
-    ></p>
-
-    <!--    <div th:with=" cookies=${#httpServletRequest.cookies}">-->
-    <!--      <p th:if="${cookies.?[name == 'hide-cookie-banner'].isEmpty()}">-->
-    <!--        showing cookie banner!-->
-    <!--      </p>-->
-    <!--    </div>-->
-
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <header class="govuk-header" role="banner" data-module="govuk-header">
