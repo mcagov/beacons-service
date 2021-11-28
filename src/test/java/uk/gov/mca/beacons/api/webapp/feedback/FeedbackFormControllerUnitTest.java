@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.webapp;
+package uk.gov.mca.beacons.api.webapp.feedback;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -15,7 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
+import uk.gov.mca.beacons.api.webapp.feedback.FeedbackFormController;
 import uk.gov.mca.beacons.api.webapp.feedback.FeedbackService;
+import uk.gov.mca.beacons.api.webapp.feedback.SatisfactionRating;
 
 @WebMvcTest(controllers = FeedbackFormController.class)
 @AutoConfigureMockMvc
@@ -100,6 +102,26 @@ public class FeedbackFormControllerUnitTest {
               .getHowCouldWeImproveThisService()
               .equals("Insightful feedback")
         )
+      );
+  }
+
+  @Test
+  public void test_GivenUserHasProvidedRequiredInformation_WhenUserSubmitsForm_ThenShowASuccessMessage()
+    throws Exception {
+    mockMvc
+      .perform(
+        post("/help/feedback")
+          .param(
+            "satisfactionRating",
+            String.valueOf(SatisfactionRating.NEITHER_SATISFIED_OR_DISSATISFIED)
+          )
+          .param("howCouldWeImproveThisService", "Insightful feedback")
+      )
+      .andExpect(status().isOk())
+      .andExpect(view().name("feedback-received"))
+      .andExpect(
+        content()
+          .string(containsString("Thank you for submitting your feedback"))
       );
   }
 }

@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.webapp;
+package uk.gov.mca.beacons.api.webapp.feedback;
 
 public enum SatisfactionRating {
   VERY_SATISFIED("Very satisfied"),

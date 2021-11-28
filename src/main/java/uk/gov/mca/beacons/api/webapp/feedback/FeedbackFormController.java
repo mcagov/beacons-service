@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.webapp;
+package uk.gov.mca.beacons.api.webapp.feedback;
 
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import uk.gov.mca.beacons.api.webapp.feedback.FeedbackService;
 
 @Slf4j
 @Controller
@@ -36,6 +35,6 @@ public class FeedbackFormController {
 
     feedbackService.record(feedback);
 
-    return "feedback-submitted";
+    return "feedback-received";
   }
 }

@@ -11,155 +11,169 @@
     <div layout:fragment="content">
       <a href="/" class="govuk-back-link">Back</a>
       <main id="main-content" class="govuk-main-wrapper">
-        <div
-          th:if="${#fields.hasErrors('${feedback.*}')}"
-          class="govuk-error-summary"
-          aria-labelledby="error-summary-title"
-          role="alert"
-          tabindex="-1"
-          data-module="govuk-error-summary"
-        >
-          <h2 class="govuk-error-summary__title" id="error-summary-title">
-            There is a problem
-          </h2>
-          <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-              <li th:each="err : ${#fields.detailedErrors('feedback.*')}">
-                <a
-                  th:text="${err.getMessage()}"
-                  th:href="'#' + ${err.getFieldName()}"
-                  >{error message}</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-        <h1 class="govuk-heading-l">Give feedback on Register a beacon</h1>
-        <form
-          th:object="${feedback}"
-          th:action="@{/help/feedback}"
-          method="post"
-          novalidate
-        >
-          <div class="govuk-form-group">
-            <div class="govuk-form-group">
-              <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend">
-                  Overall, how do you feel about the service you received today?
-                </legend>
-                <span
-                  th:if="${#fields.hasErrors('satisfactionRating')}"
-                  th:errors="*{satisfactionRating}"
-                  class="govuk-error-message"
-                >
-                  <span class="govuk-visually-hidden">Error:</span>{error
-                  message}
-                </span>
-                <div class="govuk-radios">
-                  <div
-                    class="govuk-radios__item"
-                    th:each="satisfactionRating : ${T(uk.gov.mca.beacons.api.webapp.SatisfactionRating).values()}"
-                  >
-                    <input
-                      type="radio"
-                      class="govuk-radios__input"
-                      th:field="*{satisfactionRating}"
-                      th:value="${satisfactionRating}"
-                    />
-                    <label
-                      class="govuk-label govuk-radios__label"
-                      th:text="${satisfactionRating.displayValue}"
-                      th:for="${#ids.prev('satisfactionRating')}"
-                    >
-                    </label>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
             <div
-              class="govuk-character-count"
-              data-module="govuk-character-count"
-              data-maxlength="1200"
+              th:if="${#fields.hasErrors('${feedback.*}')}"
+              class="govuk-error-summary"
+              aria-labelledby="error-summary-title"
+              role="alert"
+              tabindex="-1"
+              data-module="govuk-error-summary"
+            >
+              <h2 class="govuk-error-summary__title" id="error-summary-title">
+                There is a problem
+              </h2>
+              <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                  <li th:each="err : ${#fields.detailedErrors('feedback.*')}">
+                    <a
+                      th:text="${err.getMessage()}"
+                      th:href="'#' + ${err.getFieldName()}"
+                      >{error message}</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <h1 class="govuk-heading-l">Give feedback on Register a beacon</h1>
+            <form
+              th:object="${feedback}"
+              th:action="@{/help/feedback}"
+              method="post"
+              novalidate
             >
               <div class="govuk-form-group">
-                <label class="govuk-label" for="howCouldWeImproveThisService"
-                  >How could we improve this service?</label
-                >
-                <div id="howCouldWeImproveThisService-hint" class="govuk-hint">
-                  Please include an email address or telephone number if you
-                  would like us to contact you.
+                <div class="govuk-form-group">
+                  <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                      Overall, how do you feel about the service you received
+                      today?
+                    </legend>
+                    <span
+                      th:if="${#fields.hasErrors('satisfactionRating')}"
+                      th:errors="*{satisfactionRating}"
+                      class="govuk-error-message"
+                    >
+                      <span class="govuk-visually-hidden">Error:</span>{error
+                      message}
+                    </span>
+                    <div class="govuk-radios">
+                      <div
+                        class="govuk-radios__item"
+                        th:each="satisfactionRating : ${T(uk.gov.mca.beacons.api.webapp.SatisfactionRating).values()}"
+                      >
+                        <input
+                          type="radio"
+                          class="govuk-radios__input"
+                          th:field="*{satisfactionRating}"
+                          th:value="${satisfactionRating}"
+                        />
+                        <label
+                          class="govuk-label govuk-radios__label"
+                          th:text="${satisfactionRating.displayValue}"
+                          th:for="${#ids.prev('satisfactionRating')}"
+                        >
+                        </label>
+                      </div>
+                    </div>
+                  </fieldset>
                 </div>
-                <span
-                  th:if="${#fields.hasErrors('howCouldWeImproveThisService')}"
-                  th:errors="*{howCouldWeImproveThisService}"
-                  class="govuk-error-message"
+                <div
+                  class="govuk-character-count"
+                  data-module="govuk-character-count"
+                  data-maxlength="1200"
                 >
-                  <span class="govuk-visually-hidden">Error:</span>{error
-                  message}
-                </span>
-                <textarea
-                  class="govuk-textarea govuk-js-character-count"
-                  id="howCouldWeImproveThisService"
-                  name="howCouldWeImproveThisService"
-                  rows="4"
-                  aria-describedby="howCouldWeImproveThisService-hint howCouldWeImproveThisService-info"
-                  th:field="*{howCouldWeImproveThisService}"
-                ></textarea>
-              </div>
-              <div
-                id="howCouldWeImproveThisService-info"
-                class="govuk-hint govuk-character-count__message"
-                aria-live="polite"
-              >
-                You can enter up to 1200 characters
-              </div>
-            </div>
-            <input type="hidden" id="use-index" name="useId" value="0" />
-          </div>
-          <div class="govuk-button-group">
-            <button
-              class="govuk-button"
-              data-module="govuk-button"
-              role="button"
-            >
-              Send feedback
-            </button>
-          </div>
-        </form>
-        <details class="govuk-details null" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text"
-              >If you need help completing this form</span
-            >
-          </summary>
-          <div class="govuk-details__text">
-            <div>
-              <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
-                The UK Beacon Registry
-              </h2>
-              <ul class="govuk-list">
-                <li>
-                  <a class="govuk-link" href="mailto:ukbeacons@mcga.gov.uk"
-                    >ukbeacons@mcga.gov.uk</a
+                  <div class="govuk-form-group">
+                    <label
+                      class="govuk-label"
+                      for="howCouldWeImproveThisService"
+                      >How could we improve this service?</label
+                    >
+                    <div
+                      id="howCouldWeImproveThisService-hint"
+                      class="govuk-hint"
+                    >
+                      Please include an email address or telephone number if you
+                      would like us to contact you.
+                    </div>
+                    <span
+                      th:if="${#fields.hasErrors('howCouldWeImproveThisService')}"
+                      th:errors="*{howCouldWeImproveThisService}"
+                      class="govuk-error-message"
+                    >
+                      <span class="govuk-visually-hidden">Error:</span>{error
+                      message}
+                    </span>
+                    <textarea
+                      class="govuk-textarea govuk-js-character-count"
+                      id="howCouldWeImproveThisService"
+                      name="howCouldWeImproveThisService"
+                      rows="4"
+                      aria-describedby="howCouldWeImproveThisService-hint howCouldWeImproveThisService-info"
+                      th:field="*{howCouldWeImproveThisService}"
+                    ></textarea>
+                  </div>
+                  <div
+                    id="howCouldWeImproveThisService-info"
+                    class="govuk-hint govuk-character-count__message"
+                    aria-live="polite"
                   >
-                </li>
-                <li>Telephone: +44 (0)20 3817 2006</li>
-                <li>Fax: +44 (0)1326 319264</li>
-                <li>Monday to Friday, 9am to 5pm (except public holidays)</li>
-                <li>
-                  <a href="https://www.gov.uk/call-charges" class="govuk-link"
-                    >Find out about call charges</a
-                  >
-                </li>
-              </ul>
-            </div>
-            <p class="govuk-!-margin-top-5">
-              In an emergency in the UK, dial 999 and ask for the Coastguard. If
-              you are at sea and have GMDSS systems, use them to make a distress
-              or urgency alert.
-            </p>
+                    You can enter up to 1200 characters
+                  </div>
+                </div>
+                <input type="hidden" id="use-index" name="useId" value="0" />
+              </div>
+              <div class="govuk-button-group">
+                <button
+                  class="govuk-button"
+                  data-module="govuk-button"
+                  role="button"
+                >
+                  Send feedback
+                </button>
+              </div>
+            </form>
+            <details class="govuk-details null" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text"
+                  >If you need help completing this form</span
+                >
+              </summary>
+              <div class="govuk-details__text">
+                <div>
+                  <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
+                    The UK Beacon Registry
+                  </h2>
+                  <ul class="govuk-list">
+                    <li>
+                      <a class="govuk-link" href="mailto:ukbeacons@mcga.gov.uk"
+                        >ukbeacons@mcga.gov.uk</a
+                      >
+                    </li>
+                    <li>Telephone: +44 (0)20 3817 2006</li>
+                    <li>Fax: +44 (0)1326 319264</li>
+                    <li>
+                      Monday to Friday, 9am to 5pm (except public holidays)
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.gov.uk/call-charges"
+                        class="govuk-link"
+                        >Find out about call charges</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <p class="govuk-!-margin-top-5">
+                  In an emergency in the UK, dial 999 and ask for the
+                  Coastguard. If you are at sea and have GMDSS systems, use them
+                  to make a distress or urgency alert.
+                </p>
+              </div>
+            </details>
           </div>
-        </details>
+        </div>
       </main>
     </div>
   </body>
