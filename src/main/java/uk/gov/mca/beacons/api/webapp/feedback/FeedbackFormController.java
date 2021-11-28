@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.webapp.feedback;
 
+import java.io.IOException;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,11 @@ public class FeedbackFormController {
   ) {
     if (bindingResult.hasErrors()) return "feedback-form";
 
-    feedbackService.record(feedback);
+    try {
+      feedbackService.record(feedback);
+    } catch (IOException e) {
+      return "feedback-problem";
+    }
 
     return "feedback-received";
   }
