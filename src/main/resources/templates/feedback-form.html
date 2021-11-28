@@ -9,6 +9,31 @@
   </head>
   <body>
     <main>
+      <div
+        layout:fragment="error-summary"
+        th:if="${#fields.hasErrors('${feedback.*}')}"
+        class="govuk-error-summary"
+        aria-labelledby="error-summary-title"
+        role="alert"
+        tabindex="-1"
+        data-module="govuk-error-summary"
+      >
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a
+                th:each="err : ${#fields.detailedErrors('feedback.*')}"
+                th:text="${err.getMessage()}"
+                th:href="'#' + ${err.getFieldName()} + '1'"
+                >{error message}</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
       <h1 layout:fragment="heading">Give feedback on Register a beacon</h1>
       <div layout:fragment="content">
         <form
@@ -23,6 +48,14 @@
                 <legend class="govuk-fieldset__legend">
                   Overall, how do you feel about the service you received today?
                 </legend>
+                <span
+                  th:if="${#fields.hasErrors('satisfactionRating')}"
+                  th:errors="*{satisfactionRating}"
+                  class="govuk-error-message"
+                >
+                  <span class="govuk-visually-hidden">Error:</span>{error
+                  message}
+                </span>
                 <div class="govuk-radios">
                   <div
                     class="govuk-radios__item"
@@ -31,13 +64,13 @@
                     <input
                       type="radio"
                       class="govuk-radios__input"
-                      th:field="${feedback.satisfactionRating}"
+                      th:field="*{satisfactionRating}"
                       th:value="${satisfactionRating}"
                     />
                     <label
                       class="govuk-label govuk-radios__label"
                       th:text="${satisfactionRating.displayValue}"
-                      th:for="${feedback.satisfactionRating}"
+                      th:for="${#ids.prev('satisfactionRating')}"
                     >
                     </label>
                   </div>
