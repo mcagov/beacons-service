@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.azure.spring:azure-spring-boot-starter-active-directory:3.6.1'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.jetbrains:annotations:21.0.1'
+    implementation 'uk.gov.service.notify:notifications-java-client:3.17.2-RELEASE'
 
     runtimeOnly 'org.postgresql:postgresql'
 
