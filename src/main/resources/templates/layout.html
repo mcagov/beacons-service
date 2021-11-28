@@ -125,21 +125,7 @@
 
     <div class="govuk-width-container">
       <div th:replace="fragments/phase-banner :: phase-banner"></div>
-      <main class="govuk-main-wrapper" id="main-content" role="main">
-        <div layout:fragment="error-summary"></div>
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l" layout:fragment="heading">
-              Heading goes here
-            </h1>
-            <section layout:fragment="content"></section>
-          </div>
-          <div
-            class="govuk-grid-column-one-third"
-            layout:fragment="aside"
-          ></div>
-        </div>
-      </main>
+      <div layout:fragment="content"></div>
     </div>
     <footer class="govuk-footer" role="contentinfo">
       <div class="govuk-width-container">
