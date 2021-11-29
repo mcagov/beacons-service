@@ -16,9 +16,9 @@ public abstract class BaseAggregateRoot<Id extends DomainObjectId>
   extends BaseEntity<Id> {
 
   @Transient
-  private final List<Object> domainEvents = new ArrayList<>();
+  private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-  protected void registerEvent(@NotNull Object event) {
+  protected void registerEvent(@NotNull DomainEvent event) {
     domainEvents.add(Objects.requireNonNull(event));
   }
 
@@ -28,7 +28,7 @@ public abstract class BaseAggregateRoot<Id extends DomainObjectId>
   }
 
   @DomainEvents
-  protected Collection<Object> domainEvents() {
+  protected Collection<DomainEvent> domainEvents() {
     return Collections.unmodifiableList(domainEvents);
   }
 }

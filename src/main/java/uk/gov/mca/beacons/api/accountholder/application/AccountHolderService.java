@@ -19,32 +19,19 @@ public class AccountHolderService {
 
   private final AccountHolderRepository accountHolderRepository;
   private final ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory;
-  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Autowired
   public AccountHolderService(
     AccountHolderRepository accountHolderRepository,
-    ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory,
-    ApplicationEventPublisher applicationEventPublisher
+    ModelPatcherFactory<AccountHolder> accountHolderPatcherFactory
   ) {
     this.accountHolderRepository = accountHolderRepository;
     this.accountHolderPatcherFactory = accountHolderPatcherFactory;
-    this.applicationEventPublisher = applicationEventPublisher;
   }
 
   public AccountHolder create(AccountHolder accountHolder) {
-    AccountHolder createdAccountHolder = accountHolderRepository.save(
-      accountHolder
-    );
-
-    applicationEventPublisher.publishEvent(
-      new AccountHolderCreated(
-        Instant.now(),
-        Objects.requireNonNull(createdAccountHolder.getId())
-      )
-    );
-
-    return createdAccountHolder;
+    accountHolder.registerCreatedEvent();
+    return accountHolderRepository.save(accountHolder);
   }
 
   public Optional<AccountHolder> getAccountHolder(AccountHolderId id) {
@@ -77,7 +64,7 @@ public class AccountHolderService {
       )
       .withMapping(AccountHolder::getAddress, AccountHolder::setAddress);
 
-    patcher.patchModel(accountHolder, accountHolderUpdate);
+    accountHolder.update(accountHolderUpdate, patcher);
 
     return Optional.of(accountHolderRepository.save(accountHolder));
   }

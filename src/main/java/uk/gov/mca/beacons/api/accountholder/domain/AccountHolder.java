@@ -8,6 +8,9 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderCreated;
+import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderUpdated;
+import uk.gov.mca.beacons.api.mappers.ModelPatcher;
 import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
@@ -53,4 +56,16 @@ public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
 
   @LastModifiedDate
   private OffsetDateTime lastModifiedDate;
+
+  public void update(
+    AccountHolder accountHolder,
+    ModelPatcher<AccountHolder> patcher
+  ) {
+    patcher.patchModel(this, accountHolder);
+    this.registerEvent(new AccountHolderUpdated(this));
+  }
+
+  public void registerCreatedEvent() {
+    this.registerEvent(new AccountHolderCreated(this));
+  }
 }

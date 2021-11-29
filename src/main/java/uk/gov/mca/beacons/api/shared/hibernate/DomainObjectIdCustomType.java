@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import org.hibernate.id.ResultSetIdentifierConsumer;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.PostgresUUIDType;
-import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
 import org.springframework.lang.NonNull;
 import uk.gov.mca.beacons.api.shared.domain.base.DomainObjectId;
 
