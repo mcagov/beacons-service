@@ -32,14 +32,26 @@ services:
       POSTGRES_DB: beacons
 
   opensearch:
-    build:
-      context: ./opensearch
-    container_name: opensearch-local
-    ports:
-      - 9200:9200
-      - 9600:9600
+    image: opensearchproject/opensearch:1.1.0
+    container_name: opensearch
     environment:
       - discovery.type=single-node
+    volumes:
+      - ./opensearch.yml:/usr/share/opensearch/config/opensearch.yml
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+
+  opensearch-dashboard:
+    image: opensearchproject/opensearch-dashboards:1.1.0
+    container_name: opensearch-dashboards
+    ports:
+      - "5601:5601"
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
 
   schemacrawler:
     image: schemacrawler/schemacrawler
@@ -62,3 +74,6 @@ services:
         "--output-format=htmlx",
         "--output-file=/opt/schema/beacons-schema.html",
       ]
+
+networks:
+  opensearch-net:

@@ -27,16 +27,9 @@ public class OpenSearchRestClientConfiguration
   @NonNull
   @Override
   public RestHighLevelClient elasticsearchClient() {
-    final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-    credentialsProvider.setCredentials(
-      AuthScope.ANY,
-      new UsernamePasswordCredentials(username, password)
-    );
-
     final ClientConfiguration clientConfiguration = ClientConfiguration
       .builder()
       .connectedTo("localhost:9200")
-      .withBasicAuth("admin", "admin")
       .build();
 
     return RestClients.create(clientConfiguration).rest();
