@@ -9,6 +9,7 @@ services:
       - 8080:8080
     depends_on:
       - postgres
+      - opensearch
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
 
@@ -29,6 +30,16 @@ services:
       POSTGRES_USER: beacons_service
       POSTGRES_PASSWORD: password
       POSTGRES_DB: beacons
+
+  opensearch:
+    build:
+      context: ./opensearch
+    container_name: opensearch-local
+    ports:
+      - 9200:9200
+      - 9600:9600
+    environment:
+      - discovery.type=single-node
 
   schemacrawler:
     image: schemacrawler/schemacrawler

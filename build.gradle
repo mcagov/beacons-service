@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:21.0.1'
 
     implementation 'org.opensearch.client:opensearch-rest-high-level-client:1.0.0'
+    implementation 'org.springframework.data:spring-data-elasticsearch'
 
     runtimeOnly 'org.postgresql:postgresql'
 
