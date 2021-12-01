@@ -1,16 +1,12 @@
 package uk.gov.mca.beacons.api.accountholder.application;
 
-import java.time.Instant;
-import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderRepository;
-import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderCreated;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
 @Transactional

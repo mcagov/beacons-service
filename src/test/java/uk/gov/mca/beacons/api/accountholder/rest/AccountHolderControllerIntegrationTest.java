@@ -1,8 +1,6 @@
 package uk.gov.mca.beacons.api.accountholder.rest;
 
 import com.jayway.jsonpath.JsonPath;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,7 @@ import uk.gov.mca.beacons.api.DatabaseCleanerConfiguration;
 import uk.gov.mca.beacons.api.FixtureHelper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(DatabaseCleanerConfiguration.class)
+@Import({ DatabaseCleanerConfiguration.class })
 @AutoConfigureWebTestClient
 public class AccountHolderControllerIntegrationTest {
 

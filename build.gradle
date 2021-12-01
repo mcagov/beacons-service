@@ -20,6 +20,15 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if(details.requested.group == "org.elasticsearch" && details.requested.name == "elasticsearch") {
+            details.useVersion '7.13.4'
+            details.because('compatibility with Lucene version 8.8.2')
+        }
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -38,7 +47,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:21.0.1'
 
     implementation 'org.opensearch.client:opensearch-rest-high-level-client:1.0.0'
-    implementation 'org.springframework.data:spring-data-elasticsearch'
+    implementation 'org.springframework.data:spring-data-elasticsearch:4.2.7'
 
     runtimeOnly 'org.postgresql:postgresql'
 
