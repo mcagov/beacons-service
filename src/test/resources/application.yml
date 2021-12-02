@@ -35,10 +35,5 @@ beacons:
         password: password
 
 opensearch:
-  credentials:
-    user: admin
-    password: admin
-  host:
-    name: localhost
-    port: 9200
-    scheme: https
+  host: localhost
+  port: 9200

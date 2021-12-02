@@ -12,14 +12,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.api.BaseIntegrationTest;
 import uk.gov.mca.beacons.api.DatabaseCleaner;
 import uk.gov.mca.beacons.api.DatabaseCleanerConfiguration;
 import uk.gov.mca.beacons.api.FixtureHelper;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({ DatabaseCleanerConfiguration.class })
 @AutoConfigureWebTestClient
-public class AccountHolderControllerIntegrationTest {
+public class AccountHolderControllerIntegrationTest
+  extends BaseIntegrationTest {
 
   private final String accountHolderEndpoint = "/spring-api/account-holderv2";
 
@@ -27,15 +27,7 @@ public class AccountHolderControllerIntegrationTest {
   private WebTestClient webTestClient;
 
   @Autowired
-  private DatabaseCleaner databaseCleaner;
-
-  @Autowired
   private FixtureHelper fixtureHelper;
-
-  @BeforeEach
-  public void init() {
-    databaseCleaner.clean();
-  }
 
   @Test
   public void shouldRespondWithTheCreatedAccountHolder() throws Exception {

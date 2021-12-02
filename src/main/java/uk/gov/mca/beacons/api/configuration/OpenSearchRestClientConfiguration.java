@@ -19,11 +19,11 @@ import org.springframework.lang.NonNull;
 public class OpenSearchRestClientConfiguration
   extends AbstractElasticsearchConfiguration {
 
-  @Value("${opensearch.credentials.user}")
-  private String username;
+  @Value("${opensearch.host}")
+  private String host;
 
-  @Value("${opensearch.credentials.password}")
-  private String password;
+  @Value("${opensearch.port}")
+  private int port;
 
   @Bean
   @NonNull
@@ -31,7 +31,7 @@ public class OpenSearchRestClientConfiguration
   public RestHighLevelClient elasticsearchClient() {
     final ClientConfiguration clientConfiguration = ClientConfiguration
       .builder()
-      .connectedTo("localhost:9200")
+      .connectedTo(host + ":" + port)
       .build();
 
     return RestClients.create(clientConfiguration).rest();
