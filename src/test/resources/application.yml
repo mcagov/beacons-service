@@ -11,6 +11,11 @@ spring:
   data:
     rest:
       basePath: spring-api
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.elasticsearch.ElasticSearchReactiveHealthContributorAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRestClientAutoConfiguration
 
 management:
   endpoints:
@@ -33,7 +38,3 @@ beacons:
       user:
         name: user
         password: password
-
-opensearch:
-  host: localhost
-  port: 9200

@@ -2,19 +2,14 @@ package uk.gov.mca.beacons.api.accountholder.rest;
 
 import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.BaseIntegrationTest;
-import uk.gov.mca.beacons.api.DatabaseCleaner;
-import uk.gov.mca.beacons.api.DatabaseCleanerConfiguration;
 import uk.gov.mca.beacons.api.FixtureHelper;
 
 @AutoConfigureWebTestClient
