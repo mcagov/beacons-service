@@ -15,11 +15,11 @@ import uk.gov.service.notify.NotificationClientException;
  */
 @Slf4j
 @Component
-public class GovNotifyGateway implements EmailGateway {
+public class GovNotifyEmailGateway implements EmailGateway {
 
   private final NotificationClient govNotifyClient;
 
-  public GovNotifyGateway(@Value("${govnotify.api-key}") String apiKey) {
+  public GovNotifyEmailGateway(@Value("${govnotify.api-key}") String apiKey) {
     this.govNotifyClient = new NotificationClient(apiKey);
   }
 
@@ -32,8 +32,9 @@ public class GovNotifyGateway implements EmailGateway {
         personalisationFields(email),
         null
       );
+      log.info("Feedback email sent: " + email.getReferenceId());
     } catch (NotificationClientException e) {
-      log.error(e.toString());
+      log.error("Error sending feedback email: " + e);
       throw new IOException();
     }
   }

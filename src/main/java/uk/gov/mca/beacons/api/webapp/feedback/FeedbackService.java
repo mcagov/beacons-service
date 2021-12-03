@@ -2,10 +2,12 @@ package uk.gov.mca.beacons.api.webapp.feedback;
 
 import java.io.IOException;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class FeedbackService {
 
   private final EmailGateway emailGateway;
@@ -21,6 +23,8 @@ public class FeedbackService {
 
   private void sendEmailToBeaconRegistryTeam(Feedback feedback)
     throws IOException {
+    log.info("Feedback received: " + feedback.getId());
+
     emailGateway.send(
       FeedbackEmail
         .builder()
