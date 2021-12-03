@@ -115,7 +115,7 @@ public class FeedbackFormControllerUnitTest {
           .param("howCouldWeImproveThisService", "Insightful feedback")
       )
       .andExpect(status().isOk())
-      .andExpect(view().name("feedback-received"))
+      .andExpect(view().name("feedback-submitted"))
       .andExpect(
         content()
           .string(containsString("Thank you for submitting your feedback"))
