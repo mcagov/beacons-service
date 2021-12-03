@@ -17,6 +17,9 @@ spring:
 server:
   compression:
     enabled: true
+  error:
+    whitelabel:
+      enabled: false
 
 management:
   endpoints:
