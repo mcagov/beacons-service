@@ -66,6 +66,12 @@ test {
     }
 }
 
+task openCypress(type: NpmTask) {
+    description = "Open the Cypress test runner"
+    workingDir = file("${project.projectDir}/src/test/e2e")
+    args = ["run", "cypress:open"]
+}
+
 task integrationTest(type: Test) {
     description = 'Runs integration tests.'
     group = 'verification'
