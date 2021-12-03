@@ -23,11 +23,7 @@ public class CookiePolicyControllerUnitTest {
   @Test
   public void testHideCookieBanner_setsACookie() throws Exception {
     mockMvc
-      .perform(post("/cookies/hide-banner"))
+      .perform(post("/help/cookies/hide-banner"))
       .andExpect(cookie().value("hide-cookie-banner", "true"));
   }
-  //  @Test
-  //  public void testHideCookieBanner_keepsUsersOnTheSamePage() throws Exception {
-  //    mockMvc.perform(post("/cookies/hider-banner").);
-  //  }
 }
