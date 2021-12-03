@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.webapp.GovNotifyGateway;
 
 @ExtendWith(MockitoExtension.class)
 public class FeedbackServiceUnitTest {
@@ -19,7 +18,7 @@ public class FeedbackServiceUnitTest {
   FeedbackService feedbackService;
 
   @Mock
-  GovNotifyGateway govNotifyGateway;
+  EmailGateway emailGateway;
 
   @Test
   void test_WhenAskedToRecordFeedback_ThenSendsEmailToRegistryTeam()
@@ -32,11 +31,11 @@ public class FeedbackServiceUnitTest {
 
     feedbackService.record(feedback);
 
-    verify(govNotifyGateway, times(1))
-      .sendEmail(
+    verify(emailGateway, times(1))
+      .send(
         argThat(
-          (GovNotifyEmail email) ->
-            email.getTo().equals("ukbeacons@mcga.gov.uk")
+          (FeedbackEmail email) ->
+            email.getRecipientEmailAddress().equals("ukbeacons@mcga.gov.uk")
         )
       );
   }
@@ -52,14 +51,13 @@ public class FeedbackServiceUnitTest {
 
     feedbackService.record(feedback);
 
-    verify(govNotifyGateway, times(1))
-      .sendEmail(
+    verify(emailGateway, times(1))
+      .send(
         argThat(
-          (GovNotifyEmail email) ->
+          (FeedbackEmail email) ->
             email
-              .getPersonalisation()
-              .get("satisfactionRating")
-              .equals(SatisfactionRating.VERY_SATISFIED.getDisplayValue())
+              .getSatisfactionRating()
+              .equals(SatisfactionRating.VERY_SATISFIED)
         )
       );
   }
@@ -75,13 +73,12 @@ public class FeedbackServiceUnitTest {
 
     feedbackService.record(feedback);
 
-    verify(govNotifyGateway, times(1))
-      .sendEmail(
+    verify(emailGateway, times(1))
+      .send(
         argThat(
-          (GovNotifyEmail email) ->
+          (FeedbackEmail email) ->
             email
-              .getPersonalisation()
-              .get("howCouldWeImproveThisService")
+              .getHowCouldWeImproveThisService()
               .equals("Insightful feedback")
         )
       );

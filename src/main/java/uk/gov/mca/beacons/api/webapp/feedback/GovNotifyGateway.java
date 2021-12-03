@@ -1,10 +1,10 @@
-package uk.gov.mca.beacons.api.webapp;
+package uk.gov.mca.beacons.api.webapp.feedback;
 
 import java.io.IOException;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uk.gov.mca.beacons.api.webapp.feedback.GovNotifyEmail;
 import uk.gov.service.notify.NotificationClient;
 import uk.gov.service.notify.NotificationClientException;
 
@@ -15,7 +15,7 @@ import uk.gov.service.notify.NotificationClientException;
  */
 @Slf4j
 @Component
-public class GovNotifyGateway {
+public class GovNotifyGateway implements EmailGateway {
 
   private final NotificationClient govNotifyClient;
 
@@ -23,17 +23,29 @@ public class GovNotifyGateway {
     this.govNotifyClient = new NotificationClient(apiKey);
   }
 
-  public void sendEmail(GovNotifyEmail email) throws IOException {
+  public void send(FeedbackEmail email) throws IOException {
+    String govNotifyTemplateId = "87dc177e-942f-4484-95ba-18580e937280";
     try {
       govNotifyClient.sendEmail(
-        email.getTemplateId(),
-        email.getTo(),
-        email.getPersonalisation(),
+        govNotifyTemplateId,
+        email.getRecipientEmailAddress(),
+        personalisationFields(email),
         null
       );
     } catch (NotificationClientException e) {
       log.error(e.toString());
       throw new IOException();
     }
+  }
+
+  private Map<String, String> personalisationFields(FeedbackEmail email) {
+    return Map.of(
+      "referenceId",
+      email.getReferenceId().toString(),
+      "satisfactionRating",
+      email.getSatisfactionRating().getDisplayValue(),
+      "howCouldWeImproveThisService",
+      email.getHowCouldWeImproveThisService()
+    );
   }
 }
