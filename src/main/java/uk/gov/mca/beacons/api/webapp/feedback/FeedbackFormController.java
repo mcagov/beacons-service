@@ -31,15 +31,11 @@ public class FeedbackFormController {
   public String feedbackSubmit(
     @Valid Feedback feedback,
     BindingResult bindingResult
-  ) {
+  ) throws IOException {
     if (bindingResult.hasErrors()) return "feedback-form";
 
-    try {
-      feedbackService.record(feedback);
-    } catch (IOException e) {
-      return "feedback-problem";
-    }
+    feedbackService.record(feedback);
 
-    return "feedback-received";
+    return "feedback-submitted";
   }
 }

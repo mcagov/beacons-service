@@ -26,6 +26,7 @@ public class FeedbackService {
     govNotifyGateway.sendEmail(
       GovNotifyEmail
         .builder()
+        .templateId("87dc177e-942f-4484-95ba-18580e937280")
         .to("ukbeacons@mcga.gov.uk")
         .personalisation(
           Map.of(
