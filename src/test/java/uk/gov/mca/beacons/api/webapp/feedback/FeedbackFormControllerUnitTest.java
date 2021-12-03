@@ -15,9 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
-import uk.gov.mca.beacons.api.webapp.feedback.FeedbackFormController;
-import uk.gov.mca.beacons.api.webapp.feedback.FeedbackService;
-import uk.gov.mca.beacons.api.webapp.feedback.SatisfactionRating;
 
 @WebMvcTest(controllers = FeedbackFormController.class)
 @AutoConfigureMockMvc

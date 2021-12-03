@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.webapp.feedback;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,6 +32,58 @@ public class FeedbackServiceUnitTest {
 
     feedbackService.record(feedback);
 
-    verify(govNotifyGateway, times(1)).sendEmail(any(), any(), any());
+    verify(govNotifyGateway, times(1))
+      .sendEmail(
+        argThat(
+          (GovNotifyEmail email) ->
+            email.getTo().equals("ukbeacons@mcga.gov.uk")
+        )
+      );
+  }
+
+  @Test
+  void test_WhenAskedToRecordFeedback_ThenEmailContainsSatisfactionRating()
+    throws Exception {
+    Feedback feedback = Feedback
+      .builder()
+      .satisfactionRating(SatisfactionRating.VERY_SATISFIED)
+      .howCouldWeImproveThisService("Insightful feedback")
+      .build();
+
+    feedbackService.record(feedback);
+
+    verify(govNotifyGateway, times(1))
+      .sendEmail(
+        argThat(
+          (GovNotifyEmail email) ->
+            email
+              .getPersonalisation()
+              .get("satisfactionRating")
+              .equals(SatisfactionRating.VERY_SATISFIED.getDisplayValue())
+        )
+      );
+  }
+
+  @Test
+  void test_WhenAskedToRecordFeedback_ThenEmailContainsHowCouldWeImproveThisService()
+    throws Exception {
+    Feedback feedback = Feedback
+      .builder()
+      .satisfactionRating(SatisfactionRating.VERY_SATISFIED)
+      .howCouldWeImproveThisService("Insightful feedback")
+      .build();
+
+    feedbackService.record(feedback);
+
+    verify(govNotifyGateway, times(1))
+      .sendEmail(
+        argThat(
+          (GovNotifyEmail email) ->
+            email
+              .getPersonalisation()
+              .get("howCouldWeImproveThisService")
+              .equals("Insightful feedback")
+        )
+      );
   }
 }
