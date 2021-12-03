@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+  layout:decorate="~{layout.html}"
+>
+  <head>
+    <title>Give feedback on Register a beacon</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <main id="main-content" class="govuk-main-wrapper">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">Feedback submitted</h1>
+            <p class="govuk-body">Thank you for submitting your feedback.</p>
+            <a
+              href="/"
+              role="button"
+              class="govuk-button"
+              data-module="govuk-button"
+            >
+              Go to service start page
+            </a>
+            <h2 class="govuk-heading-m">Contact the UK Beacon Registry</h2>
+            <div
+              th:replace="fragments/contact-beacon-registry :: contact-beacon-registry"
+            ></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
