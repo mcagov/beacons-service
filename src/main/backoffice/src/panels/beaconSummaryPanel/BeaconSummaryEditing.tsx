@@ -24,12 +24,23 @@ import {
 import mtiJson from "../../lib/mti/mtis.json";
 import protocolJson from "../../lib/protocol/protocols.json";
 import manufacturerModelJson from "../../lib/manufacturerModel/manufacturerModel.json";
+import { degree } from "moo-color/src/util/util";
 
 export const BeaconSummaryEditing: FunctionComponent<{
   beacon: IBeacon;
   onSave: (beacon: IBeacon) => void;
   onCancel: () => void;
 }> = ({ beacon, onSave, onCancel }) => {
+  beacon.batteryExpiryDate = beacon.batteryExpiryDate
+    ? `${beacon.batteryExpiryDate.split("/")[2]}-${
+        beacon.batteryExpiryDate.split("/")[1]
+      }-${beacon.batteryExpiryDate.split("/")[0]}`
+    : "";
+  beacon.lastServicedDate = beacon.lastServicedDate
+    ? `${beacon.lastServicedDate.split("/")[2]}-${
+        beacon.lastServicedDate.split("/")[1]
+      }-${beacon.lastServicedDate.split("/")[0]}`
+    : "";
   return (
     <Formik
       initialValues={beacon}
@@ -41,7 +52,7 @@ export const BeaconSummaryEditing: FunctionComponent<{
         setSubmitting(false);
       }}
     >
-      {({ values, setValues, initialValues }) => (
+      {({ values, setValues, initialValues, setFieldValue }) => (
         <Form>
           <Grid container direction="row" justifyContent={"flex-start"}>
             <Grid item xs={12} sm={6}>
@@ -330,14 +341,16 @@ export const BeaconSummaryEditing: FunctionComponent<{
                         </label>
                       }
                       value={
-                        <Field
-                          as={Input}
-                          id="batteryExpiryDate"
-                          name="batteryExpiryDate"
-                          type="date"
-                          fullWidth
-                          placeholder={Placeholders.NoData}
-                        />
+                        <>
+                          <Field
+                            as={Input}
+                            id="batteryExpiryDate"
+                            name="batteryExpiryDate"
+                            type="date"
+                            fullWidth
+                            placeholder={Placeholders.NoData}
+                          />
+                        </>
                       }
                     />
 

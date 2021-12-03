@@ -14,7 +14,6 @@ export interface ILegacyBeaconResponseMapper {
 
 export class LegacyBeaconResponseMapper implements ILegacyBeaconResponseMapper {
   public map(beaconApiResponse: ILegacyBeaconResponse): ILegacyBeacon {
-    debugger;
     return {
       pkBeaconId: beaconApiResponse.data.attributes.beacon.pkBeaconId,
       statusCode: beaconApiResponse.data.attributes.beacon.statusCode,
