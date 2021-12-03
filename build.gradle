@@ -95,7 +95,7 @@ task e2eTest(type: Test) {
     shouldRunAfter integrationTest
 }
 
-check.dependsOn 'e2eTest'
+check.dependsOn e2eTest
 
 /**
  * Build, package and serve the Backoffice SPA's static assets
