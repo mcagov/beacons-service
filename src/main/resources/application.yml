@@ -45,3 +45,6 @@ azure:
   activedirectory:
     client-id: ${AZURE_AD_API_CLIENT_ID:8fb0f9ea-6351-4251-bcca-85e298bda8e7}
     app-id-uri: ${AZURE_AD_API_ID_URI:api://8fb0f9ea-6351-4251-bcca-85e298bda8e7}
+
+govnotify:
+  api-key: ${GOVNOTIFY_API_KEY}

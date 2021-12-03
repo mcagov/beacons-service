@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.webapp;
 
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.webapp.feedback.GovNotifyEmail;
 import uk.gov.service.notify.NotificationClient;
@@ -18,8 +19,8 @@ public class GovNotifyGateway {
 
   private final NotificationClient govNotifyClient;
 
-  public GovNotifyGateway() {
-    this.govNotifyClient = new NotificationClient("TODO apiKey");
+  public GovNotifyGateway(@Value("${govnotify.api-key}") String apiKey) {
+    this.govNotifyClient = new NotificationClient(apiKey);
   }
 
   public void sendEmail(GovNotifyEmail email) throws IOException {
