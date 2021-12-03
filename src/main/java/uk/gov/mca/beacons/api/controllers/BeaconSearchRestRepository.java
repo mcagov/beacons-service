@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
+import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntityAlt;
 
 /**
  * This {@link RepositoryRestResource} exposes controller endpoints to enable searching across beacon records using JPA's built in pagination/sorting capability.
@@ -53,7 +54,7 @@ interface BeaconSearchRestRepository
     "(b.ownerEmail = :email AND b.beaconStatus = 'MIGRATED') OR " +
     "(b.accountHolderId = :accountHolderId AND b.beaconStatus = 'NEW')"
   )
-  List<BeaconSearchEntity> findALlByAccountHolderIdAndEmail(
+  List<BeaconSearchEntityAlt> findALlByAccountHolderIdAndEmail(
     @Param("email") String email,
     @Param("accountHolderId") UUID accountHolderId,
     Sort sort
