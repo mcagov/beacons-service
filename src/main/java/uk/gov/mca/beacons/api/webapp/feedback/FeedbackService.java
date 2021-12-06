@@ -18,13 +18,13 @@ public class FeedbackService {
   }
 
   public void record(Feedback feedback) throws IOException {
+    log.info("Feedback received: " + feedback.getId());
+
     sendEmailToBeaconRegistryTeam(feedback);
   }
 
   private void sendEmailToBeaconRegistryTeam(Feedback feedback)
     throws IOException {
-    log.info("Feedback received: " + feedback.getId());
-
     emailGateway.send(
       FeedbackEmail
         .builder()

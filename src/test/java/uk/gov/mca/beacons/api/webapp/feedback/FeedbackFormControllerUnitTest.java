@@ -66,7 +66,7 @@ public class FeedbackFormControllerUnitTest {
         post("/help/feedback")
           .param(
             "satisfactionRating",
-            String.valueOf(SatisfactionRating.NEITHER_SATISFIED_OR_DISSATISFIED)
+            SatisfactionRating.NEITHER_SATISFIED_OR_DISSATISFIED.toString()
           )
           .param("howCouldWeImproveThisService", "")
       )

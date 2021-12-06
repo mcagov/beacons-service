@@ -21,8 +21,7 @@ public class FeedbackFormController {
   }
 
   @GetMapping("/help/feedback")
-  public String feedbackForm(Model model) {
-    model.addAttribute("feedback", new Feedback());
+  public String feedbackForm() {
     return "feedback-form";
   }
 
