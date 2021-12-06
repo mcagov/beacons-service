@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Feedback {
 
   private UUID id;
