@@ -32,6 +32,7 @@ public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
 
   @Setter
   @NotNull
+  @Column(unique = true)
   private String authId;
 
   @Setter

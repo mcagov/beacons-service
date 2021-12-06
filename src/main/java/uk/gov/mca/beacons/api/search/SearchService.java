@@ -36,6 +36,8 @@ public class SearchService {
     );
     accountHolderDocument.setName(accountHolder.getFullName());
     accountHolderDocument.setEmail(accountHolder.getEmail());
+    accountHolderDocument.setLastModified(accountHolder.getLastModifiedDate());
+    accountHolderDocument.setCreatedAt(accountHolder.getCreatedDate());
 
     accountHolderSearchRepository.save(accountHolderDocument);
   }
