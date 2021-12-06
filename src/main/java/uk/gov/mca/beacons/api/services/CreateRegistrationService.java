@@ -71,26 +71,23 @@ public class CreateRegistrationService {
       beacon
     );
 
-    matchingLegacyBeacons.ifPresent(
-      matches ->
-        matches.forEach(
-          matchingLegacyBeacon -> {
-            try {
-              log.info(
-                "Matching LegacyBeacon {} found for AccountHolder {}.  Attempting to claim",
-                matchingLegacyBeacon.getId(),
-                beacon.getAccountHolderId()
-              );
-              legacyBeaconService.claim(matchingLegacyBeacon);
-            } catch (Exception e) {
-              log.error(
-                "Failed to claim LegacyBeacon {}",
-                matchingLegacyBeacon.getId()
-              );
-              e.printStackTrace();
-            }
-          }
-        )
+    matchingLegacyBeacons.ifPresent(matches ->
+      matches.forEach(matchingLegacyBeacon -> {
+        try {
+          log.info(
+            "Matching LegacyBeacon {} found for AccountHolder {}.  Attempting to claim",
+            matchingLegacyBeacon.getId(),
+            beacon.getAccountHolderId()
+          );
+          legacyBeaconService.claim(matchingLegacyBeacon);
+        } catch (Exception e) {
+          log.error(
+            "Failed to claim LegacyBeacon {}",
+            matchingLegacyBeacon.getId()
+          );
+          e.printStackTrace();
+        }
+      })
     );
   }
 
@@ -105,12 +102,10 @@ public class CreateRegistrationService {
   }
 
   private void registerBeaconUses(List<BeaconUse> uses, UUID beaconId) {
-    uses.forEach(
-      use -> {
-        use.setBeaconId(beaconId);
-        beaconUseJpaRepository.save(use);
-      }
-    );
+    uses.forEach(use -> {
+      use.setBeaconId(beaconId);
+      beaconUseJpaRepository.save(use);
+    });
   }
 
   private void registerOwner(Person owner, UUID beaconId) {
@@ -125,8 +120,8 @@ public class CreateRegistrationService {
     List<Person> emergencyContacts,
     UUID beaconId
   ) {
-    emergencyContacts.forEach(
-      emergencyContact -> registerEmergencyContact(emergencyContact, beaconId)
+    emergencyContacts.forEach(emergencyContact ->
+      registerEmergencyContact(emergencyContact, beaconId)
     );
   }
 

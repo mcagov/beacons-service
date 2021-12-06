@@ -91,13 +91,12 @@ public class FeedbackFormControllerUnitTest {
 
     verify(feedbackService, times(1))
       .record(
-        argThat(
-          feedback ->
-            feedback.getSatisfactionRating() ==
-            SatisfactionRating.NEITHER_SATISFIED_OR_DISSATISFIED &&
-            feedback
-              .getHowCouldWeImproveThisService()
-              .equals("Insightful feedback")
+        argThat(feedback ->
+          feedback.getSatisfactionRating() ==
+          SatisfactionRating.NEITHER_SATISFIED_OR_DISSATISFIED &&
+          feedback
+            .getHowCouldWeImproveThisService()
+            .equals("Insightful feedback")
         )
       );
   }

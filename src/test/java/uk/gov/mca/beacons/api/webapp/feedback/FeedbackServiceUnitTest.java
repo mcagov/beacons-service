@@ -33,9 +33,8 @@ public class FeedbackServiceUnitTest {
 
     verify(emailGateway, times(1))
       .send(
-        argThat(
-          (FeedbackEmail email) ->
-            email.getRecipientEmailAddress().equals("ukbeacons@mcga.gov.uk")
+        argThat((FeedbackEmail email) ->
+          email.getRecipientEmailAddress().equals("ukbeacons@mcga.gov.uk")
         )
       );
   }
@@ -53,11 +52,10 @@ public class FeedbackServiceUnitTest {
 
     verify(emailGateway, times(1))
       .send(
-        argThat(
-          (FeedbackEmail email) ->
-            email
-              .getSatisfactionRating()
-              .equals(SatisfactionRating.VERY_SATISFIED)
+        argThat((FeedbackEmail email) ->
+          email
+            .getSatisfactionRating()
+            .equals(SatisfactionRating.VERY_SATISFIED)
         )
       );
   }
@@ -75,11 +73,8 @@ public class FeedbackServiceUnitTest {
 
     verify(emailGateway, times(1))
       .send(
-        argThat(
-          (FeedbackEmail email) ->
-            email
-              .getHowCouldWeImproveThisService()
-              .equals("Insightful feedback")
+        argThat((FeedbackEmail email) ->
+          email.getHowCouldWeImproveThisService().equals("Insightful feedback")
         )
       );
   }
