@@ -30,6 +30,10 @@ public class AccountHolderController {
     this.accountHolderService = accountHolderService;
   }
 
+  // TODO: current endpoint is /account-holder/beacons, this has not been remade
+  // need to make /beacon?accountHolderId=<uuid> and update webapp.
+
+  // TODO: updated endpoint from /authid/authid to /account-holder?authId=<uuid>
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public WrapperDTO<AccountHolderDTO> createAccountHolder(
