@@ -20,7 +20,7 @@ public class Beacon extends BaseAggregateRoot<BeaconId> {
 
   public static final String ID_GENERATOR_NAME = "beacon-id-generator";
 
-  @Type(type = "uk.gov.beacons.api.beacon.domain.BeaconId")
+  @Type(type = "uk.gov.mca.beacons.api.beacon.domain.BeaconId")
   @Column(nullable = false)
   @Id
   @GeneratedValue(
@@ -85,7 +85,7 @@ public class Beacon extends BaseAggregateRoot<BeaconId> {
   @LastModifiedDate
   private OffsetDateTime lastModifiedDate;
 
-  @Type(type = "uk.gov.beacons.api.accountholder.domain.AccountHolderId")
+  @Type(type = "uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId")
   @Setter
   @NotNull
   private AccountHolderId accountHolderId;

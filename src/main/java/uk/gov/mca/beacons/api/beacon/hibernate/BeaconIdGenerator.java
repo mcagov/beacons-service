@@ -10,7 +10,7 @@ import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 public class BeaconIdGenerator implements IdentifierGenerator {
 
   public static final String STRATEGY =
-    "uk.gov.mca.beacons.api.accountholder.hibernate.BeaconIdGenerator";
+    "uk.gov.mca.beacons.api.beacon.hibernate.BeaconIdGenerator";
 
   @Override
   public Serializable generate(
