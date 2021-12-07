@@ -5,11 +5,11 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import uk.gov.mca.beacons.api.BaseIntegrationTest;
 import uk.gov.mca.beacons.api.accountholder.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
-@SpringBootTest
-public class AccountHolderIntegrationTest {
+public class AccountHolderIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
   AccountHolderRepository accountHolderRepository;
