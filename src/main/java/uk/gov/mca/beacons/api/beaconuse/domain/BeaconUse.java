@@ -170,11 +170,12 @@ public class BeaconUse extends BaseAggregateRoot<BeaconUseId> {
   @Setter
   private String otherActivityPeopleCount;
 
+  @Setter
+  @NotNull
+  private String moreDetails;
+
   @CreatedDate
   private OffsetDateTime createdDate;
-
-  @LastModifiedDate
-  private OffsetDateTime lastModifiedDate;
 
   @Type(type = "uk.gov.mca.beacons.api.beacon.domain.BeaconId")
   @Setter
