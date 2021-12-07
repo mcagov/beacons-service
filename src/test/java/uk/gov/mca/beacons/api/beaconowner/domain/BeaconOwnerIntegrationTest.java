@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.emergencycontact.domain;
+package uk.gov.mca.beacons.api.beaconowner.domain;
 
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,9 @@ import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconRepository;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
+import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
-public class EmergencyContactIntegrationTest extends BaseIntegrationTest {
+public class BeaconOwnerIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
   AccountHolderRepository accountHolderRepository;
@@ -21,24 +22,33 @@ public class EmergencyContactIntegrationTest extends BaseIntegrationTest {
   BeaconRepository beaconRepository;
 
   @Autowired
-  EmergencyContactRepository emergencyContactRepository;
+  BeaconOwnerRepository beaconOwnerRepository;
 
   @Test
-  void shouldSaveEmergencyContact() {
+  void shouldSaveBeaconOwner() {
     AccountHolderId accountHolderId = createAccountHolder();
     BeaconId beaconId = createBeacon(accountHolderId);
-    EmergencyContact emergencyContact = new EmergencyContact();
-    emergencyContact.setBeaconId(beaconId);
-    emergencyContact.setFullName("Test Testsson");
-    emergencyContact.setTelephoneNumber("07456789998");
 
-    EmergencyContact savedEmergencyContact = emergencyContactRepository.save(
-      emergencyContact
+    BeaconOwner beaconOwner = new BeaconOwner();
+    beaconOwner.setEmail("test@thetestssons.com");
+    beaconOwner.setFullName("Test Testsson");
+    beaconOwner.setTelephoneNumber("07825996445");
+    beaconOwner.setAddress(
+      Address
+        .builder()
+        .addressLine1("123 Test")
+        .addressLine2("Testgatan")
+        .townOrCity("Karlstad")
+        .county("Värmland")
+        .postcode("65223")
+        .country("Sverige")
+        .build()
     );
+    beaconOwner.setBeaconId(beaconId);
 
-    assert savedEmergencyContact.getId() != null;
-    assert savedEmergencyContact.getFullName().equals("Test Testsson");
-    assert savedEmergencyContact.getCreatedDate() != null;
+    BeaconOwner savedBeaconOwner = beaconOwnerRepository.save(beaconOwner);
+
+    assert savedBeaconOwner.getId() != null;
   }
 
   private AccountHolderId createAccountHolder() {

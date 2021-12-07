@@ -10,14 +10,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
-import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContactId;
 import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity(name = "beacon_owner")
-public class BeaconOwner extends BaseAggregateRoot<EmergencyContactId> {
+public class BeaconOwner extends BaseAggregateRoot<BeaconOwnerId> {
 
   public static final String ID_GENERATOR_NAME = "beaconowner-id-generator";
 
@@ -31,6 +30,7 @@ public class BeaconOwner extends BaseAggregateRoot<EmergencyContactId> {
   private BeaconOwnerId id;
 
   @Setter
+  @NotNull
   private String fullName;
 
   @Setter
