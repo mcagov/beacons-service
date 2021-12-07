@@ -28,7 +28,7 @@ public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
     strategy = javax.persistence.GenerationType.AUTO,
     generator = "accountholder-id-generator"
   )
-  AccountHolderId id;
+  private AccountHolderId id;
 
   @Setter
   @NotNull

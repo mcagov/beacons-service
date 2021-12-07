@@ -27,7 +27,7 @@ public class Beacon extends BaseAggregateRoot<BeaconId> {
     strategy = GenerationType.AUTO,
     generator = "beacon-id-generator"
   )
-  BeaconId id;
+  private BeaconId id;
 
   @Setter
   @NotNull
