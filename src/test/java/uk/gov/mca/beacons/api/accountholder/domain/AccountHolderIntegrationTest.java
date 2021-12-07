@@ -14,9 +14,6 @@ public class AccountHolderIntegrationTest extends BaseIntegrationTest {
   @Autowired
   AccountHolderRepository accountHolderRepository;
 
-  @Autowired
-  AccountHolderMapper accountHolderMapper;
-
   @Transactional
   @Test
   public void shouldSaveAccountHolder() {
