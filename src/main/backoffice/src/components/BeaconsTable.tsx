@@ -218,6 +218,7 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
               });
             } catch (error) {
               console.error("Could not fetch beacons", error);
+              alert("Search timed out, please try refreshing in 30 seconds");
             }
           })
         }
