@@ -226,7 +226,7 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
         title=""
         options={{
           filtering: true,
-          search: true,
+          search: false,
           searchFieldVariant: "outlined",
           pageSize: 20,
         }}
@@ -234,28 +234,6 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
           Container: (props) => <Paper {...props} elevation={0} />,
           Row: (props) => (
             <MTableBodyRow {...props} data-testid="beacons-table-row" />
-          ),
-          Toolbar: (props) => (
-            // We are overriding the MTableToolbar search with our own search component
-            // Therefore we set search on MTableToolbar to false and use our own implementation
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <MTableToolbar {...props} search={false} />
-              <SearchBar
-                searchFieldVariant={props.searchFieldVariant}
-                searchAutoFocus={props.searchAutoFocus}
-                searchFieldStyle={props.searchFieldStyle}
-                searchText={props.searchText}
-                onSearchChanged={props.onSearchChanged}
-                dataManager={props.dataManager}
-                icons={props.icons}
-              />
-            </div>
           ),
         }}
       />
