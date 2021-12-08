@@ -25,7 +25,6 @@ import MaterialTable, {
   Column,
   Icons,
   MTableBodyRow,
-  MTableToolbar,
   Query,
 } from "@material-table/core";
 import React, { forwardRef, FunctionComponent } from "react";
@@ -34,7 +33,6 @@ import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 import { replaceNone } from "../lib/legacyData/replaceNone";
 import { TextFilter } from "./tableComponents/TextFilter";
-import { SearchBar } from "./tableComponents/SearchBar";
 
 interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
