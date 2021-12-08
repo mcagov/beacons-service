@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,6 +60,7 @@ interface BeaconSearchRestRepository
     Sort sort
   );
 
+  @Cacheable(value = "beacons-search")
   @RestResource(path = "find-allv2", rel = "findAllBeacons")
   @Query(
     "SELECT b FROM BeaconSearchEntity b WHERE " +
