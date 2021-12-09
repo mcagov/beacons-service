@@ -48,4 +48,5 @@ public class MigrationController {
       legacyBeaconService.create(legacyBeacon)
     );
   }
+  // TODO: Assess whether it's still necessary/safe to expose a delete-all endpoint for legacy beacons
 }
