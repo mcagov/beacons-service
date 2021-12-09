@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.legacybeacon.mappers;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
+import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyData;
 import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyUse;
@@ -67,5 +68,12 @@ public class LegacyBeaconMapper {
     dto.setAttributes(attributes);
 
     return dto;
+  }
+
+  public WrapperDTO<LegacyBeaconDTO> toWrapperDTO(LegacyBeacon legacyBeacon) {
+    final var wrapperDTO = new WrapperDTO<LegacyBeaconDTO>();
+    wrapperDTO.setData(toDTO(legacyBeacon));
+
+    return wrapperDTO;
   }
 }

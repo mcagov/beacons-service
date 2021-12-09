@@ -11,9 +11,6 @@ public class LegacyBeaconIntegrationTest extends BaseIntegrationTest {
   @Autowired
   LegacyBeaconRepository legacyBeaconRepository;
 
-  @Autowired
-  FixtureHelper fixtureHelper;
-
   @Test
   void shouldSaveALegacyBeacon() throws Exception {
     LegacyBeacon legacyBeacon = new LegacyBeacon();

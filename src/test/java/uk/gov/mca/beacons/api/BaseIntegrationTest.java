@@ -15,6 +15,9 @@ import org.testcontainers.utility.DockerImageName;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {
 
+  @Autowired
+  protected FixtureHelper fixtureHelper;
+
   static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(
     DockerImageName.parse("postgres:12")
   )

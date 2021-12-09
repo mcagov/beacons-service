@@ -21,9 +21,6 @@ public class AccountHolderControllerIntegrationTest
   @Autowired
   private WebTestClient webTestClient;
 
-  @Autowired
-  private FixtureHelper fixtureHelper;
-
   @Test
   public void shouldRespondWithTheCreatedAccountHolder() throws Exception {
     final String authId = UUID.randomUUID().toString();
