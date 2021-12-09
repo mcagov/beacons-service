@@ -1,11 +1,15 @@
 package uk.gov.mca.beacons.api.legacybeacon.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import java.time.OffsetDateTime;
+import java.util.Map;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,7 +19,9 @@ import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name = "legacy_beacon")
+@Entity(name = "legacy_beacon2.0")
+@Table(name = "legacy_beacon")
+@TypeDefs({ @TypeDef(name = "json", typeClass = JsonType.class) })
 public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
 
   public static final String ID_GENERATOR_NAME = "legacybeacon-id-generator";
@@ -43,6 +49,11 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
 
   @Setter
   private String useActivities;
+
+  @Setter
+  @Type(type = "json")
+  @Column(columnDefinition = "jsonb")
+  private LegacyData data;
 
   @CreatedDate
   private OffsetDateTime createdDate;
