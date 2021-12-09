@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.legacybeacon.domain;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.shared.domain.base.ValueObject;
 
@@ -22,7 +23,13 @@ public class LegacyBeaconDetails implements ValueObject, Serializable {
   private Integer pkBeaconId;
   private String statusCode;
   private Integer versioning;
+
+  @NotNull
   private String createdDate;
+
+  @NotNull
+  private String lastModifiedDate;
+
   private String departRefId;
   private String isWithdrawn;
   private Integer createUserId;
@@ -31,7 +38,6 @@ public class LegacyBeaconDetails implements ValueObject, Serializable {
   private Integer updateUserId;
   private String lastServiceDate;
   private String withdrawnReason;
-  private String lastModifiedDate;
   private String batteryExpiryDate;
   private Integer cospasSarsatNumber;
   private String firstRegistrationDate;

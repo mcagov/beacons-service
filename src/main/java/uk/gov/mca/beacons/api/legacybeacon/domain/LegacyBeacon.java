@@ -55,9 +55,11 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
   @Column(columnDefinition = "jsonb")
   private LegacyData data;
 
-  @CreatedDate
+  @Setter
+  @NotNull
   private OffsetDateTime createdDate;
 
-  @LastModifiedDate
+  @Setter
+  @NotNull
   private OffsetDateTime lastModifiedDate;
 }
