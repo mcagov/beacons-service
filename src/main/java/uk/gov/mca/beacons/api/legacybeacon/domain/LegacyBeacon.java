@@ -2,6 +2,8 @@ package uk.gov.mca.beacons.api.legacybeacon.domain;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,8 +20,7 @@ import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
 @Getter
-@EntityListeners(AuditingEntityListener.class)
-@Entity(name = "legacy_beacon2.0")
+@Entity(name = "legacy_beaconV2")
 @Table(name = "legacy_beacon")
 @TypeDefs({ @TypeDef(name = "json", typeClass = JsonType.class) })
 public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
@@ -55,6 +56,14 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
   @Column(columnDefinition = "jsonb")
   private LegacyData data;
 
+  @OneToMany(
+    cascade = CascadeType.ALL,
+    orphanRemoval = true,
+    fetch = FetchType.EAGER
+  )
+  @JoinColumn(name = "legacy_beacon_id", nullable = false)
+  private List<LegacyBeaconAction> actions;
+
   @Setter
   @NotNull
   private OffsetDateTime createdDate;
@@ -62,4 +71,27 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
   @Setter
   @NotNull
   private OffsetDateTime lastModifiedDate;
+
+  public boolean isClaimed() {
+    if (actions == null) {
+      return false;
+    }
+
+    return actions.stream().anyMatch(LegacyBeaconClaimAction.class::isInstance);
+  }
+
+  public void claim() {
+    initActions();
+    if (!isClaimed()) {
+      LegacyBeaconClaimAction claimAction = new LegacyBeaconClaimAction();
+      actions.add(claimAction);
+    }
+  }
+
+  // TODO: Add constructor to initialize list of actions
+  private void initActions() {
+    if (actions == null) {
+      actions = new ArrayList<>();
+    }
+  }
 }
