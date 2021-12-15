@@ -17,4 +17,17 @@ public class EmergencyContactMapper {
 
     return emergencyContact;
   }
+
+  EmergencyContactRegistrationDTO toEmergencyContactRegistrationDTO(
+    EmergencyContact emergencyContact
+  ) {
+    return EmergencyContactRegistrationDTO
+      .builder()
+      .fullName(emergencyContact.getFullName())
+      .telephoneNumber(emergencyContact.getTelephoneNumber())
+      .alternativeTelephoneNumber(
+        emergencyContact.getAlternativeTelephoneNumber()
+      )
+      .build();
+  }
 }

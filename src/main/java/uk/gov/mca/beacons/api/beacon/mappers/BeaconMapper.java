@@ -28,4 +28,24 @@ public class BeaconMapper {
 
     return beacon;
   }
+
+  public BeaconRegistrationDTO toBeaconRegistrationDTO(Beacon beacon) {
+    return BeaconRegistrationDTO
+      .builder()
+      .hexId(beacon.getHexId())
+      .manufacturer(beacon.getManufacturer())
+      .model(beacon.getModel())
+      .manufacturerSerialNumber(beacon.getManufacturerSerialNumber())
+      .referenceNumber(beacon.getReferenceNumber())
+      .chkCode(beacon.getChkCode())
+      .batteryExpiryDate(beacon.getBatteryExpiryDate())
+      .lastServicedDate(beacon.getLastServicedDate())
+      .mti(beacon.getMti())
+      .svdr(beacon.getSvdr())
+      .csta(beacon.getCsta())
+      .beaconType(beacon.getBeaconType())
+      .protocol(beacon.getProtocol())
+      .coding(beacon.getCoding())
+      .build();
+  }
 }

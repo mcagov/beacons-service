@@ -29,4 +29,17 @@ public class BeaconOwnerMapper {
 
     return beaconOwner;
   }
+
+  public BeaconOwnerRegistrationDTO toBeaconOwnerRegistrationDTO(
+    BeaconOwner beaconOwner
+  ) {
+    return BeaconOwnerRegistrationDTO
+      .builder()
+      .fullName(beaconOwner.getFullName())
+      .email(beaconOwner.getEmail())
+      .telephoneNumber(beaconOwner.getTelephoneNumber())
+      .alternativeTelephoneNumber(beaconOwner.getAlternativeTelephoneNumber())
+      .addressDTO(addressMapper.toDTO(beaconOwner.getAddress()))
+      .build();
+  }
 }

@@ -58,4 +58,56 @@ public class BeaconUseMapper {
 
     return beaconUse;
   }
+
+  public BeaconUseRegistrationDTO toBeaconRegistrationDTO(BeaconUse beaconUse) {
+    BeaconUseRegistrationDTO dto = new BeaconUseRegistrationDTO();
+    dto.setEnvironment(beaconUse.getEnvironment());
+    dto.setPurpose(beaconUse.getPurpose());
+    dto.setActivity(beaconUse.getActivity());
+    dto.setOtherActivity(beaconUse.getOtherActivity());
+    dto.setCallSign(beaconUse.getCallSign());
+    dto.setVhfRadio(beaconUse.getVhfRadio());
+    dto.setFixedVhfRadio(beaconUse.getFixedVhfRadio());
+    dto.setFixedVhfRadioValue(beaconUse.getFixedVhfRadioValue());
+    dto.setPortableVhfRadio(beaconUse.getPortableVhfRadio());
+    dto.setPortableVhfRadioValue(beaconUse.getPortableVhfRadioValue());
+    dto.setSatelliteTelephone(beaconUse.getSatelliteTelephone());
+    dto.setSatelliteTelephoneValue(beaconUse.getSatelliteTelephoneValue());
+    dto.setMobileTelephone(beaconUse.getMobileTelephone());
+    dto.setMobileTelephone1(beaconUse.getMobileTelephone1());
+    dto.setMobileTelephone2(beaconUse.getMobileTelephone2());
+    dto.setOtherCommunication(beaconUse.getOtherCommunication());
+    dto.setOtherCommunicationValue(beaconUse.getOtherCommunicationValue());
+    dto.setMaxCapacity(beaconUse.getMaxCapacity());
+    dto.setVesselName(beaconUse.getVesselName());
+    dto.setPortLetterNumber(beaconUse.getPortLetterNumber());
+    dto.setHomeport(beaconUse.getHomeport());
+    dto.setAreaOfOperation(beaconUse.getAreaOfOperation());
+    dto.setBeaconLocation(beaconUse.getBeaconLocation());
+    dto.setImoNumber(beaconUse.getImoNumber());
+    dto.setSsrNumber(beaconUse.getSsrNumber());
+    dto.setRssNumber(beaconUse.getRssNumber());
+    dto.setOfficialNumber(beaconUse.getOfficialNumber());
+    dto.setRigPlatformLocation(beaconUse.getRigPlatformLocation());
+    dto.setMainUse(beaconUse.getMainUse());
+    dto.setAircraftManufacturer(beaconUse.getAircraftManufacturer());
+    dto.setPrincipalAirport(beaconUse.getPrincipalAirport());
+    dto.setSecondaryAirport(beaconUse.getSecondaryAirport());
+    dto.setRegistrationMark(beaconUse.getRegistrationMark());
+    dto.setHexAddress(beaconUse.getHexAddress());
+    dto.setCnOrMsnNumber(beaconUse.getCnOrMsnNumber());
+    dto.setDongle(beaconUse.getDongle());
+    dto.setBeaconPosition(beaconUse.getBeaconPosition());
+    dto.setWorkingRemotelyLocation(beaconUse.getWorkingRemotelyLocation());
+    dto.setWorkingRemotelyPeopleCount(
+      beaconUse.getWorkingRemotelyPeopleCount()
+    );
+    dto.setWindfarmLocation(beaconUse.getWindfarmLocation());
+    dto.setWindfarmPeopleCount(beaconUse.getWindfarmPeopleCount());
+    dto.setOtherActivityLocation(beaconUse.getOtherActivityLocation());
+    dto.setOtherActivityPeopleCount(beaconUse.getOtherActivityPeopleCount());
+    dto.setMoreDetails(beaconUse.getMoreDetails());
+
+    return dto;
+  }
 }
