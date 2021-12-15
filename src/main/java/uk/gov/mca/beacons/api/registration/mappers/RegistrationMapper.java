@@ -32,26 +32,54 @@ public class RegistrationMapper {
   }
 
   public Registration fromDTO(RegistrationDTO dto) {
-    Registration registration = new Registration();
-    registration.setBeacon(beaconMapper.fromDTO(dto.getCreateBeaconDTO()));
-    registration.setBeaconUses(
-      dto
-        .getCreateBeaconUseDTOs()
-        .stream()
-        .map(beaconUseMapper::fromDTO)
-        .collect(Collectors.toList())
-    );
-    registration.setBeaconOwner(
-      beaconOwnerMapper.fromDTO(dto.getCreateBeaconOwnerDTO())
-    );
-    registration.setEmergencyContacts(
-      dto
-        .getCreateEmergencyContactDTOs()
-        .stream()
-        .map(emergencyContactMapper::fromDTO)
-        .collect(Collectors.toList())
-    );
+    return Registration
+      .builder()
+      .beacon(beaconMapper.fromDTO(dto.getBeaconRegistrationDTO()))
+      .beaconUses(
+        dto
+          .getBeaconUseRegistrationDTOs()
+          .stream()
+          .map(beaconUseMapper::fromDTO)
+          .collect(Collectors.toList())
+      )
+      .beaconOwner(
+        beaconOwnerMapper.fromDTO(dto.getBeaconOwnerRegistrationDTO())
+      )
+      .emergencyContacts(
+        dto
+          .getEmergencyContactRegistrationDTOs()
+          .stream()
+          .map(emergencyContactMapper::fromDTO)
+          .collect(Collectors.toList())
+      )
+      .build();
+  }
 
-    return registration;
+  public RegistrationDTO toDTO(Registration registration) {
+    return RegistrationDTO
+      .builder()
+      .beaconRegistrationDTO(
+        beaconMapper.toBeaconRegistrationDTO(registration.getBeacon())
+      )
+      .beaconOwnerRegistrationDTO(
+        beaconOwnerMapper.toBeaconOwnerRegistrationDTO(
+          registration.getBeaconOwner()
+        )
+      )
+      .beaconUseRegistrationDTOs(
+        registration
+          .getBeaconUses()
+          .stream()
+          .map(beaconUseMapper::toBeaconRegistrationDTO)
+          .collect(Collectors.toList())
+      )
+      .emergencyContactRegistrationDTOs(
+        registration
+          .getEmergencyContacts()
+          .stream()
+          .map(emergencyContactMapper::toEmergencyContactRegistrationDTO)
+          .collect(Collectors.toList())
+      )
+      .build();
   }
 }

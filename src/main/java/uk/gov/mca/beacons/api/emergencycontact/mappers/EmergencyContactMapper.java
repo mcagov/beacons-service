@@ -18,7 +18,7 @@ public class EmergencyContactMapper {
     return emergencyContact;
   }
 
-  EmergencyContactRegistrationDTO toEmergencyContactRegistrationDTO(
+  public EmergencyContactRegistrationDTO toEmergencyContactRegistrationDTO(
     EmergencyContact emergencyContact
   ) {
     return EmergencyContactRegistrationDTO
