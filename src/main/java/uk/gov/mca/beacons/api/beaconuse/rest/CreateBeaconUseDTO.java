@@ -1,7 +1,5 @@
 package uk.gov.mca.beacons.api.beaconuse.rest;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.beaconuse.domain.Activity;
