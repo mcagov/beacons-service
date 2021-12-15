@@ -3,7 +3,7 @@ package uk.gov.mca.beacons.api.beaconowner.mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
-import uk.gov.mca.beacons.api.beaconowner.rest.CreateBeaconOwnerDTO;
+import uk.gov.mca.beacons.api.beaconowner.rest.BeaconOwnerRegistrationDTO;
 import uk.gov.mca.beacons.api.shared.mappers.person.AddressMapper;
 
 @Component("BeaconOwnerMapperV2")
@@ -16,7 +16,7 @@ public class BeaconOwnerMapper {
     this.addressMapper = addressMapper;
   }
 
-  public BeaconOwner fromDTO(CreateBeaconOwnerDTO dto) {
+  public BeaconOwner fromDTO(BeaconOwnerRegistrationDTO dto) {
     BeaconOwner beaconOwner = new BeaconOwner();
 
     beaconOwner.setFullName(dto.getFullName());

@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateEmergencyContactDTO {
+public class EmergencyContactRegistrationDTO {
 
   private String fullName;
   private String telephoneNumber;

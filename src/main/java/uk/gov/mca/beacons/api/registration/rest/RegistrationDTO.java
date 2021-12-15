@@ -5,24 +5,24 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.mca.beacons.api.beacon.rest.CreateBeaconDTO;
-import uk.gov.mca.beacons.api.beaconowner.rest.CreateBeaconOwnerDTO;
-import uk.gov.mca.beacons.api.beaconuse.rest.CreateBeaconUseDTO;
-import uk.gov.mca.beacons.api.emergencycontact.rest.CreateEmergencyContactDTO;
+import uk.gov.mca.beacons.api.beacon.rest.BeaconRegistrationDTO;
+import uk.gov.mca.beacons.api.beaconowner.rest.BeaconOwnerRegistrationDTO;
+import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseRegistrationDTO;
+import uk.gov.mca.beacons.api.emergencycontact.rest.EmergencyContactRegistrationDTO;
 
 @Getter
 @Setter
 public class RegistrationDTO {
 
   @JsonUnwrapped
-  private CreateBeaconDTO createBeaconDTO;
+  private BeaconRegistrationDTO beaconRegistrationDTO;
 
   @JsonProperty("uses")
-  private List<CreateBeaconUseDTO> createBeaconUseDTOs;
+  private List<BeaconUseRegistrationDTO> beaconUseRegistrationDTOs;
 
   @JsonProperty("owner")
-  private CreateBeaconOwnerDTO createBeaconOwnerDTO;
+  private BeaconOwnerRegistrationDTO beaconOwnerRegistrationDTO;
 
   @JsonProperty("emergencyContacts")
-  private List<CreateEmergencyContactDTO> createEmergencyContactDTOs;
+  private List<EmergencyContactRegistrationDTO> emergencyContactRegistrationDTOs;
 }

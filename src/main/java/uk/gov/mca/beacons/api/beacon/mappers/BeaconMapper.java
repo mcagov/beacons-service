@@ -3,12 +3,12 @@ package uk.gov.mca.beacons.api.beacon.mappers;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
-import uk.gov.mca.beacons.api.beacon.rest.CreateBeaconDTO;
+import uk.gov.mca.beacons.api.beacon.rest.BeaconRegistrationDTO;
 
 @Component("BeaconMapperV2")
 public class BeaconMapper {
 
-  public Beacon fromDTO(CreateBeaconDTO dto) {
+  public Beacon fromDTO(BeaconRegistrationDTO dto) {
     Beacon beacon = new Beacon();
     beacon.setHexId(dto.getHexId());
     beacon.setManufacturer(dto.getManufacturer());

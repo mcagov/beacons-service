@@ -9,7 +9,7 @@ import uk.gov.mca.beacons.api.shared.rest.person.dto.AddressDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBeaconOwnerDTO {
+public class BeaconOwnerRegistrationDTO {
 
   private String fullName;
   private String email;

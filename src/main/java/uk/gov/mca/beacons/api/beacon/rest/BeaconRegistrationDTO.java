@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBeaconDTO {
+public class BeaconRegistrationDTO {
 
   @NotNull
   private String hexId;

@@ -11,7 +11,7 @@ import uk.gov.mca.beacons.api.beaconuse.domain.Purpose;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBeaconUseDTO {
+public class BeaconUseRegistrationDTO {
 
   @NotNull
   private Environment environment;

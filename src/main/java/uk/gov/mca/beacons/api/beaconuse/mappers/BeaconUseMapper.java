@@ -2,12 +2,12 @@ package uk.gov.mca.beacons.api.beaconuse.mappers;
 
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
-import uk.gov.mca.beacons.api.beaconuse.rest.CreateBeaconUseDTO;
+import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseRegistrationDTO;
 
 @Component("BeaconUseMapperV2")
 public class BeaconUseMapper {
 
-  public BeaconUse fromDTO(CreateBeaconUseDTO dto) {
+  public BeaconUse fromDTO(BeaconUseRegistrationDTO dto) {
     BeaconUse beaconUse = new BeaconUse();
     beaconUse.setEnvironment(dto.getEnvironment());
     beaconUse.setPurpose(dto.getPurpose());
