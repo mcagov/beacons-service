@@ -1,14 +1,13 @@
 package uk.gov.mca.beacons.api.registration.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.registration.application.RegistrationService;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
 import uk.gov.mca.beacons.api.registration.mappers.RegistrationMapper;
@@ -40,5 +39,19 @@ public class RegistrationController {
       registrationMapper.toDTO(savedRegistration),
       HttpStatus.CREATED
     );
+  }
+
+  @PatchMapping(value = "/register/{uuid}")
+  public ResponseEntity<RegistrationDTO> update(
+    @Valid @RequestBody RegistrationDTO dto,
+    @PathVariable("uuid") UUID rawBeaconId
+  ) {
+    BeaconId beaconId = new BeaconId(rawBeaconId);
+    Registration registration = registrationMapper.fromDTO(dto);
+    Registration updatedRegistration = registrationService.update(
+      beaconId,
+      registration
+    );
+    return ResponseEntity.ok(registrationMapper.toDTO(updatedRegistration));
   }
 }

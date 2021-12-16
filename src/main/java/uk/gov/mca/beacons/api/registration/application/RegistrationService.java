@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.beacon.application.BeaconService;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
+import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.beaconowner.application.BeaconOwnerService;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
 import uk.gov.mca.beacons.api.beaconuse.application.BeaconUseService;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
 import uk.gov.mca.beacons.api.emergencycontact.application.EmergencyContactService;
 import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContact;
+import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
 
 @Transactional
@@ -39,6 +41,26 @@ public class RegistrationService {
   // TODO: Add back the claim process
   public Registration register(Registration registration) {
     Beacon savedBeacon = beaconService.create(registration.getBeacon());
+
+    return persistAssociatedAggregates(savedBeacon, registration);
+  }
+
+  public Registration update(BeaconId beaconId, Registration registration)
+    throws ResourceNotFoundException {
+    Beacon updatedBeacon = beaconService.update(
+      beaconId,
+      registration.getBeacon()
+    );
+
+    deleteAssociatedAggregates(beaconId);
+
+    return persistAssociatedAggregates(updatedBeacon, registration);
+  }
+
+  private Registration persistAssociatedAggregates(
+    Beacon savedBeacon,
+    Registration registration
+  ) {
     registration.setBeaconId(savedBeacon.getId());
     BeaconOwner savedBeaconOwner = beaconOwnerService.create(
       registration.getBeaconOwner()
@@ -57,5 +79,11 @@ public class RegistrationService {
       .beaconUses(savedBeaconUses)
       .emergencyContacts(savedEmergencyContacts)
       .build();
+  }
+
+  private void deleteAssociatedAggregates(BeaconId beaconId) {
+    beaconOwnerService.deleteAllByBeaconId(beaconId);
+    beaconUseService.deleteAllByBeaconId(beaconId);
+    emergencyContactService.deleteAllByBeaconId(beaconId);
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContact;
 import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContactRepository;
 
@@ -24,5 +25,9 @@ public class EmergencyContactService {
     List<EmergencyContact> emergencyContacts
   ) {
     return emergencyContactRepository.saveAll(emergencyContacts);
+  }
+
+  public void deleteAllByBeaconId(BeaconId beaconId) {
+    emergencyContactRepository.deleteAllByBeaconId(beaconId);
   }
 }
