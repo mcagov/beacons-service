@@ -1,7 +1,9 @@
 package uk.gov.mca.beacons.api;
 
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -61,15 +63,17 @@ public abstract class BaseIntegrationTest {
   @Autowired
   JdbcTemplate jdbcTemplate;
 
-  @BeforeEach
+  @AfterEach
   public void cleanDatabase() {
     JdbcTestUtils.deleteFromTables(
       jdbcTemplate,
-      "account_holder",
-      "beacon",
+      "beacon_owner",
       "beacon_use",
-      "legacy_beacon",
+      "emergency_contact",
+      "beacon",
+      "account_holder",
       "legacy_beacon_claim_event",
+      "legacy_beacon",
       "note",
       "person"
     );

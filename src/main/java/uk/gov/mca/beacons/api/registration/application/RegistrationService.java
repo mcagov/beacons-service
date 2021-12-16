@@ -16,7 +16,7 @@ import uk.gov.mca.beacons.api.registration.domain.Registration;
 
 @Transactional
 @Service("CreateRegistrationServiceV2")
-public class CreateRegistrationService {
+public class RegistrationService {
 
   private final BeaconService beaconService;
   private final BeaconOwnerService beaconOwnerService;
@@ -24,7 +24,7 @@ public class CreateRegistrationService {
   private final EmergencyContactService emergencyContactService;
 
   @Autowired
-  public CreateRegistrationService(
+  public RegistrationService(
     BeaconService beaconService,
     BeaconOwnerService beaconOwnerService,
     BeaconUseService beaconUseService,
@@ -36,6 +36,7 @@ public class CreateRegistrationService {
     this.emergencyContactService = emergencyContactService;
   }
 
+  // TODO: Add back the claim process
   public Registration register(Registration registration) {
     Beacon savedBeacon = beaconService.create(registration.getBeacon());
     registration.setBeaconId(savedBeacon.getId());

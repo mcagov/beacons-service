@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.mca.beacons.api.registration.application.CreateRegistrationService;
+import uk.gov.mca.beacons.api.registration.application.RegistrationService;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
 import uk.gov.mca.beacons.api.registration.mappers.RegistrationMapper;
 
@@ -18,15 +18,15 @@ import uk.gov.mca.beacons.api.registration.mappers.RegistrationMapper;
 @Tag(name = "Registration Controller")
 public class RegistrationController {
 
-  private final CreateRegistrationService createRegistrationService;
+  private final RegistrationService registrationService;
   private final RegistrationMapper registrationMapper;
 
   @Autowired
   public RegistrationController(
-    CreateRegistrationService createRegistrationService,
+    RegistrationService createRegistrationService,
     RegistrationMapper registrationMapper
   ) {
-    this.createRegistrationService = createRegistrationService;
+    this.registrationService = createRegistrationService;
     this.registrationMapper = registrationMapper;
   }
 
@@ -35,9 +35,7 @@ public class RegistrationController {
     @Valid @RequestBody RegistrationDTO registrationDTO
   ) {
     Registration registration = registrationMapper.fromDTO(registrationDTO);
-    Registration savedRegistration = createRegistrationService.register(
-      registration
-    );
+    Registration savedRegistration = registrationService.register(registration);
     return new ResponseEntity<>(
       registrationMapper.toDTO(savedRegistration),
       HttpStatus.CREATED
