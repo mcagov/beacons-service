@@ -4,6 +4,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.accountholder.application.AccountHolderService;
+import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.beacon.application.BeaconService;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
@@ -14,33 +16,40 @@ import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
 import uk.gov.mca.beacons.api.emergencycontact.application.EmergencyContactService;
 import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContact;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
+import uk.gov.mca.beacons.api.legacybeacon.application.LegacyBeaconService;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
 
 @Transactional
 @Service("CreateRegistrationServiceV2")
 public class RegistrationService {
 
+  private final AccountHolderService accountHolderService;
   private final BeaconService beaconService;
   private final BeaconOwnerService beaconOwnerService;
   private final BeaconUseService beaconUseService;
   private final EmergencyContactService emergencyContactService;
+  private final LegacyBeaconService legacyBeaconService;
 
   @Autowired
   public RegistrationService(
+    AccountHolderService accountHolderService,
     BeaconService beaconService,
     BeaconOwnerService beaconOwnerService,
     BeaconUseService beaconUseService,
-    EmergencyContactService emergencyContactService
+    EmergencyContactService emergencyContactService,
+    LegacyBeaconService legacyBeaconService
   ) {
+    this.accountHolderService = accountHolderService;
     this.beaconService = beaconService;
     this.beaconOwnerService = beaconOwnerService;
     this.beaconUseService = beaconUseService;
     this.emergencyContactService = emergencyContactService;
+    this.legacyBeaconService = legacyBeaconService;
   }
 
-  // TODO: Add back the claim process
   public Registration register(Registration registration) {
     Beacon savedBeacon = beaconService.create(registration.getBeacon());
+    claimLegacyBeacon(savedBeacon);
 
     return persistAssociatedAggregates(savedBeacon, registration);
   }
@@ -85,5 +94,16 @@ public class RegistrationService {
     beaconOwnerService.deleteByBeaconId(beaconId);
     beaconUseService.deleteByBeaconId(beaconId);
     emergencyContactService.deleteByBeaconId(beaconId);
+  }
+
+  private void claimLegacyBeacon(Beacon beacon) {
+    AccountHolder accountHolder = accountHolderService
+      .getAccountHolder(beacon.getAccountHolderId())
+      .orElseThrow(ResourceNotFoundException::new);
+
+    legacyBeaconService.claimByHexIdAndAccountHolderEmail(
+      beacon.getHexId(),
+      accountHolder.getEmail()
+    );
   }
 }

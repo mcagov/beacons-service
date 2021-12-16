@@ -88,6 +88,14 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
     }
   }
 
+  public String claimStatus() {
+    if (isClaimed()) {
+      return "CLAIMED";
+    }
+
+    return null;
+  }
+
   // TODO: Add constructor to initialize list of actions
   private void initActions() {
     if (actions == null) {

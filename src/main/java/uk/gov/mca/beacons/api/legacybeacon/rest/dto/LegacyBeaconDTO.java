@@ -28,5 +28,6 @@ public class LegacyBeaconDTO extends DomainDTO<LegacyBeaconDTO.Attributes> {
     private List<LegacyUse> uses;
     private List<LegacySecondaryOwner> secondaryOwners;
     private LegacyEmergencyContact emergencyContact;
+    private String claimStatus;
   }
 }
