@@ -47,12 +47,12 @@ public class RegistrationService {
 
   public Registration update(BeaconId beaconId, Registration registration)
     throws ResourceNotFoundException {
+    deleteAssociatedAggregates(beaconId);
+
     Beacon updatedBeacon = beaconService.update(
       beaconId,
       registration.getBeacon()
     );
-
-    deleteAssociatedAggregates(beaconId);
 
     return persistAssociatedAggregates(updatedBeacon, registration);
   }
@@ -82,8 +82,8 @@ public class RegistrationService {
   }
 
   private void deleteAssociatedAggregates(BeaconId beaconId) {
-    beaconOwnerService.deleteAllByBeaconId(beaconId);
-    beaconUseService.deleteAllByBeaconId(beaconId);
-    emergencyContactService.deleteAllByBeaconId(beaconId);
+    beaconOwnerService.deleteByBeaconId(beaconId);
+    beaconUseService.deleteByBeaconId(beaconId);
+    emergencyContactService.deleteByBeaconId(beaconId);
   }
 }

@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.beacon.mappers;
 
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
@@ -34,6 +35,7 @@ public class BeaconMapper {
   public BeaconRegistrationDTO toBeaconRegistrationDTO(Beacon beacon) {
     return BeaconRegistrationDTO
       .builder()
+      .id(Objects.requireNonNull(beacon.getId()).unwrap())
       .hexId(beacon.getHexId())
       .manufacturer(beacon.getManufacturer())
       .model(beacon.getModel())

@@ -1,11 +1,13 @@
 package uk.gov.mca.beacons.api.beaconowner.domain;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
-import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContact;
-import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContactId;
 
+@Repository
 public interface BeaconOwnerRepository
   extends JpaRepository<BeaconOwner, BeaconOwnerId> {
-  void deleteAllByBeaconId(BeaconId beaconId);
+  List<BeaconOwner> getByBeaconId(BeaconId beaconId);
+  Long deleteAllByBeaconId(BeaconId beaconId);
 }

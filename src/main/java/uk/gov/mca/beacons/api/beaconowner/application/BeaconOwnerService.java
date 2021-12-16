@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.beaconowner.application;
 
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class BeaconOwnerService {
     return beaconOwnerRepository.save(beaconOwner);
   }
 
-  public void deleteAllByBeaconId(BeaconId beaconId) {
+  public void deleteByBeaconId(BeaconId beaconId) {
     beaconOwnerRepository.deleteAllByBeaconId(beaconId);
+    beaconOwnerRepository.flush();
   }
 }

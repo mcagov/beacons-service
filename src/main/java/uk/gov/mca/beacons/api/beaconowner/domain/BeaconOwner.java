@@ -16,6 +16,7 @@ import uk.gov.mca.beacons.api.shared.domain.person.Address;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity(name = "beacon_owner")
+@Table(name = "beacon_owner")
 public class BeaconOwner extends BaseAggregateRoot<BeaconOwnerId> {
 
   public static final String ID_GENERATOR_NAME = "beaconowner-id-generator";

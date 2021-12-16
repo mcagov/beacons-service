@@ -12,6 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 public class BeaconRegistrationDTO {
 
+  private UUID id;
+
   @NotNull
   private String hexId;
 

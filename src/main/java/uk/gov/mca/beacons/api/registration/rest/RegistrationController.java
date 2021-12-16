@@ -52,6 +52,7 @@ public class RegistrationController {
       beaconId,
       registration
     );
-    return ResponseEntity.ok(registrationMapper.toDTO(updatedRegistration));
+    RegistrationDTO updateDTO = registrationMapper.toDTO(updatedRegistration);
+    return ResponseEntity.ok(updateDTO);
   }
 }

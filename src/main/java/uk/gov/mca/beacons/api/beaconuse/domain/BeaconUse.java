@@ -20,6 +20,7 @@ import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity(name = "beacon_use")
+@Table(name = "beacon_use")
 public class BeaconUse extends BaseAggregateRoot<BeaconUseId> {
 
   public static final String ID_GENERATOR_NAME = "beaconuse-id-generator";

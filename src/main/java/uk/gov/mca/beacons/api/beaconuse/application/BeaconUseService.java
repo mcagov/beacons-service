@@ -23,7 +23,8 @@ public class BeaconUseService {
     return beaconUseRepository.saveAll(beaconUses);
   }
 
-  public void deleteAllByBeaconId(BeaconId beaconId) {
+  public void deleteByBeaconId(BeaconId beaconId) {
     beaconUseRepository.deleteAllByBeaconId(beaconId);
+    beaconUseRepository.flush();
   }
 }

@@ -66,6 +66,35 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
     }
   }
 
+  @Nested
+  class UpdateRegistration {
+
+    private String beaconId;
+
+    @BeforeEach
+    void init() throws Exception {
+      beaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
+    }
+
+    @Test
+    void shouldUpdateTheBeacon() throws Exception {
+      final String updateRegistrationBody = getRegistrationBody(
+        RegistrationUseCase.BEACON_TO_UPDATE
+      );
+
+      webTestClient
+        .patch()
+        .uri(REGISTRATION_ENDPOINT + "/register/" + beaconId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(updateRegistrationBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .json(updateRegistrationBody);
+    }
+  }
+
   // returns created account holder id
   private String createAccountHolder() throws Exception {
     final String accountHolderEndpoint = "/spring-api/account-holderv2";
@@ -87,6 +116,25 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
         .getResponseBody()
         .blockFirst(),
       "$.data.id"
+    );
+  }
+
+  // returns created Beacon id
+  private String createRegistration(RegistrationUseCase useCase)
+    throws Exception {
+    final String registrationBody = getRegistrationBody(useCase);
+    return JsonPath.read(
+      webTestClient
+        .post()
+        .uri(REGISTRATION_ENDPOINT + "/register")
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(registrationBody)
+        .exchange()
+        .returnResult(String.class)
+        .getResponseBody()
+        .blockFirst(),
+      "$.id"
     );
   }
 
