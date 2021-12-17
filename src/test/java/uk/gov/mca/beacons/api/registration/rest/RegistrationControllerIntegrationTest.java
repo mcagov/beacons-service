@@ -1,8 +1,6 @@
 package uk.gov.mca.beacons.api.registration.rest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.jayway.jsonpath.JsonPath;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

@@ -1,14 +1,15 @@
 package uk.gov.mca.beacons.api.beaconuse.mappers;
 
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
 import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseDTO;
-import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseRegistrationDTO;
+import uk.gov.mca.beacons.api.beaconuse.rest.CreateBeaconUseDTO;
 
 @Component("BeaconUseMapperV2")
 public class BeaconUseMapper {
 
-  public BeaconUse fromDTO(BeaconUseRegistrationDTO dto) {
+  public BeaconUse fromDTO(CreateBeaconUseDTO dto) {
     BeaconUse beaconUse = new BeaconUse();
     beaconUse.setEnvironment(dto.getEnvironment());
     beaconUse.setPurpose(dto.getPurpose());
@@ -60,62 +61,10 @@ public class BeaconUseMapper {
     return beaconUse;
   }
 
-  public BeaconUseRegistrationDTO toBeaconRegistrationDTO(BeaconUse beaconUse) {
-    BeaconUseRegistrationDTO dto = new BeaconUseRegistrationDTO();
-    dto.setEnvironment(beaconUse.getEnvironment());
-    dto.setPurpose(beaconUse.getPurpose());
-    dto.setActivity(beaconUse.getActivity());
-    dto.setOtherActivity(beaconUse.getOtherActivity());
-    dto.setCallSign(beaconUse.getCallSign());
-    dto.setVhfRadio(beaconUse.getVhfRadio());
-    dto.setFixedVhfRadio(beaconUse.getFixedVhfRadio());
-    dto.setFixedVhfRadioValue(beaconUse.getFixedVhfRadioValue());
-    dto.setPortableVhfRadio(beaconUse.getPortableVhfRadio());
-    dto.setPortableVhfRadioValue(beaconUse.getPortableVhfRadioValue());
-    dto.setSatelliteTelephone(beaconUse.getSatelliteTelephone());
-    dto.setSatelliteTelephoneValue(beaconUse.getSatelliteTelephoneValue());
-    dto.setMobileTelephone(beaconUse.getMobileTelephone());
-    dto.setMobileTelephone1(beaconUse.getMobileTelephone1());
-    dto.setMobileTelephone2(beaconUse.getMobileTelephone2());
-    dto.setOtherCommunication(beaconUse.getOtherCommunication());
-    dto.setOtherCommunicationValue(beaconUse.getOtherCommunicationValue());
-    dto.setMaxCapacity(beaconUse.getMaxCapacity());
-    dto.setVesselName(beaconUse.getVesselName());
-    dto.setPortLetterNumber(beaconUse.getPortLetterNumber());
-    dto.setHomeport(beaconUse.getHomeport());
-    dto.setAreaOfOperation(beaconUse.getAreaOfOperation());
-    dto.setBeaconLocation(beaconUse.getBeaconLocation());
-    dto.setImoNumber(beaconUse.getImoNumber());
-    dto.setSsrNumber(beaconUse.getSsrNumber());
-    dto.setRssNumber(beaconUse.getRssNumber());
-    dto.setOfficialNumber(beaconUse.getOfficialNumber());
-    dto.setRigPlatformLocation(beaconUse.getRigPlatformLocation());
-    dto.setMainUse(beaconUse.getMainUse());
-    dto.setAircraftManufacturer(beaconUse.getAircraftManufacturer());
-    dto.setPrincipalAirport(beaconUse.getPrincipalAirport());
-    dto.setSecondaryAirport(beaconUse.getSecondaryAirport());
-    dto.setRegistrationMark(beaconUse.getRegistrationMark());
-    dto.setHexAddress(beaconUse.getHexAddress());
-    dto.setCnOrMsnNumber(beaconUse.getCnOrMsnNumber());
-    dto.setDongle(beaconUse.getDongle());
-    dto.setBeaconPosition(beaconUse.getBeaconPosition());
-    dto.setWorkingRemotelyLocation(beaconUse.getWorkingRemotelyLocation());
-    dto.setWorkingRemotelyPeopleCount(
-      beaconUse.getWorkingRemotelyPeopleCount()
-    );
-    dto.setWindfarmLocation(beaconUse.getWindfarmLocation());
-    dto.setWindfarmPeopleCount(beaconUse.getWindfarmPeopleCount());
-    dto.setOtherActivityLocation(beaconUse.getOtherActivityLocation());
-    dto.setOtherActivityPeopleCount(beaconUse.getOtherActivityPeopleCount());
-    dto.setMoreDetails(beaconUse.getMoreDetails());
-
-    return dto;
-  }
-
-  BeaconUseDTO toDTO(BeaconUse beaconUse) {
-    BeaconUseDTO dto = new BeaconUseDTO();
-    var attributes = BeaconUseDTO.Attributes
+  public BeaconUseDTO toDTO(BeaconUse beaconUse) {
+    return BeaconUseDTO
       .builder()
+      .id(Objects.requireNonNull(beaconUse.getId()).unwrap())
       .environment(beaconUse.getEnvironment())
       .purpose(beaconUse.getPurpose())
       .activity(beaconUse.getActivity())
@@ -160,9 +109,7 @@ public class BeaconUseMapper {
       .otherActivityLocation(beaconUse.getOtherActivityLocation())
       .otherActivityPeopleCount(beaconUse.getOtherActivityPeopleCount())
       .moreDetails(beaconUse.getMoreDetails())
+      .beaconId(beaconUse.getBeaconId().unwrap())
       .build();
-
-    dto.setAttributes(attributes);
-    return dto;
   }
 }

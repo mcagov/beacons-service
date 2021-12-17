@@ -2,45 +2,38 @@ package uk.gov.mca.beacons.api.beaconowner.rest;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.*;
-import uk.gov.mca.beacons.api.dto.DomainDTO;
 import uk.gov.mca.beacons.api.shared.rest.person.dto.AddressDTO;
 
-public class BeaconOwnerDTO extends DomainDTO<BeaconOwnerDTO.Attributes> {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BeaconOwnerDTO {
 
-  // TODO: This is tech debt, it's being left as beaconPerson to keep the
-  // TODO: public contract static, should be changed to beaconOwner soon
-  private final String type = "beaconPerson";
+  @NotNull
+  private UUID id;
 
-  @Override
-  public String getType() {
-    return type;
-  }
+  @NotNull
+  private String fullName;
 
-  @Getter
-  @Setter
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class Attributes {
+  @NotNull
+  private String email;
 
-    @NotNull
-    private String fullName;
+  private String telephoneNumber;
 
-    @NotNull
-    private String email;
+  private String alternativeTelephoneNumber;
 
-    private String telephoneNumber;
+  @JsonUnwrapped
+  private AddressDTO addressDTO;
 
-    private String alternativeTelephoneNumber;
+  private OffsetDateTime createdDate;
 
-    @JsonUnwrapped
-    private AddressDTO addressDTO;
+  private OffsetDateTime lastModifiedDate;
 
-    private OffsetDateTime createdDate;
-
-    private OffsetDateTime lastModifiedDate;
-    // TODO: DTO should really contain BeaconId attribute;
-  }
+  @NotNull
+  private UUID beaconId;
 }

@@ -6,64 +6,56 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
-import uk.gov.mca.beacons.api.dto.DomainDTO;
 
-public class BeaconDTO extends DomainDTO<BeaconDTO.Attributes> {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BeaconDTO {
 
-  private final String type = "beacon";
+  @NotNull
+  private UUID id;
 
-  @Override
-  public String getType() {
-    return type;
-  }
+  @NotNull
+  private String hexId;
 
-  @Getter
-  @Setter
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class Attributes {
+  @NotNull
+  private String manufacturer;
 
-    @NotNull
-    private String hexId;
+  @NotNull
+  private String model;
 
-    @NotNull
-    private String manufacturer;
+  @NotNull
+  private String manufacturerSerialNumber;
 
-    @NotNull
-    private String model;
+  @NotNull
+  private String referenceNumber;
 
-    @NotNull
-    private String manufacturerSerialNumber;
+  private String chkCode;
 
-    @NotNull
-    private String referenceNumber;
+  private LocalDate batteryExpiryDate;
 
-    private String chkCode;
+  private LocalDate lastServicedDate;
 
-    private LocalDate batteryExpiryDate;
+  private String mti;
 
-    private LocalDate lastServicedDate;
+  private Boolean svdr;
 
-    private String mti;
+  private String csta;
 
-    private Boolean svdr;
+  private String beaconType;
 
-    private String csta;
+  private String protocol;
 
-    private String beaconType;
+  private String coding;
 
-    private String protocol;
+  private BeaconStatus status;
 
-    private String coding;
+  private OffsetDateTime createdDate;
 
-    private BeaconStatus status;
+  private OffsetDateTime lastModifiedDate;
 
-    private OffsetDateTime createdDate;
-
-    private OffsetDateTime lastModifiedDate;
-
-    @NotNull
-    private UUID accountHolderId;
-  }
+  @NotNull
+  private UUID accountHolderId;
 }

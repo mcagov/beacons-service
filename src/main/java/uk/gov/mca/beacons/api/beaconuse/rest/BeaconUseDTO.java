@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.beaconuse.rest;
 
+import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.beaconuse.domain.Activity;
@@ -7,113 +8,107 @@ import uk.gov.mca.beacons.api.beaconuse.domain.Environment;
 import uk.gov.mca.beacons.api.beaconuse.domain.Purpose;
 import uk.gov.mca.beacons.api.dto.DomainDTO;
 
-public class BeaconUseDTO extends DomainDTO<BeaconUseDTO.Attributes> {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BeaconUseDTO {
 
-  private final String type = "beaconUse";
+  @NotNull
+  private UUID id;
 
-  @Override
-  public String getType() {
-    return type;
-  }
+  @NotNull
+  private Environment environment;
 
-  @Getter
-  @Setter
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class Attributes {
+  private Purpose purpose;
 
-    @NotNull
-    private Environment environment;
+  @NotNull
+  private Activity activity;
 
-    private Purpose purpose;
+  private String otherActivity;
 
-    @NotNull
-    private Activity activity;
+  private String callSign;
 
-    private String otherActivity;
+  private Boolean vhfRadio;
 
-    private String callSign;
+  private Boolean fixedVhfRadio;
 
-    private Boolean vhfRadio;
+  private String fixedVhfRadioValue;
 
-    private Boolean fixedVhfRadio;
+  private Boolean portableVhfRadio;
 
-    private String fixedVhfRadioValue;
+  private String portableVhfRadioValue;
 
-    private Boolean portableVhfRadio;
+  private Boolean satelliteTelephone;
 
-    private String portableVhfRadioValue;
+  private String satelliteTelephoneValue;
 
-    private Boolean satelliteTelephone;
+  private Boolean mobileTelephone;
 
-    private String satelliteTelephoneValue;
+  private String mobileTelephone1;
 
-    private Boolean mobileTelephone;
+  private String mobileTelephone2;
 
-    private String mobileTelephone1;
+  private Boolean otherCommunication;
 
-    private String mobileTelephone2;
+  private String otherCommunicationValue;
 
-    private Boolean otherCommunication;
+  private Integer maxCapacity;
 
-    private String otherCommunicationValue;
+  private String vesselName;
 
-    private Integer maxCapacity;
+  private String portLetterNumber;
 
-    private String vesselName;
+  private String homeport;
 
-    private String portLetterNumber;
+  private String areaOfOperation;
 
-    private String homeport;
+  private String beaconLocation;
 
-    private String areaOfOperation;
+  private String imoNumber;
 
-    private String beaconLocation;
+  private String ssrNumber;
 
-    private String imoNumber;
+  private String rssNumber;
 
-    private String ssrNumber;
+  private String officialNumber;
 
-    private String rssNumber;
+  private String rigPlatformLocation;
 
-    private String officialNumber;
+  @NotNull
+  private Boolean mainUse;
 
-    private String rigPlatformLocation;
+  private String aircraftManufacturer;
 
-    @NotNull
-    private Boolean mainUse;
+  private String principalAirport;
 
-    private String aircraftManufacturer;
+  private String secondaryAirport;
 
-    private String principalAirport;
+  private String registrationMark;
 
-    private String secondaryAirport;
+  private String hexAddress;
 
-    private String registrationMark;
+  private String cnOrMsnNumber;
 
-    private String hexAddress;
+  private Boolean dongle;
 
-    private String cnOrMsnNumber;
+  private String beaconPosition;
 
-    private Boolean dongle;
+  private String workingRemotelyLocation;
 
-    private String beaconPosition;
+  private String workingRemotelyPeopleCount;
 
-    private String workingRemotelyLocation;
+  private String windfarmLocation;
 
-    private String workingRemotelyPeopleCount;
+  private String windfarmPeopleCount;
 
-    private String windfarmLocation;
+  private String otherActivityLocation;
 
-    private String windfarmPeopleCount;
+  private String otherActivityPeopleCount;
 
-    private String otherActivityLocation;
+  @NotNull
+  private String moreDetails;
 
-    private String otherActivityPeopleCount;
-
-    @NotNull
-    private String moreDetails;
-    // TODO: This should really have a beacon id in it
-  }
+  private UUID beaconId;
 }

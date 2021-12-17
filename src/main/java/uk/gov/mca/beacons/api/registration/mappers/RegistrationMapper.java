@@ -8,6 +8,7 @@ import uk.gov.mca.beacons.api.beaconowner.mappers.BeaconOwnerMapper;
 import uk.gov.mca.beacons.api.beaconuse.mappers.BeaconUseMapper;
 import uk.gov.mca.beacons.api.emergencycontact.mappers.EmergencyContactMapper;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
+import uk.gov.mca.beacons.api.registration.rest.CreateRegistrationDTO;
 import uk.gov.mca.beacons.api.registration.rest.RegistrationDTO;
 
 @Component("RegistrationMapperV2")
@@ -31,7 +32,7 @@ public class RegistrationMapper {
     this.emergencyContactMapper = emergencyContactMapper;
   }
 
-  public Registration fromDTO(RegistrationDTO dto) {
+  public Registration fromDTO(CreateRegistrationDTO dto) {
     return Registration
       .builder()
       .beacon(beaconMapper.fromDTO(dto.getBeaconRegistrationDTO()))
@@ -58,26 +59,20 @@ public class RegistrationMapper {
   public RegistrationDTO toDTO(Registration registration) {
     return RegistrationDTO
       .builder()
-      .beaconRegistrationDTO(
-        beaconMapper.toBeaconRegistrationDTO(registration.getBeacon())
-      )
-      .beaconOwnerRegistrationDTO(
-        beaconOwnerMapper.toBeaconOwnerRegistrationDTO(
-          registration.getBeaconOwner()
-        )
-      )
-      .beaconUseRegistrationDTOs(
+      .beaconDTO(beaconMapper.toDTO(registration.getBeacon()))
+      .beaconOwnerDTO(beaconOwnerMapper.toDTO(registration.getBeaconOwner()))
+      .beaconUseDTOs(
         registration
           .getBeaconUses()
           .stream()
-          .map(beaconUseMapper::toBeaconRegistrationDTO)
+          .map(beaconUseMapper::toDTO)
           .collect(Collectors.toList())
       )
-      .emergencyContactRegistrationDTOs(
+      .emergencyContactDTOs(
         registration
           .getEmergencyContacts()
           .stream()
-          .map(emergencyContactMapper::toEmergencyContactRegistrationDTO)
+          .map(emergencyContactMapper::toDTO)
           .collect(Collectors.toList())
       )
       .build();

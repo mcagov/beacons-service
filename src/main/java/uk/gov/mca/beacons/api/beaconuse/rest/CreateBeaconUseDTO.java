@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.beaconuse.rest;
 
+import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.beaconuse.domain.Activity;
@@ -11,7 +12,7 @@ import uk.gov.mca.beacons.api.beaconuse.domain.Purpose;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BeaconUseRegistrationDTO {
+public class CreateBeaconUseDTO {
 
   @NotNull
   private Environment environment;
@@ -104,4 +105,10 @@ public class BeaconUseRegistrationDTO {
 
   @NotNull
   private String moreDetails;
+
+  /**
+   * Not being used as beacon uses are being created as part of a registration, when we
+   * move to a more resource focussed API structure, this will be used
+   */
+  private UUID beaconId;
 }

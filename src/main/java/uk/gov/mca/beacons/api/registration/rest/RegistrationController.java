@@ -31,9 +31,11 @@ public class RegistrationController {
 
   @PostMapping(value = "/register")
   public ResponseEntity<RegistrationDTO> register(
-    @Valid @RequestBody RegistrationDTO registrationDTO
+    @Valid @RequestBody CreateRegistrationDTO createRegistrationDTO
   ) {
-    Registration registration = registrationMapper.fromDTO(registrationDTO);
+    Registration registration = registrationMapper.fromDTO(
+      createRegistrationDTO
+    );
     Registration savedRegistration = registrationService.register(registration);
     return new ResponseEntity<>(
       registrationMapper.toDTO(savedRegistration),
@@ -43,7 +45,7 @@ public class RegistrationController {
 
   @PatchMapping(value = "/register/{uuid}")
   public ResponseEntity<RegistrationDTO> update(
-    @Valid @RequestBody RegistrationDTO dto,
+    @Valid @RequestBody CreateRegistrationDTO dto,
     @PathVariable("uuid") UUID rawBeaconId
   ) {
     BeaconId beaconId = new BeaconId(rawBeaconId);
