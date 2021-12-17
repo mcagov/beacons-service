@@ -72,16 +72,15 @@ public class RegistrationController {
 
   /**
    *
-   * @param rawAccountHolderId Account holder's id
+   * @param accountHolderId Account holder's id
    * @return List of registrations where beacon status is new
    */
   @GetMapping
   public ResponseEntity<List<RegistrationDTO>> getRegistrationsByAccountHolderId(
-    @RequestParam UUID rawAccountHolderId
+    @RequestParam UUID accountHolderId
   ) {
-    AccountHolderId accountHolderId = new AccountHolderId(rawAccountHolderId);
     List<Registration> registrations = registrationService.getByAccountHolderId(
-      accountHolderId
+      new AccountHolderId(accountHolderId)
     );
 
     return ResponseEntity.ok(

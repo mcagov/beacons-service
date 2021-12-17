@@ -96,6 +96,7 @@ public class RegistrationService {
     return beacons
       .stream()
       .map(this::getAssociatedAggregates)
+      .sorted()
       .collect(Collectors.toList());
   }
 

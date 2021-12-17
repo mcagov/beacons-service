@@ -93,6 +93,61 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
     }
   }
 
+  @Nested
+  class GetRegistrationByBeaconId {
+
+    private String beaconId;
+
+    @BeforeEach
+    void init() throws Exception {
+      beaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
+    }
+
+    @Test
+    void shouldGetTheRegistrationByBeaconId() throws Exception {
+      final String registrationBody = getRegistrationBody(
+        RegistrationUseCase.SINGLE_BEACON
+      );
+
+      webTestClient
+        .get()
+        .uri(REGISTRATION_ENDPOINT + "/" + beaconId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .json(registrationBody);
+    }
+  }
+
+  @Nested
+  class GetRegistrationsByAccountHolderId {
+
+    String firstBeaconId;
+    String secondBeaconId;
+
+    @BeforeEach
+    void init() throws Exception {
+      firstBeaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
+      secondBeaconId = createRegistration(RegistrationUseCase.BEACON_TO_UPDATE);
+    }
+
+    @Test
+    void shouldGetTheRegistrationsByAccountHolderId() {
+      webTestClient
+        .get()
+        .uri(REGISTRATION_ENDPOINT + "?accountHolderId=" + accountHolderId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$[0].manufacturer")
+        .isEqualTo("Ocean Sound")
+        .jsonPath("$[1].manufacturer")
+        .isEqualTo("Ocean Signal");
+    }
+  }
+
   // returns created account holder id
   private String createAccountHolder() throws Exception {
     final String accountHolderEndpoint = "/spring-api/account-holderv2";
