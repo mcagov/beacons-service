@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.beaconuse.mappers;
 
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
+import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseDTO;
 import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseRegistrationDTO;
 
 @Component("BeaconUseMapperV2")
@@ -108,6 +109,60 @@ public class BeaconUseMapper {
     dto.setOtherActivityPeopleCount(beaconUse.getOtherActivityPeopleCount());
     dto.setMoreDetails(beaconUse.getMoreDetails());
 
+    return dto;
+  }
+
+  BeaconUseDTO toDTO(BeaconUse beaconUse) {
+    BeaconUseDTO dto = new BeaconUseDTO();
+    var attributes = BeaconUseDTO.Attributes
+      .builder()
+      .environment(beaconUse.getEnvironment())
+      .purpose(beaconUse.getPurpose())
+      .activity(beaconUse.getActivity())
+      .otherActivity(beaconUse.getOtherActivity())
+      .callSign(beaconUse.getCallSign())
+      .vhfRadio(beaconUse.getVhfRadio())
+      .fixedVhfRadio(beaconUse.getFixedVhfRadio())
+      .fixedVhfRadioValue(beaconUse.getFixedVhfRadioValue())
+      .portableVhfRadio(beaconUse.getPortableVhfRadio())
+      .portableVhfRadioValue(beaconUse.getPortableVhfRadioValue())
+      .satelliteTelephone(beaconUse.getSatelliteTelephone())
+      .satelliteTelephoneValue(beaconUse.getSatelliteTelephoneValue())
+      .mobileTelephone(beaconUse.getMobileTelephone())
+      .mobileTelephone1(beaconUse.getMobileTelephone1())
+      .mobileTelephone2(beaconUse.getMobileTelephone2())
+      .otherCommunication(beaconUse.getOtherCommunication())
+      .otherCommunicationValue(beaconUse.getOtherCommunicationValue())
+      .maxCapacity(beaconUse.getMaxCapacity())
+      .vesselName(beaconUse.getVesselName())
+      .portLetterNumber(beaconUse.getPortLetterNumber())
+      .homeport(beaconUse.getHomeport())
+      .areaOfOperation(beaconUse.getAreaOfOperation())
+      .beaconLocation(beaconUse.getBeaconLocation())
+      .imoNumber(beaconUse.getImoNumber())
+      .ssrNumber(beaconUse.getSsrNumber())
+      .rssNumber(beaconUse.getRssNumber())
+      .officialNumber(beaconUse.getOfficialNumber())
+      .rigPlatformLocation(beaconUse.getRigPlatformLocation())
+      .mainUse(beaconUse.getMainUse())
+      .aircraftManufacturer(beaconUse.getAircraftManufacturer())
+      .principalAirport(beaconUse.getPrincipalAirport())
+      .secondaryAirport(beaconUse.getSecondaryAirport())
+      .registrationMark(beaconUse.getRegistrationMark())
+      .hexAddress(beaconUse.getHexAddress())
+      .cnOrMsnNumber(beaconUse.getCnOrMsnNumber())
+      .dongle(beaconUse.getDongle())
+      .beaconPosition(beaconUse.getBeaconPosition())
+      .workingRemotelyLocation(beaconUse.getWorkingRemotelyLocation())
+      .workingRemotelyPeopleCount(beaconUse.getWorkingRemotelyPeopleCount())
+      .windfarmLocation(beaconUse.getWindfarmLocation())
+      .windfarmPeopleCount(beaconUse.getWindfarmPeopleCount())
+      .otherActivityLocation(beaconUse.getOtherActivityLocation())
+      .otherActivityPeopleCount(beaconUse.getOtherActivityPeopleCount())
+      .moreDetails(beaconUse.getMoreDetails())
+      .build();
+
+    dto.setAttributes(attributes);
     return dto;
   }
 }
