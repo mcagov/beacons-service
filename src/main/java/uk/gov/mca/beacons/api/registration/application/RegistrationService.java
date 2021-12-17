@@ -1,11 +1,14 @@
 package uk.gov.mca.beacons.api.registration.application;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.accountholder.application.AccountHolderService;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
+import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.application.BeaconService;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
@@ -64,6 +67,54 @@ public class RegistrationService {
     );
 
     return persistAssociatedAggregates(updatedBeacon, registration);
+  }
+
+  public Registration getByBeaconId(BeaconId beaconId) {
+    Beacon beacon = beaconService
+      .findById(beaconId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    return getAssociatedAggregates(beacon);
+  }
+
+  /**
+   *
+   * @param accountHolderId id of the AccountHolder
+   * @return a list of beacons where status is new
+   */
+  public List<Registration> getByAccountHolderId(
+    AccountHolderId accountHolderId
+  ) {
+    AccountHolder accountHolder = accountHolderService
+      .getAccountHolder(accountHolderId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    List<Beacon> beacons = beaconService.getByAccountHolderIdWhereStatusIsNew(
+      accountHolder.getId()
+    );
+
+    return beacons
+      .stream()
+      .map(this::getAssociatedAggregates)
+      .collect(Collectors.toList());
+  }
+
+  private Registration getAssociatedAggregates(Beacon beacon) {
+    Optional<BeaconOwner> beaconOwner = beaconOwnerService.getByBeaconId(
+      beacon.getId()
+    );
+    List<BeaconUse> beaconUses = beaconUseService.getByBeaconId(beacon.getId());
+    List<EmergencyContact> emergencyContacts = emergencyContactService.getByBeaconId(
+      beacon.getId()
+    );
+
+    return Registration
+      .builder()
+      .beacon(beacon)
+      .beaconOwner(beaconOwner.orElse(null))
+      .beaconUses(beaconUses)
+      .emergencyContacts(emergencyContacts)
+      .build();
   }
 
   private Registration persistAssociatedAggregates(

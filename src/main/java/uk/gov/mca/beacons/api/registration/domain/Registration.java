@@ -21,7 +21,9 @@ public class Registration {
   private List<EmergencyContact> emergencyContacts;
 
   public void setBeaconId(BeaconId beaconId) {
-    beaconOwner.setBeaconId(beaconId);
+    if (beaconOwner != null) {
+      beaconOwner.setBeaconId(beaconId);
+    }
     beaconUses.forEach(use -> use.setBeaconId(beaconId));
     emergencyContacts.forEach(
       emergencyContact -> emergencyContact.setBeaconId(beaconId)

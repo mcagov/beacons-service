@@ -27,6 +27,10 @@ public class EmergencyContactService {
     return emergencyContactRepository.saveAll(emergencyContacts);
   }
 
+  public List<EmergencyContact> getByBeaconId(BeaconId beaconId) {
+    return emergencyContactRepository.getByBeaconId(beaconId);
+  }
+
   public void deleteByBeaconId(BeaconId beaconId) {
     emergencyContactRepository.deleteAllByBeaconId(beaconId);
     emergencyContactRepository.flush();

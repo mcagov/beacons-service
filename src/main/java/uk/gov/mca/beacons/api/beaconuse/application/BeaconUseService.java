@@ -23,6 +23,10 @@ public class BeaconUseService {
     return beaconUseRepository.saveAll(beaconUses);
   }
 
+  public List<BeaconUse> getByBeaconId(BeaconId beaconId) {
+    return beaconUseRepository.getBeaconUseByBeaconId(beaconId);
+  }
+
   public void deleteByBeaconId(BeaconId beaconId) {
     beaconUseRepository.deleteAllByBeaconId(beaconId);
     beaconUseRepository.flush();

@@ -17,14 +17,14 @@ import uk.gov.mca.beacons.api.emergencycontact.rest.CreateEmergencyContactDTO;
 public class CreateRegistrationDTO {
 
   @JsonUnwrapped
-  private CreateBeaconDTO beaconRegistrationDTO;
+  private CreateBeaconDTO createBeaconDTO;
 
   @JsonProperty("uses")
-  private List<CreateBeaconUseDTO> beaconUseRegistrationDTOs;
+  private List<CreateBeaconUseDTO> createBeaconUseDTOs;
 
   @JsonProperty("owner")
-  private CreateBeaconOwnerDTO beaconOwnerRegistrationDTO;
+  private CreateBeaconOwnerDTO createBeaconOwnerDTO;
 
   @JsonProperty("emergencyContacts")
-  private List<CreateEmergencyContactDTO> emergencyContactRegistrationDTOs;
+  private List<CreateEmergencyContactDTO> createEmergencyContactDTOs;
 }

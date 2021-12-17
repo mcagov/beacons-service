@@ -1,11 +1,15 @@
 package uk.gov.mca.beacons.api.beacon.application;
 
+import java.util.List;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconRepository;
+import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
@@ -27,6 +31,23 @@ public class BeaconService {
 
   public Beacon create(Beacon beacon) {
     return beaconRepository.save(beacon);
+  }
+
+  public Optional<Beacon> findById(BeaconId beacon) {
+    return beaconRepository.findById(beacon);
+  }
+
+  public List<Beacon> getByAccountHolderId(AccountHolderId accountHolderId) {
+    return beaconRepository.getByAccountHolderId(accountHolderId);
+  }
+
+  public List<Beacon> getByAccountHolderIdWhereStatusIsNew(
+    AccountHolderId accountHolderId
+  ) {
+    return beaconRepository.getByAccountHolderIdAndBeaconStatus(
+      accountHolderId,
+      BeaconStatus.NEW
+    );
   }
 
   public Beacon update(BeaconId beaconId, Beacon beaconUpdate)

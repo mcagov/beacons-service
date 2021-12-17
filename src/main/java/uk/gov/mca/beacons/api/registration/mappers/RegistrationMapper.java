@@ -35,20 +35,18 @@ public class RegistrationMapper {
   public Registration fromDTO(CreateRegistrationDTO dto) {
     return Registration
       .builder()
-      .beacon(beaconMapper.fromDTO(dto.getBeaconRegistrationDTO()))
+      .beacon(beaconMapper.fromDTO(dto.getCreateBeaconDTO()))
       .beaconUses(
         dto
-          .getBeaconUseRegistrationDTOs()
+          .getCreateBeaconUseDTOs()
           .stream()
           .map(beaconUseMapper::fromDTO)
           .collect(Collectors.toList())
       )
-      .beaconOwner(
-        beaconOwnerMapper.fromDTO(dto.getBeaconOwnerRegistrationDTO())
-      )
+      .beaconOwner(beaconOwnerMapper.fromDTO(dto.getCreateBeaconOwnerDTO()))
       .emergencyContacts(
         dto
-          .getEmergencyContactRegistrationDTOs()
+          .getCreateEmergencyContactDTOs()
           .stream()
           .map(emergencyContactMapper::fromDTO)
           .collect(Collectors.toList())
@@ -60,7 +58,12 @@ public class RegistrationMapper {
     return RegistrationDTO
       .builder()
       .beaconDTO(beaconMapper.toDTO(registration.getBeacon()))
-      .beaconOwnerDTO(beaconOwnerMapper.toDTO(registration.getBeaconOwner()))
+      .beaconOwnerDTO(
+        // special case for handling deleted beacon owners, this won't be necessary with a resource oriented API
+        registration.getBeaconOwner() == null
+          ? null
+          : beaconOwnerMapper.toDTO(registration.getBeaconOwner())
+      )
       .beaconUseDTOs(
         registration
           .getBeaconUses()

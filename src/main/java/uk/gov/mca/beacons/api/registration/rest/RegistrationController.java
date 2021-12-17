@@ -1,12 +1,15 @@
 package uk.gov.mca.beacons.api.registration.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.registration.application.RegistrationService;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
@@ -56,5 +59,36 @@ public class RegistrationController {
     );
     RegistrationDTO updateDTO = registrationMapper.toDTO(updatedRegistration);
     return ResponseEntity.ok(updateDTO);
+  }
+
+  @GetMapping(value = "/{uuid}")
+  public ResponseEntity<RegistrationDTO> getRegistrationByBeaconId(
+    @PathVariable("uuid") UUID rawBeaconId
+  ) {
+    BeaconId beaconId = new BeaconId(rawBeaconId);
+    Registration registration = registrationService.getByBeaconId(beaconId);
+    return ResponseEntity.ok(registrationMapper.toDTO(registration));
+  }
+
+  /**
+   *
+   * @param rawAccountHolderId Account holder's id
+   * @return List of registrations where beacon status is new
+   */
+  @GetMapping
+  public ResponseEntity<List<RegistrationDTO>> getRegistrationsByAccountHolderId(
+    @RequestParam UUID rawAccountHolderId
+  ) {
+    AccountHolderId accountHolderId = new AccountHolderId(rawAccountHolderId);
+    List<Registration> registrations = registrationService.getByAccountHolderId(
+      accountHolderId
+    );
+
+    return ResponseEntity.ok(
+      registrations
+        .stream()
+        .map(registrationMapper::toDTO)
+        .collect(Collectors.toList())
+    );
   }
 }
