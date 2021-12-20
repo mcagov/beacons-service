@@ -1,15 +1,15 @@
-package uk.gov.mca.beacons.api.services;
+package uk.gov.mca.beacons.api.auth.application;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.mca.beacons.api.gateways.AuthGateway;
-import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl.SupportedPermissions;
 
 @Service
 public class BeaconRolesService {
 
-  private AuthGateway authGateway;
+  private final AuthGateway authGateway;
 
   @Autowired
   public BeaconRolesService(AuthGateway authGateway) {

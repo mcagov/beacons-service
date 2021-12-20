@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.gateways;
+package uk.gov.mca.beacons.api.auth.gateway;
 
 import com.azure.spring.aad.webapi.AADOAuth2AuthenticatedPrincipal;
 import java.util.ArrayList;

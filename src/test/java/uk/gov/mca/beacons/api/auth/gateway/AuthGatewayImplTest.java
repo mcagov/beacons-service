@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.gateways;
+package uk.gov.mca.beacons.api.auth.gateway;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
+import static uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl.SupportedPermissions;
 
 import com.azure.spring.aad.webapi.AADOAuth2AuthenticatedPrincipal;
 import java.util.HashMap;
@@ -22,6 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl;
 import uk.gov.mca.beacons.api.domain.User;
 
 @ExtendWith(MockitoExtension.class)

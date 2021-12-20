@@ -1,15 +1,15 @@
 package uk.gov.mca.beacons.api.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
+import static uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl.SupportedPermissions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.auth.application.BeaconRolesService;
 import uk.gov.mca.beacons.api.controllers.BeaconsController;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.jpa.entities.Beacon;
-import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @Service
 public class BeaconLinkStrategy implements IHateoasLinkStrategy<Beacon> {

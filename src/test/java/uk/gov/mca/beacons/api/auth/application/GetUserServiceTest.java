@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.services;
+package uk.gov.mca.beacons.api.auth.application;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -10,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mca.beacons.api.auth.application.GetUserService;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
-import uk.gov.mca.beacons.api.gateways.AuthGateway;
 
 @ExtendWith(MockitoExtension.class)
 class GetUserServiceTest {

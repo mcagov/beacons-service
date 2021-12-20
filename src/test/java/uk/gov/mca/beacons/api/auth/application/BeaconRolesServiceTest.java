@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.hateoas;
+package uk.gov.mca.beacons.api.auth.application;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mca.beacons.api.gateways.AuthGateway;
-import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
-import uk.gov.mca.beacons.api.services.BeaconRolesService;
+import uk.gov.mca.beacons.api.auth.application.BeaconRolesService;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl.SupportedPermissions;
 
 @ExtendWith(MockitoExtension.class)
 class BeaconRolesServiceTest {

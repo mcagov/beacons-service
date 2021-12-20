@@ -5,12 +5,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import uk.gov.mca.beacons.api.auth.application.GetUserService;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
-import uk.gov.mca.beacons.api.services.GetUserService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @RestController

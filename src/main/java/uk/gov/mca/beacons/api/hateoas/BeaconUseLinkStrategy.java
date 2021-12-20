@@ -6,11 +6,11 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.auth.application.BeaconRolesService;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl.SupportedPermissions;
 import uk.gov.mca.beacons.api.controllers.BeaconUsesController;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
-import uk.gov.mca.beacons.api.gateways.AuthGatewayImpl.SupportedPermissions;
 import uk.gov.mca.beacons.api.jpa.entities.BeaconUse;
-import uk.gov.mca.beacons.api.services.BeaconRolesService;
 
 @Service
 public class BeaconUseLinkStrategy implements IHateoasLinkStrategy<BeaconUse> {

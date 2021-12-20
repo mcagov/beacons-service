@@ -1,9 +1,9 @@
-package uk.gov.mca.beacons.api.services;
+package uk.gov.mca.beacons.api.auth.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
 import uk.gov.mca.beacons.api.domain.User;
-import uk.gov.mca.beacons.api.gateways.AuthGateway;
 
 @Service
 public class GetUserService {

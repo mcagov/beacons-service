@@ -19,13 +19,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
+import uk.gov.mca.beacons.api.auth.application.GetUserService;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
-import uk.gov.mca.beacons.api.services.GetUserService;
 import uk.gov.mca.beacons.api.services.NoteService;
 
 @WebMvcTest(controllers = NoteController.class)
