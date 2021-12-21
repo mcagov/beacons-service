@@ -11,13 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.mca.beacons.api.registration.rest.RegistrationControllerIntegrationTest;
 
 @AutoConfigureWebTestClient
-public abstract class WebIntegrationTest extends BaseIntegrationTest {
+public class WebIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
-  WebTestClient webTestClient;
+  protected WebTestClient webTestClient;
 
   protected enum Endpoints {
     AccountHolder("/spring-api/account-holderv2"),
@@ -27,10 +26,10 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
     Note("/spring-api/notev2"),
     Registration("/spring-api/registrationv2");
 
-    public final String label;
+    public final String value;
 
-    Endpoints(String label) {
-      this.label = label;
+    Endpoints(String value) {
+      this.value = value;
     }
   }
 
@@ -51,7 +50,7 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
     return JsonPath.read(
       webTestClient
         .post()
-        .uri(Endpoints.AccountHolder.toString())
+        .uri(Endpoints.AccountHolder.value)
         .body(BodyInserters.fromValue(createAccountHolderRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -67,7 +66,7 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
    * @return AccountHolderId as String
    * @throws Exception From reading fixture
    */
-  private String seedAccountHolder() throws Exception {
+  protected String seedAccountHolder() throws Exception {
     return seedAccountHolder(UUID.randomUUID().toString());
   }
 
@@ -76,7 +75,7 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
    * @return LegacyBeaconId as String
    * @throws Exception from reading fixture
    */
-  private String seedLegacyBeacon() throws Exception {
+  protected String seedLegacyBeacon() throws Exception {
     String createLegacyBeaconRequest = fixtureHelper.getFixture(
       "src/test/resources/fixtures/createLegacyBeaconRequest.json"
     );
@@ -84,7 +83,7 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
     return JsonPath.read(
       webTestClient
         .post()
-        .uri(Endpoints.LegacyBeacon + "/legacy-beacon")
+        .uri(Endpoints.Migration.value + "/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -121,7 +120,7 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
     return JsonPath.read(
       webTestClient
         .post()
-        .uri(Endpoints.Registration + "/register")
+        .uri(Endpoints.Registration.value + "/register")
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(registrationBody)

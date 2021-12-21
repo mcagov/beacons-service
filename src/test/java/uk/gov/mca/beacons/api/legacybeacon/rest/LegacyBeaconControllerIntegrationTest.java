@@ -1,20 +1,9 @@
 package uk.gov.mca.beacons.api.legacybeacon.rest;
 
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.BaseIntegrationTest;
+import uk.gov.mca.beacons.api.WebIntegrationTest;
 
-@AutoConfigureWebTestClient
-public class LegacyBeaconControllerIntegrationTest extends BaseIntegrationTest {
-
-  @Autowired
-  WebTestClient webTestClient;
+public class LegacyBeaconControllerIntegrationTest extends WebIntegrationTest {
 
   @Test
   void shouldFindTheLegacyBeaconById() throws Exception {
@@ -22,7 +11,7 @@ public class LegacyBeaconControllerIntegrationTest extends BaseIntegrationTest {
       "src/test/resources/fixtures/createLegacyBeaconResponse.json"
     );
 
-    final String legacyBeaconId = createLegacyBeacon();
+    final String legacyBeaconId = seedLegacyBeacon();
 
     webTestClient
       .get()
@@ -32,23 +21,5 @@ public class LegacyBeaconControllerIntegrationTest extends BaseIntegrationTest {
       .isOk()
       .expectBody()
       .json(createLegacyBeaconResponse);
-  }
-
-  private String createLegacyBeacon() throws Exception {
-    String createLegacyBeaconRequest = fixtureHelper.getFixture(
-      "src/test/resources/fixtures/createLegacyBeaconRequest.json"
-    );
-
-    final String responseBody = webTestClient
-      .post()
-      .uri("/spring-api/migratev2/legacy-beacon")
-      .body(BodyInserters.fromValue(createLegacyBeaconRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange()
-      .returnResult(String.class)
-      .getResponseBody()
-      .blockFirst();
-
-    return JsonPath.read(responseBody, "$.data.id");
   }
 }
