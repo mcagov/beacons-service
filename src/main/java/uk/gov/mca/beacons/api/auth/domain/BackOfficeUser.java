@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.domain;
+package uk.gov.mca.beacons.api.auth.domain;
 
 import java.util.UUID;
 import lombok.Builder;

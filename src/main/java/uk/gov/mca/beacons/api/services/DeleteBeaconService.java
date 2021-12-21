@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mca.beacons.api.domain.Note;
 import uk.gov.mca.beacons.api.domain.NoteType;
-import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.DeleteBeaconRequestDTO;
 import uk.gov.mca.beacons.api.exceptions.UserNotFoundException;
 import uk.gov.mca.beacons.api.gateways.AccountHolderGateway;
@@ -18,6 +17,7 @@ import uk.gov.mca.beacons.api.gateways.EmergencyContactGateway;
 import uk.gov.mca.beacons.api.gateways.NoteGateway;
 import uk.gov.mca.beacons.api.gateways.OwnerGateway;
 import uk.gov.mca.beacons.api.gateways.UseGateway;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @Service
 @Transactional

@@ -22,11 +22,11 @@ import uk.gov.mca.beacons.api.WebMvcTestConfiguration;
 import uk.gov.mca.beacons.api.auth.application.GetUserService;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.domain.Note;
-import uk.gov.mca.beacons.api.domain.User;
 import uk.gov.mca.beacons.api.dto.NoteDTO;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.services.NoteService;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @WebMvcTest(controllers = NoteController.class)
 @AutoConfigureMockMvc

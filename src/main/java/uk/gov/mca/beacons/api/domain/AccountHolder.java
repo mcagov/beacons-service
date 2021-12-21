@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.domain;
 
 import java.util.UUID;
 import lombok.*;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @Getter
 @Setter

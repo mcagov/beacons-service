@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import uk.gov.mca.beacons.api.domain.BackOfficeUser;
-import uk.gov.mca.beacons.api.domain.User;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @Component
 public class AuthGatewayImpl implements AuthGateway {

@@ -22,9 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
-import uk.gov.mca.beacons.api.auth.gateway.AuthGatewayImpl;
-import uk.gov.mca.beacons.api.domain.User;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @ExtendWith(MockitoExtension.class)
 class AuthGatewayImplTest {

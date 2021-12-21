@@ -13,11 +13,14 @@ import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderUpdated;
 import uk.gov.mca.beacons.api.mappers.ModelPatcher;
 import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 import uk.gov.mca.beacons.api.shared.domain.person.Address;
+import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity(name = "account_holder")
-public class AccountHolder extends BaseAggregateRoot<AccountHolderId> {
+public class AccountHolder
+  extends BaseAggregateRoot<AccountHolderId>
+  implements User {
 
   public static final String ID_GENERATOR_NAME = "accountholder-id-generator";
 
