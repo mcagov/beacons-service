@@ -70,7 +70,6 @@ class AuthGatewayImplTest {
 
       User user = authGateway.getUser();
 
-      assertThat(user.getId(), is(UUID.fromString(userId)));
       assertThat(user.getFullName(), is(fullName));
       assertThat(user.getEmail(), is(email));
     }

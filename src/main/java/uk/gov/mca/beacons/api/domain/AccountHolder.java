@@ -38,4 +38,9 @@ public class AccountHolder implements User {
   private String county;
 
   private String country;
+
+  @Override
+  public UUID getUserId() {
+    return getId();
+  }
 }

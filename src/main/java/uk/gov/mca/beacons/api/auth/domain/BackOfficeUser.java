@@ -14,4 +14,8 @@ public class BackOfficeUser implements User {
   private UUID id;
   private String fullName;
   private String email;
+
+  public UUID getUserId() {
+    return id;
+  }
 }

@@ -1,6 +1,8 @@
 package uk.gov.mca.beacons.api.accountholder.domain;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.*;
@@ -71,5 +73,9 @@ public class AccountHolder
 
   public void registerCreatedEvent() {
     this.registerEvent(new AccountHolderCreated(this));
+  }
+
+  public UUID getUserId() {
+    return Objects.requireNonNull(getId()).unwrap();
   }
 }

@@ -13,7 +13,8 @@ import uk.gov.mca.beacons.api.shared.domain.user.User;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name = "note")
+@Entity(name = "notev2")
+@Table(name = "note")
 public class Note extends BaseAggregateRoot<NoteId> {
 
   public static final String ID_GENERATOR_NAME = "note-id-generator";
