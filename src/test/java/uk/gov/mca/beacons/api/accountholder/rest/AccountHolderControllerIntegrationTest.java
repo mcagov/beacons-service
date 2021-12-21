@@ -1,32 +1,26 @@
 package uk.gov.mca.beacons.api.accountholder.rest;
 
-import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import uk.gov.mca.beacons.api.BaseIntegrationTest;
-import uk.gov.mca.beacons.api.FixtureHelper;
+import uk.gov.mca.beacons.api.WebIntegrationTest;
 
-@AutoConfigureWebTestClient
-public class AccountHolderControllerIntegrationTest
-  extends BaseIntegrationTest {
-
-  private final String accountHolderEndpoint = "/spring-api/account-holderv2";
-
-  @Autowired
-  private WebTestClient webTestClient;
+public class AccountHolderControllerIntegrationTest extends WebIntegrationTest {
 
   @Test
   public void shouldRespondWithTheCreatedAccountHolder() throws Exception {
     final String authId = UUID.randomUUID().toString();
+    final var createAccountHolderRequest = createAccountHolderRequest(authId);
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
 
-    createAccountHolder(authId)
+    webTestClient
+      .post()
+      .uri(Endpoints.AccountHolder.value)
+      .body(BodyInserters.fromValue(createAccountHolderRequest))
+      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .exchange()
       .expectStatus()
       .isCreated()
       .expectBody()
@@ -38,18 +32,12 @@ public class AccountHolderControllerIntegrationTest
   @Test
   public void shouldFindTheCreatedAccountHolderById() throws Exception {
     final String authId = UUID.randomUUID().toString();
+    final String id = seedAccountHolder(authId);
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
-
-    String responseBody = createAccountHolder(authId)
-      .returnResult(String.class)
-      .getResponseBody()
-      .blockFirst();
-
-    String id = JsonPath.read(responseBody, "$.data.id");
 
     webTestClient
       .get()
-      .uri(accountHolderEndpoint + "/" + id)
+      .uri(Endpoints.AccountHolder.value + "/" + id)
       .exchange()
       .expectStatus()
       .isOk()
@@ -60,13 +48,12 @@ public class AccountHolderControllerIntegrationTest
   @Test
   public void shouldFindTheAccountHolderByAuthId() throws Exception {
     final String authId = UUID.randomUUID().toString();
+    seedAccountHolder(authId);
     final var createAccountHolderResponse = createAccountHolderResponse(authId);
-
-    createAccountHolder(authId).expectStatus().isCreated();
 
     webTestClient
       .get()
-      .uri(accountHolderEndpoint + "?authId=" + authId)
+      .uri(Endpoints.AccountHolder.value + "?authId=" + authId)
       .exchange()
       .expectStatus()
       .isOk()
@@ -78,20 +65,14 @@ public class AccountHolderControllerIntegrationTest
   public void shouldRespondWithTheUpdateAccountHolderDetails()
     throws Exception {
     final String authId = UUID.randomUUID().toString();
-
-    String responseBody = createAccountHolder(authId)
-      .returnResult(String.class)
-      .getResponseBody()
-      .blockFirst();
-
-    String id = JsonPath.read(responseBody, "$.data.id");
+    String id = seedAccountHolder(authId);
 
     String updateAccountHolderRequest = updateAccountHolderRequest(id);
     String updateAccountHolderResponse = updateAccountHolderResponse(id);
 
     webTestClient
       .patch()
-      .uri(accountHolderEndpoint + "/" + id)
+      .uri(Endpoints.AccountHolder.value + "/" + id)
       .body(BodyInserters.fromValue(updateAccountHolderRequest))
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .exchange()
@@ -99,18 +80,6 @@ public class AccountHolderControllerIntegrationTest
       .isOk()
       .expectBody()
       .json(updateAccountHolderResponse);
-  }
-
-  private WebTestClient.ResponseSpec createAccountHolder(String authId)
-    throws Exception {
-    final var createAccountHolderRequest = createAccountHolderRequest(authId);
-
-    return webTestClient
-      .post()
-      .uri(accountHolderEndpoint)
-      .body(BodyInserters.fromValue(createAccountHolderRequest))
-      .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-      .exchange();
   }
 
   private String createAccountHolderRequest(String authId) throws Exception {
