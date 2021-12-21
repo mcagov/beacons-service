@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @AutoConfigureWebTestClient
-public class WebIntegrationTest extends BaseIntegrationTest {
+public abstract class WebIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
   protected WebTestClient webTestClient;
@@ -24,7 +24,7 @@ public class WebIntegrationTest extends BaseIntegrationTest {
     LegacyBeacon("/spring-api/legacy-beaconv2"),
     Migration("/spring-api/migratev2"),
     Note("/spring-api/notev2"),
-    Registration("/spring-api/registrationv2");
+    Registration("/spring-api/registrationsv2");
 
     public final String value;
 
@@ -132,7 +132,7 @@ public class WebIntegrationTest extends BaseIntegrationTest {
     );
   }
 
-  private String getRegistrationBody(
+  protected String getRegistrationBody(
     RegistrationUseCase useCase,
     String accountHolderId
   ) throws Exception {

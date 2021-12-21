@@ -1,43 +1,18 @@
 package uk.gov.mca.beacons.api.registration.rest;
 
-import com.jayway.jsonpath.JsonPath;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.mca.beacons.api.BaseIntegrationTest;
+import uk.gov.mca.beacons.api.WebIntegrationTest;
 
-@AutoConfigureWebTestClient
-public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
-
-  @Autowired
-  WebTestClient webTestClient;
-
-  private static final String REGISTRATION_ENDPOINT =
-    "/spring-api/registrationsv2";
-
-  enum RegistrationUseCase {
-    SINGLE_BEACON,
-    BEACON_TO_UPDATE,
-    NO_HEX_ID,
-    NO_USES,
-    NO_EMERGENCY_CONTACTS,
-  }
+public class RegistrationControllerIntegrationTest extends WebIntegrationTest {
 
   private String accountHolderId;
 
   @BeforeEach
   void init() throws Exception {
-    accountHolderId = createAccountHolder();
+    accountHolderId = seedAccountHolder();
   }
 
   @Nested
@@ -46,12 +21,13 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     void shouldRegisterNewRegistration() throws Exception {
       final String registrationBody = getRegistrationBody(
-        RegistrationUseCase.SINGLE_BEACON
+        RegistrationUseCase.SINGLE_BEACON,
+        accountHolderId
       );
 
       webTestClient
         .post()
-        .uri(REGISTRATION_ENDPOINT + "/register")
+        .uri(Endpoints.Registration.value + "/register")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(registrationBody)
         .exchange()
@@ -71,20 +47,31 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
 
     @BeforeEach
     void init() throws Exception {
-      beaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
+      beaconId =
+        seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId);
     }
 
     @Test
     void shouldUpdateTheBeacon() throws Exception {
       final String updateRegistrationBody = getRegistrationBody(
-        RegistrationUseCase.BEACON_TO_UPDATE
+        RegistrationUseCase.BEACON_TO_UPDATE,
+        accountHolderId
       );
 
       webTestClient
         .patch()
-        .uri(REGISTRATION_ENDPOINT + "/register/" + beaconId)
+        .uri(Endpoints.Registration.value + "/register/" + beaconId)
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(updateRegistrationBody)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .json(updateRegistrationBody);
+
+      webTestClient
+        .get()
+        .uri(Endpoints.Registration.value + "/" + beaconId)
         .exchange()
         .expectStatus()
         .isOk()
@@ -100,18 +87,20 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
 
     @BeforeEach
     void init() throws Exception {
-      beaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
+      beaconId =
+        seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId);
     }
 
     @Test
     void shouldGetTheRegistrationByBeaconId() throws Exception {
       final String registrationBody = getRegistrationBody(
-        RegistrationUseCase.SINGLE_BEACON
+        RegistrationUseCase.SINGLE_BEACON,
+        accountHolderId
       );
 
       webTestClient
         .get()
-        .uri(REGISTRATION_ENDPOINT + "/" + beaconId)
+        .uri(Endpoints.Registration.value + "/" + beaconId)
         .exchange()
         .expectStatus()
         .isOk()
@@ -128,89 +117,27 @@ public class RegistrationControllerIntegrationTest extends BaseIntegrationTest {
 
     @BeforeEach
     void init() throws Exception {
-      firstBeaconId = createRegistration(RegistrationUseCase.SINGLE_BEACON);
-      secondBeaconId = createRegistration(RegistrationUseCase.BEACON_TO_UPDATE);
+      firstBeaconId =
+        seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId);
+      secondBeaconId =
+        seedRegistration(RegistrationUseCase.BEACON_TO_UPDATE, accountHolderId);
     }
 
     @Test
     void shouldGetTheRegistrationsByAccountHolderId() {
       webTestClient
         .get()
-        .uri(REGISTRATION_ENDPOINT + "?accountHolderId=" + accountHolderId)
+        .uri(
+          Endpoints.Registration.value + "?accountHolderId=" + accountHolderId
+        )
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$[0].manufacturer")
-        .isEqualTo("Ocean Sound")
-        .jsonPath("$[1].manufacturer")
-        .isEqualTo("Ocean Signal");
+        .jsonPath("$[0].id")
+        .isEqualTo(secondBeaconId)
+        .jsonPath("$[1].id")
+        .isEqualTo(firstBeaconId);
     }
-  }
-
-  // returns created account holder id
-  private String createAccountHolder() throws Exception {
-    final String accountHolderEndpoint = "/spring-api/account-holderv2";
-    String authId = UUID.randomUUID().toString();
-
-    String createAccountHolderRequestBody = fixtureHelper.getFixture(
-      "src/test/resources/fixtures/createAccountHolderRequest.json",
-      fixture -> fixture.replace("replace-with-test-auth-id", authId)
-    );
-
-    return JsonPath.read(
-      webTestClient
-        .post()
-        .uri(accountHolderEndpoint)
-        .body(BodyInserters.fromValue(createAccountHolderRequestBody))
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .exchange()
-        .returnResult(String.class)
-        .getResponseBody()
-        .blockFirst(),
-      "$.data.id"
-    );
-  }
-
-  // returns created Beacon id
-  private String createRegistration(RegistrationUseCase useCase)
-    throws Exception {
-    final String registrationBody = getRegistrationBody(useCase);
-    return JsonPath.read(
-      webTestClient
-        .post()
-        .uri(REGISTRATION_ENDPOINT + "/register")
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(registrationBody)
-        .exchange()
-        .returnResult(String.class)
-        .getResponseBody()
-        .blockFirst(),
-      "$.id"
-    );
-  }
-
-  private String getRegistrationBody(RegistrationUseCase useCase)
-    throws Exception {
-    final String REGISTRATION_JSON_RESOURCE =
-      "src/test/resources/fixtures/registrations.json";
-
-    final ObjectMapper mapper = new ObjectMapper();
-
-    @SuppressWarnings("unchecked")
-    final Map<String, Map<String, Object>> registrationMap = mapper.readValue(
-      fixtureHelper.getFixture(
-        REGISTRATION_JSON_RESOURCE,
-        fixture ->
-          fixture.replace(
-            "replace-with-test-account-holder-id",
-            accountHolderId
-          )
-      ),
-      HashMap.class
-    );
-
-    return mapper.writeValueAsString(registrationMap.get(useCase.toString()));
   }
 }
