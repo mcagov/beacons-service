@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.note.domain;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -31,6 +32,7 @@ public class Note extends BaseAggregateRoot<NoteId> {
 
   @Setter
   @Type(type = "uk.gov.mca.beacons.api.beacon.domain.BeaconId")
+  @NotNull
   private BeaconId beaconId;
 
   @Setter

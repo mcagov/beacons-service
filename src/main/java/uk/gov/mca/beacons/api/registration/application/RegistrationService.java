@@ -20,7 +20,10 @@ import uk.gov.mca.beacons.api.emergencycontact.application.EmergencyContactServi
 import uk.gov.mca.beacons.api.emergencycontact.domain.EmergencyContact;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.legacybeacon.application.LegacyBeaconService;
+import uk.gov.mca.beacons.api.note.application.NoteService;
+import uk.gov.mca.beacons.api.note.domain.Note;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
+import uk.gov.mca.beacons.api.registration.rest.DeleteRegistrationDTO;
 
 @Transactional
 @Service("CreateRegistrationServiceV2")
@@ -32,6 +35,7 @@ public class RegistrationService {
   private final BeaconUseService beaconUseService;
   private final EmergencyContactService emergencyContactService;
   private final LegacyBeaconService legacyBeaconService;
+  private final NoteService noteService;
 
   @Autowired
   public RegistrationService(
@@ -40,7 +44,8 @@ public class RegistrationService {
     BeaconOwnerService beaconOwnerService,
     BeaconUseService beaconUseService,
     EmergencyContactService emergencyContactService,
-    LegacyBeaconService legacyBeaconService
+    LegacyBeaconService legacyBeaconService,
+    NoteService noteService
   ) {
     this.accountHolderService = accountHolderService;
     this.beaconService = beaconService;
@@ -48,6 +53,7 @@ public class RegistrationService {
     this.beaconUseService = beaconUseService;
     this.emergencyContactService = emergencyContactService;
     this.legacyBeaconService = legacyBeaconService;
+    this.noteService = noteService;
   }
 
   public Registration register(Registration registration) {
@@ -75,6 +81,22 @@ public class RegistrationService {
       .orElseThrow(ResourceNotFoundException::new);
 
     return getAssociatedAggregates(beacon);
+  }
+
+  public void delete(DeleteRegistrationDTO dto) {
+    AccountHolder accountHolder = accountHolderService
+      .getAccountHolder(new AccountHolderId(dto.getUserId()))
+      .orElseThrow(ResourceNotFoundException::new);
+
+    BeaconId beaconId = new BeaconId(dto.getBeaconId());
+    Beacon deletedBeacon = beaconService.softDelete(beaconId);
+
+    deleteAssociatedAggregates(beaconId);
+    noteService.createNoteForDeletedRegistration(
+      accountHolder,
+      deletedBeacon,
+      dto.getReason()
+    );
   }
 
   /**

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
+import uk.gov.mca.beacons.api.exceptions.InvalidBeaconDeleteException;
 import uk.gov.mca.beacons.api.registration.application.RegistrationService;
 import uk.gov.mca.beacons.api.registration.domain.Registration;
 import uk.gov.mca.beacons.api.registration.mappers.RegistrationMapper;
@@ -89,5 +90,19 @@ public class RegistrationController {
         .map(registrationMapper::toDTO)
         .collect(Collectors.toList())
     );
+  }
+
+  @PatchMapping(value = "/{uuid}")
+  public ResponseEntity<Void> deleteRegistration(
+    @PathVariable("uuid") UUID beaconId,
+    @RequestBody @Valid DeleteRegistrationDTO dto
+  ) {
+    if (
+      !beaconId.equals(dto.getBeaconId())
+    ) throw new InvalidBeaconDeleteException();
+
+    registrationService.delete(dto);
+
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

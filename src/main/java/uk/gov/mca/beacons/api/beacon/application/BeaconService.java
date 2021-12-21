@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
@@ -17,14 +18,17 @@ import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 @Service("BeaconServiceV2")
 public class BeaconService {
 
+  private final AuditingHandler auditingHandler;
   private final BeaconRepository beaconRepository;
   private final ModelPatcherFactory<Beacon> beaconModelPatcherFactory;
 
   @Autowired
   BeaconService(
+    AuditingHandler auditingHandler,
     BeaconRepository beaconRepository,
     ModelPatcherFactory<Beacon> beaconModelPatcherFactory
   ) {
+    this.auditingHandler = auditingHandler;
     this.beaconRepository = beaconRepository;
     this.beaconModelPatcherFactory = beaconModelPatcherFactory;
   }
@@ -76,7 +80,18 @@ public class BeaconService {
       .withMapping(Beacon::getModel, Beacon::setModel);
 
     Beacon updatedBeacon = patcher.patchModel(toUpdate, beaconUpdate);
+    auditingHandler.markModified(updatedBeacon);
 
     return beaconRepository.save(updatedBeacon);
+  }
+
+  public Beacon softDelete(BeaconId beaconId) {
+    Beacon beacon = beaconRepository
+      .findById(beaconId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    beacon.setBeaconStatus(BeaconStatus.DELETED);
+
+    return beaconRepository.save(beacon);
   }
 }
