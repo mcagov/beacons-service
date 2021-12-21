@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.registration.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -138,6 +140,83 @@ public class RegistrationControllerIntegrationTest extends WebIntegrationTest {
         .isEqualTo(secondBeaconId)
         .jsonPath("$[1].id")
         .isEqualTo(firstBeaconId);
+    }
+  }
+
+  @Nested
+  class DeleteRegistration {
+
+    String beaconId;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeEach
+    void init() throws Exception {
+      beaconId =
+        seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId);
+    }
+
+    @Test
+    void shouldDeleteRegistration() throws Exception {
+      String reason = "I dN't WaNT It";
+      String deleteRegistrationRequestBody = createDeleteRequest(
+        accountHolderId,
+        beaconId,
+        reason
+      );
+
+      webTestClient
+        .patch()
+        .uri(Endpoints.Registration.value + "/" + beaconId + "/delete")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(deleteRegistrationRequestBody)
+        .exchange()
+        .expectStatus()
+        .isOk();
+
+      webTestClient
+        .get()
+        .uri(Endpoints.Registration.value + "/" + beaconId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.id")
+        .isEqualTo(beaconId)
+        .jsonPath("$.status")
+        .isEqualTo("DELETED")
+        .jsonPath("$.owner")
+        .isEmpty()
+        .jsonPath("$.uses")
+        .isEmpty()
+        .jsonPath("$.emergencyContacts")
+        .isEmpty();
+
+      webTestClient
+        .get()
+        .uri(Endpoints.Note.value + "?beaconId=" + beaconId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.meta.count")
+        .isEqualTo(1)
+        .jsonPath("$.data[0].attributes.beaconId")
+        .isEqualTo(beaconId);
+    }
+
+    private String createDeleteRequest(
+      String accountHolderId,
+      String beaconId,
+      String reason
+    ) throws Exception {
+      DeleteRegistrationDTO dto = DeleteRegistrationDTO
+        .builder()
+        .beaconId(UUID.fromString(beaconId))
+        .userId(UUID.fromString(accountHolderId))
+        .reason(reason)
+        .build();
+
+      return objectMapper.writeValueAsString(dto);
     }
   }
 }

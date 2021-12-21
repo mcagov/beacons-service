@@ -92,7 +92,7 @@ public class RegistrationController {
     );
   }
 
-  @PatchMapping(value = "/{uuid}")
+  @PatchMapping(value = "/{uuid}/delete")
   public ResponseEntity<Void> deleteRegistration(
     @PathVariable("uuid") UUID beaconId,
     @RequestBody @Valid DeleteRegistrationDTO dto
