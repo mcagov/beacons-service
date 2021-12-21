@@ -12,6 +12,7 @@ import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconRepository;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
+import uk.gov.mca.beacons.api.mappers.ModelPatcher;
 import uk.gov.mca.beacons.api.mappers.ModelPatcherFactory;
 
 @Transactional
@@ -60,7 +61,26 @@ public class BeaconService {
       .findById(beaconId)
       .orElseThrow(ResourceNotFoundException::new);
 
-    final var patcher = beaconModelPatcherFactory
+    final ModelPatcher<Beacon> patcher = getPatcher();
+
+    Beacon updatedBeacon = patcher.patchModel(toUpdate, beaconUpdate);
+    auditingHandler.markModified(updatedBeacon);
+
+    return beaconRepository.save(updatedBeacon);
+  }
+
+  public Beacon softDelete(BeaconId beaconId) {
+    Beacon beacon = beaconRepository
+      .findById(beaconId)
+      .orElseThrow(ResourceNotFoundException::new);
+
+    beacon.setBeaconStatus(BeaconStatus.DELETED);
+
+    return beaconRepository.save(beacon);
+  }
+
+  private ModelPatcher<Beacon> getPatcher() {
+    return beaconModelPatcherFactory
       .getModelPatcher()
       .withMapping(Beacon::getBatteryExpiryDate, Beacon::setBatteryExpiryDate)
       .withMapping(Beacon::getBeaconStatus, Beacon::setBeaconStatus)
@@ -78,20 +98,5 @@ public class BeaconService {
         Beacon::setManufacturerSerialNumber
       )
       .withMapping(Beacon::getModel, Beacon::setModel);
-
-    Beacon updatedBeacon = patcher.patchModel(toUpdate, beaconUpdate);
-    auditingHandler.markModified(updatedBeacon);
-
-    return beaconRepository.save(updatedBeacon);
-  }
-
-  public Beacon softDelete(BeaconId beaconId) {
-    Beacon beacon = beaconRepository
-      .findById(beaconId)
-      .orElseThrow(ResourceNotFoundException::new);
-
-    beacon.setBeaconStatus(BeaconStatus.DELETED);
-
-    return beaconRepository.save(beacon);
   }
 }

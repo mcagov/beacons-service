@@ -57,7 +57,7 @@ public class RegistrationMapper {
   public RegistrationDTO toDTO(Registration registration) {
     return RegistrationDTO
       .builder()
-      .beaconDTO(beaconMapper.toDTO(registration.getBeacon()))
+      .beaconDTO(beaconMapper.toRegistrationDTO(registration.getBeacon()))
       .beaconOwnerDTO(
         // special case for handling deleted beacon owners, this won't be necessary with a resource oriented API
         registration.getBeaconOwner() == null

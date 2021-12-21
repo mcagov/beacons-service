@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.util.List;
 import lombok.*;
-import uk.gov.mca.beacons.api.beacon.rest.BeaconDTO;
+import uk.gov.mca.beacons.api.beacon.rest.BeaconRegistrationDTO;
 import uk.gov.mca.beacons.api.beaconowner.rest.BeaconOwnerDTO;
 import uk.gov.mca.beacons.api.beaconuse.rest.BeaconUseDTO;
 import uk.gov.mca.beacons.api.emergencycontact.rest.EmergencyContactDTO;
@@ -17,7 +17,7 @@ import uk.gov.mca.beacons.api.emergencycontact.rest.EmergencyContactDTO;
 public class RegistrationDTO {
 
   @JsonUnwrapped
-  BeaconDTO beaconDTO;
+  BeaconRegistrationDTO beaconDTO;
 
   @JsonProperty("owner")
   BeaconOwnerDTO beaconOwnerDTO;

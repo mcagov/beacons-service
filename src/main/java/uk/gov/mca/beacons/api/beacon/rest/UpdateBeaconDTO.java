@@ -8,7 +8,7 @@ import lombok.*;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconStatus;
 import uk.gov.mca.beacons.api.dto.DomainDTO;
 
-public class BeaconDTO extends DomainDTO<BeaconDTO.Attributes> {
+public class UpdateBeaconDTO extends DomainDTO<UpdateBeaconDTO.Attributes> {
 
   private final String type = "beacon";
 
