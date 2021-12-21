@@ -33,6 +33,7 @@ public class NoteMapper {
       .fullName(note.getFullName())
       .text(note.getText())
       .type(note.getType())
+      .userId(note.getUserId())
       .createdDate(note.getCreatedDate())
       .build();
 

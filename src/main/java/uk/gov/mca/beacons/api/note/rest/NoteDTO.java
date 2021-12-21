@@ -27,5 +27,6 @@ public class NoteDTO extends DomainDTO<NoteDTO.Attributes> {
     private OffsetDateTime createdDate;
     private String fullName;
     private String email;
+    private UUID userId;
   }
 }

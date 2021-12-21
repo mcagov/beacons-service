@@ -1,6 +1,7 @@
 package uk.gov.mca.beacons.api.note.domain;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,11 +46,15 @@ public class Note extends BaseAggregateRoot<NoteId> {
   @Enumerated(EnumType.STRING)
   private NoteType type;
 
+  @Setter
+  private UUID userId;
+
   @CreatedDate
   private OffsetDateTime createdDate;
 
   public void setUser(User user) {
     setEmail(user.getEmail());
     setFullName(user.getFullName());
+    setUserId(user.getUserId());
   }
 }

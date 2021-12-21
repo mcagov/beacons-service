@@ -70,11 +70,11 @@ public abstract class BaseIntegrationTest {
       "beacon_owner",
       "beacon_use",
       "emergency_contact",
+      "note",
       "beacon",
       "account_holder",
       "legacy_beacon_claim_event",
       "legacy_beacon",
-      "note",
       "person"
     );
   }

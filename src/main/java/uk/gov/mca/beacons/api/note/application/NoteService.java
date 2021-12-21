@@ -1,12 +1,14 @@
 package uk.gov.mca.beacons.api.note.application;
 
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.note.domain.Note;
 import uk.gov.mca.beacons.api.note.domain.NoteRepository;
 
+@Transactional
 @Service("NoteServiceV2")
 public class NoteService {
 
