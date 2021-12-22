@@ -60,7 +60,7 @@ jobs:
           POSTGRES_USER: beacons_service
           POSTGRES_DB: beacons
         ports:
-          - 5433:5432
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2.3.4
