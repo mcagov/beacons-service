@@ -48,6 +48,8 @@ dependencies {
     implementation 'org.opensearch.client:opensearch-rest-high-level-client:1.0.0'
     implementation 'org.springframework.data:spring-data-elasticsearch:4.2.7'
 
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     runtimeOnly 'org.postgresql:postgresql'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

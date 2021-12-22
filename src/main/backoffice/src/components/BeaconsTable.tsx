@@ -25,7 +25,6 @@ import MaterialTable, {
   Column,
   Icons,
   MTableBodyRow,
-  MTableToolbar,
   Query,
 } from "@material-table/core";
 import React, { forwardRef, FunctionComponent } from "react";
@@ -34,7 +33,6 @@ import { Placeholders } from "utils/writingStyle";
 import { IBeaconSearchResultData } from "../entities/IBeaconSearchResult";
 import { replaceNone } from "../lib/legacyData/replaceNone";
 import { TextFilter } from "./tableComponents/TextFilter";
-import { SearchBar } from "./tableComponents/SearchBar";
 
 interface IBeaconsTableProps {
   beaconsGateway: IBeaconsGateway;
@@ -220,13 +218,14 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
               });
             } catch (error) {
               console.error("Could not fetch beacons", error);
+              alert("Search timed out, please try refreshing in 30 seconds");
             }
           })
         }
         title=""
         options={{
           filtering: true,
-          search: true,
+          search: false,
           searchFieldVariant: "outlined",
           pageSize: 20,
         }}
@@ -234,28 +233,6 @@ export const BeaconsTable: FunctionComponent<IBeaconsTableProps> = React.memo(
           Container: (props) => <Paper {...props} elevation={0} />,
           Row: (props) => (
             <MTableBodyRow {...props} data-testid="beacons-table-row" />
-          ),
-          Toolbar: (props) => (
-            // We are overriding the MTableToolbar search with our own search component
-            // Therefore we set search on MTableToolbar to false and use our own implementation
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <MTableToolbar {...props} search={false} />
-              <SearchBar
-                searchFieldVariant={props.searchFieldVariant}
-                searchAutoFocus={props.searchAutoFocus}
-                searchFieldStyle={props.searchFieldStyle}
-                searchText={props.searchText}
-                onSearchChanged={props.onSearchChanged}
-                dataManager={props.dataManager}
-                icons={props.icons}
-              />
-            </div>
           ),
         }}
       />
