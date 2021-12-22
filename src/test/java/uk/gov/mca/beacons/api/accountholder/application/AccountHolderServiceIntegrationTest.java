@@ -15,19 +15,19 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.ApplicationEventsTestExecutionListener;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import uk.gov.mca.beacons.api.BaseIntegrationTest;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderCreated;
 import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderUpdated;
 
-@SpringBootTest
 @TestExecutionListeners(
   value = { ApplicationEventsTestExecutionListener.class },
   mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 )
 @RecordApplicationEvents
 @Transactional
-public class AccountHolderServiceIntegrationTest {
+public class AccountHolderServiceIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

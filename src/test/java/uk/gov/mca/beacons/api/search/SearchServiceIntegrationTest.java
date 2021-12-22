@@ -7,13 +7,16 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 import java.util.UUID;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.transaction.TestTransaction;
+import uk.gov.mca.beacons.api.BaseIntegrationTest;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderRepository;
@@ -21,8 +24,7 @@ import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderUpdated;
 import uk.gov.mca.beacons.api.search.documents.AccountHolderDocument;
 import uk.gov.mca.beacons.api.search.repositories.AccountHolderSearchRepository;
 
-@SpringBootTest
-public class SearchServiceIntegrationTest {
+public class SearchServiceIntegrationTest extends BaseIntegrationTest {
 
   @Autowired
   ApplicationEventPublisher publisher;
@@ -34,6 +36,7 @@ public class SearchServiceIntegrationTest {
   AccountHolderRepository accountHolderRepository;
 
   @Test
+  @Transactional
   @DisplayName(
     "When an AccountHolderUpdated event is received, should publish AccountHolderDocument to Opensearch"
   )
@@ -52,6 +55,10 @@ public class SearchServiceIntegrationTest {
 
     // Act
     publisher.publishEvent(new AccountHolderUpdated(accountHolder));
+
+    // Force test transaction to commit so that TransactionalEventListener will fire
+    TestTransaction.flagForCommit();
+    TestTransaction.end();
 
     // Assert
     verify(accountHolderSearchRepository, times(1)).save(captor.capture());

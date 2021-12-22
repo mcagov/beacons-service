@@ -1,8 +1,6 @@
 package uk.gov.mca.beacons.api.search.listeners;
 
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderCreated;
