@@ -14,9 +14,9 @@ import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeaconId;
 import uk.gov.mca.beacons.api.legacybeacon.mappers.LegacyBeaconMapper;
 import uk.gov.mca.beacons.api.legacybeacon.rest.dto.LegacyBeaconDTO;
 
-@RestController("LegacyBeaconControllerV2")
-@RequestMapping("/spring-api/legacy-beaconv2")
-@Tag(name = "Legacy Beacon Controller V2")
+@RestController
+@RequestMapping("/spring-api/legacy-beacon")
+@Tag(name = "Legacy Beacon Controller")
 public class LegacyBeaconController {
 
   private final LegacyBeaconService legacyBeaconService;

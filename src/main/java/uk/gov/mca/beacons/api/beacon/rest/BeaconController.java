@@ -14,7 +14,7 @@ import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.InvalidPatchException;
 
 @RestController
-@RequestMapping("/spring-api/beaconsv2")
+@RequestMapping("/spring-api/beacons")
 @Tag(name = "Beacon Controller")
 public class BeaconController {
 

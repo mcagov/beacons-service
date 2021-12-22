@@ -12,9 +12,9 @@ import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.legacybeacon.mappers.LegacyBeaconMapper;
 import uk.gov.mca.beacons.api.legacybeacon.rest.dto.LegacyBeaconDTO;
 
-@RestController("Migrationv2")
-@RequestMapping("/spring-api/migratev2")
-@Tag(name = "Migration Controller V2")
+@RestController
+@RequestMapping("/spring-api/migrate")
+@Tag(name = "Migration Controller")
 @Profile("migration")
 public class MigrationController {
 

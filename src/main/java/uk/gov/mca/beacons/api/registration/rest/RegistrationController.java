@@ -17,7 +17,7 @@ import uk.gov.mca.beacons.api.registration.domain.Registration;
 import uk.gov.mca.beacons.api.registration.mappers.RegistrationMapper;
 
 @RestController
-@RequestMapping("/spring-api/registrationsv2")
+@RequestMapping("/spring-api/registrations")
 @Tag(name = "Registration Controller")
 public class RegistrationController {
 

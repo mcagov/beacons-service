@@ -13,9 +13,9 @@ import uk.gov.mca.beacons.api.accountholder.mappers.AccountHolderMapper;
 import uk.gov.mca.beacons.api.dto.WrapperDTO;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 
-@RestController("AccountHolderControllerV2")
-@RequestMapping("/spring-api/account-holderv2")
-@Tag(name = "Account Holder v2")
+@RestController
+@RequestMapping("/spring-api/account-holder")
+@Tag(name = "Account Holder")
 public class AccountHolderController {
 
   private final AccountHolderService accountHolderService;

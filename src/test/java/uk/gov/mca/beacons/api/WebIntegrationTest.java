@@ -19,12 +19,12 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
   protected WebTestClient webTestClient;
 
   protected enum Endpoints {
-    AccountHolder("/spring-api/account-holderv2"),
-    Beacon("/spring-api/beaconsv2"),
-    LegacyBeacon("/spring-api/legacy-beaconv2"),
-    Migration("/spring-api/migratev2"),
-    Note("/spring-api/notev2"),
-    Registration("/spring-api/registrationsv2");
+    AccountHolder("/spring-api/account-holder"),
+    Beacon("/spring-api/beacons"),
+    LegacyBeacon("/spring-api/legacy-beacon"),
+    Migration("/spring-api/migrate"),
+    Note("/spring-api/note"),
+    Registration("/spring-api/registrations");
 
     public final String value;
 

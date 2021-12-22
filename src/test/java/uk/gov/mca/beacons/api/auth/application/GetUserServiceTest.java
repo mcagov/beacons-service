@@ -11,8 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mca.beacons.api.auth.application.GetUserService;
+import uk.gov.mca.beacons.api.auth.domain.BackOfficeUser;
 import uk.gov.mca.beacons.api.auth.gateway.AuthGateway;
-import uk.gov.mca.beacons.api.domain.BackOfficeUser;
 
 @ExtendWith(MockitoExtension.class)
 class GetUserServiceTest {

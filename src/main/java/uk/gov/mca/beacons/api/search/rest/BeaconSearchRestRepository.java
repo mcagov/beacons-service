@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.controllers;
+package uk.gov.mca.beacons.api.search.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
-import uk.gov.mca.beacons.api.jpa.entities.BeaconSearchEntity;
+import uk.gov.mca.beacons.api.search.domain.BeaconSearchEntity;
 
 /**
  * This {@link RepositoryRestResource} exposes controller endpoints to enable searching across beacon records using JPA's built in pagination/sorting capability.

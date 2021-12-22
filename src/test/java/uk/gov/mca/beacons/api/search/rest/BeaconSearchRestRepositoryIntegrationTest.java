@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.controllers;
+package uk.gov.mca.beacons.api.search.rest;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.nio.file.Files;
@@ -15,55 +15,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import uk.gov.mca.beacons.api.WebIntegrationTest;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
-class BeaconSearchRestRepositoryIntegrationTest {
-
-  @Autowired
-  private WebTestClient webTestClient;
+class BeaconSearchRestRepositoryIntegrationTest extends WebIntegrationTest {
 
   @Nested
   class GetBeaconSearchResults {
 
     private static final String FIND_ALL_URI =
       "/spring-api/beacon-search/search/find-allv2";
-
-    @Test
-    void v1ShouldWork() throws Exception {
-      final var randomHexId = UUID.randomUUID().toString();
-      createLegacyBeacon(randomHexId);
-
-      webTestClient
-        .get()
-        .uri(
-          uriBuilder ->
-            uriBuilder
-              .path("/spring-api/beacon-search/search/find-all")
-              .queryParam("term", randomHexId)
-              .queryParam("status", "")
-              .queryParam("uses", "")
-              .build()
-        )
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("_embedded.beaconSearch[0].id")
-        .isNotEmpty()
-        .jsonPath("_embedded.beaconSearch[0].hexId")
-        .isEqualTo(randomHexId)
-        .jsonPath("_embedded.beaconSearch[0].lastModifiedDate")
-        .isEqualTo("2004-10-13T00:00:00Z")
-        .jsonPath("_embedded.beaconSearch[0].beaconStatus")
-        .isEqualTo("MIGRATED")
-        .jsonPath("_embedded.beaconSearch[0].ownerName")
-        .isEqualTo("Mr Beacon")
-        .jsonPath("_embedded.beaconSearch[0].useActivities")
-        .isEqualTo("Maritime, Maritime")
-        .jsonPath("page.totalElements")
-        .isEqualTo(1);
-    }
 
     @Test
     void shouldFindTheLegacyBeaconByHexIdStatusAndUses() throws Exception {
@@ -96,8 +56,9 @@ class BeaconSearchRestRepositoryIntegrationTest {
 
     @Test
     void shouldFindTheCreatedBeaconByHexIdStatusAndUses() throws Exception {
+      final String accountHolderId = seedAccountHolder();
       final var randomHexId = UUID.randomUUID().toString();
-      createBeacon(randomHexId);
+      createBeacon(randomHexId, accountHolderId);
 
       webTestClient
         .get()
@@ -195,11 +156,7 @@ class BeaconSearchRestRepositoryIntegrationTest {
       "/spring-api/beacon-search/search/find-all-by-account-holder-and-email";
 
     @Test
-    void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() throws Exception {
-      createBeacon(
-        request -> request.replace("\"account-holder-id-placeholder\"", "null")
-      );
-
+    void shouldNotFindAnyBeaconsIfEmptyQueryParamsSubmitted() {
       webTestClient
         .get()
         .uri(
@@ -315,12 +272,13 @@ class BeaconSearchRestRepositoryIntegrationTest {
     );
   }
 
-  private void createBeacon(String hexId) throws Exception {
+  private void createBeacon(String hexId, String accountHolderId)
+    throws Exception {
     createBeacon(
       request ->
         request
           .replace("1D0EA08C52FFBFF", hexId)
-          .replace("\"account-holder-id-placeholder\"", "null")
+          .replace("account-holder-id-placeholder", accountHolderId)
     );
   }
 

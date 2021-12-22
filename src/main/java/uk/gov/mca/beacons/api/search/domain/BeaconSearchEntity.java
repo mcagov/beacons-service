@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.jpa.entities;
+package uk.gov.mca.beacons.api.search.domain;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

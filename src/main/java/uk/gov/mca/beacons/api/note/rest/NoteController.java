@@ -15,9 +15,9 @@ import uk.gov.mca.beacons.api.note.domain.Note;
 import uk.gov.mca.beacons.api.note.mappers.NoteMapper;
 import uk.gov.mca.beacons.api.shared.domain.user.User;
 
-@RestController("NoteControllerV2")
-@RequestMapping("/spring-api/notev2")
-@Tag(name = "Note Controller V2")
+@RestController
+@RequestMapping("/spring-api/note")
+@Tag(name = "Note Controller")
 public class NoteController {
 
   private final NoteMapper noteMapper;
