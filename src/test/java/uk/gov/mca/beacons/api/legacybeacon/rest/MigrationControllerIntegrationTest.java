@@ -11,12 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import uk.gov.mca.beacons.api.BaseIntegrationTest;
+import uk.gov.mca.beacons.api.WebIntegrationTest;
 
-@AutoConfigureWebTestClient
-public class MigrationControllerIntegrationTest extends BaseIntegrationTest {
-
-  @Autowired
-  WebTestClient webTestClient;
+public class MigrationControllerIntegrationTest extends WebIntegrationTest {
 
   @Nested
   class CreateLegacyBeacon {
@@ -33,7 +30,7 @@ public class MigrationControllerIntegrationTest extends BaseIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/spring-api/migratev2/legacy-beacon")
+        .uri(Endpoints.Migration.value + "/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
@@ -53,7 +50,7 @@ public class MigrationControllerIntegrationTest extends BaseIntegrationTest {
 
       webTestClient
         .post()
-        .uri("/spring-api/migratev2/legacy-beacon")
+        .uri(Endpoints.Migration.value + "/legacy-beacon")
         .body(BodyInserters.fromValue(createLegacyBeaconInvalidRequest))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()

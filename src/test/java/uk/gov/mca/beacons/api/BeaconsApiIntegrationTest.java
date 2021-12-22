@@ -6,18 +6,13 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
-class BeaconsApiIntegrationTest {
+class BeaconsApiIntegrationTest extends WebIntegrationTest {
 
   private static final String ACTUATOR_ENDPOINT = "/actuator";
   private static final String ACTUATOR_HEALTH_ENDPOINT =
     ACTUATOR_ENDPOINT + "/health";
   private static final String ACTUATOR_INFO_ENDPOINT =
     ACTUATOR_ENDPOINT + "/info";
-
-  @Autowired
-  private WebTestClient webTestClient;
 
   @Test
   void contextLoads() {}

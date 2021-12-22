@@ -15,7 +15,7 @@ public class LegacyBeaconControllerIntegrationTest extends WebIntegrationTest {
 
     webTestClient
       .get()
-      .uri("/spring-api/legacy-beaconv2/" + legacyBeaconId)
+      .uri(Endpoints.LegacyBeacon.value + "/" + legacyBeaconId)
       .exchange()
       .expectStatus()
       .isOk()

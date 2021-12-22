@@ -2,8 +2,6 @@ package uk.gov.mca.beacons.api.legacybeacon.domain;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.*;
 import uk.gov.mca.beacons.api.shared.domain.base.ValueObject;
 
