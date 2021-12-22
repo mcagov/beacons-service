@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.HttpHeaders;
@@ -76,8 +77,14 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
    * @throws Exception from reading fixture
    */
   protected String seedLegacyBeacon() throws Exception {
+    return seedLegacyBeacon(fixture -> fixture);
+  }
+
+  protected String seedLegacyBeacon(Function<String, String> replacer)
+    throws Exception {
     String createLegacyBeaconRequest = fixtureHelper.getFixture(
-      "src/test/resources/fixtures/createLegacyBeaconRequest.json"
+      "src/test/resources/fixtures/createLegacyBeaconRequest.json",
+      replacer
     );
 
     return JsonPath.read(

@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.registration.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -217,6 +218,53 @@ public class RegistrationControllerIntegrationTest extends WebIntegrationTest {
         .build();
 
       return objectMapper.writeValueAsString(dto);
+    }
+  }
+
+  @Nested
+  class ClaimLegacyBeacon {
+
+    @Test
+    @DisplayName(
+      "When a registration is made with a matching Beacon HexId and AccountHolder email, should claim a matching legacy beacon"
+    )
+    void shouldClaimMatchingLegacyBeacon() throws Exception {
+      //setup
+      String legacyBeaconId = seedLegacyBeacon(
+        fixture ->
+          fixture
+            .replace("ownerbeacon@beacons.com", "testy@mctestface.com")
+            .replace("9D0E1D1B8C00001", "1D0EA08C52FFBFF")
+      );
+      final String registrationBody = getRegistrationBody(
+        RegistrationUseCase.SINGLE_BEACON,
+        accountHolderId
+      );
+
+      // act
+      webTestClient
+        .post()
+        .uri(Endpoints.Registration.value + "/register")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(registrationBody)
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectHeader()
+        .valueEquals("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+        .expectBody()
+        .json(registrationBody);
+
+      // assert
+      webTestClient
+        .get()
+        .uri(Endpoints.LegacyBeacon.value + "/" + legacyBeaconId)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.data.attributes.claimStatus")
+        .isEqualTo("CLAIMED");
     }
   }
 }
