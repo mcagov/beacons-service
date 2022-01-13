@@ -1,177 +1,148 @@
 import { IBeacon } from "../../entities/IBeacon";
 import { IEmergencyContact } from "../../entities/IEmergencyContact";
-import { IEntityLink } from "../../entities/IEntityLink";
 import { IOwner } from "../../entities/IOwner";
 import { IUse } from "../../entities/IUse";
 import { formatDateTime } from "../../utils/dateTime";
-import { IBeaconResponse } from "./IBeaconResponse";
+import {
+  EmergencyContactRegistrationResponse,
+  IRegistrationResponse,
+  OwnerRegistrationResponse,
+  UseRegistrationResponse,
+} from "./IRegistrationResponse";
 
 export interface IBeaconResponseMapper {
-  map: (beaconApiResponse: IBeaconResponse) => IBeacon;
+  map: (beaconApiResponse: IRegistrationResponse) => IBeacon;
 }
 
 export class BeaconResponseMapper implements IBeaconResponseMapper {
-  public map(beaconApiResponse: IBeaconResponse): IBeacon {
+  public map(beaconApiResponse: IRegistrationResponse): IBeacon {
     return {
-      id: beaconApiResponse.data.id,
-      hexId: beaconApiResponse.data.attributes.hexId,
-      beaconType: beaconApiResponse.data.attributes.beaconType || "",
-      manufacturer: beaconApiResponse.data.attributes.manufacturer || "",
-      model: beaconApiResponse.data.attributes.model || "",
-      status: beaconApiResponse.data.attributes.status || "",
-      registeredDate: formatDateTime(
-        beaconApiResponse.data.attributes.createdDate || ""
-      ),
+      id: beaconApiResponse.id,
+      hexId: beaconApiResponse.hexId,
+      beaconType: beaconApiResponse.beaconType || "",
+      manufacturer: beaconApiResponse.manufacturer || "",
+      model: beaconApiResponse.model || "",
+      status: beaconApiResponse.status || "",
+      registeredDate: formatDateTime(beaconApiResponse.createdDate || ""),
       lastModifiedDate: formatDateTime(
-        beaconApiResponse.data.attributes.lastModifiedDate || ""
+        beaconApiResponse.lastModifiedDate || ""
       ),
       batteryExpiryDate: formatDateTime(
-        beaconApiResponse.data.attributes.batteryExpiryDate || ""
+        beaconApiResponse.batteryExpiryDate || ""
       ),
-      chkCode: beaconApiResponse.data.attributes.chkCode || "",
-      mti: beaconApiResponse.data.attributes.mti || "",
-      referenceNumber: beaconApiResponse.data.attributes.referenceNumber,
+      chkCode: beaconApiResponse.chkCode || "",
+      mti: beaconApiResponse.mti || "",
+      referenceNumber: beaconApiResponse.referenceNumber,
       svdr:
-        beaconApiResponse.data.attributes.svdr == null
+        beaconApiResponse.svdr == null
           ? ""
-          : beaconApiResponse.data.attributes.svdr
+          : beaconApiResponse.svdr
           ? "true"
           : "false",
-      csta: beaconApiResponse.data.attributes.csta || "",
-      protocol: beaconApiResponse.data.attributes.protocol || "",
-      coding: beaconApiResponse.data.attributes.coding || "",
+      csta: beaconApiResponse.csta || "",
+      protocol: beaconApiResponse.protocol || "",
+      coding: beaconApiResponse.coding || "",
       lastServicedDate: formatDateTime(
-        beaconApiResponse.data.attributes.lastServicedDate || ""
+        beaconApiResponse.lastServicedDate || ""
       ),
       manufacturerSerialNumber:
-        beaconApiResponse.data.attributes.manufacturerSerialNumber || "",
-      owners: beaconApiResponse.data.relationships?.owner
-        ? this.mapOwners(beaconApiResponse)
+        beaconApiResponse.manufacturerSerialNumber || "",
+      owners: beaconApiResponse.owner
+        ? this.mapOwners(beaconApiResponse.owner)
         : [],
-      emergencyContacts: beaconApiResponse.data.relationships?.emergencyContacts
-        ? this.mapEmergencyContacts(beaconApiResponse)
+      emergencyContacts: beaconApiResponse.emergencyContacts
+        ? this.mapEmergencyContacts(beaconApiResponse.emergencyContacts)
         : [],
-      uses: beaconApiResponse.data.relationships?.owner
-        ? this.mapUses(beaconApiResponse)
-        : [],
-      entityLinks: this.mapLinks(beaconApiResponse.data.links),
+      uses: beaconApiResponse.uses ? this.mapUses(beaconApiResponse.uses) : [],
     };
   }
 
-  private mapLinks(links: IEntityLink[]): IEntityLink[] {
-    return links.map((link) => {
-      return { verb: link.verb, path: link.path };
-    });
-  }
-
-  private mapOwners(beaconApiResponse: IBeaconResponse): IOwner[] {
-    const ownerIds = beaconApiResponse.data.relationships.owner.data.map(
-      (owner) => owner.id
-    );
-
-    return ownerIds.map((ownerId) => {
-      const owner = beaconApiResponse.included.find(
-        (entity) => entity.type === "beaconPerson" && entity.id === ownerId
-      );
-
-      if (!owner)
-        throw ReferenceError(`Owner: ${ownerId} is defined as a relationship but not found in "included".  This is 
-      likely to be a problem with the API response`);
-
-      return {
+  private mapOwners(owner: OwnerRegistrationResponse): IOwner[] {
+    return [
+      {
         id: owner.id,
-        fullName: owner.attributes.fullName || "",
-        email: owner.attributes.email || "",
-        telephoneNumber: owner.attributes.telephoneNumber || "",
-        addressLine1: owner.attributes.addressLine1 || "",
-        addressLine2: owner.attributes.addressLine2 || "",
-        townOrCity: owner.attributes.townOrCity || "",
-        county: owner.attributes.county || "",
-        postcode: owner.attributes.postcode || "",
-      };
-    });
+        fullName: owner.fullName || "",
+        email: owner.email || "",
+        telephoneNumber: owner.telephoneNumber || "",
+        addressLine1: owner.addressLine1 || "",
+        addressLine2: owner.addressLine2 || "",
+        addressLine3: owner.addressLine3 || "",
+        addressLine4: owner.addressLine3 || "",
+        townOrCity: owner.townOrCity || "",
+        county: owner.county || "",
+        postcode: owner.postcode || "",
+        country: owner.country || "",
+      },
+    ];
   }
 
   private mapEmergencyContacts(
-    beaconApiResponse: IBeaconResponse
+    emergencyContacts: EmergencyContactRegistrationResponse[]
   ): IEmergencyContact[] {
-    const emergencyContactIds =
-      beaconApiResponse.data.relationships.emergencyContacts.data.map(
-        (relationship) => relationship.id
-      );
-
-    return emergencyContactIds.map((emergencyContactId) => {
-      const emergencyContact = beaconApiResponse.included.find(
-        (entity) =>
-          entity.type === "beaconPerson" && entity.id === emergencyContactId
-      );
-
-      if (!emergencyContact)
-        throw ReferenceError(`Emergency contact: ${emergencyContactId} is defined as a relationship but not found in "included".  This is 
-      likely to be a problem with the API response`);
-
+    return emergencyContacts.map((emergencyContact) => {
       return {
-        id: emergencyContactId,
-        fullName: emergencyContact.attributes.fullName || "",
-        telephoneNumber: emergencyContact.attributes.telephoneNumber || "",
+        id: emergencyContact.id,
+        fullName: emergencyContact.fullName || "",
+        telephoneNumber: emergencyContact.telephoneNumber || "",
         alternativeTelephoneNumber:
-          emergencyContact.attributes.alternativeTelephoneNumber || "",
+          emergencyContact.alternativeTelephoneNumber || "",
       };
     });
   }
 
-  private mapUses(beaconApiResponse: IBeaconResponse): IUse[] {
-    return beaconApiResponse.included
-      .filter((entity) => entity.type === "beaconUse")
-      .map((use) => ({
-        id: use.id,
-        environment: use.attributes.environment || "",
-        purpose: use.attributes.purpose || "",
-        activity: use.attributes.activity || "",
-        otherActivity: use.attributes.otherActivity || "",
-        moreDetails: use.attributes.moreDetails || "",
-        callSign: use.attributes.callSign || "",
-        vhfRadio: use.attributes.vhfRadio || "",
-        fixedVhfRadio: use.attributes.fixedVhfRadio || "",
-        fixedVhfRadioValue: use.attributes.fixedVhfRadioValue || "",
-        portableVhfRadio: use.attributes.portableVhfRadio || "",
-        portableVhfRadioValue: use.attributes.portableVhfRadioValue || "",
-        satelliteTelephone: use.attributes.satelliteTelephone || "",
-        satelliteTelephoneValue: use.attributes.satelliteTelephoneValue || "",
-        mobileTelephone: use.attributes.mobileTelephone || "",
-        mobileTelephone1: use.attributes.mobileTelephone1 || "",
-        mobileTelephone2: use.attributes.mobileTelephone2 || "",
-        otherCommunication: use.attributes.otherCommunication || "",
-        otherCommunicationValue: use.attributes.otherCommunicationValue || "",
-        maxCapacity: use.attributes.maxCapacity || "",
-        vesselName: use.attributes.vesselName || "",
-        portLetterNumber: use.attributes.portLetterNumber || "",
-        homeport: use.attributes.homeport || "",
-        areaOfOperation: use.attributes.areaOfOperation || "",
-        beaconLocation: use.attributes.beaconLocation || "",
-        imoNumber: use.attributes.imoNumber || "",
-        ssrNumber: use.attributes.ssrNumber || "",
-        rssNumber: use.attributes.rssNumber || "",
-        officialNumber: use.attributes.officialNumber || "",
-        rigPlatformLocation: use.attributes.rigPlatformLocation || "",
-        aircraftManufacturer: use.attributes.aircraftManufacturer || "",
-        principalAirport: use.attributes.principalAirport || "",
-        secondaryAirport: use.attributes.secondaryAirport || "",
-        registrationMark: use.attributes.registrationMark || "",
-        hexAddress: use.attributes.hexAddress || "",
-        cnOrMsnNumber: use.attributes.cnOrMsnNumber || "",
-        dongle: use.attributes.dongle,
-        beaconPosition: use.attributes.beaconPosition || "",
-        workingRemotelyLocation: use.attributes.workingRemotelyLocation || "",
-        workingRemotelyPeopleCount:
-          use.attributes.workingRemotelyPeopleCount || "",
-        windfarmLocation: use.attributes.windfarmLocation || "",
-        windfarmPeopleCount: use.attributes.windfarmPeopleCount || "",
-        otherActivityLocation: use.attributes.otherActivityLocation || "",
-        otherActivityPeopleCount: use.attributes.otherActivityPeopleCount || "",
-        mainUse: use.attributes.mainUse,
-        entityLinks: this.mapLinks(use.links),
-      }))
+  private mapUses(uses: UseRegistrationResponse[]): IUse[] {
+    return uses
+      .map(
+        (use) =>
+          ({
+            id: use.id,
+            environment: use.environment || "",
+            purpose: use.purpose || "",
+            activity: use.activity || "",
+            otherActivity: use.otherActivity || "",
+            moreDetails: use.moreDetails || "",
+            callSign: use.callSign || "",
+            vhfRadio: use.vhfRadio || "",
+            fixedVhfRadio: use.fixedVhfRadio || "",
+            fixedVhfRadioValue: use.fixedVhfRadioValue || "",
+            portableVhfRadio: use.portableVhfRadio || "",
+            portableVhfRadioValue: use.portableVhfRadioValue || "",
+            satelliteTelephone: use.satelliteTelephone || "",
+            satelliteTelephoneValue: use.satelliteTelephoneValue || "",
+            mobileTelephone: use.mobileTelephone || "",
+            mobileTelephone1: use.mobileTelephone1 || "",
+            mobileTelephone2: use.mobileTelephone2 || "",
+            otherCommunication: use.otherCommunication || "",
+            otherCommunicationValue: use.otherCommunicationValue || "",
+            maxCapacity: use.maxCapacity || "",
+            vesselName: use.vesselName || "",
+            portLetterNumber: use.portLetterNumber || "",
+            homeport: use.homeport || "",
+            areaOfOperation: use.areaOfOperation || "",
+            beaconLocation: use.beaconLocation || "",
+            imoNumber: use.imoNumber || "",
+            ssrNumber: use.ssrNumber || "",
+            rssNumber: use.rssNumber || "",
+            officialNumber: use.officialNumber || "",
+            rigPlatformLocation: use.rigPlatformLocation || "",
+            aircraftManufacturer: use.aircraftManufacturer || "",
+            principalAirport: use.principalAirport || "",
+            secondaryAirport: use.secondaryAirport || "",
+            registrationMark: use.registrationMark || "",
+            hexAddress: use.hexAddress || "",
+            cnOrMsnNumber: use.cnOrMsnNumber || "",
+            dongle: use.dongle,
+            beaconPosition: use.beaconPosition || "",
+            workingRemotelyLocation: use.workingRemotelyLocation || "",
+            workingRemotelyPeopleCount: use.workingRemotelyPeopleCount || "",
+            windfarmLocation: use.windfarmLocation || "",
+            windfarmPeopleCount: use.windfarmPeopleCount || "",
+            otherActivityLocation: use.otherActivityLocation || "",
+            otherActivityPeopleCount: use.otherActivityPeopleCount || "",
+            mainUse: use.mainUse,
+            // This makes me sad but is necessary due to previously incorrect code
+          } as Record<string, any> as IUse)
+      )
       .sort((firstUse, secondUse) => this.mainUseSortFn(firstUse, secondUse));
   }
 

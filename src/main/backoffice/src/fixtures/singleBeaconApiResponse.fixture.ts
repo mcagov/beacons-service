@@ -1,9 +1,17 @@
-import { IBeaconResponse } from "gateways/mappers/IBeaconResponse";
 import { deepFreeze } from "../utils";
+import {
+  IRegistrationResponse,
+  UseRegistrationResponse,
+} from "../gateways/mappers/IRegistrationResponse";
+import { Environments } from "../entities/IUse";
 
-const getUseResponseJson = (mainUse: boolean) =>
+const getUseResponseJson = (
+  mainUse: boolean,
+  id: string
+): UseRegistrationResponse =>
   deepFreeze({
-    environment: "MARITIME",
+    id,
+    environment: Environments.Maritime,
     purpose: "COMMERCIAL",
     activity: "FISHING_VESSEL",
     moreDetails: "I take people out in my yacht.",
@@ -49,128 +57,54 @@ const getUseResponseJson = (mainUse: boolean) =>
     mainUse,
   });
 
-export const singleBeaconApiResponseFixture: IBeaconResponse =
-  deepFreeze<IBeaconResponse>({
-    meta: {},
-    data: {
-      type: "beacon",
-      id: "f48e8212-2e10-4154-95c7-bdfd061bcfd2",
-      attributes: {
-        hexId: "1D0EA08C52FFBFF",
-        status: "NEW",
-        beaconType: "Beacon type to be derived from Hex ID",
-        protocol: "Protocol code to be derived from Hex ID",
-        coding: "Coding method to be derived from Hex ID",
-        manufacturer: "Ocean Signal",
-        createdDate: "2018-06-08T00:00",
-        referenceNumber: "REF1234",
-        model: "CSTA 282, SafeSea E100G EPIRB",
-        mti: "EXAMPLE MTI",
-        svdr: true,
-        csta: "CSTA EXAMPLE",
-        manufacturerSerialNumber: "1407312904",
-        chkCode: "456QWE",
-        batteryExpiryDate: "2020-02-01T00:00",
-        lastServicedDate: "2020-02-01T00:00",
-        lastModifiedDate: "2021-02-01T00:00",
-      },
-      links: [
-        { verb: "GET", path: "/beacons/f48e8212-2e10-4154-95c7-bdfd061bcfd2" },
-        {
-          verb: "PATCH",
-          path: "/beacons/f48e8212-2e10-4154-95c7-bdfd061bcfd2",
-        },
-      ],
-      relationships: {
-        uses: {
-          data: [
-            { type: "beaconUse", id: "e00036c4-e3f4-46bb-aa9e-1d91870d9172" },
-            { type: "beaconUse", id: "e00036c4-e3f4-46bb-aa9e-1d91870d9173" },
-          ],
-        },
-        owner: {
-          data: [
-            {
-              type: "beaconPerson",
-              id: "cb2e9fd2-45bb-4865-a04c-add5bb7c34a7",
-            },
-          ],
-        },
-        emergencyContacts: {
-          data: [
-            {
-              type: "beaconPerson",
-              id: "5ffd1b86-d347-49e2-b821-4550c72666c1",
-            },
-            {
-              type: "beaconPerson",
-              id: "3851e8c7-6e4e-4827-ab8f-b904f845582f",
-            },
-          ],
-        },
-      },
+export const singleBeaconApiResponseFixture: IRegistrationResponse =
+  deepFreeze<IRegistrationResponse>({
+    id: "f48e8212-2e10-4154-95c7-bdfd061bcfd2",
+    hexId: "1D0EA08C52FFBFF",
+    status: "NEW",
+    beaconType: "Beacon type to be derived from Hex ID",
+    protocol: "Protocol code to be derived from Hex ID",
+    coding: "Coding method to be derived from Hex ID",
+    manufacturer: "Ocean Signal",
+    createdDate: "2018-06-08T00:00",
+    referenceNumber: "REF1234",
+    model: "CSTA 282, SafeSea E100G EPIRB",
+    mti: "EXAMPLE MTI",
+    svdr: true,
+    csta: "CSTA EXAMPLE",
+    manufacturerSerialNumber: "1407312904",
+    chkCode: "456QWE",
+    batteryExpiryDate: "2020-02-01T00:00",
+    lastServicedDate: "2020-02-01T00:00",
+    lastModifiedDate: "2021-02-01T00:00",
+    uses: [
+      getUseResponseJson(true, "e00036c4-e3f4-46bb-aa9e-1d91870d9172"),
+      getUseResponseJson(false, "e00036c4-e3f4-46bb-aa9e-1d91870d9173"),
+    ],
+    owner: {
+      id: "cb2e9fd2-45bb-4865-a04c-add5bb7c34a7",
+      fullName: "Steve Stevington",
+      email: "steve@beaconowner.com",
+      telephoneNumber: "07872536271",
+      addressLine1: "1 Beacon Square",
+      addressLine2: "",
+      townOrCity: "Beaconsfield",
+      county: "Yorkshire",
+      postcode: "BS8 7NW",
+      country: "United Kingdom",
     },
-    included: [
+    emergencyContacts: [
       {
-        type: "beaconUse",
-        id: "e00036c4-e3f4-46bb-aa9e-1d91870d9173",
-        attributes: {
-          ...getUseResponseJson(false),
-        },
-        links: [
-          {
-            verb: "PATCH",
-            path: "/beacon-uses/e00036c4-e3f4-46bb-aa9e-1d91870d9173",
-          },
-        ],
-      },
-      {
-        type: "beaconUse",
-        id: "e00036c4-e3f4-46bb-aa9e-1d91870d9172",
-        attributes: {
-          ...getUseResponseJson(true),
-        },
-        links: [
-          {
-            verb: "PATCH",
-            path: "/beacon-uses/e00036c4-e3f4-46bb-aa9e-1d91870d9172",
-          },
-        ],
-      },
-      {
-        type: "beaconPerson",
-        id: "cb2e9fd2-45bb-4865-a04c-add5bb7c34a7",
-        attributes: {
-          fullName: "Steve Stevington",
-          email: "steve@beaconowner.com",
-          telephoneNumber: "07872536271",
-          addressLine1: "1 Beacon Square",
-          addressLine2: "",
-          townOrCity: "Beaconsfield",
-          county: "Yorkshire",
-          postcode: "BS8 7NW",
-        },
-        links: [],
-      },
-      {
-        type: "beaconPerson",
         id: "5ffd1b86-d347-49e2-b821-4550c72666c1",
-        attributes: {
-          fullName: "Lady Hamilton",
-          telephoneNumber: "02392 856621",
-          alternativeTelephoneNumber: "02392 856622",
-        },
-        links: [],
+        fullName: "Lady Hamilton",
+        telephoneNumber: "02392 856621",
+        alternativeTelephoneNumber: "02392 856622",
       },
       {
-        type: "beaconPerson",
         id: "3851e8c7-6e4e-4827-ab8f-b904f845582f",
-        attributes: {
-          fullName: "Neil Hamilton",
-          telephoneNumber: "04392 856626",
-          alternativeTelephoneNumber: "04392 856625",
-        },
-        links: [],
+        fullName: "Neil Hamilton",
+        telephoneNumber: "04392 856626",
+        alternativeTelephoneNumber: "04392 856625",
       },
     ],
   });

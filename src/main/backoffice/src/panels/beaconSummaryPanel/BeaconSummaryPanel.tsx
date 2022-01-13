@@ -63,7 +63,6 @@ export const BeaconSummaryPanel: FunctionComponent<IBeaconSummaryProps> = ({
           <>
             <EditPanelButton
               onClick={() => setUserState(DataPanelStates.Editing)}
-              links={beacon.entityLinks}
             >
               Edit summary
             </EditPanelButton>

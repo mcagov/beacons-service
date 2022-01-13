@@ -25,7 +25,6 @@ export interface IBeacon {
   uses: IUse[];
   owners: IOwner[];
   emergencyContacts: IEmergencyContact[];
-  entityLinks: IEntityLink[];
 }
 
 export enum BeaconStatuses {

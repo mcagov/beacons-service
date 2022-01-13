@@ -51,7 +51,7 @@ export class BeaconsGateway implements IBeaconsGateway {
 
   public async getBeacon(beaconId: string): Promise<IBeacon> {
     try {
-      const response = await this._makeGetRequest(`/beacons/${beaconId}`);
+      const response = await this._makeGetRequest(`/registrations/${beaconId}`);
 
       return this._beaconResponseMapper.map(response.data);
     } catch (e) {

@@ -28,8 +28,4 @@ export const beaconFixture = deepFreeze<IBeacon>({
   uses: usesFixture as IUse[],
   owners: testOwners,
   emergencyContacts: emergencyContactsFixture as IEmergencyContact[],
-  entityLinks: [
-    { verb: "GET", path: "/beacons/f48e8212-2e10-4154-95c7-bdfd061bcfd2" },
-    { verb: "PATCH", path: "/beacons/f48e8212-2e10-4154-95c7-bdfd061bcfd2" },
-  ],
 });

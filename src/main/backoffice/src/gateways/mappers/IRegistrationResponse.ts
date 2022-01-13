@@ -2,7 +2,7 @@ import { IOwner } from "../../entities/IOwner";
 import { IUse } from "../../entities/IUse";
 import { IEmergencyContact } from "../../entities/IEmergencyContact";
 
-export interface IBeaconResponse {
+export interface IRegistrationResponse {
   id: string;
   hexId: string;
   status?: string;
@@ -26,8 +26,8 @@ export interface IBeaconResponse {
   emergencyContacts?: EmergencyContactRegistrationResponse[];
 }
 
-type OwnerRegistrationResponse = IOwner;
+export type OwnerRegistrationResponse = IOwner;
 
-type UseRegistrationResponse = IUse;
+export type UseRegistrationResponse = IUse;
 
-type EmergencyContactRegistrationResponse = IEmergencyContact;
+export type EmergencyContactRegistrationResponse = IEmergencyContact;

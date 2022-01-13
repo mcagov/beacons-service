@@ -46,7 +46,6 @@ export interface IUse {
   otherActivityPeopleCount?: string;
   moreDetails: string;
   mainUse: boolean;
-  entityLinks: IEntityLink[];
 }
 
 export enum Environments {
