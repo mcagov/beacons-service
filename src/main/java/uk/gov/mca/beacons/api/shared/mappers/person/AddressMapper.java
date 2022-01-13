@@ -22,6 +22,10 @@ public class AddressMapper {
   }
 
   public AddressDTO toDTO(Address address) {
+    if (address == null) {
+      return new AddressDTO("", "", "", "", "", "", "", "");
+    }
+
     return AddressDTO
       .builder()
       .addressLine1(address.getAddressLine1())
