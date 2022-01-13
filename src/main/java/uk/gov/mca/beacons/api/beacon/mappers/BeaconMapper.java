@@ -56,6 +56,8 @@ public class BeaconMapper {
       .coding(beacon.getCoding())
       .accountHolderId(beacon.getAccountHolderId().unwrap())
       .status(beacon.getBeaconStatus())
+      .createdDate(beacon.getCreatedDate())
+      .lastModifiedDate(beacon.getLastModifiedDate())
       .build();
   }
 
@@ -81,6 +83,8 @@ public class BeaconMapper {
       .coding(beacon.getCoding())
       .accountHolderId(beacon.getAccountHolderId().unwrap())
       .status(beacon.getBeaconStatus())
+      .createdDate(beacon.getCreatedDate())
+      .lastModifiedDate(beacon.getLastModifiedDate())
       .build();
     dto.setAttributes(attributes);
 
