@@ -1,5 +1,4 @@
 import { IEmergencyContact } from "./IEmergencyContact";
-import { IEntityLink } from "./IEntityLink";
 import { IOwner } from "./IOwner";
 import { IUse } from "./IUse";
 

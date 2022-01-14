@@ -1,5 +1,3 @@
-import { IEntityLink } from "./IEntityLink";
-
 export interface IUse {
   id: string;
   environment: Environments;
