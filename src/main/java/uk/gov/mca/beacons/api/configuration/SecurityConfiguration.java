@@ -23,7 +23,7 @@ public class SecurityConfiguration {
    */
   @Order(1)
   @Configuration
-  @Profile("migration")
+  @Profile("migration | dev")
   public static class BasicAuthConfiguration
     extends WebSecurityConfigurerAdapter {
 

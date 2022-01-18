@@ -15,7 +15,7 @@ import uk.gov.mca.beacons.api.legacybeacon.rest.dto.LegacyBeaconDTO;
 @RestController
 @RequestMapping("/spring-api/migrate")
 @Tag(name = "Migration Controller")
-@Profile("migration")
+@Profile("migration | dev")
 public class MigrationController {
 
   private final LegacyBeaconMapper legacyBeaconMapper;

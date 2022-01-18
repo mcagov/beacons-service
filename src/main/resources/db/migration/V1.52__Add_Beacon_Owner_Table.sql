@@ -53,7 +53,7 @@ SELECT
     telephone_number,
     alternative_telephone_number
 FROM person
-WHERE person.beacon_id is not null and person.person_type = 'beacon_owner';
+WHERE person.beacon_id is not null and person.person_type = 'OWNER';
 
 UPDATE beacon_owner
 SET created_date = now()
