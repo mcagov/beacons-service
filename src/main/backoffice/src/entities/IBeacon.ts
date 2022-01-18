@@ -1,5 +1,4 @@
 import { IEmergencyContact } from "./IEmergencyContact";
-import { IEntityLink } from "./IEntityLink";
 import { IOwner } from "./IOwner";
 import { IUse } from "./IUse";
 
@@ -25,7 +24,6 @@ export interface IBeacon {
   uses: IUse[];
   owners: IOwner[];
   emergencyContacts: IEmergencyContact[];
-  entityLinks: IEntityLink[];
 }
 
 export enum BeaconStatuses {

@@ -8,13 +8,13 @@ import java.util.function.Function;
 public class ModelPatcher<T> {
 
   @SuppressWarnings("rawtypes")
-  private final List<ModelUpdateMapping> mapping = new ArrayList<ModelUpdateMapping>();
+  private final List<ModelUpdateMapping> mapping = new ArrayList<>();
 
   public <TValue> ModelPatcher<T> withMapping(
     Function<T, TValue> getter,
     BiConsumer<T, TValue> setter
   ) {
-    mapping.add(new ModelUpdateMapping<TValue>(getter, setter));
+    mapping.add(new ModelUpdateMapping<>(getter, setter));
     return this;
   }
 

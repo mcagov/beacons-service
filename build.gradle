@@ -20,12 +20,20 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if(details.requested.group == "org.elasticsearch" && details.requested.name == "elasticsearch") {
+            details.useVersion '7.13.4'
+            details.because('compatibility with Lucene version 8.8.2')
+        }
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.flywaydb:flyway-core'
@@ -37,13 +45,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.jetbrains:annotations:21.0.1'
 
+    implementation 'org.springframework.data:spring-data-elasticsearch:4.2.7'
+
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine'
     runtimeOnly 'org.postgresql:postgresql'
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:testcontainers:1.16.2'
+    testImplementation 'org.testcontainers:junit-jupiter:1.16.2'
+    testImplementation "org.testcontainers:postgresql:1.16.2"
+    testImplementation "org.testcontainers:elasticsearch:1.16.2"
 }
 
 test {

@@ -8,9 +8,12 @@ export const ownerFixture: IOwner = deepFreeze<IOwner>({
   telephoneNumber: "07872536271",
   addressLine1: "1 Beacon Square",
   addressLine2: "",
+  addressLine3: "",
+  addressLine4: "",
   townOrCity: "Beaconsfield",
   county: "Yorkshire",
   postcode: "BS8 7NW",
+  country: "United Kingdom",
 });
 
 export const testOwners: IOwner[] = [ownerFixture];

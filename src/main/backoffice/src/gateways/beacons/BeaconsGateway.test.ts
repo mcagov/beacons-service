@@ -95,7 +95,7 @@ describe("BeaconsGateway", () => {
       await gateway.getBeacon(beaconId);
 
       expect(axios.get).toHaveBeenCalledWith(
-        `${applicationConfig.apiUrl}/beacons/${beaconId}`,
+        `${applicationConfig.apiUrl}/registrations/${beaconId}`,
         config
       );
     });
@@ -122,15 +122,16 @@ describe("BeaconsGateway", () => {
         authGateway
       );
       const beaconId = "f48e8212-2e10-4154-95c7-bdfd061bcfd2";
+
       // @ts-ignore
       axios.get.mockImplementation(() =>
-        Promise.resolve(singleBeaconApiResponseFixture)
+        Promise.resolve({ data: singleBeaconApiResponseFixture })
       );
 
       await gateway.getBeacon(beaconId);
 
       expect(beaconResponseMapper.map).toHaveBeenCalledWith(
-        singleBeaconApiResponseFixture.data
+        singleBeaconApiResponseFixture
       );
     });
   });

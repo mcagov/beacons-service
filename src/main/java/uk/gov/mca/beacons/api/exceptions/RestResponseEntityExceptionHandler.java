@@ -6,10 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uk.gov.mca.beacons.api.jpa.entities.Beacon;
 import uk.gov.mca.beacons.api.mappers.ValidationErrorMapper;
 
 @ControllerAdvice
@@ -42,16 +40,5 @@ public class RestResponseEntityExceptionHandler
       status,
       request
     );
-  }
-
-  @ExceptionHandler(BeaconsValidationException.class)
-  public ResponseEntity<Object> handleBeaconsValidationException(
-    BeaconsValidationException ex
-  ) {
-    final var errorResponseDTO = errorResponseService.fromBindingErrors(
-      ex.getErrors()
-    );
-
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
   }
 }

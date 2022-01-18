@@ -13,6 +13,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.elasticsearch.ElasticSearchReactiveHealthContributorAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRestClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
 
 server:
   compression:
@@ -45,3 +51,8 @@ azure:
   activedirectory:
     client-id: ${AZURE_AD_API_CLIENT_ID:8fb0f9ea-6351-4251-bcca-85e298bda8e7}
     app-id-uri: ${AZURE_AD_API_ID_URI:api://8fb0f9ea-6351-4251-bcca-85e298bda8e7}
+
+opensearch:
+  host: localhost
+  port: 9200
+  enabled: false

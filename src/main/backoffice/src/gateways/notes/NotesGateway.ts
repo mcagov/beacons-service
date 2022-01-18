@@ -17,7 +17,7 @@ export class NotesGateway implements INotesGateway {
 
   public async getNotes(beaconId: string): Promise<INote[]> {
     try {
-      const response = await this._makeGetRequest(`/beacons/${beaconId}/notes`);
+      const response = await this._makeGetRequest(`/note?beaconId=${beaconId}`);
       return this._mapNotesListResponseToNotes(response.data);
     } catch (e) {
       throw Error(e);

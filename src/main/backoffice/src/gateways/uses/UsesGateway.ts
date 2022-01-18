@@ -19,7 +19,7 @@ export class UsesGateway implements IUsesGateway {
 
   public async getUses(beaconId: string): Promise<IUse[]> {
     try {
-      const response = await this._makeGetRequest(`/beacons/${beaconId}`);
+      const response = await this._makeGetRequest(`/registrations/${beaconId}`);
 
       return this._usesResponseMapper.map(response.data).uses;
     } catch (e) {
