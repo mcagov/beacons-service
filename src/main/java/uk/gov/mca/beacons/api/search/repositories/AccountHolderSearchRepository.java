@@ -6,6 +6,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import uk.gov.mca.beacons.api.search.documents.AccountHolderDocument;
 
-@ConditionalOnProperty("opensearch.enabled")
+@ConditionalOnProperty(
+  prefix = "opensearch",
+  name = "enabled",
+  havingValue = "true"
+)
 public interface AccountHolderSearchRepository
   extends ElasticsearchRepository<AccountHolderDocument, UUID> {}

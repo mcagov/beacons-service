@@ -9,7 +9,11 @@ import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderCreated;
 import uk.gov.mca.beacons.api.accountholder.domain.events.AccountHolderUpdated;
 import uk.gov.mca.beacons.api.search.SearchService;
 
-@ConditionalOnProperty("opensearch.enabled")
+@ConditionalOnProperty(
+  prefix = "opensearch",
+  name = "enabled",
+  havingValue = "true"
+)
 @Component
 public class AccountHolderListener {
 

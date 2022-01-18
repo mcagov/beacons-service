@@ -12,7 +12,11 @@ import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.search.documents.AccountHolderDocument;
 import uk.gov.mca.beacons.api.search.repositories.AccountHolderSearchRepository;
 
-@ConditionalOnProperty("opensearch.enabled")
+@ConditionalOnProperty(
+  prefix = "opensearch",
+  name = "enabled",
+  havingValue = "true"
+)
 @Service("Opensearch service")
 public class SearchService {
 

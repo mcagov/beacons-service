@@ -11,7 +11,11 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@ConditionalOnProperty("opensearch.enabled")
+@ConditionalOnProperty(
+  prefix = "opensearch",
+  name = "enabled",
+  havingValue = "true"
+)
 @Getter
 @Setter
 @Document(indexName = "account_holder")
