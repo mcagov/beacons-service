@@ -1,0 +1,4 @@
+opensearch:
+  host: localhost
+  port: 9200
+  enabled: true

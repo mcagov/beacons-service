@@ -2,6 +2,8 @@ package uk.gov.mca.beacons.api.search;
 
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
@@ -10,6 +12,7 @@ import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 import uk.gov.mca.beacons.api.search.documents.AccountHolderDocument;
 import uk.gov.mca.beacons.api.search.repositories.AccountHolderSearchRepository;
 
+@ConditionalOnProperty("opensearch.enabled")
 @Service("Opensearch service")
 public class SearchService {
 
