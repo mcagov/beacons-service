@@ -111,7 +111,7 @@ public class BeaconMapper {
     beacon.setBeaconType(attributes.getBeaconType());
     beacon.setProtocol(attributes.getProtocol());
     beacon.setCoding(attributes.getCoding());
-    beacon.setBeaconStatus(BeaconStatus.NEW);
+    beacon.setBeaconStatus(attributes.getStatus());
 
     return beacon;
   }
