@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.legacybeacon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import lombok.*;
@@ -10,6 +11,7 @@ import uk.gov.mca.beacons.api.shared.domain.base.ValueObject;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LegacyBeaconDetails implements ValueObject, Serializable {
 
   private String note;
