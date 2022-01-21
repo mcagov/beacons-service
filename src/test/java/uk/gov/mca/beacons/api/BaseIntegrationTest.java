@@ -1,11 +1,15 @@
 package uk.gov.mca.beacons.api;
 
 import java.util.Map;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.RestClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -77,5 +81,19 @@ public abstract class BaseIntegrationTest {
       "legacy_beacon",
       "person"
     );
+  }
+
+  static RestClient restClient = RestClient
+    .builder(HttpHost.create(OPENSEARCH_CONTAINER.getHttpHostAddress()))
+    .build();
+
+  @AfterEach
+  public void cleanElasticSearch() throws Exception {
+    Request request = new Request(
+      "POST",
+      "/beacon_search/_delete_by_query?conflicts=proceed"
+    );
+    request.setJsonEntity("{\"query\":{\"match_all\":{}}}");
+    restClient.performRequest(request);
   }
 }
