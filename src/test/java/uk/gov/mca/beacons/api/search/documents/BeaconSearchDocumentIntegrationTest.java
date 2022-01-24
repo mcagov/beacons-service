@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.mca.beacons.api.BaseIntegrationTest;
+import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconOwner;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconUse;
 import uk.gov.mca.beacons.api.search.repositories.BeaconSearchRepository;
@@ -40,8 +41,8 @@ public class BeaconSearchDocumentIntegrationTest extends BaseIntegrationTest {
     beaconSearchDocument.setId(id);
     beaconSearchDocument.setHexId(hexId);
     beaconSearchDocument.setBeaconStatus(beaconStatus);
-    beaconSearchDocument.setCreatedAt(createdAt);
-    beaconSearchDocument.setLastModified(lastModifiedDate);
+    beaconSearchDocument.setCreatedDate(createdAt);
+    beaconSearchDocument.setLastModifiedDate(lastModifiedDate);
     beaconSearchDocument.setManufacturerSerialNumber(manufacturerSerialNumber);
     beaconSearchDocument.setCospasSarsatNumber(null);
     beaconSearchDocument.setBeaconUses(List.of(beaconUse));
