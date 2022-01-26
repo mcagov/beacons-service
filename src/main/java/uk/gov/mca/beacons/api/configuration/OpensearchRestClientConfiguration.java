@@ -2,8 +2,6 @@ package uk.gov.mca.beacons.api.configuration;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +11,12 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.lang.NonNull;
 
-@ConditionalOnProperty(
-  prefix = "opensearch",
-  name = "enabled",
-  havingValue = "true"
-)
 @Configuration
 @EnableElasticsearchRepositories(
   basePackages = "uk.gov.mca.beacons.api.search.repositories"
 )
 @ComponentScan(basePackages = { "uk.gov.mca.beacons.api.search" })
-public class OpenSearchRestClientConfiguration
+public class OpensearchRestClientConfiguration
   extends AbstractElasticsearchConfiguration {
 
   @Value("${opensearch.host}")
@@ -32,20 +25,39 @@ public class OpenSearchRestClientConfiguration
   @Value("${opensearch.port}")
   private int port;
 
+  @Value("${opensearch.credentials.enabled}")
+  private Boolean credentialsEnabled;
+
+  @Value("${opensearch.credentials.user:n/a}")
+  private String user;
+
+  @Value("${opensearch.credentials.password:n/a}")
+  private String password;
+
   @Bean
   @NonNull
   @Override
-  @ConditionalOnProperty(
-    prefix = "opensearch",
-    name = "enabled",
-    havingValue = "true"
-  )
   public RestHighLevelClient elasticsearchClient() {
-    final ClientConfiguration clientConfiguration = ClientConfiguration
+    ClientConfiguration clientConfiguration;
+
+    if (credentialsEnabled) {
+      clientConfiguration = clientConfigurationWithBasicAuthAndSslEnabled();
+    } else {
+      clientConfiguration = clientConfigurationWithoutBasicAuth();
+    }
+    return RestClients.create(clientConfiguration).rest();
+  }
+
+  private ClientConfiguration clientConfigurationWithBasicAuthAndSslEnabled() {
+    return ClientConfiguration
       .builder()
       .connectedTo(host + ":" + port)
+      .usingSsl()
+      .withBasicAuth(user, password)
       .build();
+  }
 
-    return RestClients.create(clientConfiguration).rest();
+  private ClientConfiguration clientConfigurationWithoutBasicAuth() {
+    return ClientConfiguration.builder().connectedTo(host + ":" + port).build();
   }
 }
