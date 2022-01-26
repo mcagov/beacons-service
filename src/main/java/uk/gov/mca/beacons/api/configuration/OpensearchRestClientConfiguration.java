@@ -25,13 +25,13 @@ public class OpensearchRestClientConfiguration
   @Value("${opensearch.port}")
   private int port;
 
-  @Value("{opensearch.credentials.enabled}")
-  private boolean credentialsEnabled;
+  @Value("${opensearch.credentials.enabled}")
+  private Boolean credentialsEnabled;
 
-  @Value("{opensearch.credentials.user}")
+  @Value("${opensearch.credentials.user:n/a}")
   private String user;
 
-  @Value("{opensearch.credentials.password}")
+  @Value("${opensearch.credentials.password:n/a}")
   private String password;
 
   @Bean
