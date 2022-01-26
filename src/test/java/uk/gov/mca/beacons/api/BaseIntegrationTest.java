@@ -60,8 +60,11 @@ public abstract class BaseIntegrationTest {
       POSTGRE_SQL_CONTAINER::getUsername
     );
 
-    registry.add("opensearch.host", OPENSEARCH_CONTAINER::getHost);
-    registry.add("opensearch.port", OPENSEARCH_CONTAINER::getFirstMappedPort);
+    registry.add("opensearch.source.host", OPENSEARCH_CONTAINER::getHost);
+    registry.add(
+      "opensearch.source.port",
+      OPENSEARCH_CONTAINER::getFirstMappedPort
+    );
   }
 
   @Autowired
