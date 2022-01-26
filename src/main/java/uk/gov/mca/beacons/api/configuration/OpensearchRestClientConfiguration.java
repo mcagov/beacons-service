@@ -19,10 +19,10 @@ import org.springframework.lang.NonNull;
 public class OpensearchRestClientConfiguration
   extends AbstractElasticsearchConfiguration {
 
-  @Value("${opensearch.host}")
+  @Value("${opensearch.source.host}")
   private String host;
 
-  @Value("${opensearch.port}")
+  @Value("${opensearch.source.port}")
   private int port;
 
   @Value("${opensearch.credentials.enabled}")
