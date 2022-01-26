@@ -8,22 +8,15 @@ import java.util.stream.Collectors;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
-import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconOwner;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconUse;
 
-@ConditionalOnProperty(
-  prefix = "opensearch",
-  name = "enabled",
-  havingValue = "true"
-)
 @Getter
 @Setter
 @Document(indexName = "beacon_search")
