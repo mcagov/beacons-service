@@ -26,8 +26,8 @@ public class BeaconSearchDocument {
 
   public BeaconSearchDocument(
     Beacon beacon,
-    List<BeaconUse> beaconUses,
-    BeaconOwner beaconOwner
+    BeaconOwner beaconOwner,
+    List<BeaconUse> beaconUses
   ) {
     this.id = Objects.requireNonNull(beacon.getId()).unwrap();
     this.hexId = beacon.getHexId();
@@ -35,7 +35,9 @@ public class BeaconSearchDocument {
     this.createdDate = beacon.getCreatedDate();
     this.lastModifiedDate = beacon.getLastModifiedDate();
     this.manufacturerSerialNumber = beacon.getManufacturerSerialNumber();
-    this.beaconOwner = new NestedBeaconOwner(beaconOwner);
+    if (beaconOwner != null) {
+      this.beaconOwner = new NestedBeaconOwner(beaconOwner);
+    }
     this.beaconUses =
       beaconUses
         .stream()
@@ -51,6 +53,9 @@ public class BeaconSearchDocument {
 
   @Field
   private String beaconStatus;
+
+  @Field
+  private boolean isLegacy;
 
   @Field(type = FieldType.Date)
   private OffsetDateTime createdDate;
