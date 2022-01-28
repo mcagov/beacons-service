@@ -14,7 +14,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.transaction.TestTransaction;
 import uk.gov.mca.beacons.api.BaseIntegrationTest;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolder;
