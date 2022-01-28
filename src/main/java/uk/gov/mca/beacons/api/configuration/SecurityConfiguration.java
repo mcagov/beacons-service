@@ -74,7 +74,7 @@ public class SecurityConfiguration {
    */
   @Order(2)
   @Configuration
-  @Profile("default")
+  @Profile("default | dev")
   public static class AzureAdSecurityConfiguration
     extends AADResourceServerWebSecurityConfigurerAdapter {
 
