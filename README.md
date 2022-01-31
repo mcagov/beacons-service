@@ -69,9 +69,8 @@ You can also build from the command line:
 The service can be run either locally in your IDE of choice or from the command line by
 running: `./gradlew bootRun --args='--spring.profiles.active=dev'`
 
-The PostgreSQL backend can be stood up by running: `docker-compose up postgres`
-
-You can also use `docker-compose up` to bring up both the service and the PostgreSQL backend in docker.
+Local development instances of the backing services, such as PostgreSQL and OpenSearch, can be initiated with the
+command `docker compose up`.
 
 ## Style Guide
 

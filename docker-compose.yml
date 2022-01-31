@@ -1,18 +1,8 @@
 version: "3.8"
 
+# Stand up backing services for the Beacons Service API.
+# (See README.md for how to stand up the Beacons Service API itself)
 services:
-  beacons-service:
-    build:
-      context: ./
-    container_name: beacons-service
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-      - opensearch
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/beacons
-
   postgres:
     image: library/postgres:12
     ports:
