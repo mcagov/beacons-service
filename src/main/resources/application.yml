@@ -54,10 +54,10 @@ azure:
 
 opensearch:
   source:
-    host: ${OPENSEARCH_ENDPOINT}
+    host: ${OPENSEARCH_ENDPOINT:localhost}
     port: 443
     https: true
   credentials:
     enabled: true
-    user: ${OPENSEARCH_USER}
-    password: ${OPENSEARCH_PASSWORD}
+    user: ${OPENSEARCH_USER:beacon_service}
+    password: ${OPENSEARCH_PASSWORD:password}
