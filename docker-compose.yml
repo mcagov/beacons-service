@@ -33,25 +33,3 @@ services:
     environment:
       OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
       DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
-
-  schemacrawler:
-    image: schemacrawler/schemacrawler:v16.15.2
-    depends_on:
-      - postgres
-    volumes:
-      - ./schemacrawler:/opt/schema/
-    entrypoint:
-      [
-        "/opt/schemacrawler/schemacrawler.sh",
-        "--server=postgresql",
-        "--host=postgres",
-        "--port=5432",
-        "--database=beacons",
-        "--schemas=public",
-        "--user=beacons_service",
-        "--password=password",
-        "--info-level=standard",
-        "--command=schema",
-        "--output-format=htmlx",
-        "--output-file=/opt/schema/beacons-schema.html",
-      ]

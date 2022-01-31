@@ -76,10 +76,10 @@ merges into the `main` branch.
 Please see the [Beacons Integration](https://github.com/mcagov/beacons-integration) project which manages the
 infrastructure-as-code and deployments for the application.
 
-## Database schema
+## Database schema diagram
 
-With the Beacons Service API running, execute `docker compose up schemacrawler`. This will create a diagram of the
-database schema at
+With the Beacons Service API running, execute `docker compose up -f docker-compose.schemacrawler.yml`. This will create
+a diagram of the database schema at
 [schemacrawler/beacons-schema.html](schemacrawler/beacons-schema.html).
 
 ## Licence
