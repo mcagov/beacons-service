@@ -45,7 +45,7 @@ services:
       DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
 
   schemacrawler:
-    image: schemacrawler/schemacrawler
+    image: schemacrawler/schemacrawler:v16.15.2
     depends_on:
       - postgres
     volumes:
