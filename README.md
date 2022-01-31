@@ -26,7 +26,9 @@ Wrapper.
 
 ## Development
 
-Clone this repo
+Clone this repo.
+
+Set the Node environment using `nvm use` (having installed [nvm](https://github.com/nvm-sh/nvm))
 
 Install node packages (needed for code formatting): `npm install`
 
