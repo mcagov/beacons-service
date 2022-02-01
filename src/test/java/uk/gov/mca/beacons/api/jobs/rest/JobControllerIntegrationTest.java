@@ -51,7 +51,7 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
       .expectStatus()
       .isAccepted()
       .expectBody()
-      .jsonPath("$.Location")
+      .jsonPath("$.location")
       .isEqualTo("/spring-api/job/reindexSearch/1");
 
     pollJobStatusUntilCompletedOrFailed(
@@ -64,7 +64,7 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
       .iterator()
       .forEachRemaining(beaconSearchDocuments::add);
 
-    assertThat(beaconSearchDocuments.size(), is(2));
+    assertThat(beaconSearchDocuments.size(), is(3));
   }
 
   private void pollJobStatusUntilCompletedOrFailed(String endpoint) {
@@ -73,8 +73,11 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
       .flatMap(
         clientResponse -> {
           String status = JsonPath.read(
-            clientResponse.returnResult(String.class).getResponseBody(),
-            "$.Status"
+            clientResponse
+              .returnResult(String.class)
+              .getResponseBody()
+              .blockFirst(),
+            "$.status"
           );
 
           assertThat(status, not("FAILED"));
@@ -82,10 +85,10 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
           if (!status.equals("COMPLETED")) {
             return Mono.error(new RuntimeException());
           }
-          return null;
+          return Mono.just(status);
         }
       )
-      .retryWhen(Retry.backoff(10, Duration.ofSeconds(1)))
+      .retryWhen(Retry.fixedDelay(10, Duration.ofSeconds(1)))
       .blockFirst();
   }
 }
