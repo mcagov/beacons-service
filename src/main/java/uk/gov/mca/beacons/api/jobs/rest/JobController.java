@@ -1,15 +1,12 @@
 package uk.gov.mca.beacons.api.jobs.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionException;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/spring-api/job")
@@ -18,10 +15,16 @@ public class JobController {
 
   private final JobLauncher jobLauncher;
   private final Job reindexSearchJob;
+  private final JobExplorer jobExplorer;
 
-  public JobController(JobLauncher jobLauncher, Job reindexSearchJob) {
+  public JobController(
+    JobLauncher jobLauncher,
+    Job reindexSearchJob,
+    JobExplorer jobExplorer
+  ) {
     this.jobLauncher = jobLauncher;
     this.reindexSearchJob = reindexSearchJob;
+    this.jobExplorer = jobExplorer;
   }
 
   @PostMapping("/reindexSearch")
@@ -37,6 +40,21 @@ public class JobController {
       .location("/spring-api/job/reindexSearch/" + jobExecution.getJobId())
       .build();
 
-    return ResponseEntity.accepted().build();
+    return ResponseEntity.accepted().body(jobAcceptanceDTO);
+  }
+
+  @GetMapping("reindexSearch/{id}")
+  public ResponseEntity<JobOutputDTO> getReindexSearchOutput(
+    @PathVariable("id") Long jobId
+  ) {
+    JobExecution jobExecution = jobExplorer.getJobExecution(jobId);
+    if (jobExecution == null) {
+      throw new ResourceNotFoundException();
+    }
+    JobOutputDTO jobOutputDTO = JobOutputDTO
+      .builder()
+      .status(jobExecution.getStatus().getBatchStatus())
+      .build();
+    return ResponseEntity.ok().body(jobOutputDTO);
   }
 }
