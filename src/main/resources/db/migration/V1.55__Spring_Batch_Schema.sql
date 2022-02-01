@@ -1,3 +1,6 @@
+-- Schema taken from https://github.com/spring-projects/spring-batch/blob/e5c752b4b82057a80ed2a049770223201c309666/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-postgresql.sql
+-- When using Flyway, Spring Batch schema needs to be added as a migration script manually. https://docs.spring.io/spring-boot/docs/2.1.x/reference/html/howto-database-initialization.html#howto-execute-flyway-database-migrations-on-startup
+
 CREATE TABLE BATCH_JOB_INSTANCE  (
                                      JOB_INSTANCE_ID BIGINT  NOT NULL PRIMARY KEY ,
                                      VERSION BIGINT ,
