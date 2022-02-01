@@ -1,4 +1,4 @@
-package uk.gov.mca.beacons.api.search.jobs;
+package uk.gov.mca.beacons.api.jobs.configuration;
 
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
@@ -61,7 +61,7 @@ public class BeaconBatchJobConfiguration {
       .build();
   }
 
-  @Bean
+  @Bean(value = "sendBeaconSearchDocumentJob")
   public Job sendBeaconSearchDocumentJob(Step sendBeaconSearchDocumentStep) {
     return jobBuilderFactory
       .get("sendBeaconSearchDocumentStep")
