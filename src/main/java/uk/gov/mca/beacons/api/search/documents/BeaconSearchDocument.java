@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
+import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconOwner;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconUse;
 
@@ -40,6 +41,24 @@ public class BeaconSearchDocument {
     }
     this.beaconUses =
       beaconUses
+        .stream()
+        .map(NestedBeaconUse::new)
+        .collect(Collectors.toList());
+  }
+
+  public BeaconSearchDocument(LegacyBeacon legacyBeacon) {
+    this.id = Objects.requireNonNull(legacyBeacon.getId()).unwrap();
+    this.hexId = legacyBeacon.getHexId();
+    this.beaconStatus = legacyBeacon.getBeaconStatus();
+    this.createdDate = legacyBeacon.getCreatedDate();
+    this.lastModifiedDate = legacyBeacon.getLastModifiedDate();
+    this.manufacturerSerialNumber =
+      legacyBeacon.getData().getBeacon().getManufacturerSerialNumber();
+    this.beaconOwner = new NestedBeaconOwner(legacyBeacon.getData().getOwner());
+    this.beaconUses =
+      legacyBeacon
+        .getData()
+        .getUses()
         .stream()
         .map(NestedBeaconUse::new)
         .collect(Collectors.toList());
