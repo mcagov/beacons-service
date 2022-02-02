@@ -1,18 +1,32 @@
 package uk.gov.mca.beacons.api.jobs.rest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 import com.jayway.jsonpath.JsonPath;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.Requests;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.test.JobRepositoryTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.query.StringQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
@@ -28,7 +42,7 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
   private JobRepositoryTestUtils jobRepositoryTestUtils;
 
   @Autowired
-  private BeaconSearchRepository beaconSearchRepository;
+  private RestHighLevelClient restHighLevelClient;
 
   @AfterEach
   void cleanContext() {
@@ -36,14 +50,15 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
   }
 
   @Test
-  void whenJobIsTriggeredViaEndpoint_ShouldWriteBeaconSearchDocumentsToOpensearch()
+  void givenBeacons_whenJobIsTriggeredViaEndpoint_ShouldWriteBeaconSearchDocumentsToOpensearch()
     throws Exception {
     // given
     String accountHolderId_1 = seedAccountHolder();
     String accountHolderId_2 = seedAccountHolder();
-    seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId_1);
-    seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId_2);
+    String seededRegistrationId_1 = seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId_1);
+    String seededRegistrationId_2 = seedRegistration(RegistrationUseCase.SINGLE_BEACON, accountHolderId_2);
 
+    // when
     webTestClient
       .post()
       .uri(Endpoints.Job.value + "/reindexSearch")
@@ -58,13 +73,16 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
       Endpoints.Job.value + "/reindexSearch/1"
     );
 
-    List<BeaconSearchDocument> beaconSearchDocuments = new ArrayList<>();
-    beaconSearchRepository
-      .findAll()
-      .iterator()
-      .forEachRemaining(beaconSearchDocuments::add);
+    // then
+    SearchRequest searchRequest = new SearchRequest("beacon_search");
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    searchSourceBuilder.query(QueryBuilders.matchAllQuery()).sort(new FieldSortBuilder("lastModifiedDate").order(SortOrder.ASC));
+    searchRequest.source(searchSourceBuilder);
 
-    assertThat(beaconSearchDocuments.size(), is(3));
+    var response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+    assertThat(response.getHits().getAt(0).getId(), is(seededRegistrationId_1));
+    assertThat(response.getHits().getAt(1).getId(), is(seededRegistrationId_2));
   }
 
   private void pollJobStatusUntilCompletedOrFailed(String endpoint) {
