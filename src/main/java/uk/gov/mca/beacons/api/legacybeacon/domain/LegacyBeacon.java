@@ -4,7 +4,6 @@ import com.vladmihalcea.hibernate.type.json.JsonType;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,15 +11,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.mca.beacons.api.beacon.domain.BeaconId;
 import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
-import uk.gov.mca.beacons.api.shared.domain.person.Address;
 
 @Getter
-@Entity(name = "legacy_beaconV2")
+@Entity
 @Table(name = "legacy_beacon")
 @TypeDefs({ @TypeDef(name = "json", typeClass = JsonType.class) })
 public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
