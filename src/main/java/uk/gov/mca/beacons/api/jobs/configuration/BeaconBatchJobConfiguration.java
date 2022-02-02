@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
+import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.BeaconSearchDocument;
 
 @Configuration
@@ -37,8 +39,8 @@ public class BeaconBatchJobConfiguration {
     this.entityManagerFactory = entityManagerFactory;
   }
 
-  @Bean
-  public JpaPagingItemReader<Beacon> itemReader() {
+  @Bean("beaconItemReader")
+  public JpaPagingItemReader<Beacon> beaconItemReader() {
     return new JpaPagingItemReaderBuilder<Beacon>()
       .name("beaconReader")
       .entityManagerFactory(entityManagerFactory)
@@ -47,15 +49,26 @@ public class BeaconBatchJobConfiguration {
       .build();
   }
 
+  @Bean("legacyBeaconItemReader")
+  public JpaPagingItemReader<LegacyBeacon> legacyBeaconItemReader() {
+    return new JpaPagingItemReaderBuilder<LegacyBeacon>()
+      .name("legacyBeaconReader")
+      .entityManagerFactory(entityManagerFactory)
+      .queryString("select b from LegacyBeacon order by lastModifiedDate")
+      .pageSize(chunkSize)
+      .build();
+  }
+
   @Bean
   public Step sendBeaconSearchDocumentStep(
+    ItemReader<Beacon> beaconItemReader,
     ItemWriter<BeaconSearchDocument> beaconSearchDocumentWriter,
     ItemProcessor<Beacon, BeaconSearchDocument> beaconBatchJobProcessor
   ) {
     return stepBuilderFactory
       .get("sendBeaconSearchDocumentStep")
       .<Beacon, BeaconSearchDocument>chunk(chunkSize)
-      .reader(itemReader())
+      .reader(beaconItemReader)
       .processor(beaconBatchJobProcessor)
       .writer(beaconSearchDocumentWriter)
       .build();
