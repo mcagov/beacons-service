@@ -28,8 +28,7 @@ public class JobController {
   }
 
   @PostMapping("/reindexSearch")
-  public ResponseEntity<JobAcceptanceDTO> reindexSearch()
-    throws JobExecutionException {
+  public ResponseEntity<JobAcceptanceDTO> reindexSearch() throws Exception {
     JobExecution jobExecution = jobLauncher.run(
       reindexSearchJob,
       new JobParameters()

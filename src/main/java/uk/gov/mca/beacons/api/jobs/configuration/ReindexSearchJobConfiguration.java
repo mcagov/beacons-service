@@ -3,7 +3,6 @@ package uk.gov.mca.beacons.api.jobs.configuration;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -20,8 +19,7 @@ import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.BeaconSearchDocument;
 
 @Configuration
-@EnableBatchProcessing
-public class BeaconBatchJobConfiguration {
+public class ReindexSearchJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
   private final StepBuilderFactory stepBuilderFactory;
@@ -29,7 +27,7 @@ public class BeaconBatchJobConfiguration {
   private static final int chunkSize = 256;
 
   @Autowired
-  public BeaconBatchJobConfiguration(
+  public ReindexSearchJobConfiguration(
     JobBuilderFactory jobBuilderFactory,
     StepBuilderFactory stepBuilderFactory,
     EntityManagerFactory entityManagerFactory
@@ -54,19 +52,19 @@ public class BeaconBatchJobConfiguration {
     return new JpaPagingItemReaderBuilder<LegacyBeacon>()
       .name("legacyBeaconReader")
       .entityManagerFactory(entityManagerFactory)
-      .queryString("select b from LegacyBeacon order by lastModifiedDate")
+      .queryString("select b from LegacyBeacon b order by lastModifiedDate")
       .pageSize(chunkSize)
       .build();
   }
 
   @Bean
-  public Step sendBeaconSearchDocumentStep(
+  public Step reindexSearchBeaconStep(
     ItemReader<Beacon> beaconItemReader,
-    ItemWriter<BeaconSearchDocument> beaconSearchDocumentWriter,
-    ItemProcessor<Beacon, BeaconSearchDocument> beaconBatchJobProcessor
+    ItemProcessor<Beacon, BeaconSearchDocument> beaconBatchJobProcessor,
+    ItemWriter<BeaconSearchDocument> beaconSearchDocumentWriter
   ) {
     return stepBuilderFactory
-      .get("sendBeaconSearchDocumentStep")
+      .get("reindexSearchBeaconStep")
       .<Beacon, BeaconSearchDocument>chunk(chunkSize)
       .reader(beaconItemReader)
       .processor(beaconBatchJobProcessor)
@@ -74,13 +72,31 @@ public class BeaconBatchJobConfiguration {
       .build();
   }
 
-  @Bean(value = "sendBeaconSearchDocumentJob")
-  public Job sendBeaconSearchDocumentJob(Step sendBeaconSearchDocumentStep) {
+  @Bean
+  public Step reindexSearchLegacyBeaconStep(
+    ItemReader<LegacyBeacon> legacyBeaconItemReader,
+    ItemProcessor<LegacyBeacon, BeaconSearchDocument> reindexSearchLegacyBeaconProcessor,
+    ItemWriter<BeaconSearchDocument> beaconSearchDocumentItemWriter
+  ) {
+    return stepBuilderFactory
+      .get("reindexSearchLegacyBeaconStep")
+      .<LegacyBeacon, BeaconSearchDocument>chunk(chunkSize)
+      .reader(legacyBeaconItemReader)
+      .processor(reindexSearchLegacyBeaconProcessor)
+      .writer(beaconSearchDocumentItemWriter)
+      .build();
+  }
+
+  @Bean(value = "reindexSearchJob")
+  public Job reindexSearchJob(
+    Step reindexSearchBeaconStep,
+    Step reindexSearchLegacyBeaconStep
+  ) {
     return jobBuilderFactory
-      .get("sendBeaconSearchDocumentStep")
+      .get("reindexSearchJob")
       .incrementer(new RunIdIncrementer())
-      .flow(sendBeaconSearchDocumentStep)
-      .end()
+      .start(reindexSearchBeaconStep)
+      .next(reindexSearchLegacyBeaconStep)
       .build();
   }
 }

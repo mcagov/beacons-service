@@ -21,7 +21,7 @@ import uk.gov.mca.beacons.api.search.documents.BeaconSearchDocument;
 import uk.gov.mca.beacons.api.search.repositories.BeaconSearchRepository;
 
 @SpringBatchTest
-public class BeaconBatchJobConfigurationIntegrationTest
+public class ReindexSearchJobConfigurationIntegrationTest
   extends WebIntegrationTest {
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
