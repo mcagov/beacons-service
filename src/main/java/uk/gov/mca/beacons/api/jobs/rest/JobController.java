@@ -1,9 +1,8 @@
 package uk.gov.mca.beacons.api.jobs.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobExecutionNotRunningException;
+import org.springframework.batch.core.launch.NoSuchJobExecutionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
@@ -40,5 +39,21 @@ public class JobController {
       .status(jobService.getJobStatus(jobId))
       .build();
     return ResponseEntity.ok().body(jobOutputDTO);
+  }
+
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> cancelJob(@PathVariable("id") Long jobId)
+    throws NoSuchJobExecutionException, JobExecutionNotRunningException {
+    try {
+      jobService.cancel(jobId);
+    } catch (NoSuchJobExecutionException e) {
+      throw new ResourceNotFoundException();
+    } catch (JobExecutionNotRunningException e) {
+      // The job has been found but is not deletable; no further information is to be supplied.
+      // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE
+      return ResponseEntity.noContent().build();
+    }
+
+    return ResponseEntity.accepted().build();
   }
 }
