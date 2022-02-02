@@ -13,14 +13,14 @@ import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUseRepository;
 import uk.gov.mca.beacons.api.search.documents.BeaconSearchDocument;
 
 @Component
-public class BeaconBatchJobProcessor
+public class ReindexSearchBeaconProcessor
   implements ItemProcessor<Beacon, BeaconSearchDocument> {
 
   private final BeaconOwnerRepository beaconOwnerRepository;
   private final BeaconUseRepository beaconUseRepository;
 
   @Autowired
-  public BeaconBatchJobProcessor(
+  public ReindexSearchBeaconProcessor(
     BeaconOwnerRepository beaconOwnerRepository,
     BeaconUseRepository beaconUseRepository
   ) {
