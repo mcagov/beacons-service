@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -37,6 +38,7 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
   private String ownerEmail;
 
   @Setter
+  @Getter(AccessLevel.NONE)
   private String beaconStatus;
 
   @Setter
@@ -82,12 +84,12 @@ public class LegacyBeacon extends BaseAggregateRoot<LegacyBeaconId> {
     }
   }
 
-  public String claimStatus() {
+  public String getBeaconStatus() {
     if (isClaimed()) {
       return "CLAIMED";
     }
 
-    return null;
+    return beaconStatus;
   }
 
   // TODO: Add constructor to initialize list of actions
