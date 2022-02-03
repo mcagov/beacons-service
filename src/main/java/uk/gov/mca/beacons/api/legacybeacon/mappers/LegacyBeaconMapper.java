@@ -64,7 +64,7 @@ public class LegacyBeaconMapper {
       .uses(data.getUses())
       .secondaryOwners(data.getSecondaryOwners())
       .emergencyContact(data.getEmergencyContact())
-      .claimStatus(legacyBeacon.claimStatus())
+      .claimStatus(legacyBeacon.getBeaconStatus())
       .build();
     dto.setAttributes(attributes);
 

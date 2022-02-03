@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
 import uk.gov.mca.beacons.api.beaconuse.domain.BeaconUse;
+import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconOwner;
 import uk.gov.mca.beacons.api.search.documents.nested.NestedBeaconUse;
 
@@ -26,8 +27,8 @@ public class BeaconSearchDocument {
 
   public BeaconSearchDocument(
     Beacon beacon,
-    List<BeaconUse> beaconUses,
-    BeaconOwner beaconOwner
+    BeaconOwner beaconOwner,
+    List<BeaconUse> beaconUses
   ) {
     this.id = Objects.requireNonNull(beacon.getId()).unwrap();
     this.hexId = beacon.getHexId();
@@ -35,9 +36,29 @@ public class BeaconSearchDocument {
     this.createdDate = beacon.getCreatedDate();
     this.lastModifiedDate = beacon.getLastModifiedDate();
     this.manufacturerSerialNumber = beacon.getManufacturerSerialNumber();
-    this.beaconOwner = new NestedBeaconOwner(beaconOwner);
+    if (beaconOwner != null) {
+      this.beaconOwner = new NestedBeaconOwner(beaconOwner);
+    }
     this.beaconUses =
       beaconUses
+        .stream()
+        .map(NestedBeaconUse::new)
+        .collect(Collectors.toList());
+  }
+
+  public BeaconSearchDocument(LegacyBeacon legacyBeacon) {
+    this.id = Objects.requireNonNull(legacyBeacon.getId()).unwrap();
+    this.hexId = legacyBeacon.getHexId();
+    this.beaconStatus = legacyBeacon.getBeaconStatus();
+    this.createdDate = legacyBeacon.getCreatedDate();
+    this.lastModifiedDate = legacyBeacon.getLastModifiedDate();
+    this.manufacturerSerialNumber =
+      legacyBeacon.getData().getBeacon().getManufacturerSerialNumber();
+    this.beaconOwner = new NestedBeaconOwner(legacyBeacon.getData().getOwner());
+    this.beaconUses =
+      legacyBeacon
+        .getData()
+        .getUses()
         .stream()
         .map(NestedBeaconUse::new)
         .collect(Collectors.toList());
@@ -51,6 +72,9 @@ public class BeaconSearchDocument {
 
   @Field
   private String beaconStatus;
+
+  @Field
+  private boolean isLegacy;
 
   @Field(type = FieldType.Date)
   private OffsetDateTime createdDate;
