@@ -3,6 +3,7 @@ package uk.gov.mca.beacons.api.search.documents.nested;
 import lombok.Getter;
 import lombok.Setter;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
+import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyOwner;
 
 @Getter
 @Setter
@@ -12,6 +13,10 @@ public class NestedBeaconOwner {
 
   public NestedBeaconOwner(BeaconOwner beaconOwner) {
     this.ownerName = beaconOwner.getFullName();
+  }
+
+  public NestedBeaconOwner(LegacyOwner legacyOwner) {
+    this.ownerName = legacyOwner.getOwnerName();
   }
 
   private String ownerName;

@@ -25,7 +25,8 @@ public abstract class WebIntegrationTest extends BaseIntegrationTest {
     LegacyBeacon("/spring-api/legacy-beacon"),
     Migration("/spring-api/migrate"),
     Note("/spring-api/note"),
-    Registration("/spring-api/registrations");
+    Registration("/spring-api/registrations"),
+    Job("/spring-api/job");
 
     public final String value;
 

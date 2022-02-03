@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private String password;
 
     /**
-     * Creates a HTTP basic auth security filter for the migration endpoints.
+     * Creates a HTTP basic auth security filter for the migration and job endpoints.
      * <p>
      * NOTE: The HTTP session has to be stateless for the basic auth security filter.
      * Otherwise Spring allows access to Azure authenticated endpoints if a user
@@ -46,6 +46,7 @@ public class SecurityConfiguration {
         .cors()
         .and()
         .antMatcher("/spring-api/migrate/**")
+        .antMatcher("/spring-api/job/**")
         .csrf()
         .disable()
         .authorizeRequests()
@@ -74,7 +75,7 @@ public class SecurityConfiguration {
    */
   @Order(2)
   @Configuration
-  @Profile("default")
+  @Profile("default | dev")
   public static class AzureAdSecurityConfiguration
     extends AADResourceServerWebSecurityConfigurerAdapter {
 

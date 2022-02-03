@@ -19,6 +19,11 @@ spring:
       - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRepositoriesAutoConfiguration
       - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRestClientAutoConfiguration
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
 
 server:
   compression:

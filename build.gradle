@@ -36,6 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.vladmihalcea:hibernate-types-55:2.12.1'
@@ -57,8 +58,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:testcontainers:1.16.2'
     testImplementation 'org.testcontainers:junit-jupiter:1.16.2'
-    testImplementation "org.testcontainers:postgresql:1.16.2"
-    testImplementation "org.testcontainers:elasticsearch:1.16.2"
+    testImplementation 'org.testcontainers:postgresql:1.16.2'
+    testImplementation 'org.testcontainers:elasticsearch:1.16.2'
+    testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
 test {
