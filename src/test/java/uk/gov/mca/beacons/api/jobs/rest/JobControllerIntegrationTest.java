@@ -55,17 +55,20 @@ public class JobControllerIntegrationTest extends WebIntegrationTest {
     );
 
     // when
-    webTestClient
-      .post()
-      .uri(Endpoints.Job.value + "/reindexSearch")
-      .exchange()
-      .expectStatus()
-      .isAccepted()
-      .expectBody()
-      .jsonPath("$.location")
-      .isEqualTo("/spring-api/job/reindexSearch/1");
+    String location = JsonPath.read(
+      webTestClient
+        .post()
+        .uri(Endpoints.Job.value + "/reindexSearch")
+        .exchange()
+        .expectStatus()
+        .isAccepted()
+        .returnResult(String.class)
+        .getResponseBody()
+        .blockFirst(),
+      "$.location"
+    );
 
-    pollJobStatusUntilFinished(Endpoints.Job.value + "/reindexSearch/1");
+    pollJobStatusUntilFinished(location);
 
     // then
     SearchRequest searchRequest = new SearchRequest("beacon_search");
