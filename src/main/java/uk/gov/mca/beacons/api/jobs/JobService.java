@@ -13,6 +13,7 @@ import org.springframework.batch.core.launch.NoSuchJobExecutionException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import uk.gov.mca.beacons.api.exceptions.ResourceNotFoundException;
 
@@ -25,7 +26,7 @@ public class JobService {
   private final JobOperator jobOperator;
 
   public JobService(
-    JobLauncher jobLauncher,
+    @Qualifier("simpleAsyncJobLauncher") JobLauncher jobLauncher,
     Job reindexSearchJob,
     JobExplorer jobExplorer,
     JobOperator jobOperator
