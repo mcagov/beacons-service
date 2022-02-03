@@ -2,6 +2,7 @@ package uk.gov.mca.beacons.api.jobs.configuration;
 
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import uk.gov.mca.beacons.api.beacon.domain.Beacon;
+import uk.gov.mca.beacons.api.jobs.listener.JobExecutionLoggingListener;
 import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyBeacon;
 import uk.gov.mca.beacons.api.search.documents.BeaconSearchDocument;
 
@@ -31,6 +33,7 @@ public class ReindexSearchJobConfiguration {
   private final StepBuilderFactory stepBuilderFactory;
   private final EntityManagerFactory entityManagerFactory;
   private final JobRepository jobRepository;
+  private final JobExecutionLoggingListener jobExecutionLoggingListener;
   private static final int chunkSize = 256;
 
   @Autowired
@@ -38,12 +41,14 @@ public class ReindexSearchJobConfiguration {
     JobBuilderFactory jobBuilderFactory,
     StepBuilderFactory stepBuilderFactory,
     EntityManagerFactory entityManagerFactory,
-    JobRepository jobRepository
+    JobRepository jobRepository,
+    JobExecutionLoggingListener jobExecutionLoggingListener
   ) {
     this.jobBuilderFactory = jobBuilderFactory;
     this.stepBuilderFactory = stepBuilderFactory;
     this.entityManagerFactory = entityManagerFactory;
     this.jobRepository = jobRepository;
+    this.jobExecutionLoggingListener = jobExecutionLoggingListener;
   }
 
   @Bean("beaconItemReader")
@@ -104,6 +109,7 @@ public class ReindexSearchJobConfiguration {
     return jobBuilderFactory
       .get("reindexSearchJob")
       .incrementer(new RunIdIncrementer())
+      .listener(jobExecutionLoggingListener)
       .start(reindexSearchBeaconStep)
       .next(reindexSearchLegacyBeaconStep)
       .build();
