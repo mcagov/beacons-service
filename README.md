@@ -76,6 +76,30 @@ merges into the `main` branch.
 Please see the [Beacons Integration](https://github.com/mcagov/beacons-integration) project which manages the
 infrastructure-as-code and deployments for the application.
 
+## Jobs
+
+### Manually adding all beacon registrations to OpenSearch (reindexing)
+
+We use OpenSearch to support advanced querying of beacon registrations. Beacons are streamed into OpenSearch
+automatically on registration, though if necessary OpenSearch can be manually re-indexed using a job. This will
+update OpenSearch to the latest version of the data in Postgres.
+
+To trigger the reindexSearch job, run:
+
+```bash
+$ curl -X POST -s http://user:password@localhost:8080/spring-api/job/reindexSearch
+{"location":"/spring-api/job/reindexSearch/2"}
+```
+
+This will output the path to the job, which can then be checked for its status:
+
+```bash
+$ curl -X GET -s http://user:password@localhost:8080/spring-api/job/reindexSearch/2
+{"status":"COMPLETED"}
+```
+
+Logs are also output to CloudWatch when the job starts and finishes.
+
 ## Database schema diagram
 
 With the Beacons Service API running, execute `docker compose up -f docker-compose.schemacrawler.yml`. This will create
