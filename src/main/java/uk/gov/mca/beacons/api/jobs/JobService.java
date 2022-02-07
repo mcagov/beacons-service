@@ -1,15 +1,10 @@
 package uk.gov.mca.beacons.api.jobs;
 
+import java.util.Map;
 import javax.batch.runtime.BatchStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.launch.JobExecutionNotRunningException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.batch.core.launch.NoSuchJobExecutionException;
+import org.springframework.batch.core.launch.*;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
@@ -38,10 +33,12 @@ public class JobService {
   }
 
   public Long startReindexSearchJob()
-    throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+    throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, NoSuchJobException {
     JobExecution jobExecution = jobLauncher.run(
       reindexSearchJob,
-      new JobParameters()
+      new JobParameters(
+        Map.of("run.id", incrementRunIdOfLastJob("reindexSearchJob"))
+      )
     );
 
     return jobExecution.getJobId();
@@ -67,5 +64,11 @@ public class JobService {
   public boolean cancel(Long jobId)
     throws NoSuchJobExecutionException, JobExecutionNotRunningException {
     return jobOperator.stop(jobId);
+  }
+
+  private JobParameter incrementRunIdOfLastJob(String jobName)
+    throws NoSuchJobException {
+    long lastExecutionRunId = jobExplorer.getJobInstanceCount(jobName);
+    return new JobParameter(lastExecutionRunId + 1L, true);
   }
 }
