@@ -39,7 +39,10 @@ public class JobService {
       new JobParameters(
         // Pass in the last job instance ID, which is then incremented by the job launcher to provide the ID of the
         // new job instance. See ReindexSearchJobConfiguration.
-        Map.of("run.id", new JobParameter(getLastJobInstanceId("reindexSearchJob")))
+        Map.of(
+          "run.id",
+          new JobParameter(getLastJobInstanceId("reindexSearchJob"))
+        )
       )
     );
 
