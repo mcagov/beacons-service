@@ -37,7 +37,9 @@ public class JobService {
     JobExecution jobExecution = jobLauncher.run(
       reindexSearchJob,
       new JobParameters(
-        Map.of("run.id", incrementRunIdOfLastJob("reindexSearchJob"))
+        // Pass in the last job instance ID, which is then incremented by the job launcher to provide the ID of the
+        // new job instance. See ReindexSearchJobConfiguration.
+        Map.of("run.id", new JobParameter(getLastJobInstanceId("reindexSearchJob")))
       )
     );
 
@@ -66,9 +68,13 @@ public class JobService {
     return jobOperator.stop(jobId);
   }
 
-  private JobParameter incrementRunIdOfLastJob(String jobName)
-    throws NoSuchJobException {
-    long lastExecutionRunId = jobExplorer.getJobInstanceCount(jobName);
-    return new JobParameter(lastExecutionRunId + 1L, true);
+  private long getLastJobInstanceId(String jobName) {
+    JobInstance lastJobInstance = jobExplorer.getLastJobInstance(jobName);
+
+    if (lastJobInstance != null) {
+      return lastJobInstance.getId();
+    } else {
+      return 0;
+    }
   }
 }
