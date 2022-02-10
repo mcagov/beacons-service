@@ -82,10 +82,10 @@ public class BeaconSearchDocument {
   @Field(type = FieldType.Date)
   private OffsetDateTime lastModifiedDate;
 
-  @Field(type = FieldType.Text)
+  @Field(type = FieldType.Keyword)
   private String manufacturerSerialNumber;
 
-  @Field(type = FieldType.Text)
+  @Field(type = FieldType.Keyword)
   private String cospasSarsatNumber;
 
   @Field(type = FieldType.Nested)
