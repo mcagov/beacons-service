@@ -45,8 +45,9 @@ public class SecurityConfiguration {
       http
         .cors()
         .and()
-        .antMatcher("/spring-api/migrate/**")
-        .antMatcher("/spring-api/job/**")
+        .requestMatchers()
+        .antMatchers("/spring-api/migrate/**","/spring-api/job/**")
+        .and()
         .csrf()
         .disable()
         .authorizeRequests()
