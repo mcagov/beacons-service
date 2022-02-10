@@ -67,10 +67,10 @@ public class BeaconSearchDocument {
   @Id
   private UUID id;
 
-  @Field
+  @Field(type = FieldType.Keyword)
   private String hexId;
 
-  @Field
+  @Field(type = FieldType.Keyword)
   private String beaconStatus;
 
   @Field
@@ -82,10 +82,10 @@ public class BeaconSearchDocument {
   @Field(type = FieldType.Date)
   private OffsetDateTime lastModifiedDate;
 
-  @Field
+  @Field(type = FieldType.Text)
   private String manufacturerSerialNumber;
 
-  @Field
+  @Field(type = FieldType.Text)
   private String cospasSarsatNumber;
 
   @Field(type = FieldType.Nested)

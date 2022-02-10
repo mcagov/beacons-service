@@ -2,6 +2,8 @@ package uk.gov.mca.beacons.api.search.documents.nested;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import uk.gov.mca.beacons.api.beaconowner.domain.BeaconOwner;
 import uk.gov.mca.beacons.api.legacybeacon.domain.LegacyOwner;
 
@@ -19,5 +21,6 @@ public class NestedBeaconOwner {
     this.ownerName = legacyOwner.getOwnerName();
   }
 
+  @Field(type = FieldType.Text)
   private String ownerName;
 }
