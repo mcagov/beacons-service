@@ -1,5 +1,7 @@
 package uk.gov.mca.beacons.api.jobs;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import javax.batch.runtime.BatchStatus;
 import org.springframework.batch.core.*;
@@ -39,10 +41,7 @@ public class JobService {
       new JobParameters(
         // Pass in the last job instance ID, which is then incremented by the job launcher to provide the ID of the
         // new job instance. See ReindexSearchJobConfiguration.
-        Map.of(
-          "run.id",
-          new JobParameter(getLastJobInstanceId("reindexSearchJob"))
-        )
+        Map.of("run.datetime", new JobParameter(new Date()))
       )
     );
 
@@ -69,15 +68,5 @@ public class JobService {
   public boolean cancel(Long jobId)
     throws NoSuchJobExecutionException, JobExecutionNotRunningException {
     return jobOperator.stop(jobId);
-  }
-
-  private long getLastJobInstanceId(String jobName) {
-    JobInstance lastJobInstance = jobExplorer.getLastJobInstance(jobName);
-
-    if (lastJobInstance != null) {
-      return lastJobInstance.getId();
-    } else {
-      return 0;
-    }
   }
 }

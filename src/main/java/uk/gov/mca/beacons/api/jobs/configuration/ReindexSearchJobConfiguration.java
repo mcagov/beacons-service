@@ -109,7 +109,6 @@ public class ReindexSearchJobConfiguration {
     return jobBuilderFactory
       .get("reindexSearchJob")
       .listener(jobExecutionLoggingListener)
-      .incrementer(new RunIdIncrementer())
       .start(reindexSearchBeaconStep)
       .next(reindexSearchLegacyBeaconStep)
       .build();
