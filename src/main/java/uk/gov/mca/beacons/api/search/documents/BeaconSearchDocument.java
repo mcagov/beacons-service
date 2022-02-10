@@ -73,7 +73,7 @@ public class BeaconSearchDocument {
   @Field(type = FieldType.Keyword)
   private String beaconStatus;
 
-  @Field
+  @Field(index = false)
   private boolean isLegacy;
 
   @Field(type = FieldType.Date)
