@@ -21,10 +21,10 @@ public class JobController {
 
   @PostMapping("/reindexSearch")
   public ResponseEntity<JobAcceptanceDTO> reindexSearch() throws Exception {
-    Long jobId = jobService.startReindexSearchJob();
+    Long jobExecutionId = jobService.startReindexSearchJob();
     JobAcceptanceDTO jobAcceptanceDTO = JobAcceptanceDTO
       .builder()
-      .location("/spring-api/job/reindexSearch/" + jobId)
+      .location("/spring-api/job/reindexSearch/" + jobExecutionId)
       .build();
 
     return ResponseEntity.accepted().body(jobAcceptanceDTO);
@@ -32,20 +32,21 @@ public class JobController {
 
   @GetMapping("reindexSearch/{id}")
   public ResponseEntity<JobOutputDTO> getReindexSearchOutput(
-    @PathVariable("id") Long jobId
+    @PathVariable("id") Long jobExecutionId
   ) {
     JobOutputDTO jobOutputDTO = JobOutputDTO
       .builder()
-      .status(jobService.getJobStatus(jobId))
+      .status(jobService.getJobStatus(jobExecutionId))
       .build();
     return ResponseEntity.ok().body(jobOutputDTO);
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> cancelJob(@PathVariable("id") Long jobId)
-    throws NoSuchJobExecutionException, JobExecutionNotRunningException {
+  public ResponseEntity<Void> cancelJob(
+    @PathVariable("id") Long jobExecutionId
+  ) throws NoSuchJobExecutionException, JobExecutionNotRunningException {
     try {
-      jobService.cancel(jobId);
+      jobService.cancel(jobExecutionId);
     } catch (NoSuchJobExecutionException e) {
       throw new ResourceNotFoundException();
     } catch (JobExecutionNotRunningException e) {

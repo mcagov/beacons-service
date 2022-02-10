@@ -45,11 +45,11 @@ public class JobService {
       )
     );
 
-    return jobExecution.getJobId();
+    return jobExecution.getId();
   }
 
-  public BatchStatus getJobStatus(Long jobId) {
-    JobExecution jobExecution = jobExplorer.getJobExecution(jobId);
+  public BatchStatus getJobStatus(Long jobExecutionId) {
+    JobExecution jobExecution = jobExplorer.getJobExecution(jobExecutionId);
     if (jobExecution == null) {
       throw new ResourceNotFoundException();
     }
@@ -60,13 +60,13 @@ public class JobService {
   /**
    * Cancel a running job.
    *
-   * @param jobId the id of the job
+   * @param jobExecutionId the id of the job execution
    * @return true if the message was successfully sent (does not guarantee that the job has stopped)
    * @throws NoSuchJobExecutionException if the job is not found
    * @throws JobExecutionNotRunningException if the job is found but not running
    */
-  public boolean cancel(Long jobId)
+  public boolean cancel(Long jobExecutionId)
     throws NoSuchJobExecutionException, JobExecutionNotRunningException {
-    return jobOperator.stop(jobId);
+    return jobOperator.stop(jobExecutionId);
   }
 }
