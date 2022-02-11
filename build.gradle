@@ -116,4 +116,6 @@ task backofficeSpaCopyToStaticAssetsDirectory(type: Copy, dependsOn: 'backoffice
 
 bootRun.dependsOn 'backofficeSpaCopyToStaticAssetsDirectory'
 assemble.dependsOn 'backofficeSpaCopyToStaticAssetsDirectory'
-clean.delete << file('src/main/backoffice/node_modules')
+clean {
+    delete file('src/main/backoffice/node_modules')
+}
