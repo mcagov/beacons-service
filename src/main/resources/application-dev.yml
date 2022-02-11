@@ -1,7 +1,7 @@
 opensearch:
   source:
-    host: localhost
-    port: 9200
+    host: ${OPENSEARCH_ENDPOINT:localhost}
+    port: ${OPENSEARCH_PORT:9200}
     https: false
   credentials:
     enabled: false
