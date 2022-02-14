@@ -14,13 +14,38 @@ public class NestedBeaconUse {
   public NestedBeaconUse() {}
 
   public NestedBeaconUse(BeaconUse beaconUse) {
-    this.environment = beaconUse.getEnvironment().toString();
+    this.environment = beaconUse.getEnvironment().toString().toUpperCase();
+    this.activity = beaconUse.getActivity().toString().toUpperCase();
+    this.purpose = beaconUse.getPurpose().toString().toUpperCase();
+    this.vesselName = beaconUse.getVesselName();
+    this.callSign = beaconUse.getCallSign();
+    this.aircraftRegistrationMark = beaconUse.getRegistrationMark();
   }
 
   public NestedBeaconUse(LegacyUse legacyUse) {
     this.environment = legacyUse.getEnvironment();
+    this.activity = legacyUse.getActivity();
+    this.purpose = legacyUse.getPurpose();
+    this.vesselName = legacyUse.getVesselName();
+    this.callSign = legacyUse.getCallSign();
+    this.aircraftRegistrationMark = legacyUse.getAircraftRegistrationMark();
   }
 
   @Field(type = FieldType.Keyword)
   private String environment;
+
+  @Field(type = FieldType.Keyword)
+  private String activity;
+
+  @Field(type = FieldType.Keyword)
+  private String purpose;
+
+  @Field(type = FieldType.Keyword)
+  private String vesselName;
+
+  @Field(type = FieldType.Keyword)
+  private String callSign;
+
+  @Field(type = FieldType.Keyword)
+  private String aircraftRegistrationMark;
 }
