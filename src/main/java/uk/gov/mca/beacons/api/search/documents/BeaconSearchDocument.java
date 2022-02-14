@@ -1,5 +1,6 @@
 package uk.gov.mca.beacons.api.search.documents;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +37,9 @@ public class BeaconSearchDocument {
     this.createdDate = beacon.getCreatedDate();
     this.lastModifiedDate = beacon.getLastModifiedDate();
     this.manufacturerSerialNumber = beacon.getManufacturerSerialNumber();
+    this.referenceNumber = beacon.getReferenceNumber();
+    this.batteryExpiryDate = beacon.getBatteryExpiryDate();
+    this.lastServicedDate = beacon.getLastServicedDate();
     if (beaconOwner != null) {
       this.beaconOwner = new NestedBeaconOwner(beaconOwner);
     }
@@ -87,6 +91,15 @@ public class BeaconSearchDocument {
 
   @Field(type = FieldType.Keyword)
   private String cospasSarsatNumber;
+
+  @Field(type = FieldType.Keyword)
+  private String referenceNumber;
+
+  @Field(type = FieldType.Date)
+  private LocalDate batteryExpiryDate;
+
+  @Field(type = FieldType.Date)
+  private LocalDate lastServicedDate;
 
   @Field(type = FieldType.Nested)
   private NestedBeaconOwner beaconOwner;
