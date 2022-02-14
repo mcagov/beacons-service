@@ -85,9 +85,9 @@ public class LegacyUse implements ValueObject, Serializable {
     );
 
     if (
-      activity == null ||
-      activity.equals("COMMERCIAL") ||
-      activity.equals("PLEASURE")
+      activity != null &&
+      !activity.equals("COMMERCIAL") &&
+      !activity.equals("PLEASURE")
     ) {
       return null;
     }
