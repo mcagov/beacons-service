@@ -61,6 +61,37 @@ public class LegacyUse implements ValueObject, Serializable {
   }
 
   public String getPurpose() {
-    return LegacyDataSanitiser.chooseField(this.aircraftType, this.vesselType);
+    String purpose = LegacyDataSanitiser.chooseField(
+      this.aircraftType,
+      this.vesselType
+    );
+
+    if (
+      purpose != null &&
+      !purpose.equals("COMMERCIAL") &&
+      !purpose.equals("PLEASURE")
+    ) {
+      return null;
+    }
+
+    return purpose;
+  }
+
+  public String getActivity() {
+    String activity = LegacyDataSanitiser.chooseField(
+      this.aircraftType,
+      this.landUse,
+      this.vesselType
+    );
+
+    if (
+      activity == null ||
+      activity.equals("COMMERCIAL") ||
+      activity.equals("PLEASURE")
+    ) {
+      return null;
+    }
+
+    return activity;
   }
 }
