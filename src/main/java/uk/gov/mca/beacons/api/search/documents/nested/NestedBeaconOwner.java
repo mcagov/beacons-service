@@ -15,12 +15,17 @@ public class NestedBeaconOwner {
 
   public NestedBeaconOwner(BeaconOwner beaconOwner) {
     this.ownerName = beaconOwner.getFullName();
+    this.ownerEmail = beaconOwner.getEmail();
   }
 
   public NestedBeaconOwner(LegacyOwner legacyOwner) {
     this.ownerName = legacyOwner.getOwnerName();
+    this.ownerEmail = legacyOwner.getEmail();
   }
 
   @Field(type = FieldType.Keyword)
   private String ownerName;
+
+  @Field(type = FieldType.Keyword)
+  private String ownerEmail;
 }
