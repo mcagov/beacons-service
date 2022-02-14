@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import lombok.*;
 import uk.gov.mca.beacons.api.shared.domain.base.ValueObject;
+import uk.gov.mca.beacons.api.utils.LegacyDataSanitiser;
 
 @Getter
 @Setter
@@ -57,5 +58,9 @@ public class LegacyUse implements ValueObject, Serializable {
 
   public String getEnvironment() {
     return getUseType();
+  }
+
+  public String getPurpose() {
+    return LegacyDataSanitiser.chooseField(this.aircraftType, this.vesselType);
   }
 }
