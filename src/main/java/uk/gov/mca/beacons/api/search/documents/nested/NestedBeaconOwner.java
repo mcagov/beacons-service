@@ -21,6 +21,6 @@ public class NestedBeaconOwner {
     this.ownerName = legacyOwner.getOwnerName();
   }
 
-  @Field(type = FieldType.Search_As_You_Type)
+  @Field(type = FieldType.Keyword)
   private String ownerName;
 }
