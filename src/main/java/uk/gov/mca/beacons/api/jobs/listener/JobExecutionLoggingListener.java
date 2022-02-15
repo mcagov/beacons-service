@@ -11,7 +11,9 @@ public class JobExecutionLoggingListener implements JobExecutionListener {
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
-    log.info(String.format("Starting job execution with id %s", jobExecution.getId()));
+    log.info(
+      String.format("Starting job execution with id %s", jobExecution.getId())
+    );
   }
 
   @Override
