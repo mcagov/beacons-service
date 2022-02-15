@@ -11,7 +11,7 @@ public class JobExecutionLoggingListener implements JobExecutionListener {
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
-    log.info(String.format("Starting job with id %s", jobExecution.getJobId()));
+    log.info(String.format("Starting job execution with id %s", jobExecution.getId()));
   }
 
   @Override
@@ -21,8 +21,8 @@ public class JobExecutionLoggingListener implements JobExecutionListener {
       jobExecution.getStartTime().toInstant().getEpochSecond();
     log.info(
       String.format(
-        "Finished job with id %s, duration was %ss",
-        jobExecution.getJobId(),
+        "Finished job execution with id %s, duration was %ss",
+        jobExecution.getId(),
         duration
       )
     );
