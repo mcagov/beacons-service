@@ -31,7 +31,7 @@ public abstract class BaseIntegrationTest {
     .withUsername("beacons_service")
     .withPassword("password");
 
-  static final ElasticsearchContainer OPENSEARCH_CONTAINER = new ElasticsearchContainer(
+  protected static final ElasticsearchContainer OPENSEARCH_CONTAINER = new ElasticsearchContainer(
     DockerImageName
       .parse("opensearchproject/opensearch:1.1.0")
       .asCompatibleSubstituteFor(

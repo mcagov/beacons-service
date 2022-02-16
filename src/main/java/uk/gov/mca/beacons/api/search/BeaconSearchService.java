@@ -38,12 +38,13 @@ public class BeaconSearchService {
   }
 
   /**
-   * The "update registration" transaction sub-optimally crosses more than one aggregate boundary.  Therefore, here we
-   * update the BeaconSearchDocument as a unit.  The domain was initially modelled as a single transaction.  If
-   * each aggregate had its own indexing operation, there would be a race condition where, for example, a Use is
-   * indexed prior to the Beacon it references.  In future, each aggregate should be operated on as an atomic
-   * transaction with its own event, and the dependency of this method on many aggregate repositories should be
-   * removed.
+   * Make the Beacon with id of beaconId searchable in OpenSearch
+   *
+   * @implNote  The "update registration" transaction sub-optimally crosses more than one aggregate boundary.
+   * Therefore, here we update the BeaconSearchDocument as a unit.  The domain was initially modelled as a single
+   * transaction.  If each aggregate had its own indexing operation, there would be a race condition where, for example,
+   * a Use is indexed prior to the Beacon it references.  In future, each aggregate should be operated on as an atomic
+   * transaction with its own event, and the dependency of this method on many aggregate repositories should be removed.
    *
    * @param beaconId The id of the beacon to be indexed
    * @return The BeaconSearchDocument
