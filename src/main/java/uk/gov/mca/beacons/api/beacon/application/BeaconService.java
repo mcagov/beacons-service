@@ -35,6 +35,7 @@ public class BeaconService {
   }
 
   public Beacon create(Beacon beacon) {
+    beacon.registerCreatedEvent();
     return beaconRepository.save(beacon);
   }
 
