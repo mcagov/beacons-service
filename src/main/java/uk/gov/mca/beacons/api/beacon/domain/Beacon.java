@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.mca.beacons.api.accountholder.domain.AccountHolderId;
+import uk.gov.mca.beacons.api.beacon.domain.events.BeaconCreated;
 import uk.gov.mca.beacons.api.shared.domain.base.BaseAggregateRoot;
 
 @Getter
@@ -89,4 +90,8 @@ public class Beacon extends BaseAggregateRoot<BeaconId> {
   @Setter
   @NotNull
   private AccountHolderId accountHolderId;
+
+  public void registerCreatedEvent() {
+    this.registerEvent(new BeaconCreated(this));
+  }
 }
